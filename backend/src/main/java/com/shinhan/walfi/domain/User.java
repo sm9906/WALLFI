@@ -25,5 +25,4 @@ public class User {
     private LocalDateTime birth_date;
 
     private String phone_number;
-
 }

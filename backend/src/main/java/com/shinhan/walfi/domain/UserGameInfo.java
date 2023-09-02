@@ -18,6 +18,4 @@ public class UserGameInfo {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-
-
 }
