@@ -19,15 +19,15 @@ public class Branch {
 
     private String branch_type;
 
-    private int level;
+    private int manager_level;
+
+    private int manager_hp;
+
+    private int manager_atk;
+
+    private int manager_def;
 
     private int exp;
-
-    private int hp;
-
-    private int atk;
-
-    private int def;
 
     private float latitude;
 
