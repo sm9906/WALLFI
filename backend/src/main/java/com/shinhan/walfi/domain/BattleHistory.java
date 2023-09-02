@@ -23,6 +23,4 @@ public class BattleHistory {
     @ManyToOne
     @JoinColumn(name = "branch_code")
     private Branch branch;
-
-
 }

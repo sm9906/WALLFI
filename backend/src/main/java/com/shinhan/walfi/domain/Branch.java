@@ -17,7 +17,7 @@ public class Branch {
 
     private String address;
 
-    private String type;
+    private String branch_type;
 
     private int level;
 
