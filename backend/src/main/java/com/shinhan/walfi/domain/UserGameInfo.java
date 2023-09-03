@@ -8,6 +8,8 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.persistence.FetchType.LAZY;
+
 @Entity
 @Getter
 @Table(name = "user_game_info")
@@ -23,7 +25,7 @@ public class UserGameInfo {
 //    @ColumnDefault("C") //challenger or manager
     private String status;
 
-    @OneToOne
+    @OneToOne(fetch = LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
