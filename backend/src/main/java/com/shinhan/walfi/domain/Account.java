@@ -1,5 +1,6 @@
 package com.shinhan.walfi.domain;
 
+import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,13 +14,19 @@ public class Account {
     @Column(name = "account_number")
     private String accountNumber;
 
+    @NotNull
     private Long balance;
 
     @Column(name = "created_time")
+    @NotNull
     private LocalDateTime createdTime;
 
     @Column(name = "account_password")
+    @NotNull
     private Integer accountPassword;
+
+    @NotNull
+    private String currency;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

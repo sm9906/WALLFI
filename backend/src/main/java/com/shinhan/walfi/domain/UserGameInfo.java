@@ -1,5 +1,6 @@
 package com.shinhan.walfi.domain;
 
+import com.sun.istack.NotNull;
 import lombok.Getter;
 
 import javax.persistence.*;
@@ -12,8 +13,10 @@ public class UserGameInfo {
     @Column(name = "user_code")
     private String userCode;
 
+    @NotNull
     private Integer point;
 
+    @NotNull
     private String status;
 
     @ManyToOne

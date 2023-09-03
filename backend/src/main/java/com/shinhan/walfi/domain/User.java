@@ -1,5 +1,6 @@
 package com.shinhan.walfi.domain;
 
+import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,10 +17,13 @@ public class User {
     @Column(name = "user_id")
     private String id;
 
+    @NotNull
     private String email;
 
+    @NotNull
     private String password;
 
+    @NotNull
     private String name;
 
     @Column(name = "birth_date")

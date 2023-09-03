@@ -1,5 +1,6 @@
 package com.shinhan.walfi.domain;
 
+import com.sun.istack.NotNull;
 import lombok.Getter;
 
 import javax.persistence.*;
@@ -14,5 +15,6 @@ public class CharacterProbability {
     private CharacterType characterType;
 
     @Column(name = "character_percent")
+    @NotNull
     private Float characterPercent;
 }

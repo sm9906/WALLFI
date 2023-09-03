@@ -1,5 +1,6 @@
 package com.shinhan.walfi.domain;
 
+import com.sun.istack.NotNull;
 import lombok.Getter;
 
 import javax.persistence.*;
@@ -10,15 +11,18 @@ import java.time.LocalDateTime;
 @Table(name = "battle_history")
 public class BattleHistory {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "battle_idx")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long battleIdx;
 
+    @NotNull
     private String manager;
 
+    @NotNull
     private String challenger;
 
     @Column(name = "start_time")
+    @NotNull
     private LocalDateTime startTime;
 
     @Column(name = "occupy_time")

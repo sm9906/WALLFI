@@ -1,5 +1,6 @@
 package com.shinhan.walfi.domain;
 
+import com.sun.istack.NotNull;
 import lombok.Getter;
 
 import javax.persistence.*;
@@ -9,26 +10,34 @@ import java.time.LocalDateTime;
 @Getter
 public class GameCharacter {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "character_idx")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long characterIdx;
 
     @Column(name = "character_type")
+    @NotNull
     private String characterType;
 
+    @NotNull
     private Integer level;
 
+    @NotNull
     private Integer exp;
 
+    @NotNull
     private Integer hp;
 
+    @NotNull
     private Integer atk;
 
+    @NotNull
     private Integer def;
 
+    @NotNull
     private String istypical;
 
     @Column(name = "created_time")
+    @NotNull
     private LocalDateTime createdTime;
 
     @ManyToOne
