@@ -12,5 +12,5 @@ public class ColorProbability {
     @Enumerated(EnumType.STRING)
     private Color color;
 
-    private float colorPercent;
+    private Float colorPercent;
 }

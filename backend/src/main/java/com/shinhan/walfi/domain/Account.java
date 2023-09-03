@@ -13,7 +13,7 @@ public class Account {
     @Column(name = "account_number")
     private String accountNumber;
 
-    private Integer balance;
+    private Long balance;
 
     @Column(name = "created_time")
     private LocalDateTime createdTime;

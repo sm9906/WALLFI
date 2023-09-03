@@ -14,5 +14,5 @@ public class CharacterProbability {
     private CharacterType characterType;
 
     @Column(name = "character_percent")
-    private float characterPercent;
+    private Float characterPercent;
 }

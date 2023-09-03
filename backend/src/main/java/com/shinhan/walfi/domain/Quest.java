@@ -19,8 +19,8 @@ public class Quest {
     private String title;
 
     @Column(name = "quest_exp")
-    private int questExp;
+    private Integer questExp;
 
     @Column(name = "due_date")
-    private int dueDate;
+    private Integer dueDate;
 }

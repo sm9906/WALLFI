@@ -15,15 +15,15 @@ public class GameCharacter {
     @Column(name = "character_type")
     private String characterType;
 
-    private int level;
+    private Integer level;
 
-    private int exp;
+    private Integer exp;
 
-    private int hp;
+    private Integer hp;
 
-    private int atk;
+    private Integer atk;
 
-    private int def;
+    private Integer def;
 
     private String istypical;
 

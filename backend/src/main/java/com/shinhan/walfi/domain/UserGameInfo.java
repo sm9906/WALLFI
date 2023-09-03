@@ -12,7 +12,7 @@ public class UserGameInfo {
     @Column(name = "user_code")
     private String userCode;
 
-    private int point;
+    private Integer point;
 
     private String status;
 

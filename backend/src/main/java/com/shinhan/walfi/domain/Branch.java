@@ -20,22 +20,22 @@ public class Branch {
     private String branchType;
 
     @Column(name = "manager_level")
-    private int managerLevel;
+    private Integer managerLevel;
 
     @Column(name = "manager_hp")
-    private int managerHp;
+    private Integer managerHp;
 
     @Column(name = "manager_atk")
-    private int managerAtk;
+    private Integer managerAtk;
 
     @Column(name = "manager_def")
-    private int managerDef;
+    private Integer managerDef;
 
-    private int exp;
+    private Integer exp;
 
-    private float latitude;
+    private Float latitude;
 
-    private float longitude;
+    private Float longitude;
 
     @ManyToOne
     @JoinColumn(name = "user_code")
