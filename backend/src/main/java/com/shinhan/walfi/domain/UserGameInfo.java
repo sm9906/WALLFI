@@ -20,7 +20,7 @@ public class UserGameInfo {
     private Integer point;
 
     @NotNull
-//    @ColumnDefault("C") //challenger or manager
+    @ColumnDefault("'C'") //challenger or manager
     private String status;
 
     @OneToOne(fetch = LAZY)

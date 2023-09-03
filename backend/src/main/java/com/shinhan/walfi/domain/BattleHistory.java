@@ -3,6 +3,7 @@ package com.shinhan.walfi.domain;
 import com.sun.istack.NotNull;
 import lombok.Getter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -23,7 +24,7 @@ public class BattleHistory {
     private String challenger;
 
     @NotNull
-//    @ColumnDefault("CURRENT_TIMESTAMP")
+    @CreationTimestamp
     private LocalDateTime startTime;
 
     private LocalDateTime occupyTime;

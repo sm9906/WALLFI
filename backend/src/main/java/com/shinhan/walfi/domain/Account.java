@@ -4,6 +4,7 @@ import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -22,7 +23,7 @@ public class Account {
     private Long balance;
 
     @NotNull
-//    @ColumnDefault("CURRENT_TIMESTAMP")
+    @CreationTimestamp
     private LocalDateTime createdTime;
 
     @NotNull
