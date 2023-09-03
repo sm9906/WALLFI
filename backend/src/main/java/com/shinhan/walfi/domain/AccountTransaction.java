@@ -8,6 +8,8 @@ import org.springframework.boot.SpringApplication;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+import static javax.persistence.FetchType.*;
+
 @Entity
 @Getter
 @Table(name = "transaction_history")
@@ -48,7 +50,7 @@ public class AccountTransaction {
     @NotNull
     private String toBank;
 
-    @ManyToOne
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "account_number")
     private Account account;
 }

@@ -7,6 +7,8 @@ import org.hibernate.annotations.ColumnDefault;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+import static javax.persistence.FetchType.*;
+
 @Entity
 @Getter
 @Table(name = "battle_history")
@@ -30,7 +32,7 @@ public class BattleHistory {
     @Column(name = "occupy_time")
     private LocalDateTime occupyTime;
 
-    @ManyToOne
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "branch_code")
     private Branch branch;
 }

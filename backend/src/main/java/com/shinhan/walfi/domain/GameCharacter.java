@@ -7,6 +7,8 @@ import org.hibernate.annotations.ColumnDefault;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+import static javax.persistence.FetchType.*;
+
 @Entity
 @Getter
 public class GameCharacter {
@@ -42,7 +44,7 @@ public class GameCharacter {
 //    @ColumnDefault("CURRENT_TIMESTAMP")
     private LocalDateTime createdTime;
 
-    @ManyToOne
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_code")
     private UserGameInfo userGameInfo;
 }

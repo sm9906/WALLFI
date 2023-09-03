@@ -7,6 +7,8 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.persistence.FetchType.*;
+
 @Entity
 @Getter
 public class Branch {
@@ -50,7 +52,7 @@ public class Branch {
     @NotNull
     private Float longitude;
 
-    @ManyToOne
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_code")
     private UserGameInfo userGameInfo;
 
