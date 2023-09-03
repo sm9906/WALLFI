@@ -16,18 +16,15 @@ import static javax.persistence.FetchType.*;
 @Getter
 public class Account {
     @Id
-    @Column(name = "account_number")
     private String accountNumber;
 
     @NotNull
     private Long balance;
 
-    @Column(name = "created_time")
     @NotNull
 //    @ColumnDefault("CURRENT_TIMESTAMP")
     private LocalDateTime createdTime;
 
-    @Column(name = "account_password")
     @NotNull
     private Integer accountPassword;
 

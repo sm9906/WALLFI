@@ -12,10 +12,8 @@ import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Getter
-@Table(name = "user_game_info")
 public class UserGameInfo {
     @Id
-    @Column(name = "user_code")
     private String userCode;
 
     @NotNull
