@@ -1,39 +1,59 @@
 package com.shinhan.walfi.domain;
 
+import com.sun.istack.NotNull;
 import lombok.Getter;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
 public class Branch {
     @Id
-    private String branch_code;
+    @Column(name = "branch_code")
+    private String branchCode;
 
-    private String branch_name;
+    @Column(name = "branch_name")
+    @NotNull
+    private String branchName;
 
+    @NotNull
     private String address;
 
-    private String branch_type;
+    @Column(name = "branch_type")
+    @NotNull
+    private String branchType;
 
-    private int manager_level;
+    @Column(name = "manager_level")
+    @NotNull
+    private Integer managerLevel;
 
-    private int manager_hp;
+    @Column(name = "manager_hp")
+    @NotNull
+    private Integer managerHp;
 
-    private int manager_atk;
+    @Column(name = "manager_atk")
+    @NotNull
+    private Integer managerAtk;
 
-    private int manager_def;
+    @Column(name = "manager_def")
+    @NotNull
+    private Integer managerDef;
 
-    private int exp;
+    @NotNull
+    private Integer exp;
 
-    private float latitude;
+    @NotNull
+    private Float latitude;
 
-    private float longitude;
+    @NotNull
+    private Float longitude;
 
     @ManyToOne
     @JoinColumn(name = "user_code")
     private UserGameInfo userGameInfo;
+
+    @OneToMany(mappedBy = "branch")
+    private List<BattleHistory> battleHistories = new ArrayList<>();
 }

@@ -1,5 +1,6 @@
 package com.shinhan.walfi.domain;
 
+import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,6 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -16,13 +19,21 @@ public class User {
     @Column(name = "user_id")
     private String id;
 
+    @NotNull
     private String email;
 
+    @NotNull
     private String password;
 
+    @NotNull
     private String name;
 
-    private LocalDateTime birth_date;
+    @Column(name = "birth_date")
+    private LocalDateTime birthDate;
 
-    private String phone_number;
+    @Column(name = "phone_number")
+    private String phoneNumber;
+
+    @OneToMany(mappedBy = "user")
+    private List<Account> accounts = new ArrayList<>();
 }

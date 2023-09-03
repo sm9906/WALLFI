@@ -1,21 +1,35 @@
 package com.shinhan.walfi.domain;
 
+import com.sun.istack.NotNull;
 import lombok.Getter;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
 @Table(name = "user_game_info")
 public class UserGameInfo {
     @Id
-    private String user_code;
+    @Column(name = "user_code")
+    private String userCode;
 
-    private int point;
+    @NotNull
+    private Integer point;
 
+    @NotNull
+//    @ColumnDefault("C") //challenger or manager
     private String status;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @OneToMany(mappedBy = "userGameInfo")
+    private List<Branch> branches = new ArrayList<>();
+
+    @OneToMany(mappedBy = "userGameInfo")
+    private List<GameCharacter> gameCharacters = new ArrayList<>();
 }

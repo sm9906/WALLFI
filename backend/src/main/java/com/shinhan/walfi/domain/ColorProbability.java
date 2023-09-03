@@ -1,5 +1,6 @@
 package com.shinhan.walfi.domain;
 
+import com.sun.istack.NotNull;
 import lombok.Getter;
 
 import javax.persistence.*;
@@ -12,5 +13,7 @@ public class ColorProbability {
     @Enumerated(EnumType.STRING)
     private Color color;
 
-    private float color_percent;
+    @Column(name = "color_percent")
+    @NotNull
+    private Float colorPercent;
 }

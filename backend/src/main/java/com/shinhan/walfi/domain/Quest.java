@@ -1,21 +1,30 @@
 package com.shinhan.walfi.domain;
 
+import com.sun.istack.NotNull;
 import lombok.Getter;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Getter
 public class Quest {
     @Id
-    private String quest_idx;
+    @Column(name = "quest_idx")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long questIdx;
 
-    private String quest_type;
+    @Column(name = "quest_type")
+    @NotNull
+    private String questType;
 
+    @NotNull
     private String title;
 
-    private int quest_exp;
+    @Column(name = "quest_exp")
+    @NotNull
+    private Integer questExp;
 
-    private int due_date;
+    @Column(name = "due_date")
+    @NotNull
+    private Integer dueDate;
 }

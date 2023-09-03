@@ -1,5 +1,6 @@
 package com.shinhan.walfi.domain;
 
+import com.sun.istack.NotNull;
 import lombok.Getter;
 
 import javax.persistence.*;
@@ -9,8 +10,11 @@ import javax.persistence.*;
 @Table(name = "character_probability")
 public class CharacterProbability {
     @Id
+    @Column(name = "character_type")
     @Enumerated(EnumType.STRING)
-    private CharacterType character_type;
+    private CharacterType characterType;
 
-    private float character_percent;
+    @Column(name = "character_percent")
+    @NotNull
+    private Float characterPercent;
 }

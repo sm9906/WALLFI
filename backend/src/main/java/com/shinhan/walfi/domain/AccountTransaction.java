@@ -1,5 +1,6 @@
 package com.shinhan.walfi.domain;
 
+import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.SpringApplication;
@@ -12,23 +13,40 @@ import java.time.LocalDateTime;
 @Table(name = "transaction_history")
 public class AccountTransaction {
     @Id
-    private String tx_idx;
+    @Column(name = "tx_idx")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long txIdx;
 
-    private LocalDateTime issued_time;
+    @Column(name = "issued_time")
+    @NotNull
+    private LocalDateTime issuedTime;
 
-    private String from_name;
+    @Column(name = "from_name")
+    @NotNull
+    private String fromName;
 
-    private String to_name;
+    @Column(name = "to_name")
+    @NotNull
+    private String toName;
 
+    @NotNull
     private int money;
 
-    private String from_number;
+    @Column(name = "from_number")
+    @NotNull
+    private String fromNumber;
 
-    private String to_number;
+    @Column(name = "to_number")
+    @NotNull
+    private String toNumber;
 
-    private String from_bank;
+    @Column(name = "from_bank")
+    @NotNull
+    private String fromBank;
 
-    private String to_bank;
+    @Column(name = "to_bank")
+    @NotNull
+    private String toBank;
 
     @ManyToOne
     @JoinColumn(name = "account_number")

@@ -1,6 +1,8 @@
 package com.shinhan.walfi.domain;
 
+import com.sun.istack.NotNull;
 import lombok.Getter;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -10,15 +12,23 @@ import java.time.LocalDateTime;
 @Table(name = "battle_history")
 public class BattleHistory {
     @Id
-    private String battle_idx;
+    @Column(name = "battle_idx")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long battleIdx;
 
+    @NotNull
     private String manager;
 
+    @NotNull
     private String challenger;
 
-    private LocalDateTime start_time;
+    @Column(name = "start_time")
+    @NotNull
+//    @ColumnDefault("CURRENT_TIMESTAMP")
+    private LocalDateTime startTime;
 
-    private LocalDateTime occupy_time;
+    @Column(name = "occupy_time")
+    private LocalDateTime occupyTime;
 
     @ManyToOne
     @JoinColumn(name = "branch_code")
