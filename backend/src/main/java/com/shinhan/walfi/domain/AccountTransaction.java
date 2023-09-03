@@ -14,7 +14,7 @@ public class AccountTransaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "tx_idx")
-    private String txIdx;
+    private Long txIdx;
 
     @Column(name = "issued_time")
     private LocalDateTime issuedTime;

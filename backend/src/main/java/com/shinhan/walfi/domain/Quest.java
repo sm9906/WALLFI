@@ -10,7 +10,7 @@ public class Quest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "quest_idx")
-    private String questIdx;
+    private Long questIdx;
 
     @Column(name = "quest_type")
     private String questType;

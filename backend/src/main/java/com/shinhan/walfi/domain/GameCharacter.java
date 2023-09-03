@@ -11,7 +11,7 @@ public class GameCharacter {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "character_idx")
-    private String characterIdx;
+    private Long characterIdx;
 
     @Column(name = "character_type")
     private String characterType;

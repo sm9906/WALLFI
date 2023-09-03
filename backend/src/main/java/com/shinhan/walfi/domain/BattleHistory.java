@@ -12,7 +12,7 @@ public class BattleHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "battle_idx")
-    private String battleIdx;
+    private Long battleIdx;
 
     private String manager;
 
