@@ -2,6 +2,7 @@ package com.shinhan.walfi.domain;
 
 import com.sun.istack.NotNull;
 import lombok.Getter;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 
@@ -17,6 +18,7 @@ public class UserGameInfo {
     private Integer point;
 
     @NotNull
+//    @ColumnDefault("C") //challenger or manager
     private String status;
 
     @ManyToOne

@@ -2,6 +2,7 @@ package com.shinhan.walfi.domain;
 
 import com.sun.istack.NotNull;
 import lombok.Getter;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -38,6 +39,7 @@ public class GameCharacter {
 
     @Column(name = "created_time")
     @NotNull
+//    @ColumnDefault("CURRENT_TIMESTAMP")
     private LocalDateTime createdTime;
 
     @ManyToOne
