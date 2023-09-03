@@ -10,15 +10,18 @@ import java.time.LocalDateTime;
 @Table(name = "battle_history")
 public class BattleHistory {
     @Id
-    private String battle_idx;
+    @Column(name = "battle_idx")
+    private String battleIdx;
 
     private String manager;
 
     private String challenger;
 
-    private LocalDateTime start_time;
+    @Column(name = "start_time")
+    private LocalDateTime startTime;
 
-    private LocalDateTime occupy_time;
+    @Column(name = "occupy_time")
+    private LocalDateTime occupyTime;
 
     @ManyToOne
     @JoinColumn(name = "branch_code")

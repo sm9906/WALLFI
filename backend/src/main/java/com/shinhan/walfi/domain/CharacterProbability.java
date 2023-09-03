@@ -9,8 +9,10 @@ import javax.persistence.*;
 @Table(name = "character_probability")
 public class CharacterProbability {
     @Id
+    @Column(name = "character_type")
     @Enumerated(EnumType.STRING)
-    private CharacterType character_type;
+    private CharacterType characterType;
 
-    private float character_percent;
+    @Column(name = "character_percent")
+    private float characterPercent;
 }

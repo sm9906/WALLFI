@@ -2,19 +2,18 @@ package com.shinhan.walfi.domain;
 
 import lombok.Getter;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
 public class GameCharacter {
     @Id
-    private String character_idx;
+    @Column(name = "character_idx")
+    private String characterIdx;
 
-    private String character_type;
+    @Column(name = "character_type")
+    private String characterType;
 
     private int level;
 
@@ -28,7 +27,8 @@ public class GameCharacter {
 
     private String istypical;
 
-    private LocalDateTime created_time;
+    @Column(name = "created_time")
+    private LocalDateTime createdTime;
 
     @ManyToOne
     @JoinColumn(name = "user_code")

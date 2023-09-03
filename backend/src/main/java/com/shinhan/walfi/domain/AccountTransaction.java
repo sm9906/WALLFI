@@ -12,23 +12,31 @@ import java.time.LocalDateTime;
 @Table(name = "transaction_history")
 public class AccountTransaction {
     @Id
-    private String tx_idx;
+    @Column(name = "tx_idx")
+    private String txIdx;
 
-    private LocalDateTime issued_time;
+    @Column(name = "issued_time")
+    private LocalDateTime issuedTime;
 
-    private String from_name;
+    @Column(name = "from_name")
+    private String fromName;
 
-    private String to_name;
+    @Column(name = "to_name")
+    private String toName;
 
     private int money;
 
-    private String from_number;
+    @Column(name = "from_number")
+    private String fromNumber;
 
-    private String to_number;
+    @Column(name = "to_number")
+    private String toNumber;
 
-    private String from_bank;
+    @Column(name = "from_bank")
+    private String fromBank;
 
-    private String to_bank;
+    @Column(name = "to_bank")
+    private String toBank;
 
     @ManyToOne
     @JoinColumn(name = "account_number")

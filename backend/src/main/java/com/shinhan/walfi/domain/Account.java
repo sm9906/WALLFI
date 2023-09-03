@@ -10,15 +10,16 @@ import java.time.LocalDateTime;
 @Getter
 public class Account {
     @Id
-    private String account_number;
+    @Column(name = "account_number")
+    private String accountNumber;
 
-    private int balance;
+    private Integer balance;
 
-    private LocalDateTime created_time;
+    @Column(name = "created_time")
+    private LocalDateTime createdTime;
 
-    private int account_password;
-
-    private String currency;
+    @Column(name = "account_password")
+    private Integer accountPassword;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

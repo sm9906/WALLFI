@@ -2,30 +2,34 @@ package com.shinhan.walfi.domain;
 
 import lombok.Getter;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @Entity
 @Getter
 public class Branch {
     @Id
-    private String branch_code;
+    @Column(name = "branch_code")
+    private String branchCode;
 
-    private String branch_name;
+    @Column(name = "branch_name")
+    private String branchName;
 
     private String address;
 
-    private String branch_type;
+    @Column(name = "branch_type")
+    private String branchType;
 
-    private int manager_level;
+    @Column(name = "manager_level")
+    private int managerLevel;
 
-    private int manager_hp;
+    @Column(name = "manager_hp")
+    private int managerHp;
 
-    private int manager_atk;
+    @Column(name = "manager_atk")
+    private int managerAtk;
 
-    private int manager_def;
+    @Column(name = "manager_def")
+    private int managerDef;
 
     private int exp;
 

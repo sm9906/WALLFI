@@ -22,7 +22,9 @@ public class User {
 
     private String name;
 
-    private LocalDateTime birth_date;
+    @Column(name = "birth_date")
+    private LocalDateTime birthDate;
 
-    private String phone_number;
+    @Column(name = "phone_number")
+    private String phoneNumber;
 }

@@ -2,6 +2,7 @@ package com.shinhan.walfi.domain;
 
 import lombok.Getter;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -9,13 +10,17 @@ import javax.persistence.Id;
 @Getter
 public class Quest {
     @Id
-    private String quest_idx;
+    @Column(name = "quest_idx")
+    private String questIdx;
 
-    private String quest_type;
+    @Column(name = "quest_type")
+    private String questType;
 
     private String title;
 
-    private int quest_exp;
+    @Column(name = "quest_exp")
+    private int questExp;
 
-    private int due_date;
+    @Column(name = "due_date")
+    private int dueDate;
 }

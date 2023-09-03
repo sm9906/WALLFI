@@ -9,7 +9,8 @@ import javax.persistence.*;
 @Table(name = "user_game_info")
 public class UserGameInfo {
     @Id
-    private String user_code;
+    @Column(name = "user_code")
+    private String userCode;
 
     private int point;
 
