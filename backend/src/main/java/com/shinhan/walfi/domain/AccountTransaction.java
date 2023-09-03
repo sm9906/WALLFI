@@ -14,6 +14,7 @@ import static javax.persistence.FetchType.*;
 @Getter
 @Table(name = "transaction_history")
 public class AccountTransaction {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long txIdx;
@@ -45,4 +46,5 @@ public class AccountTransaction {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "account_number")
     private Account account;
+
 }

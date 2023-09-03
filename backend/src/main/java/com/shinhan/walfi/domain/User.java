@@ -11,8 +11,8 @@ import java.util.List;
 
 @Entity
 @Getter
-@Setter
 public class User {
+
     @Id
     @Column(name = "user_id")
     private String id;
@@ -34,4 +34,5 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Account> accounts = new ArrayList<>();
+
 }

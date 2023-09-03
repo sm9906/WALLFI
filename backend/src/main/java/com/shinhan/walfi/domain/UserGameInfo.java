@@ -13,6 +13,7 @@ import static javax.persistence.FetchType.LAZY;
 @Entity
 @Getter
 public class UserGameInfo {
+
     @Id
     private String userCode;
 
@@ -32,4 +33,5 @@ public class UserGameInfo {
 
     @OneToMany(mappedBy = "userGameInfo")
     private List<GameCharacter> gameCharacters = new ArrayList<>();
+
 }

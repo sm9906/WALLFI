@@ -13,6 +13,7 @@ import static javax.persistence.FetchType.*;
 @Entity
 @Getter
 public class GameCharacter {
+
     @Id
     @Column(name = "character_idx")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,4 +49,5 @@ public class GameCharacter {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_code")
     private UserGameInfo userGameInfo;
+
 }

@@ -13,6 +13,7 @@ import static javax.persistence.FetchType.*;
 @Entity
 @Getter
 public class BattleHistory {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long battleIdx;
@@ -32,4 +33,5 @@ public class BattleHistory {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "branch_code")
     private Branch branch;
+
 }

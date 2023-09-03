@@ -8,6 +8,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 public class Quest {
+
     @Id
     @Column(name = "quest_idx")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,4 +28,5 @@ public class Quest {
     @Column(name = "due_date")
     @NotNull
     private Integer dueDate;
+
 }

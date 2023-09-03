@@ -8,10 +8,12 @@ import javax.persistence.*;
 @Entity
 @Getter
 public class ColorProbability {
+
     @Id
     @Enumerated(EnumType.STRING)
     private Color color;
 
     @NotNull
     private Float colorPercent;
+
 }

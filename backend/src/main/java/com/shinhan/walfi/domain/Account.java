@@ -16,6 +16,7 @@ import static javax.persistence.FetchType.*;
 @Entity
 @Getter
 public class Account {
+
     @Id
     private String accountNumber;
 
