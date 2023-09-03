@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-public class Character {
+public class GameCharacter {
     @Id
     private String character_idx;
 
