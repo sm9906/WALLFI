@@ -5,6 +5,8 @@ import lombok.Getter;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -21,7 +23,13 @@ public class UserGameInfo {
 //    @ColumnDefault("C") //challenger or manager
     private String status;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @OneToMany(mappedBy = "userGameInfo")
+    private List<Branch> branches = new ArrayList<>();
+
+    @OneToMany(mappedBy = "userGameInfo")
+    private List<GameCharacter> gameCharacters = new ArrayList<>();
 }

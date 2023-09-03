@@ -4,6 +4,8 @@ import com.sun.istack.NotNull;
 import lombok.Getter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -51,4 +53,7 @@ public class Branch {
     @ManyToOne
     @JoinColumn(name = "user_code")
     private UserGameInfo userGameInfo;
+
+    @OneToMany(mappedBy = "branch")
+    private List<BattleHistory> battleHistories = new ArrayList<>();
 }
