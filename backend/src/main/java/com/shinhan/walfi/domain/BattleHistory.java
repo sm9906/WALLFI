@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @Table(name = "battle_history")
 public class BattleHistory {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "battle_idx")
     private String battleIdx;
 

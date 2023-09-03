@@ -2,14 +2,13 @@ package com.shinhan.walfi.domain;
 
 import lombok.Getter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Getter
 public class Quest {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "quest_idx")
     private String questIdx;
 

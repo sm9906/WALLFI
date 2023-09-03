@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 @Getter
 public class GameCharacter {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "character_idx")
     private String characterIdx;
 

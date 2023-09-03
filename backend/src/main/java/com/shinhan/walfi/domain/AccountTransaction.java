@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @Table(name = "transaction_history")
 public class AccountTransaction {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "tx_idx")
     private String txIdx;
 
