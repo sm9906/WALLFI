@@ -3,13 +3,17 @@ package com.shinhan.walfi.domain;
 import com.sun.istack.NotNull;
 import lombok.Getter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+import static javax.persistence.FetchType.*;
+
 @Entity
 @Getter
 public class GameCharacter {
+
     @Id
     @Column(name = "character_idx")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,10 +43,11 @@ public class GameCharacter {
 
     @Column(name = "created_time")
     @NotNull
-//    @ColumnDefault("CURRENT_TIMESTAMP")
+    @CreationTimestamp
     private LocalDateTime createdTime;
 
-    @ManyToOne
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_code")
     private UserGameInfo userGameInfo;
+
 }

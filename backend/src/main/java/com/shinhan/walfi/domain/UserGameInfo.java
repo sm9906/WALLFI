@@ -8,22 +8,23 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.persistence.FetchType.LAZY;
+
 @Entity
 @Getter
-@Table(name = "user_game_info")
 public class UserGameInfo {
+
     @Id
-    @Column(name = "user_code")
     private String userCode;
 
     @NotNull
     private Integer point;
 
     @NotNull
-//    @ColumnDefault("C") //challenger or manager
+    @ColumnDefault("'C'") //challenger or manager
     private String status;
 
-    @OneToOne
+    @OneToOne(fetch = LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
@@ -32,4 +33,5 @@ public class UserGameInfo {
 
     @OneToMany(mappedBy = "userGameInfo")
     private List<GameCharacter> gameCharacters = new ArrayList<>();
+
 }

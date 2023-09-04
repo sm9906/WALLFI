@@ -4,10 +4,7 @@ import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +12,7 @@ import java.util.List;
 @Entity
 @Getter
 public class User {
+
     @Id
     @Column(name = "user_id")
     private String id;
@@ -36,4 +34,5 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Account> accounts = new ArrayList<>();
+
 }

@@ -29,6 +29,10 @@ dependencies {
 
     // Swagger-UI
     implementation 'io.springfox:springfox-boot-starter:3.0.0'
+    testImplementation 'junit:junit:4.13.1'
+
+    // test를 위한 메모리에서 작동하는 db
+    runtimeOnly 'com.h2database:h2'
 
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.mysql:mysql-connector-j'
