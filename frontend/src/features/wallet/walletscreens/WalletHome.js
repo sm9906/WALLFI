@@ -3,10 +3,10 @@ import { StyleSheet,
   Dimensions,
   Text, View, Button, 
   TouchableOpacity } from 'react-native';
-import CardItem from '../walletcomponents/WalletCard'
+import CardItem from '../walletcomponents/walletcards/WalletCard';
 
 // const SCREEN_WIDTH = Dimensions.get("window").width;
-// const SCREEN_HEIGHT= Dimensions.get("window").height;
+const SCREEN_HEIGHT= Dimensions.get("window").height;
 
 
 export default function WalletHome({navigation}) {
@@ -22,7 +22,7 @@ export default function WalletHome({navigation}) {
         </TouchableOpacity>
       </View>
       <View>
-        
+        <Text>GoFight</Text>
       </View>
     </View>
   );
@@ -30,8 +30,13 @@ export default function WalletHome({navigation}) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex:0.6,
     alignItems: 'center',
     justifyContent: 'center',
   },
+  // button:{
+  //   flex: 1,
+  //   alighItems:'center',
+  //   justifyContent: 'space-between'
+  // }
 });
