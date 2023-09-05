@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
   },
   button:{
     paddingHorizontal:'5%',
-    paddingVertical:'3%',
+    paddingVertical:'2%',
     backgroundColor:'white',
   }
 });

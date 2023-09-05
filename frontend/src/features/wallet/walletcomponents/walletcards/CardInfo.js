@@ -1,6 +1,6 @@
 // import { ImageSourcePropType } from "react-naitve";
 
-const colors = [];
+const colors = ['#4758DE','#00A8FF','#0518AB','#293694','#8FD9FF','#1C41FF'];
 
 
 export class CardInfo{
