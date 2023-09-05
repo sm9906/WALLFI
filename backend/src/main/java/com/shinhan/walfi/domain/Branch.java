@@ -1,49 +1,44 @@
 package com.shinhan.walfi.domain;
 
-import com.sun.istack.NotNull;
 import lombok.Getter;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static javax.persistence.FetchType.*;
+import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Getter
 public class Branch {
+
     @Id
     private String branchCode;
 
-    @NotNull
-    private String branchName;
-
-    @NotNull
     private String address;
 
-    @NotNull
+    private String branchName;
+
     private String branchType;
 
-    @NotNull
-    private Integer managerLevel;
-
-    @NotNull
-    private Integer managerHp;
-
-    @NotNull
-    private Integer managerAtk;
-
-    @NotNull
-    private Integer managerDef;
-
-    @NotNull
-    private Integer exp;
-
-    @NotNull
     private Float latitude;
 
-    @NotNull
     private Float longitude;
+
+    private Integer managerLevel;
+
+    private Integer managerExp;
+
+    private Integer managerHp;
+
+    private Integer managerAtk;
+
+    private Integer managerDef;
+
+    @CreationTimestamp
+    private LocalDateTime startTime;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_code")
@@ -51,4 +46,5 @@ public class Branch {
 
     @OneToMany(mappedBy = "branch")
     private List<BattleHistory> battleHistories = new ArrayList<>();
+
 }

@@ -1,8 +1,6 @@
 package com.shinhan.walfi.domain;
 
-import com.sun.istack.NotNull;
 import lombok.Getter;
-import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -15,13 +13,10 @@ import static javax.persistence.FetchType.LAZY;
 public class UserGameInfo {
 
     @Id
-    private String userCode;
+    private String userId;
 
-    @NotNull
     private Integer point;
 
-    @NotNull
-    @ColumnDefault("'C'") //challenger or manager
     private String status;
 
     @OneToOne(fetch = LAZY)

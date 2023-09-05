@@ -1,14 +1,11 @@
 package com.shinhan.walfi.domain;
 
-import com.sun.istack.NotNull;
 import lombok.Getter;
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-import static javax.persistence.FetchType.*;
+import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Getter
@@ -18,15 +15,7 @@ public class BattleHistory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long battleIdx;
 
-    @NotNull
-    private String manager;
-
-    @NotNull
-    private String challenger;
-
-    @NotNull
-    @CreationTimestamp
-    private LocalDateTime startTime;
+    private String userId;
 
     private LocalDateTime occupyTime;
 

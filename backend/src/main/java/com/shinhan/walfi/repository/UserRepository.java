@@ -13,7 +13,7 @@ public class UserRepository {
 
     public String join(User user) {
         em.persist(user);
-        return user.getId();
+        return user.getUserId();
     }
 
     public User findUserById(String userId) {

@@ -1,35 +1,31 @@
 package com.shinhan.walfi.domain;
 
-import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
+@Setter
 public class User {
 
     @Id
-    @Column(name = "user_id")
-    private String id;
+    private String userId;
 
-    @NotNull
     private String email;
 
-    @NotNull
     private String password;
 
-    @NotNull
     private String name;
 
-    @Column(name = "birth_date")
     private LocalDateTime birthDate;
 
-    @Column(name = "phone_number")
     private String phoneNumber;
 
     @OneToMany(mappedBy = "user")

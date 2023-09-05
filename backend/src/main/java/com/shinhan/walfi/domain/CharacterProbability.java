@@ -1,19 +1,6 @@
 package com.shinhan.walfi.domain;
 
-import com.sun.istack.NotNull;
-import lombok.Getter;
+public enum CharacterProbability {
 
-import javax.persistence.*;
-
-@Entity
-@Getter
-public class CharacterProbability {
-
-    @Id
-    @Enumerated(EnumType.STRING)
-    private CharacterType characterType;
-
-    @NotNull
-    private Float characterPercent;
-
+    // Todo : 캐릭터별 뽑기확률 근데 Character Type이랑 무슨 차이?
 }
