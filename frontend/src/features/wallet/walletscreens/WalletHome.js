@@ -11,8 +11,11 @@ export default function WalletHome({navigation}) {
         홈
       </Text>
       <TouchableOpacity onPress={()=>navigation.navigate('MakeAccount')}>
-        <Text>예적금 페이지로</Text>
+        <Text>예적금 만들기</Text>
       </TouchableOpacity>  
+      <TouchableOpacity onPress={()=>navigation.navigate('ExchangeSearch')}>
+        <Text>오늘의 환율</Text>
+      </TouchableOpacity>
     </View>
   );
 }
