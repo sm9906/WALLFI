@@ -12,7 +12,7 @@ const CardItem = (props) => {
   const navigation = useNavigation();
 
   const info = {
-    national: '한국',
+    nation: '한국',
     accountnum : '1111111',
     balance: '1,000,000'
   }
@@ -26,7 +26,7 @@ const CardItem = (props) => {
     <>
      <View style={styles.card}>
       <View style={styles.account}>
-       <Text style={styles.cardinfo}>{data.national}{data.accountnum}</Text>
+       <Text style={styles.cardinfo}>{data.nation}{data.accountnum}</Text>
       </View> 
       <View style={styles.balance}>
         <Text style={{...styles.cardinfo, fontSize:30, }}>{data.balance}</Text>
@@ -76,12 +76,13 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   }, 
   buttons:{
-    width:'60%',
+    width:'70%',
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
   button:{
-    padding:'3%',
+    paddingHorizontal:'5%',
+    paddingVertical:'3%',
     backgroundColor:'white',
   }
 });
