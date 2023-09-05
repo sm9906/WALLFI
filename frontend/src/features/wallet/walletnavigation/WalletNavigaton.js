@@ -15,9 +15,11 @@ const WalletNavigation = () => {
     
 	// 4. 객체 안에 .Navigator 라는 property 나옴
     <Stack.Navigator initialRouteName='WalletHome'>
-      <Stack.Screen name="My 월렛" component={WalletHome}/>
-      <Stack.Screen name="예/적금" component={MakeAccount} />
-      <Stack.Screen name="환율" component={ExchangeSearch} />
+      <Stack.Screen name="WalletHome" component={WalletHome}
+      options={{title:'My 월렛'}}
+      />
+      <Stack.Screen name="MakeAccount" component={MakeAccount} options={{title:'예/적금'}}/>
+      <Stack.Screen name="ExchangeSearch" component={ExchangeSearch} options={{title:'환율'}} />
     </Stack.Navigator>
 
     )
