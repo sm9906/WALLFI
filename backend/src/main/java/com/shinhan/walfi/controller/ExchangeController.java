@@ -19,10 +19,7 @@ public class ExchangeController {
     private final ExchangeService exchangeService;
 
     @GetMapping("/info")
-    public ResponseEntity<HttpResult> todayExchange(){
-
-        // Todo : 오늘의 환율을 조회하여 반환
-
+    public ResponseEntity<HttpResult> todayExchange() {
         //신한 api 환율 조회하기
         HttpResult res;
 
@@ -36,5 +33,4 @@ public class ExchangeController {
 
         return ResponseEntity.status(res.getStatus()).body(res);
     }
-
 }
