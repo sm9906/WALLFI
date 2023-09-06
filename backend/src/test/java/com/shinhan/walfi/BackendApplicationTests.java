@@ -1,4 +1,4 @@
-package com.ssafy.walfi;
+package com.shinhan.walfi;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
