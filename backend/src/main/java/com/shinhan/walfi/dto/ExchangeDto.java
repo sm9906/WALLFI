@@ -20,9 +20,9 @@ public class ExchangeDto {
 //    String TC매입환율 = "1272.05";
 //    String TC매도환율 = "1302.95";
 
-    private String 매매기준환율; //"1287.50"
+    private double 매매기준환율; //"1287.50"
 
-    private float 전일대비 = 0;
+    private double 전일대비 = 0;
 
 //    String 대미환산환율 = "1.0000";
 }

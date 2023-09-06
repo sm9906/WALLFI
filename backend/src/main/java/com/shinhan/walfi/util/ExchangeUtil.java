@@ -36,6 +36,7 @@ public class ExchangeUtil {
         HttpHeaders headers = new HttpHeaders(); // 헤더 생성
         headers.setContentType(MediaType.APPLICATION_JSON); 
 
+        // Todo : 날짜 넣을 수 있게 // 가능하면 String 대신 Json 객체로 body 구성
         // 바디 생성
         String body = "{\n" +
                 "    \"dataHeader\": {\n" +
@@ -65,7 +66,7 @@ public class ExchangeUtil {
     private ExchangeDto makeExchangeDto(JSONObject item) { // json 객체를 ExchangeDto로 파싱
         ExchangeDto dto = ExchangeDto.builder().
                 통화명((String) item.get("통화CODE_DISPLAY")).
-                매매기준환율((String) item.get("매매기준환율")).
+                매매기준환율(Float.parseFloat(((String) item.get("매매기준환율")))).
                 통화코드((String) item.get("통화CODE")).
                 build();
         return dto;
