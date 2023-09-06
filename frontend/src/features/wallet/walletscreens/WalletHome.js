@@ -4,13 +4,13 @@ import { StyleSheet,
   Text, View, Image, 
   TouchableOpacity } from 'react-native';
 import CardItem from '../walletcomponents/walletcards/WalletCard';
-import GoFight from '../walletcomponents/walletcards/GoFight';
-import {Background} from '../walletcomponents/Background';
+import GoFight from '../walletcomponents/GoFight';
+import {Background} from '../walletcomponents/CommonStyle';
 import SinhanLogo from '../../../assets/wallet/SinhanLogo.png';
 import Exchange from '../../../assets/wallet/Exchange.png'
 
-const SCREEN_WIDTH = Dimensions.get("window").width;
-const SCREEN_HEIGHT= Dimensions.get("window").height;
+export const SCREEN_WIDTH = Dimensions.get("window").width;
+export const SCREEN_HEIGHT= Dimensions.get("window").height;
 
 export default function WalletHome({navigation}) {
   return (

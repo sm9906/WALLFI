@@ -31,7 +31,7 @@ const CardItem = (props) => {
       <View style={styles.balance}>
         <Text style={{...styles.cardinfo, fontSize:30, }}>{data.balance}</Text>
         <View style={styles.buttons}>
-          <TouchableOpacity onPress={()=>navigation.navigate('ExchangeSearch')} style={styles.button}>
+          <TouchableOpacity onPress={()=>navigation.navigate('SendMoney')} style={styles.button}>
             <Text>송금하기</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={()=>navigation.navigate('ExchangeSearch')} style={styles.button}>

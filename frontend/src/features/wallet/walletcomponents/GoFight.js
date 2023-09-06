@@ -1,6 +1,6 @@
 import { Image, StyleSheet } from 'react-native';
 
-import go from '../../../../assets/wallet/GoFight.png'
+import go from '../../../assets/wallet/GoFight.png'
 
 const GoFight =()=>{
   return(
