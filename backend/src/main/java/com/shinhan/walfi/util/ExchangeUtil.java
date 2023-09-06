@@ -64,9 +64,9 @@ public class ExchangeUtil {
 
     private ExchangeDto makeExchangeDto(JSONObject item) { // json 객체를 ExchangeDto로 파싱
         ExchangeDto dto = ExchangeDto.builder().
-                통화명((String) item.get("통화CODE")).
-                매매기준환율((String) item.get("통화CODE_DISPLAY")).
-                통화코드((String) item.get("매매기준환율")).
+                통화명((String) item.get("통화CODE_DISPLAY")).
+                매매기준환율((String) item.get("매매기준환율")).
+                통화코드((String) item.get("통화CODE")).
                 build();
         return dto;
     }
