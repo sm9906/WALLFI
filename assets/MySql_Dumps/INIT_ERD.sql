@@ -88,6 +88,7 @@ CREATE TABLE IF NOT EXISTS `walfi`.`branch` (
   `address` VARCHAR(16) NULL DEFAULT NULL,
   `branch_name` VARCHAR(16) NULL DEFAULT NULL,
   `branch_type` VARCHAR(16) NULL DEFAULT NULL,
+  `branch_phone_number` varchar(16) NULL,
   `latitude` FLOAT NULL DEFAULT NULL,
   `longitude` FLOAT NULL DEFAULT NULL,
   `manager_level` INT NULL DEFAULT NULL,

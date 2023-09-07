@@ -23,6 +23,8 @@ public class Branch {
 
     private String branchType;
 
+    private String branchPhoneNumber;
+
     private float latitude;
 
     private float longitude;
