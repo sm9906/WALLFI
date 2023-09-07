@@ -46,6 +46,12 @@ public class CharacterService {
         return gameCharacter.getCharacterIdx();
     }
 
+    /**
+     * 캐릭터 뽑기
+     *
+     * @param userId
+     * @return 뽑은 캐릭터 idx 반환
+     */
     @Transactional
     public Long shop(String userId) {
         UserGameInfo userGameInfo = userRepository.findUserGameInfo(userId);
