@@ -3,6 +3,8 @@ package com.shinhan.walfi.service;
 import com.shinhan.walfi.domain.CharacterType;
 import com.shinhan.walfi.domain.game.GameCharacter;
 import com.shinhan.walfi.domain.game.UserGameInfo;
+import com.shinhan.walfi.dto.game.CharacterDto;
+import com.shinhan.walfi.dto.game.CharacterResDto;
 import com.shinhan.walfi.repository.CharacterRepository;
 import com.shinhan.walfi.repository.UserGameInfoRepository;
 import com.shinhan.walfi.repository.UserRepository;
@@ -12,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -85,12 +88,27 @@ public class CharacterServiceImpl implements CharacterService {
      * @return 캐릭터 DTO
      */
     @Override
-    public List<GameCharacter> searchCharacters(String userId) {
+    public CharacterResDto searchCharacters(String userId) {
         UserGameInfo userGameInfo = userGameInfoRepository.findByUserId(userId);
 
         List<GameCharacter> characters = characterRepository.findCharactersByUserGameInfo(userGameInfo);
 
-        return characters;
+        CharacterResDto characterResDto = (CharacterResDto) characters.stream()
+                .map(character -> CharacterDto.builder()
+                            .characterIdx(character.getCharacterIdx())
+                            .characterType(character.getCharacterType())
+                            .color(character.getColor())
+                            .level(character.getLevel())
+                            .exp(character.getExp())
+                            .hp(character.getHp())
+                            .atk(character.getAtk())
+                            .def(character.getDef())
+                            .isMain(character.isMain())
+                            .createdTime(character.getCreatedTime())
+                            .build())
+                .collect(Collectors.toList());
+
+        return characterResDto;
     }
 
 }
