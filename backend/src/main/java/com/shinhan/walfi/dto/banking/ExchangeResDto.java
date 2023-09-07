@@ -1,4 +1,4 @@
-package com.shinhan.walfi.dto;
+package com.shinhan.walfi.dto.banking;
 
 import lombok.Getter;
 import lombok.Setter;

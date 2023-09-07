@@ -1,4 +1,4 @@
-package com.shinhan.walfi.domain;
+package com.shinhan.walfi.domain.game;
 
 import lombok.Getter;
 

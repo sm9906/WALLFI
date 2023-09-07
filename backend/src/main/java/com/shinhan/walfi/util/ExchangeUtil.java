@@ -1,6 +1,6 @@
 package com.shinhan.walfi.util;
 
-import com.shinhan.walfi.dto.ExchangeDto;
+import com.shinhan.walfi.dto.banking.ExchangeDto;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;

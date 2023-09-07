@@ -1,5 +1,6 @@
-package com.shinhan.walfi.domain;
+package com.shinhan.walfi.domain.banking;
 
+import com.shinhan.walfi.domain.User;
 import lombok.Getter;
 
 import javax.persistence.*;

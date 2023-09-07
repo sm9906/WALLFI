@@ -1,7 +1,7 @@
 package com.shinhan.walfi.controller;
 
 import com.shinhan.walfi.domain.HttpResult;
-import com.shinhan.walfi.dto.ExchangeResDto;
+import com.shinhan.walfi.dto.banking.ExchangeResDto;
 import com.shinhan.walfi.service.ExchangeService;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.parser.ParseException;

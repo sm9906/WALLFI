@@ -1,5 +1,6 @@
 package com.shinhan.walfi.domain;
 
+import com.shinhan.walfi.domain.banking.Account;
 import lombok.Getter;
 import lombok.Setter;
 
