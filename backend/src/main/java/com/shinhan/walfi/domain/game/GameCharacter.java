@@ -61,7 +61,7 @@ public class GameCharacter {
         gameCharacter.color = TierPerColor.BASIC;
         gameCharacter.level = 1;
         gameCharacter.exp = 0;
-        gameCharacter.hp = 100;
+        gameCharacter.hp = 50;
         gameCharacter.atk = 0;
         gameCharacter.def = 0;
         gameCharacter.isMain = isMain;
