@@ -139,7 +139,7 @@ CREATE TABLE IF NOT EXISTS `walfi`.`game_character` (
   `hp` INT NULL,
   `atk` INT NULL,
   `def` INT NULL,
-  `istypical` VARCHAR(1) NULL DEFAULT 'N',
+  `is_typical` VARCHAR(1) NULL DEFAULT 'N',
   `created_time` DATETIME NULL DEFAULT current_timestamp,
   `user_id` VARCHAR(16) NOT NULL,
   PRIMARY KEY (`character_idx`),
@@ -258,7 +258,7 @@ CREATE TABLE IF NOT EXISTS `walfi`.`quest` (
   `quest_type` VARCHAR(10) NULL,
   `quest_title` VARCHAR(50) NULL,
   `quest_exp` INT NULL,
-  `context` VARCHAR(255) NULL,
+  `content` VARCHAR(255) NULL,
   PRIMARY KEY (`quest_idx`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
