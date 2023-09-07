@@ -1,0 +1,18 @@
+package com.shinhan.walfi.dao;
+
+import lombok.Getter;
+import lombok.ToString;
+
+
+@Getter
+@ToString
+public class DailyQuestDao {
+
+    private long idx;
+
+    private String type;
+
+    private String title;
+
+    private String content;
+}
