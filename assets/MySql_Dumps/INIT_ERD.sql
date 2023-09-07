@@ -84,7 +84,7 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- Table `walfi`.`branch`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `walfi`.`branch` (
-  `branch_code` VARCHAR(16) NOT NULL,
+  `branch_idx` BIGINT NOT NULL AUTO_INCREMENT,
   `address` VARCHAR(16) NULL DEFAULT NULL,
   `branch_name` VARCHAR(16) NULL DEFAULT NULL,
   `branch_type` VARCHAR(16) NULL DEFAULT NULL,
@@ -97,7 +97,7 @@ CREATE TABLE IF NOT EXISTS `walfi`.`branch` (
   `manager_def` INT NULL DEFAULT NULL,
   `start_time` DATETIME NULL DEFAULT current_timestamp,
   `user_id` VARCHAR(16) NOT NULL,
-  PRIMARY KEY (`branch_code`),
+  PRIMARY KEY (`branch_idx`),
   INDEX `fk_branch_user_game_info1_idx` (`user_id` ASC) VISIBLE,
   CONSTRAINT `fk_branch_user_game_info1`
     FOREIGN KEY (`user_id`)
@@ -116,12 +116,13 @@ CREATE TABLE IF NOT EXISTS `walfi`.`battle_history` (
   `battle_idx` BIGINT NOT NULL AUTO_INCREMENT,
   `user_id` VARCHAR(16) NULL DEFAULT NULL,
   `occupy_time` DATETIME NULL DEFAULT NULL,
-  `branch_code` VARCHAR(16) NULL DEFAULT NULL,
+  `branch_idx` BIGINT NULL DEFAULT NULL,
   PRIMARY KEY (`battle_idx`),
-  INDEX `FK6qrmbe72qh6g647qlgxy9dg1k` (`branch_code` ASC) VISIBLE,
+  INDEX `FK6qrmbe72qh6g647qlgxy9dg1k` (`branch_idx` ASC) VISIBLE,
   CONSTRAINT `FK6qrmbe72qh6g647qlgxy9dg1k`
-    FOREIGN KEY (`branch_code`)
-    REFERENCES `walfi`.`branch` (`branch_code`))
+    FOREIGN KEY (`branch_idx`)
+    REFERENCES `walfi`.`branch` (`branch_idx`)
+    )
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;

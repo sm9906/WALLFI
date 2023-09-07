@@ -15,7 +15,7 @@ import static javax.persistence.FetchType.LAZY;
 public class Branch {
 
     @Id
-    private String branchCode;
+    private Long branchIdx;
 
     private String address;
 
