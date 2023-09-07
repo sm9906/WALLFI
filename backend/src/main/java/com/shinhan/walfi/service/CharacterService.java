@@ -45,4 +45,25 @@ public class CharacterService {
 
         return gameCharacter.getCharacterIdx();
     }
+
+    @Transactional
+    public Long shop(String userId) {
+        UserGameInfo userGameInfo = userRepository.findUserGameInfo(userId);
+
+        Random random = new Random();
+
+        // 캐릭터 타입 랜덤 생성
+        CharacterType[] characterTypes = CharacterType.values();
+        int typesRandomNum = random.nextInt(characterTypes.length);
+        CharacterType randomCharacterType = characterTypes[typesRandomNum];
+
+        // 캐릭터 생성
+        Boolean isMain = false;
+        GameCharacter gameCharacter = GameCharacter.createCharacter(userGameInfo, randomCharacterType, isMain);
+
+        // db에 저장
+        characterRepository.save(gameCharacter);
+
+        return gameCharacter.getCharacterIdx();
+    }
 }
