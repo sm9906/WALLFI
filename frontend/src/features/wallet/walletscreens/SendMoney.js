@@ -25,11 +25,11 @@ export default function SendMoney({navigation, props}){
             }}
             defaultValue={banks[0]}
             buttonStyle={styles.banksel}
-            dropdownIconPosition="right"
           />
           <TextInput keyboardType="number-pad" 
             keyboardShouldPersistTaps="handled" 
-            style={styles.accountInput} />
+            style={styles.accountInput}
+            placeholder="계좌번호" />
         </View>
         <TouchableOpacity style={{...ButtonStyle.button, marginTop:'10%'}} onPress={()=>navigation.navigate('ExchangeSearch')}>
           <Text style={ButtonStyle.btnFont}>다음</Text>
