@@ -37,7 +37,8 @@ public class CharacterService {
         CharacterType randomCharacterType = characterTypes[typesRandomNum];
 
         // 캐릭터 생성
-        GameCharacter gameCharacter = GameCharacter.createCharacter(userGameInfo, randomCharacterType);
+        Boolean isMain = true;
+        GameCharacter gameCharacter = GameCharacter.createCharacter(userGameInfo, randomCharacterType, isMain);
 
         // db에 저장
         characterRepository.save(gameCharacter);

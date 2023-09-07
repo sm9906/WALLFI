@@ -34,7 +34,7 @@ class CharacterServiceTest {
 
         // then
         Assertions.assertThat(findGameCharacter.getColor()).isEqualTo(TierPerColor.BASIC);
-        Assertions.assertThat(findGameCharacter.getLevel()).isEqualTo(0);
+        Assertions.assertThat(findGameCharacter.getLevel()).isEqualTo(1);
         Assertions.assertThat(findGameCharacter.getHp()).isEqualTo(100);
         Assertions.assertThat(findGameCharacter.getExp()).isEqualTo(0);
         Assertions.assertThat(findGameCharacter.getAtk()).isEqualTo(0);

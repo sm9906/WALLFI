@@ -54,7 +54,7 @@ public class GameCharacter {
      * 게임 캐릭터 생성, enum은 service에서 설정
      * @param userGameInfo
      */
-    public static GameCharacter createCharacter(UserGameInfo userGameInfo, CharacterType characterType) {
+    public static GameCharacter createCharacter(UserGameInfo userGameInfo, CharacterType characterType, Boolean isMain) {
         GameCharacter gameCharacter = new GameCharacter();
 
         gameCharacter.characterType = characterType;
@@ -64,7 +64,7 @@ public class GameCharacter {
         gameCharacter.hp = 100;
         gameCharacter.atk = 0;
         gameCharacter.def = 0;
-        gameCharacter.isMain = true;
+        gameCharacter.isMain = isMain;
         gameCharacter.userGameInfo = userGameInfo;
 
         return gameCharacter;
