@@ -12,9 +12,7 @@ public class UserGameInfoRepository {
 
     private final EntityManager em;
 
-    public UserGameInfo findByUserId(String userId) {
-        return em.createQuery("select u from UserGameInfo u " +
-                "where u.userId=userId ", UserGameInfo.class).getSingleResult();
+    public UserGameInfo findById(String userGameId) {
+        return em.find(UserGameInfo.class, userGameId);
     }
-
 }

@@ -21,7 +21,4 @@ public class UserRepository {
         return em.find(User.class, userId);
     }
 
-    public UserGameInfo findUserGameInfo(String userId) {
-        return em.find(UserGameInfo.class, userId);
-    }
 }
