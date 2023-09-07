@@ -42,4 +42,24 @@ class CharacterServiceTest {
         Assertions.assertThat(findGameCharacter.isMain()).isEqualTo(true);
     }
 
+    @Test
+    @DisplayName("캐릭터 뽑기 확인 테스트 (색, 레벨, hp, exp, atk, def, ismain)")
+    public void shopCharacter() {
+        // given
+        User user = new User();
+        user.setUserId("ssafy");
+
+        // when
+        Long findGameIdx = characterService.shop(user.getUserId());
+        GameCharacter findGameCharacter = em.find(GameCharacter.class, findGameIdx);
+
+        // then
+        Assertions.assertThat(findGameCharacter.getColor()).isEqualTo(TierPerColor.BASIC);
+        Assertions.assertThat(findGameCharacter.getLevel()).isEqualTo(1);
+        Assertions.assertThat(findGameCharacter.getHp()).isEqualTo(100);
+        Assertions.assertThat(findGameCharacter.getExp()).isEqualTo(0);
+        Assertions.assertThat(findGameCharacter.getAtk()).isEqualTo(0);
+        Assertions.assertThat(findGameCharacter.getDef()).isEqualTo(0);
+        Assertions.assertThat(findGameCharacter.isMain()).isEqualTo(false);
+    }
 }
