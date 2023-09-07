@@ -24,15 +24,15 @@ public class KrwTransaction {
 
     private String 적요;
 
-    private Long 출금금액;
+    private long 출금금액;
 
-    private Long 입금금액;
+    private long 입금금액;
 
     private String 내용;
 
-    private Long 잔액;
+    private long 잔액;
 
-    private Byte 입지구분;
+    private byte 입지구분;
 
     private String 거래점명;
 

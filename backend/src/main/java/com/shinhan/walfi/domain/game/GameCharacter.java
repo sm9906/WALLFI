@@ -20,17 +20,17 @@ public class GameCharacter {
 
     private String color;
 
-    private Integer level;
+    private int level;
 
-    private Integer exp;
+    private int exp;
 
-    private Integer hp;
+    private int hp;
 
-    private Integer atk;
+    private int atk;
 
-    private Integer def;
+    private int def;
 
-    private String istypical;
+    private boolean isMain;
 
     @CreationTimestamp
     private LocalDateTime createdTime;

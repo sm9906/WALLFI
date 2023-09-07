@@ -16,7 +16,7 @@ public class UserGameInfo {
     @Id
     private String userId;
 
-    private Integer point;
+    private int point;
 
     private String status;
 

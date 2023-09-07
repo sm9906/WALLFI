@@ -22,13 +22,13 @@ public class KrwAccountTransaction {
 
     private String 입금계좌번호;
 
-    private Long 이체금액;
+    private long 이체금액;
 
     private String 입금계좌통장메모;
 
     private String 출금계좌통장메모;
 
-    private Long 거래후잔액;
+    private long 거래후잔액;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "계좌번호")

@@ -19,8 +19,6 @@ public class Quest {
 
     private String questTitle;
 
-    private Integer questExp;
-
-    private String context;
+    private String content;
 
 }

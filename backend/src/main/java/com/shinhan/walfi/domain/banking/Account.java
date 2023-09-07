@@ -23,10 +23,10 @@ public class Account {
     private String 상품명;
 
     @Column(name = "잔액(통화별)")
-    private Long 잔액통화별;
+    private long 잔액통화별;
 
     @Column(name = "평가금액(통화별)")
-    private Long 평가금액통화별;
+    private long 평가금액통화별;
 
     private Date 신규일;
 
@@ -42,26 +42,26 @@ public class Account {
     private String 과세;
 
     @Column(name = "잔액(원화)")
-    private Long 잔액원화;
+    private long 잔액원화;
 
     @Column(name = "평가금액(원화)")
-    private Long 평가금액원화;
+    private long 평가금액원화;
 
-    private Byte 자동해지여부;
+    private byte 자동해지여부;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "account", fetch = LAZY)
+    @OneToMany(mappedBy = "account")
     private List<KrwTransaction> krwTransactions = new ArrayList<>();
 
-    @OneToMany(mappedBy = "account", fetch = LAZY)
+    @OneToMany(mappedBy = "account")
     private List<GlobalTransaction> globalTransactions = new ArrayList<>();
 
-    @OneToMany(mappedBy = "account", fetch = LAZY)
+    @OneToMany(mappedBy = "account")
     private List<KrwAccountTransaction> krwAccountTransactions = new ArrayList<>();
 
-    @OneToMany(mappedBy = "account", fetch = LAZY)
+    @OneToMany(mappedBy = "account")
     private List<GlobalAccountTransaction> globalAccountTransactions = new ArrayList<>();
 }

@@ -23,19 +23,19 @@ public class Branch {
 
     private String branchType;
 
-    private Float latitude;
+    private float latitude;
 
-    private Float longitude;
+    private float longitude;
 
-    private Integer managerLevel;
+    private int managerLevel;
 
-    private Integer managerExp;
+    private int managerExp;
 
-    private Integer managerHp;
+    private int managerHp;
 
-    private Integer managerAtk;
+    private int managerAtk;
 
-    private Integer managerDef;
+    private int managerDef;
 
     @CreationTimestamp
     private LocalDateTime startTime;

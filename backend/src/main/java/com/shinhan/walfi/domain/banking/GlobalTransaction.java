@@ -26,17 +26,17 @@ public class GlobalTransaction {
 
     private String 적요;
 
-    private Float 지급금액;
+    private float 지급금액;
 
-    private Float 입금금액;
+    private float 입금금액;
 
-    private Float 계좌잔액;
+    private float 계좌잔액;
 
     private String 정정취소구분;
 
-    private Long 거래원화금액;
+    private long 거래원화금액;
 
-    private Float 거래환율;
+    private float 거래환율;
 
     private String 입금의뢰인명;
 
