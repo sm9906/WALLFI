@@ -3,6 +3,8 @@ package com.shinhan.walfi.service;
 import com.shinhan.walfi.domain.TierPerColor;
 import com.shinhan.walfi.domain.User;
 import com.shinhan.walfi.domain.game.GameCharacter;
+import com.shinhan.walfi.domain.game.UserGameInfo;
+import com.shinhan.walfi.dto.game.CharacterResDto;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,6 +29,7 @@ class CharacterServiceTest {
         // given
         User user = new User();
         user.setUserId("ssafy");
+        em.persist(user);
 
         // when
         Long findGameIdx = characterService.create(user.getUserId());
@@ -48,6 +51,7 @@ class CharacterServiceTest {
         // given
         User user = new User();
         user.setUserId("ssafy");
+        em.persist(user);
 
         // when
         Long findGameIdx = characterService.shop(user.getUserId());
@@ -61,5 +65,24 @@ class CharacterServiceTest {
         Assertions.assertThat(findGameCharacter.getAtk()).isEqualTo(0);
         Assertions.assertThat(findGameCharacter.getDef()).isEqualTo(0);
         Assertions.assertThat(findGameCharacter.isMain()).isEqualTo(false);
+    }
+
+    @Test
+    @DisplayName("userGameId를 이용한 캐릭터 조회")
+    void searchCharacter() throws Exception{
+        // given
+        UserGameInfo userGameInfo = new UserGameInfo();
+        userGameInfo.setUserGameId("1234");
+        em.persist(userGameInfo);
+
+        Long c1 = characterService.create(userGameInfo.getUserGameId());
+        Long c2 = characterService.shop(userGameInfo.getUserGameId());
+        Long c3 = characterService.shop(userGameInfo.getUserGameId());
+
+        // when
+        CharacterResDto characterResDto = characterService.searchCharacters(userGameInfo.getUserGameId());
+
+        // then
+        Assertions.assertThat(characterResDto.getCharacterDtoList().size()).isEqualTo(3);
     }
 }
