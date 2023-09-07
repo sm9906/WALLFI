@@ -93,7 +93,7 @@ public class CharacterServiceImpl implements CharacterService {
 
         List<GameCharacter> characters = characterRepository.findCharactersByUserGameInfo(userGameInfo);
 
-        CharacterResDto characterResDto = (CharacterResDto) characters.stream()
+        List<CharacterDto> dtoList = characters.stream()
                 .map(character -> CharacterDto.builder()
                             .characterIdx(character.getCharacterIdx())
                             .characterType(character.getCharacterType())
@@ -107,6 +107,8 @@ public class CharacterServiceImpl implements CharacterService {
                             .createdTime(character.getCreatedTime())
                             .build())
                 .collect(Collectors.toList());
+
+        CharacterResDto characterResDto = CharacterResDto.builder().characterDtoList(dtoList).build();
 
         return characterResDto;
     }
