@@ -1,24 +1,35 @@
 package com.shinhan.walfi.domain.game;
 
+import com.shinhan.walfi.domain.CharacterType;
+import com.shinhan.walfi.domain.TierPerColor;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.awt.*;
 import java.time.LocalDateTime;
 
 import static javax.persistence.FetchType.LAZY;
 
+import java.util.Random;
+
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class GameCharacter {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long characterIdx;
 
-    private String characterType;
+    @Enumerated(EnumType.STRING)
+    private CharacterType characterType;
 
-    private String color;
+    @Enumerated(EnumType.STRING)
+    private TierPerColor color;
 
     private int level;
 
@@ -39,4 +50,23 @@ public class GameCharacter {
     @JoinColumn(name = "user_id")
     private UserGameInfo userGameInfo;
 
+    /**
+     * 게임 캐릭터 생성, enum은 service에서 설정
+     * @param userGameInfo
+     */
+    public static GameCharacter createCharacter(UserGameInfo userGameInfo, CharacterType characterType) {
+        GameCharacter gameCharacter = new GameCharacter();
+
+        gameCharacter.characterType = characterType;
+        gameCharacter.color = TierPerColor.BASIC;
+        gameCharacter.level = 1;
+        gameCharacter.exp = 0;
+        gameCharacter.hp = 100;
+        gameCharacter.atk = 0;
+        gameCharacter.def = 0;
+        gameCharacter.isMain = true;
+        gameCharacter.userGameInfo = userGameInfo;
+
+        return gameCharacter;
+    }
 }
