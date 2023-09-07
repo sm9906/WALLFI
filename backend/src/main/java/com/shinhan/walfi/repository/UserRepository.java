@@ -1,6 +1,7 @@
 package com.shinhan.walfi.repository;
 
 import com.shinhan.walfi.domain.User;
+import com.shinhan.walfi.domain.game.UserGameInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -20,4 +21,7 @@ public class UserRepository {
         return em.find(User.class, userId);
     }
 
+    public UserGameInfo findUserGameInfo(String userId) {
+        return em.find(UserGameInfo.class, userId);
+    }
 }
