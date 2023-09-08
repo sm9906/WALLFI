@@ -16,7 +16,7 @@ import static javax.persistence.FetchType.LAZY;
 public class UserGameInfo {
 
     @Id
-    private String userGameId;
+    private String userId;
 
     private int point;
 

@@ -68,7 +68,7 @@ class CharacterServiceTest {
     }
 
     @Test
-    @DisplayName("userGameId를 이용한 캐릭터 조회")
+    @DisplayName("userId를 이용한 캐릭터 조회")
     void searchCharacter() throws Exception{
         // given
         UserGameInfo userGameInfo = new UserGameInfo();

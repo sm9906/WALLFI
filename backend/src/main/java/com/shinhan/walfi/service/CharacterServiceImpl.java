@@ -22,19 +22,18 @@ import java.util.stream.Collectors;
 public class CharacterServiceImpl implements CharacterService {
 
     private final CharacterRepository characterRepository;
-    private final UserRepository userRepository;
     private final UserGameInfoRepository userGameInfoRepository;
 
     /**
      * 캐릭터 타입 랜덤 설정 후 캐릭터 생성
      *
-     * @param userGameId
+     * @param userId
      * @return 생성한 캐릭터 idx 반환
      */
     @Override
     @Transactional
-    public Long create(String userGameId) {
-        UserGameInfo userGameInfo = userGameInfoRepository.findById(userGameId);
+    public Long create(String userId) {
+        UserGameInfo userGameInfo = userGameInfoRepository.findById(userId);
 
         Random random = new Random();
 
@@ -56,13 +55,13 @@ public class CharacterServiceImpl implements CharacterService {
     /**
      * 캐릭터 뽑기
      *
-     * @param userGameId
+     * @param userId
      * @return 뽑은 캐릭터 idx 반환
      */
     @Override
     @Transactional
-    public Long shop(String userGameId) {
-        UserGameInfo userGameInfo = userGameInfoRepository.findById(userGameId);
+    public Long shop(String userId) {
+        UserGameInfo userGameInfo = userGameInfoRepository.findById(userId);
 
         Random random = new Random();
 
@@ -84,12 +83,12 @@ public class CharacterServiceImpl implements CharacterService {
     /**
      * 사용자가 가진 전체 캐릭터 조회
      *
-     * @param userGameId
+     * @param userId
      * @return 캐릭터 DTO
      */
     @Override
-    public CharacterResDto searchCharacters(String userGameId) {
-        UserGameInfo userGameInfo = userGameInfoRepository.findById(userGameId);
+    public CharacterResDto searchCharacters(String userId) {
+        UserGameInfo userGameInfo = userGameInfoRepository.findById(userId);
 
         List<GameCharacter> characters = characterRepository.findCharactersByUserGameInfo(userGameInfo);
 

@@ -12,7 +12,7 @@ public class UserGameInfoRepository {
 
     private final EntityManager em;
 
-    public UserGameInfo findById(String userGameId) {
-        return em.find(UserGameInfo.class, userGameId);
+    public UserGameInfo findById(String userId) {
+        return em.find(UserGameInfo.class, userId);
     }
 }
