@@ -38,7 +38,7 @@ class CharacterServiceTest {
         // then
         Assertions.assertThat(findGameCharacter.getColor()).isEqualTo(TierPerColor.BASIC);
         Assertions.assertThat(findGameCharacter.getLevel()).isEqualTo(1);
-        Assertions.assertThat(findGameCharacter.getHp()).isEqualTo(100);
+        Assertions.assertThat(findGameCharacter.getHp()).isEqualTo(50);
         Assertions.assertThat(findGameCharacter.getExp()).isEqualTo(0);
         Assertions.assertThat(findGameCharacter.getAtk()).isEqualTo(0);
         Assertions.assertThat(findGameCharacter.getDef()).isEqualTo(0);
@@ -60,7 +60,7 @@ class CharacterServiceTest {
         // then
         Assertions.assertThat(findGameCharacter.getColor()).isEqualTo(TierPerColor.BASIC);
         Assertions.assertThat(findGameCharacter.getLevel()).isEqualTo(1);
-        Assertions.assertThat(findGameCharacter.getHp()).isEqualTo(100);
+        Assertions.assertThat(findGameCharacter.getHp()).isEqualTo(50);
         Assertions.assertThat(findGameCharacter.getExp()).isEqualTo(0);
         Assertions.assertThat(findGameCharacter.getAtk()).isEqualTo(0);
         Assertions.assertThat(findGameCharacter.getDef()).isEqualTo(0);
@@ -72,15 +72,15 @@ class CharacterServiceTest {
     void searchCharacter() throws Exception{
         // given
         UserGameInfo userGameInfo = new UserGameInfo();
-        userGameInfo.setUserGameId("1234");
+        userGameInfo.setUserId("1234");
         em.persist(userGameInfo);
 
-        Long c1 = characterService.create(userGameInfo.getUserGameId());
-        Long c2 = characterService.shop(userGameInfo.getUserGameId());
-        Long c3 = characterService.shop(userGameInfo.getUserGameId());
+        Long c1 = characterService.create(userGameInfo.getUserId());
+        Long c2 = characterService.shop(userGameInfo.getUserId());
+        Long c3 = characterService.shop(userGameInfo.getUserId());
 
         // when
-        CharacterResDto characterResDto = characterService.searchCharacters(userGameInfo.getUserGameId());
+        CharacterResDto characterResDto = characterService.searchCharacters(userGameInfo.getUserId());
 
         // then
         Assertions.assertThat(characterResDto.getCharacterDtoList().size()).isEqualTo(3);
