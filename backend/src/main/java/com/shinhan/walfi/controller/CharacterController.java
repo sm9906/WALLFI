@@ -30,4 +30,16 @@ public class CharacterController {
         
         return ResponseEntity.status(res.getStatus()).body(res);
     }
+
+    @PostMapping("/shop")
+    public ResponseEntity<HttpResult> shopRandomCharacter(@RequestBody CharacterReqDto characterReqDto) {
+        String userId = characterReqDto.getUserId();
+        characterService.shop(userId);
+
+        HttpResult res;
+
+        res = HttpResult.getSuccess();
+
+        return ResponseEntity.status(res.getStatus()).body(res);
+    }
 }
