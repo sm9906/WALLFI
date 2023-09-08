@@ -27,12 +27,12 @@ class CharacterServiceTest {
     @DisplayName("캐릭터 생성 확인 테스트 (색, 레벨, hp, exp, atk, def, ismain)")
     public void createCharacter() {
         // given
-        User user = new User();
-        user.setUserId("ssafy");
-        em.persist(user);
+        UserGameInfo userGameInfo = new UserGameInfo();
+        userGameInfo.setUserId("1234");
+        em.persist(userGameInfo);
 
         // when
-        Long findGameIdx = characterService.create(user.getUserId());
+        Long findGameIdx = characterService.create(userGameInfo.getUserId());
         GameCharacter findGameCharacter = em.find(GameCharacter.class, findGameIdx);
 
         // then
@@ -49,12 +49,12 @@ class CharacterServiceTest {
     @DisplayName("캐릭터 뽑기 확인 테스트 (색, 레벨, hp, exp, atk, def, ismain)")
     public void shopCharacter() {
         // given
-        User user = new User();
-        user.setUserId("ssafy");
-        em.persist(user);
+        UserGameInfo userGameInfo = new UserGameInfo();
+        userGameInfo.setUserId("1234");
+        em.persist(userGameInfo);
 
         // when
-        Long findGameIdx = characterService.shop(user.getUserId());
+        Long findGameIdx = characterService.shop(userGameInfo.getUserId());
         GameCharacter findGameCharacter = em.find(GameCharacter.class, findGameIdx);
 
         // then

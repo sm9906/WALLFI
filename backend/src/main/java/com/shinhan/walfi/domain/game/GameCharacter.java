@@ -47,7 +47,7 @@ public class GameCharacter {
     private LocalDateTime createdTime;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "user_game_id")
+    @JoinColumn(name = "user_id")
     private UserGameInfo userGameInfo;
 
     /**
