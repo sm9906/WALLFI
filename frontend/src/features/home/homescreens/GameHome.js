@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import {
     StatusBar,
@@ -28,6 +28,9 @@ import dailyChallenge from '../../.././assets/game/button/dailyChallenge.png';
 import modalClose from '../../.././assets/game/button/modalClose.png';
 
 // 상태바 겹침현상을 없애려면 react-native에서 StatusBar를 import 해줘야함
+
+let mainCharacter = require('../../.././assets/characters/default/default_4.png');
+let eatCharacter = require('../../.././assets/characters/eat/eat_4.gif');
 
 export default function GameHome({navigation}) {
 
@@ -75,13 +78,107 @@ function Season() {
         <View style={styles.season}>
             <LinearGradient style={styles.box} colors={['rgba(142, 170, 245, 1)', 'rgba(72, 122, 255, 0.4)', 'transparent']}>
                 <Image source={trophy} style={styles.trophy}/>
-                <Text style={styles.seasonText}>1 시즌</Text>
+                <Text style={styles.seasonText}>시즌 1</Text>
             </LinearGradient>
         </View>
     )
 }
 
 function Content(props) {
+
+    // 먹이
+
+    const [imageSource, setImageSource] = useState(mainCharacter);
+    const [isTimerRunning_1, setIsTimerRunning_1] = useState(false);
+    const [isButtonDisabled_1, setIsButtonDisabled_1] = useState(false);
+    const [lastButtonClickTime_1, setLastButtonClickTime_1] = useState(null);
+
+    // 훈련
+
+    const [timeText, setTimeText] = useState(null);
+    const [isTimerRunning_2, setIsTimerRunning_2] = useState(false);
+    const [isButtonDisabled_2, setIsButtonDisabled_2] = useState(false);
+    const [lastButtonClickTime_2, setLastButtonClickTime_2] = useState(null);
+
+
+    function changeImage() {
+        const currentTime = new Date().getTime();
+
+        if (isButtonDisabled_1) {
+            Alert.alert(
+                '경고',
+                '4시간 동안은 밥을 다시 줄 수 없습니다.',
+                [
+                    { text: '확인', onPress: () => {}, style: 'default' }
+                ]
+            );
+            return;
+        }
+
+        setLastButtonClickTime_1(currentTime);
+        setIsButtonDisabled_1(true);
+
+        setTimeout(() => {
+            setIsButtonDisabled_1(false);
+            setLastButtonClickTime_1(null);
+        }, 4 * 60 * 60 * 1000);
+
+        setImageSource(eatCharacter);
+        setIsTimerRunning_1(true);
+    }
+
+    function train() {
+        const currentTime = new Date().getTime();
+
+        if (isButtonDisabled_2) {
+            Alert.alert(
+                '경고',
+                '24시간 동안은 다시 훈련할 수 없습니다.',
+                [
+                    { text: '확인', onPress: () => {}, style: 'default' }
+                ]
+            );
+            return;
+        }
+
+        setLastButtonClickTime_2(currentTime);
+        setIsButtonDisabled_2(true);
+
+        setTimeout(() => {
+            setIsButtonDisabled_2(false);
+            setLastButtonClickTime_2(null);
+        }, 24 * 60 * 60 * 1000);
+
+        setTimeText('훈련중..');
+        setIsTimerRunning_2(true);
+
+    }
+
+    useEffect(() => {
+        let timer;
+
+        if (isTimerRunning_1) {
+            timer = setTimeout(() => {
+                setImageSource(mainCharacter);
+                setIsTimerRunning_1(false);
+            }, 60 * 1000);
+        }
+
+        return () => clearTimeout(timer);
+    }, [isTimerRunning_1]);
+
+    useEffect(() => {
+        let timer;
+
+        if (isTimerRunning_2) {
+            timer = setTimeout(() => {
+                setTimeText(null);
+                setIsTimerRunning_2(false);
+            }, 4 * 60 * 60 * 1000);
+        }
+
+        return () => clearTimeout(timer);
+    }, [isTimerRunning_2]);
 
     return (
         <View style={styles.content}>
@@ -90,31 +187,34 @@ function Content(props) {
                     <Image source={collection} style={styles.buttonContent} />
                     <Text style={styles.btnText}>동물도감</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.button}>
+                <TouchableOpacity style={styles.button} onPress={changeImage}>
                     <Image source={eat} style={styles.buttonContent} />
                     <Text style={styles.btnText}>밥 주기</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.button}>
+                <TouchableOpacity style={styles.button} onPress={train}>
                     <Image source={training} style={styles.buttonContent} />
                     <Text style={styles.btnText}>훈련</Text>
                 </TouchableOpacity>
             </View>
             <View style={styles.main}>
-                <Image source={require('../../.././assets/characters/default/default_4.png')} 
+                <Image source={imageSource} 
                     style={{ width: '100%', height: '50%', resizeMode: 'contain' }}
                 />
                 <Text style={{
+                    color: '#3B3B3B',
                     fontWeight: 'bold',
-                    fontSize: 30,
-                }}>[인동점 지점장]</Text>
+                    fontSize: 25,
+                    margin: '5%',
+                }}>&lt;인동점 지점장&gt;</Text>
                 <Text style={{
                     color: 'white',
+                    fontSize: 18,
                     fontWeight: 'bold',
                     textShadowColor: 'black',
                     textShadowRadius: 2,
-                    textShadowOffset: { width: 2, height: 2 },
+                    textShadowOffset: { width: 1, height: 2 },
                     elevation: 2,
-                }}>5h 48m</Text>
+                }}>{timeText}</Text>
             </View>
             <View style={styles.sideBar}>
                 <TouchableOpacity
@@ -184,8 +284,8 @@ const styles = StyleSheet.create({
     },
     trophy: {
         width: '20%',
-        height: '70%',
-        resizeMode: 'contain'
+        height: '100%',
+        resizeMode: 'contain',
     },
     seasonText: {
         fontSize: 20,
