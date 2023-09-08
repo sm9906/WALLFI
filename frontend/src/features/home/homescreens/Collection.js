@@ -13,7 +13,7 @@ export const SCREEN_HEIGHT = Dimensions.get("window").height;
 export default function Collection({navigation}) {
     return (
         <View>
-            
+            <Text>도감</Text>
         </View>
     )
 }

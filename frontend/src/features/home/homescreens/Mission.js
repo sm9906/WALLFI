@@ -13,7 +13,7 @@ export const SCREEN_HEIGHT = Dimensions.get("window").height;
 export default function Mission({navigation}) {
     return (
         <View>
-            
+            <Text>미션</Text>
         </View>
     )
 }

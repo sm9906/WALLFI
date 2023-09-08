@@ -13,7 +13,7 @@ export const SCREEN_HEIGHT = Dimensions.get("window").height;
 export default function Store({navigation}) {
     return (
         <View>
-            
+            <Text>상점</Text>
         </View>
     )
 }

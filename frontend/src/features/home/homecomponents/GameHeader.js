@@ -4,7 +4,6 @@ import {
     Text,
     View,
     Image,
-    ImageBackground
 } from 'react-native';
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from '../homecomponents/ScreenSize.js';
 import IMG_URL from '../../.././assets/background/home.png'
