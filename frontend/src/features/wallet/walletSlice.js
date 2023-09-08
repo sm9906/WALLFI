@@ -9,6 +9,7 @@ export const walletSlice = createSlice({
   name: 'wallet',
   initialState,
   reducers:{
+    
   }
 })
 

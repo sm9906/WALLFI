@@ -1,11 +1,12 @@
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-// 1. Navigator import 한다
+
 import MakeAccount from '../walletscreens/MakeAccount';
 import WalletHome from '../walletscreens/WalletHome';
 import ExchangeSearch from '../walletscreens/ExchangeSearch';
-import SendMoney from '../walletscreens/SendMoney';
-// 3. Navigator로 사용할 객체 선언한다
+import SendWho from '../walletscreens/SendWho';
+import SendHow from '../walletscreens/SnedHow';
+
 const Stack = createNativeStackNavigator();
 
 const WalletNavigation = () => {
@@ -16,7 +17,8 @@ const WalletNavigation = () => {
       />
       <Stack.Screen name="MakeAccount" component={MakeAccount} options={{title:'예/적금'}}/>
       <Stack.Screen name="ExchangeSearch" component={ExchangeSearch} options={{title:'환율'}} />
-      <Stack.Screen name="SendMoney" component={SendMoney} options={{title:''}} />
+      <Stack.Screen name="SendWho" component={SendWho} options={{title:''}} />
+      <Stack.Screen name="SendHow" component={SendHow} options={{title:''}} />
     </Stack.Navigator>
     )
 }

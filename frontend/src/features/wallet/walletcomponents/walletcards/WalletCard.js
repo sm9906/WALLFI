@@ -3,7 +3,7 @@ import { StatusBar } from "expo-status-bar";
 import {Text, TouchableOpacity, 
   View, Image, StyleSheet } from "react-native";
 
-import { ScreenHeight, ScreenWidth } from "../ScreenSize";
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../ScreenSize";
 import { useNavigation } from "@react-navigation/native";
 import {CardInfo} from './CardInfo';
 
@@ -31,7 +31,7 @@ const CardItem = (props) => {
       <View style={styles.balance}>
         <Text style={{...styles.cardinfo, fontSize:30, }}>{data.balance}</Text>
         <View style={styles.buttons}>
-          <TouchableOpacity onPress={()=>navigation.navigate('SendMoney')} style={styles.button}>
+          <TouchableOpacity onPress={()=>navigation.navigate('SendWho')} style={styles.button}>
             <Text>송금하기</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={()=>navigation.navigate('ExchangeSearch')} style={styles.button}>
@@ -48,8 +48,8 @@ export default CardItem;
 
 const styles = StyleSheet.create({
   card:{
-    width: ScreenWidth * 0.8,
-    height: ScreenHeight * 0.23,
+    width: SCREEN_WIDTH * 0.8,
+    height: SCREEN_HEIGHT * 0.23,
     backgroundColor: '#293694',
     borderRadius: 15,
     justifyContent: 'center',

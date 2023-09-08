@@ -1,44 +1,47 @@
-import React from "react";
+import React, {useState} from "react";
 import { View, Text, TextInput, Image, ScrollView , TouchableOpacity, StyleSheet } from 'react-native';
-import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
+import { RFPercentage } from "react-native-responsive-fontsize";
 import {Background, ButtonStyle} from "../walletcomponents/CommonStyle";
 import SelectDropdown from 'react-native-select-dropdown'
+
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "./WalletHome";
+const BANKS=['신한','농협','하나','카카오뱅크','토스뱅크']
 
-const banks=['신한','농협','하나','카카오뱅크','토스뱅크']
-
-export default function SendMoney({navigation, props}){
+export default function SendWho({navigation, props}){
+  const [account, setAccount] = useState('');
+  const [bank, setBank] = useState('신한');
   return(
     <View style={{...Background.background, justifyContent:'none'}}>
       <View style={{height:SCREEN_HEIGHT*0.7, justifyContent:'center', alignItems:'center'}}>
         <View style={styles.info}>
           <Text style={styles.infoText}>누구에게 {"\n"}보낼까요?</Text>
-        </View>
+        </View> 
         <View style={styles.input}>
           <SelectDropdown
-            data={banks}
+            data={BANKS}
             onSelect={(selectedItem, index)=>{
-              console.log(selectedItem, index)
+              setBank(selectedItem)
             }}
             buttonTextAfterSelection={(selectedItem, index)=>{
               return selectedItem
             }}
-            defaultValue={banks[0]}
-            buttonStyle={styles.banksel}
+            defaultValue={BANKS[0]}
+            buttonStyle={styles.bankSel}
           />
           <TextInput keyboardType="number-pad" 
             keyboardShouldPersistTaps="handled" 
             style={styles.accountInput}
-            placeholder="계좌번호" />
+            placeholder="계좌번호"
+            onChangeText={text => setAccount(text)}
+          />
         </View>
-        <TouchableOpacity style={{...ButtonStyle.button, marginTop:'10%'}} onPress={()=>navigation.navigate('ExchangeSearch')}>
+        <TouchableOpacity style={{...ButtonStyle.button, marginTop:'10%'}} onPress={()=>navigation.navigate('SendHow',{account, bank})}>
           <Text style={ButtonStyle.btnFont}>다음</Text>
         </TouchableOpacity>
       </View>
     </View>
   )
 }
-
 
 const styles = StyleSheet.create({
   info:{
@@ -58,7 +61,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingHorizontal:'4%'
   },
-  banksel:{
+  bankSel:{
     width:'100%',
     backgroundColor:'white',
     borderRadius: 10,
