@@ -24,7 +24,7 @@ class UserTest {
     void 회원조회() throws Exception{
         // given
         User user = new User();
-        user.setId("123");
+        user.setUserId("123");
         user.setName("userA");
         user.setEmail("email");
         user.setPassword("123");

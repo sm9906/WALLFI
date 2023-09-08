@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/branch")
 @RequiredArgsConstructor
@@ -21,11 +23,11 @@ public class BranchController {
     @PostMapping
     public ResponseEntity<HttpResult> getBranches(@RequestBody BranchListReqDto branchListReqDto){
 
-        BranchListResDto branchListResDto = branchService.getBranches(branchListReqDto);
+        List<BranchListResDto> branchList = branchService.getBranches(branchListReqDto);
 
         HttpResult res;
         res = HttpResult.getSuccess();
-        res.setData(branchListResDto);
+        res.setData(branchList);
         return ResponseEntity.status(res.getStatus()).body(res);
     }
 }

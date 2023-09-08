@@ -25,9 +25,9 @@ public class Branch {
 
     private String branchPhoneNumber;
 
-    private float latitude;
+    private double latitude;
 
-    private float longitude;
+    private double longitude;
 
     private int managerLevel;
 
@@ -43,7 +43,7 @@ public class Branch {
     private LocalDateTime startTime;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "user_code")
+    @JoinColumn(name = "user_id")
     private UserGameInfo userGameInfo;
 
     @OneToMany(mappedBy = "branch")
