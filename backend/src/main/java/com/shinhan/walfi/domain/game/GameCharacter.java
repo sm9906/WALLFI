@@ -67,6 +67,12 @@ public class GameCharacter {
         gameCharacter.isMain = isMain;
         gameCharacter.userGameInfo = userGameInfo;
 
+        gameCharacter.addCharacterToUserGameInfo(userGameInfo);
+
         return gameCharacter;
+    }
+
+    private void addCharacterToUserGameInfo(UserGameInfo userGameInfo) {
+        userGameInfo.getGameCharacters().add(this);
     }
 }
