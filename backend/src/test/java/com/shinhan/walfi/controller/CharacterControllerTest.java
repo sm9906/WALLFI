@@ -39,9 +39,47 @@ class CharacterControllerTest {
 
         // when
         ResponseEntity<HttpResult> res = characterController.createRandomCharacter(characterReqDto);
+        UserGameInfo findUserGameInfo = userGameInfoRepository.findById("ssafy");
 
         // then
+
+        // api 반환값 테스트
         Assertions.assertThat(res.getBody().getResult()).isSameAs(HttpResult.Result.SUCCESS);
         Assertions.assertThat(res.getBody().getStatus()).isSameAs(HttpStatus.OK);
+
+        // UserGameInfo에 캐릭터 등록이 잘 되었는지 테스트
+        Assertions.assertThat(findUserGameInfo.getGameCharacters().size()).isEqualTo(1);
+
+        // isMain 테스트 1이 true 0이 false
+        Assertions.assertThat(findUserGameInfo.getGameCharacters().get(0).isMain()).isEqualTo(true);
+    }
+
+    @Test
+    @DisplayName("캐릭터 뽑기 api 테스트")
+    public void shopCharacterTest() throws Exception {
+        // given
+        UserGameInfo userGameInfo = new UserGameInfo();
+        userGameInfo.setUserId("ssafy");
+        em.persist(userGameInfo);
+
+        CharacterReqDto characterReqDto = new CharacterReqDto();
+        characterReqDto.setUserId("ssafy");
+
+        // when
+        ResponseEntity<HttpResult> res = characterController.shopRandomCharacter(characterReqDto);
+        UserGameInfo findUserGameInfo = userGameInfoRepository.findById("ssafy");
+
+        // then
+
+        // api 반환값 테스트
+        Assertions.assertThat(res.getBody().getResult()).isSameAs(HttpResult.Result.SUCCESS);
+        Assertions.assertThat(res.getBody().getStatus()).isSameAs(HttpStatus.OK);
+
+        // UserGameInfo에 캐릭터 등록이 잘 되었는지 테스트
+        Assertions.assertThat(findUserGameInfo.getGameCharacters().size()).isEqualTo(1);
+
+
+        // isMain 테스트 1이 true 0이 false
+        Assertions.assertThat(findUserGameInfo.getGameCharacters().get(0).isMain()).isEqualTo(false);
     }
 }
