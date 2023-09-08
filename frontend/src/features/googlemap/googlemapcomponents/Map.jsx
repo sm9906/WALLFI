@@ -31,7 +31,7 @@ const Map = () => {
       setRegion(newRegion);
 
       fetch(
-        `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${myLocation[0]},${myLocation[1]}&radius=400&type=bank&keyword=신한은행&key=${GOOGLE_API_KEY}`
+        `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${myLocation[0]},${myLocation[1]}&radius=1000&type=bank&keyword=신한은행&key=${GOOGLE_API_KEY}`
       )
         .then((response) => response.json())
         .then((data) => {

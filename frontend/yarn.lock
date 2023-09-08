@@ -5711,10 +5711,10 @@ react-native-select-dropdown@^3.4.0:
   resolved "https://registry.npmjs.org/react-native-select-dropdown/-/react-native-select-dropdown-3.4.0.tgz"
   integrity sha512-9xK1z4tYpwMxp3hsM0y1+xfqq/JoMh+l7sBsJ81b2eikFwT6ZbndFBqupQXrsQ1akce9hgC/10Nkzj0LjVjeXQ==
 
-react-native-svg@^13.13.0:
-  version "13.13.0"
-  resolved "https://registry.npmjs.org/react-native-svg/-/react-native-svg-13.13.0.tgz"
-  integrity sha512-L8y8uEiMG0Tr++Nb2+24wlMuv18+bmq/CMoFFtTUlEqVvGCoK2ea8WamPl/9bV8gjL+Rngg5NqEBvKS23sbYoA==
+react-native-svg@13.9.0:
+  version "13.9.0"
+  resolved "https://registry.yarnpkg.com/react-native-svg/-/react-native-svg-13.9.0.tgz#8df8a690dd00362601f074dec5d3a86dd0f99c7f"
+  integrity sha512-Ey18POH0dA0ob/QiwCBVrxIiwflhYuw0P0hBlOHeY4J5cdbs8ngdKHeWC/Kt9+ryP6fNoEQ1PUgPYw2Bs/rp5Q==
   dependencies:
     css-select "^5.1.0"
     css-tree "^1.1.3"
@@ -5763,7 +5763,7 @@ react-native@0.72.4:
 
 react-redux@^8.1.2:
   version "8.1.2"
-  resolved "https://registry.npmjs.org/react-redux/-/react-redux-8.1.2.tgz"
+  resolved "https://registry.yarnpkg.com/react-redux/-/react-redux-8.1.2.tgz#9076bbc6b60f746659ad6d51cb05de9c5e1e9188"
   integrity sha512-xJKYI189VwfsFc4CJvHqHlDrzyFTY/3vZACbE+rr/zQ34Xx1wQfB4OTOSeOSNrF6BDVe8OOdxIrAnMGXA3ggfw==
   dependencies:
     "@babel/runtime" "^7.12.1"
@@ -5832,7 +5832,7 @@ recast@^0.21.0:
 
 redux@^4.2.1:
   version "4.2.1"
-  resolved "https://registry.npmjs.org/redux/-/redux-4.2.1.tgz"
+  resolved "https://registry.yarnpkg.com/redux/-/redux-4.2.1.tgz#c08f4306826c49b5e9dc901dee0452ea8fce6197"
   integrity sha512-LAUYz4lc+Do8/g7aeRa8JkyDErK6ekstQaqWQrNRW//MY1TvCEpMtpTWvlQ+FPbWCx+Xixu/6SHt5N0HR+SB4w==
   dependencies:
     "@babel/runtime" "^7.9.2"

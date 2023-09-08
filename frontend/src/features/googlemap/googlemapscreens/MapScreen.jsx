@@ -5,6 +5,8 @@ import * as TaskManager from "expo-task-manager";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Map from "../googlemapcomponents/Map";
 import { LocationContext } from "../googlemaphooks/UseMap";
+import { ScreenHeight, ScreenWidth } from './../googlemapcomponents/ScreenSize';
+
 
 const LOCATION_TASK_NAME = "background-location-task";
 
@@ -128,7 +130,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    width: "100%",
-    height: "100%",
+    height: ScreenHeight,
+    width: ScreenWidth,
   },
 });
