@@ -5,9 +5,9 @@ import com.shinhan.walfi.domain.game.GameCharacter;
 import com.shinhan.walfi.domain.game.UserGameInfo;
 import com.shinhan.walfi.dto.game.CharacterDto;
 import com.shinhan.walfi.dto.game.CharacterResDto;
+import com.shinhan.walfi.dto.game.MainCharacterResDto;
 import com.shinhan.walfi.repository.CharacterRepository;
 import com.shinhan.walfi.repository.UserGameInfoRepository;
-import com.shinhan.walfi.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -93,18 +93,7 @@ public class CharacterServiceImpl implements CharacterService {
         List<GameCharacter> characters = characterRepository.findCharactersByUserGameInfo(userGameInfo);
 
         List<CharacterDto> dtoList = characters.stream()
-                .map(character -> CharacterDto.builder()
-                            .characterIdx(character.getCharacterIdx())
-                            .characterType(character.getCharacterType())
-                            .color(character.getColor())
-                            .level(character.getLevel())
-                            .exp(character.getExp())
-                            .hp(character.getHp())
-                            .atk(character.getAtk())
-                            .def(character.getDef())
-                            .isMain(character.isMain())
-                            .createdTime(character.getCreatedTime())
-                            .build())
+                .map(character -> getCharacterDto(character))
                 .collect(Collectors.toList());
 
         CharacterResDto characterResDto = CharacterResDto.builder()
@@ -114,5 +103,42 @@ public class CharacterServiceImpl implements CharacterService {
 
         return characterResDto;
     }
+
+    /**
+     * 사용자의 홈 캐릭터 조회
+     *
+     * @param userId
+     * @return 홈 캐릭터 DTO
+     */
+    @Override
+    public MainCharacterResDto searchMainCharacter(String userId) {
+        UserGameInfo userGameInfo = userGameInfoRepository.findById(userId);
+        GameCharacter mainCharacter = characterRepository.findHomeCharacter(userGameInfo);
+
+        CharacterDto characterDto = getCharacterDto(mainCharacter);
+
+        MainCharacterResDto mainCharacterResDto = MainCharacterResDto.builder()
+                .userId(userId)
+                .characterDto(characterDto)
+                .build();
+
+        return mainCharacterResDto;
+    }
+
+    private CharacterDto getCharacterDto(GameCharacter gameCharacter) {
+        return CharacterDto.builder()
+                .characterIdx(gameCharacter.getCharacterIdx())
+                .characterType(gameCharacter.getCharacterType())
+                .color(gameCharacter.getColor())
+                .level(gameCharacter.getLevel())
+                .exp(gameCharacter.getExp())
+                .hp(gameCharacter.getHp())
+                .atk(gameCharacter.getAtk())
+                .def(gameCharacter.getDef())
+                .isMain(gameCharacter.isMain())
+                .createdTime(gameCharacter.getCreatedTime())
+                .build();
+    }
+
 
 }

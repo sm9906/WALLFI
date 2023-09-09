@@ -23,4 +23,14 @@ public class CharacterRepository {
                 .getResultList();
         return characterList;
     }
+
+    public GameCharacter findHomeCharacter(UserGameInfo userGameInfo) {
+        GameCharacter result = (GameCharacter) em.createQuery(
+                "select g from GameCharacter g " +
+                        "where g.userGameInfo=userGameInfo " +
+                        "and g.isMain=true")
+                .getSingleResult();
+
+        return result;
+    }
 }
