@@ -35,6 +35,9 @@ public class CharacterServiceImpl implements CharacterService {
     public Long create(String userId) {
         UserGameInfo userGameInfo = userGameInfoRepository.findById(userId);
 
+
+        // TODO: 만약 메인 캐릭터가 존재하면 create가 아닌 shop으로 캐릭터를 뽑아야 함으로 예외처리
+
         Random random = new Random();
 
         // 캐릭터 타입 랜덤 생성
