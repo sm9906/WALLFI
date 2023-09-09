@@ -1,6 +1,7 @@
 package com.shinhan.walfi.domain;
 
 import com.shinhan.walfi.domain.banking.Account;
+import com.shinhan.walfi.domain.game.UserGameInfo;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -31,5 +32,13 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Account> accounts = new ArrayList<>();
+
+    public UserGameInfo userGameInfoByUser(){
+        UserGameInfo userGameInfo = new UserGameInfo();
+        userGameInfo.setUserId(userId);
+        userGameInfo.setStatus("도전자");
+        userGameInfo.setPoint(0);
+        return userGameInfo;
+    }
 
 }
