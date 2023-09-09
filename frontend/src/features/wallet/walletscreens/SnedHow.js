@@ -2,7 +2,9 @@ import React, {useState} from "react";
 import { View, Text, TextInput, Image, ScrollView , TouchableOpacity, StyleSheet } from 'react-native';
 import { ConvPad } from "../walletcomponents/sendmoney/ConvKeypad";
 import { RFPercentage } from "react-native-responsive-fontsize";
-import VirtualKeyboard from "../walletcomponents/sendmoney/VirtualKeypad";
+
+const BACK = 'back';
+const CLEAR = 'clear';
 
 export default function SendHow({route, navigation}){
   const accountTo = route.params.account;
@@ -11,16 +13,22 @@ export default function SendHow({route, navigation}){
   const [money, setMoney] = useState('0');
 
   const addMoney=(value)=>{
-    if(value===''){
-      value='0'
-    }
-    console.log(typeof(value))
+    const currMon = money;
     if(typeof(value)==='number'){
       value += Number(money);
-      console.log('ㅎㅇ')
       value = String(value);
-    }
-    setMoney(value);
+      setMoney(value);
+    }else{
+      if(value === 'back'){
+        setMoney(currMon.length===1?'0':currMon.slice(0,-1));
+      }else if(value === 'clear'){
+        setMoney('0');
+      }else if(value==='all'){
+        console.log('전액')
+      }else{
+        setMoney((prev)=>prev==='0'?value:prev+value)
+      }
+    }  
   }
 
   return(
@@ -29,7 +37,7 @@ export default function SendHow({route, navigation}){
       <Text style={styles.infoText}>얼마를 보낼까요?</Text>
       <Text>{money}원</Text>
       <Text>신한 110-556-869686 0원</Text>
-      <VirtualKeyboard color='black' pressMode='string' onPress={(val) => addMoney(val)} />
+      <ConvPad addMoney={addMoney} />
     </View>
   )
 }

@@ -6,6 +6,7 @@ import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../ScreenSize';
 const convInput = ['+1만', '+5만', '+10만', '+100만', '전액'];
 
 export const ConvPad = React.memo(function ConvPad({addMoney}){
+  // console.log('리로딩')
   const pressConvBtn = (idx)=> {
     let plus = 10000;
     if(idx==3){
@@ -27,7 +28,7 @@ export const ConvPad = React.memo(function ConvPad({addMoney}){
         </TouchableOpacity>)
       })}
     </View>
-    <VirtualKeyboard color='black' pressMode='string' onPress={(val) => addMoney(val)} />
+    <VirtualKeyboard addMoney={addMoney}/>
     </>
   )
 })
