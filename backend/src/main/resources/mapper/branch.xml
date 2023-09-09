@@ -18,8 +18,8 @@
     <select id="getBranches" resultMap="branch">
         select branch_idx, address, branch_name, branch_phone_number, latitude, longitude
         from branch
-        where latitude &gt; 36.0 and latitude &lt; 37.0
-        and longitude &gt; 128.0 and longitude &lt; 129.0
+        where latitude &gt; ${minLatitude} and latitude &lt; ${plusLatitude}
+        and longitude &gt; ${minLongitude} and longitude &lt; ${plusLongitude}
     </select>
 
 </mapper>
