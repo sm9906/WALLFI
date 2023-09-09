@@ -1,12 +1,13 @@
 package com.shinhan.walfi.service;
 
 import com.shinhan.walfi.domain.TierPerColor;
-import com.shinhan.walfi.domain.User;
 import com.shinhan.walfi.domain.game.GameCharacter;
 import com.shinhan.walfi.domain.game.UserGameInfo;
 import com.shinhan.walfi.dto.game.CharacterResDto;
+import com.shinhan.walfi.dto.game.MainCharacterResDto;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,7 +25,8 @@ class CharacterServiceTest {
     @Autowired CharacterService characterService;
 
     @Test
-    @DisplayName("캐릭터 생성 확인 테스트 (색, 레벨, hp, exp, atk, def, ismain)")
+    @Order(1)
+    @DisplayName("캐릭터 생성(create) 확인 테스트 (색, 레벨, hp, exp, atk, def, ismain)")
     public void createCharacter() {
         // given
         UserGameInfo userGameInfo = new UserGameInfo();
@@ -46,7 +48,8 @@ class CharacterServiceTest {
     }
 
     @Test
-    @DisplayName("캐릭터 뽑기 확인 테스트 (색, 레벨, hp, exp, atk, def, ismain)")
+    @Order(2)
+    @DisplayName("캐릭터 뽑기(shop) 확인 테스트 (색, 레벨, hp, exp, atk, def, ismain)")
     public void shopCharacter() {
         // given
         UserGameInfo userGameInfo = new UserGameInfo();
@@ -68,8 +71,9 @@ class CharacterServiceTest {
     }
 
     @Test
-    @DisplayName("userId를 이용한 캐릭터 조회")
-    void searchCharacter() throws Exception{
+    @Order(3)
+    @DisplayName("userId를 이용한 캐릭터 조회 (searchCharacters)")
+    void searchCharacters() throws Exception{
         // given
         UserGameInfo userGameInfo = new UserGameInfo();
         userGameInfo.setUserId("1234");
@@ -84,5 +88,26 @@ class CharacterServiceTest {
 
         // then
         Assertions.assertThat(characterResDto.getCharacterDtoList().size()).isEqualTo(3);
+    }
+
+    @Test
+    @Order(3)
+    @DisplayName("userId를 이용한 메인 캐릭터 조회 (searchHomeCharacter)")
+    void searchMainCharacter() throws Exception{
+        // given
+        UserGameInfo userGameInfo = new UserGameInfo();
+        userGameInfo.setUserId("1234");
+        em.persist(userGameInfo);
+
+        Long mainCharacterIdx = characterService.create(userGameInfo.getUserId());
+        Long c2 = characterService.shop(userGameInfo.getUserId());
+        Long c3 = characterService.shop(userGameInfo.getUserId());
+
+        // when
+        MainCharacterResDto mainCharacterResDto = characterService.searchMainCharacter(userGameInfo.getUserId());
+
+        // then
+        Assertions.assertThat(mainCharacterResDto.getCharacterDto().isMain()).isEqualTo(true);
+        Assertions.assertThat(mainCharacterResDto.getCharacterDto().getCharacterIdx()).isEqualTo(mainCharacterIdx);
     }
 }
