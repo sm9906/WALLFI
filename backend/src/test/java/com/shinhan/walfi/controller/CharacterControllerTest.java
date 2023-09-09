@@ -4,7 +4,9 @@ import com.shinhan.walfi.domain.HttpResult;
 import com.shinhan.walfi.domain.game.UserGameInfo;
 import com.shinhan.walfi.dto.game.CharacterReqDto;
 import com.shinhan.walfi.dto.game.CharacterResDto;
+import com.shinhan.walfi.dto.game.MainCharacterResDto;
 import com.shinhan.walfi.repository.UserGameInfoRepository;
+import com.shinhan.walfi.service.CharacterService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,6 +26,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class CharacterControllerTest {
 
     @Autowired CharacterController characterController;
+    @Autowired CharacterService characterService;
     @Autowired UserGameInfoRepository userGameInfoRepository;
     @PersistenceContext EntityManager em;
 
@@ -111,6 +114,36 @@ class CharacterControllerTest {
 
         // 저장한 캐릭터 2개를 받아오는지 테스트
         Assertions.assertThat(data.getCharacterDtoList().size()).isEqualTo(2);
+
+    }
+
+    @Test
+    @DisplayName("메인 캐릭터 조회 테스트")
+    public void getMainTest() throws Exception {
+        // given
+        UserGameInfo userGameInfo = new UserGameInfo();
+        userGameInfo.setUserId("ssafy");
+        em.persist(userGameInfo);
+
+        CharacterReqDto characterReqDto = new CharacterReqDto();
+        characterReqDto.setUserId("ssafy");
+
+
+        // when
+        Long mainCharacterIdx = characterService.create(userGameInfo.getUserId());
+        characterService.shop(userGameInfo.getUserId());
+        characterService.shop(userGameInfo.getUserId());
+
+        // then
+        ResponseEntity<HttpResult> res = characterController.getMainCharacter(characterReqDto);
+        MainCharacterResDto data = (MainCharacterResDto) res.getBody().getData();
+
+        // api 반환값 테스트
+        Assertions.assertThat(res.getBody().getResult()).isSameAs(HttpResult.Result.SUCCESS);
+        Assertions.assertThat(res.getBody().getStatus()).isSameAs(HttpStatus.OK);
+
+        // 메인 캐릭터를 잘 받아오는지 테스트
+        Assertions.assertThat(data.getCharacterDto().isMain()).isEqualTo(true);
 
     }
 }
