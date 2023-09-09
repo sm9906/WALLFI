@@ -1,6 +1,7 @@
 package com.shinhan.walfi.service;
 
 import com.shinhan.walfi.domain.User;
+import com.shinhan.walfi.dto.banking.SignupReqDto;
 import com.shinhan.walfi.repository.UserGameInfoRepository;
 import com.shinhan.walfi.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,4 +22,10 @@ public class UserServiceImpl implements UserService{
         // usergameinfo 생성
         userGameInfoRepository.save(user.userGameInfoByUser());
     }
+
+    @Override
+    public int login(String userId, String password) {
+        return userRepository.login(userId, password);
+    }
+
 }
