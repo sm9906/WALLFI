@@ -2,6 +2,7 @@ package com.shinhan.walfi.domain.banking;
 
 import com.shinhan.walfi.domain.User;
 import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -13,6 +14,7 @@ import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Getter
+@Setter
 public class Account {
 
     @Id
@@ -64,4 +66,17 @@ public class Account {
 
     @OneToMany(mappedBy = "account")
     private List<GlobalAccountTransaction> globalAccountTransactions = new ArrayList<>();
+
+    public String makeRandomAccountNumber(String code){
+        StringBuilder sb = new StringBuilder("100");
+        sb.append(code);
+        int randomNum = (int)(Math.random() * 100000);
+        sb.append(randomNum);
+        return sb.toString();
+    }
+
+    public Account() {
+        this.상품명 = "입출금";
+        this.잔액원화 = 0;
+    }
 }

@@ -16,10 +16,9 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public void signup(User user) {
-        //user 생성
+        // user 생성
         userRepository.save(user);
-        //usergameinfo 생성
+        // usergameinfo 생성
         userGameInfoRepository.save(user.userGameInfoByUser());
-        // 계좌 6개 생성
     }
 }

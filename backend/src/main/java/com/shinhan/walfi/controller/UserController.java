@@ -3,6 +3,7 @@ package com.shinhan.walfi.controller;
 import com.shinhan.walfi.domain.HttpResult;
 import com.shinhan.walfi.domain.User;
 import com.shinhan.walfi.dto.banking.SignupReqDto;
+import com.shinhan.walfi.service.AccountService;
 import com.shinhan.walfi.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,10 +17,14 @@ public class UserController {
 
     private final UserService userService;
 
+    private final AccountService accountService;
+
     @PostMapping("/signup")
     public ResponseEntity<HttpResult> signup(@RequestBody SignupReqDto signupReqDto){
         User user = signupReqDto.dtoToEntity();
         userService.signup(user);
+
+        accountService.makeSix(user.getUserId());
 
         HttpResult res;
         res = HttpResult.getSuccess();
