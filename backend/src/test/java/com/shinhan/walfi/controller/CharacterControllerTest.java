@@ -3,6 +3,7 @@ package com.shinhan.walfi.controller;
 import com.shinhan.walfi.domain.HttpResult;
 import com.shinhan.walfi.domain.game.UserGameInfo;
 import com.shinhan.walfi.dto.game.CharacterReqDto;
+import com.shinhan.walfi.dto.game.CharacterResDto;
 import com.shinhan.walfi.repository.UserGameInfoRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -81,5 +82,35 @@ class CharacterControllerTest {
 
         // isMain 테스트 1이 true 0이 false
         Assertions.assertThat(findUserGameInfo.getGameCharacters().get(0).isMain()).isEqualTo(false);
+    }
+
+    @Test
+    @DisplayName("캐릭터 리스트 받기 테스트")
+    public void getCharacterListTest() throws Exception {
+        // given
+        UserGameInfo userGameInfo = new UserGameInfo();
+        userGameInfo.setUserId("ssafy");
+        em.persist(userGameInfo);
+
+        CharacterReqDto characterReqDto = new CharacterReqDto();
+        characterReqDto.setUserId("ssafy");
+
+
+        // when
+        characterController.createRandomCharacter(characterReqDto);
+        characterController.shopRandomCharacter(characterReqDto);
+
+
+        // then
+        ResponseEntity<HttpResult> res = characterController.getCharacters(characterReqDto);
+        CharacterResDto data = (CharacterResDto) res.getBody().getData();
+
+        // api 반환값 테스트
+        Assertions.assertThat(res.getBody().getResult()).isSameAs(HttpResult.Result.SUCCESS);
+        Assertions.assertThat(res.getBody().getStatus()).isSameAs(HttpStatus.OK);
+
+        // 저장한 캐릭터 2개를 받아오는지 테스트
+        Assertions.assertThat(data.getCharacterDtoList().size()).isEqualTo(2);
+
     }
 }
