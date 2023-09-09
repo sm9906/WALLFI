@@ -3,8 +3,8 @@ import { View, Text, StyleSheet } from 'react-native';
 import { ConvPad } from "../walletcomponents/sendmoney/ConvKeypad";
 import { RFPercentage } from "react-native-responsive-fontsize";
 
-
 export default function SendHow({route, navigation}){
+
   const accountTo = route.params.account;
   const bankTo = route.params.bank;
 
@@ -23,8 +23,8 @@ export default function SendHow({route, navigation}){
         setMoney('0');
       }else if(value==='all'){
         console.log('전액')
-      }else if(value==='ok'){
-        
+      }else if(value==='완료'){
+        navigation.navigate('WalletHome')
       }else{
         setMoney((prev)=>prev==='0'?value:prev+value)
       }
@@ -35,8 +35,7 @@ export default function SendHow({route, navigation}){
     <View style={styles.background}>
       <View style={styles.textContainer}>
         <View>
-          <Text style={{...styles.accountTo,marginBottom:'5%'
- }}>{bankTo} {accountTo}</Text>
+          <Text style={{...styles.accountTo,marginBottom:'5%' }}>{bankTo} {accountTo}</Text>
           <Text style={styles.infoText}>얼마를 보낼까요?</Text>
         </View>
         <Text style={styles.currMoney}>{money}원</Text>
