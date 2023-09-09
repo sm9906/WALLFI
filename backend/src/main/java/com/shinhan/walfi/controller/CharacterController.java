@@ -5,6 +5,7 @@ import com.shinhan.walfi.domain.HttpResult;
 import com.shinhan.walfi.dto.banking.ExchangeResDto;
 import com.shinhan.walfi.dto.game.CharacterReqDto;
 import com.shinhan.walfi.dto.game.CharacterResDto;
+import com.shinhan.walfi.dto.game.MainCharacterResDto;
 import com.shinhan.walfi.service.CharacterService;
 import lombok.RequiredArgsConstructor;
 
@@ -53,6 +54,19 @@ public class CharacterController {
 
         res = HttpResult.getSuccess();
         res.setData(characterResDto);
+
+        return ResponseEntity.status(res.getStatus()).body(res);
+    }
+
+    @PostMapping("/getmain")
+    public ResponseEntity<HttpResult> getMainCharacter(@RequestBody CharacterReqDto characterReqDto) {
+        String userId = characterReqDto.getUserId();
+        MainCharacterResDto mainCharacterResDto = characterService.searchMainCharacter(userId);
+
+        HttpResult res;
+
+        res = HttpResult.getSuccess();
+        res.setData(mainCharacterResDto);
 
         return ResponseEntity.status(res.getStatus()).body(res);
     }
