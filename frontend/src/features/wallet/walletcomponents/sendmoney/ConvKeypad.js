@@ -28,7 +28,7 @@ export const ConvPad = React.memo(function ConvPad({addMoney}){
         </TouchableOpacity>)
       })}
     </View>
-    <VirtualKeyboard addMoney={addMoney}/>
+    <VirtualKeyboard addMoney={addMoney} color='black'/>
     </>
   )
 })
