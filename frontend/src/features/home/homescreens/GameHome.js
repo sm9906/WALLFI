@@ -104,7 +104,29 @@ function Content(props) {
     function changeImage() {
         const currentTime = new Date().getTime();
 
-        if (isButtonDisabled_1) {
+        if (isTimerRunning_1) {
+            Alert.alert(
+                '경고',
+                '밥 먹는 중입니다.',
+                [
+                    { text: '확인', onPress: () => {}, style: 'default' }
+                ]
+            );
+            return;
+        }
+
+        if (isTimerRunning_2) {
+            Alert.alert(
+                '경고',
+                '훈련중입니다.',
+                [
+                    { text: '확인', onPress: () => {}, style: 'default' }
+                ]
+            );
+            return;
+        }
+
+        if (isTimerRunning_1 === false && isButtonDisabled_1) {
             Alert.alert(
                 '경고',
                 '4시간 동안은 밥을 다시 줄 수 없습니다.',
@@ -130,7 +152,29 @@ function Content(props) {
     function train() {
         const currentTime = new Date().getTime();
 
-        if (isButtonDisabled_2) {
+        if (isTimerRunning_1) {
+            Alert.alert(
+                '경고',
+                '밥 먹는 중입니다.',
+                [
+                    { text: '확인', onPress: () => {}, style: 'default' }
+                ]
+            );
+            return;
+        }
+
+        if (isTimerRunning_2) {
+            Alert.alert(
+                '경고',
+                '훈련중입니다.',
+                [
+                    { text: '확인', onPress: () => {}, style: 'default' }
+                ]
+            );
+            return;
+        }
+
+        if (isTimerRunning_2 === false && isButtonDisabled_2) {
             Alert.alert(
                 '경고',
                 '24시간 동안은 다시 훈련할 수 없습니다.',
@@ -174,7 +218,7 @@ function Content(props) {
             timer = setTimeout(() => {
                 setTimeText(null);
                 setIsTimerRunning_2(false);
-            }, 4 * 60 * 60 * 1000);
+            }, 60 * 1000);
         }
 
         return () => clearTimeout(timer);
@@ -198,7 +242,7 @@ function Content(props) {
             </View>
             <View style={styles.main}>
                 <Image source={imageSource} 
-                    style={{ width: '100%', height: '50%', resizeMode: 'contain' }}
+                    style={{ width: '100%', height: '40%', resizeMode: 'contain' }}
                 />
                 <Text style={{
                     color: '#3B3B3B',
@@ -228,7 +272,7 @@ function Content(props) {
                     <Image source={mission} style={styles.buttonContent} />
                     <Text style={styles.btnText}>미션</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.button}>
+                <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate('Mission')}>
                     <Image source={map} style={styles.buttonContent} />
                     <Text style={styles.btnText}>지도</Text>
                 </TouchableOpacity>
@@ -241,11 +285,11 @@ function Bottom(props) {
 
     return (
         <View style={styles.bottom}>
-            <TouchableOpacity style={styles.bottomBtn}>
+            <TouchableOpacity style={styles.bottomBtn} onPress={() => props.navigation.navigate('Mission')}>
                 <Image source={wallet} style={styles.buttonContent}/>
                 <Text style={styles.btnText}>지갑으로</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.bottomCenterBtn}>
+            <TouchableOpacity style={styles.bottomCenterBtn} onPress={() => props.navigation.navigate('Mission')}>
                 <Image source={dailyChallenge} style={styles.challengeBtn}/>
                 <Text style={styles.btnText}>일일도전</Text>
             </TouchableOpacity>
@@ -312,9 +356,9 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         width: '20%',
         height: '80%',
-        marginTop: '8%',
-        marginStart: '2%',
-        marginEnd: '2%',
+        marginTop: '10%',
+        marginStart: '1%',
+        marginEnd: '1%',
         padding: '1%',
         justifyContent: 'center',
         alignItems: 'center',
