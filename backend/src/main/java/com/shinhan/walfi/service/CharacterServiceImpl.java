@@ -107,7 +107,10 @@ public class CharacterServiceImpl implements CharacterService {
                             .build())
                 .collect(Collectors.toList());
 
-        CharacterResDto characterResDto = CharacterResDto.builder().characterDtoList(dtoList).build();
+        CharacterResDto characterResDto = CharacterResDto.builder()
+                .characterDtoList(dtoList)
+                .userId(userId)
+                .build();
 
         return characterResDto;
     }

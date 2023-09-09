@@ -13,6 +13,7 @@ import java.util.List;
 @Builder
 public class CharacterResDto {
 
+    String userId;
     List<CharacterDto> characterDtoList;
 
 }
