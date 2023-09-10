@@ -2,10 +2,7 @@ package com.shinhan.walfi.controller;
 
 import com.shinhan.walfi.domain.HttpResult;
 import com.shinhan.walfi.domain.game.UserGameInfo;
-import com.shinhan.walfi.dto.game.CharacterReqDto;
-import com.shinhan.walfi.dto.game.CharacterListResDto;
-import com.shinhan.walfi.dto.game.CharacterWithUserIdResDto;
-import com.shinhan.walfi.dto.game.MainCharacterReqDto;
+import com.shinhan.walfi.dto.game.*;
 import com.shinhan.walfi.repository.CharacterRepository;
 import com.shinhan.walfi.repository.UserGameInfoRepository;
 import com.shinhan.walfi.service.CharacterService;
@@ -173,5 +170,30 @@ class CharacterControllerTest {
         Assertions.assertThat(data.getUserId()).isEqualTo(userGameInfo.getUserId());
         Assertions.assertThat(data.getCharacterDto().getCharacterIdx())
                 .isEqualTo(mainCharacterIdx);
+    }
+
+    @Test
+    @DisplayName("캐릭터의 atk 변경 테스트")
+    void changeAtkTest() throws Exception{
+        // given
+        UserGameInfo userGameInfo = new UserGameInfo();
+        userGameInfo.setUserId("ssafy");
+        em.persist(userGameInfo);
+
+        CharacterStatusReqDto characterStatusReqDto = new CharacterStatusReqDto();
+        Long characterIdx = characterService.create("ssafy");
+
+        characterStatusReqDto.setUserId("ssafy");
+        characterStatusReqDto.setCharacterIdx(characterIdx);
+        characterStatusReqDto.setStatusType("atk");
+        characterStatusReqDto.setValue(10);
+
+        // when
+        ResponseEntity<HttpResult> res = characterController.changeCharacterStatus(characterStatusReqDto);
+
+        // then
+        CharacterWithUserIdResDto data = (CharacterWithUserIdResDto) res.getBody().getData();
+
+        Assertions.assertThat(data.getCharacterDto().getAtk()).isEqualTo(10);
     }
 }
