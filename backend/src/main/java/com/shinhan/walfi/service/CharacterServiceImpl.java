@@ -75,6 +75,15 @@ public class CharacterServiceImpl implements CharacterService {
         int typesRandomNum = random.nextInt(characterTypes.length);
         CharacterType randomCharacterType = characterTypes[typesRandomNum];
 
+        List<GameCharacter> characters = characterRepository.findCharacters(userGameInfo);
+        boolean isSame = characters.stream()
+                .anyMatch(character -> character.getCharacterType().equals(randomCharacterType));
+        if (isSame) {
+            return null;
+            // TODO: 이미 있는 캐릭터라면 어떻게 할지 로직
+
+        }
+
         // 캐릭터 생성
         Boolean isMain = false;
         GameCharacter gameCharacter = GameCharacter.createCharacter(userGameInfo, randomCharacterType, isMain);
@@ -220,9 +229,8 @@ public class CharacterServiceImpl implements CharacterService {
                 int totalRaiseExp = defaultExp + statusValue;
                 int newExp = 0;
 
-
-
-                if (defaultLevel.getNeededExp() <= (defaultExp + statusValue)) {
+                // exp가 사용자의 현재 레벨을 초과하여 오르는 경우
+                if (defaultLevel.getNeededExp() <= totalRaiseExp) {
 
                     LevelUp newLevel = null;
 
