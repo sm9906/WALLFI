@@ -3,8 +3,10 @@ package com.shinhan.walfi.controller;
 import com.shinhan.walfi.domain.HttpResult;
 import com.shinhan.walfi.domain.game.UserGameInfo;
 import com.shinhan.walfi.dto.game.CharacterReqDto;
-import com.shinhan.walfi.dto.game.CharacterResDto;
-import com.shinhan.walfi.dto.game.MainCharacterResDto;
+import com.shinhan.walfi.dto.game.CharacterListResDto;
+import com.shinhan.walfi.dto.game.CharacterWithUserIdResDto;
+import com.shinhan.walfi.dto.game.MainCharacterReqDto;
+import com.shinhan.walfi.repository.CharacterRepository;
 import com.shinhan.walfi.repository.UserGameInfoRepository;
 import com.shinhan.walfi.service.CharacterService;
 import org.assertj.core.api.Assertions;
@@ -19,8 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @SpringBootTest
 @Transactional
 class CharacterControllerTest {
@@ -28,6 +28,7 @@ class CharacterControllerTest {
     @Autowired CharacterController characterController;
     @Autowired CharacterService characterService;
     @Autowired UserGameInfoRepository userGameInfoRepository;
+    @Autowired CharacterRepository characterRepository;
     @PersistenceContext EntityManager em;
 
     @Test
@@ -106,7 +107,7 @@ class CharacterControllerTest {
 
         // then
         ResponseEntity<HttpResult> res = characterController.getCharacters(characterReqDto);
-        CharacterResDto data = (CharacterResDto) res.getBody().getData();
+        CharacterListResDto data = (CharacterListResDto) res.getBody().getData();
 
         // api 반환값 테스트
         Assertions.assertThat(res.getBody().getResult()).isSameAs(HttpResult.Result.SUCCESS);
@@ -134,9 +135,11 @@ class CharacterControllerTest {
         characterService.shop(userGameInfo.getUserId());
         characterService.shop(userGameInfo.getUserId());
 
-        // then
         ResponseEntity<HttpResult> res = characterController.getMainCharacter(characterReqDto);
-        MainCharacterResDto data = (MainCharacterResDto) res.getBody().getData();
+
+
+        // then
+        CharacterWithUserIdResDto data = (CharacterWithUserIdResDto) res.getBody().getData();
 
         // api 반환값 테스트
         Assertions.assertThat(res.getBody().getResult()).isSameAs(HttpResult.Result.SUCCESS);
@@ -145,5 +148,30 @@ class CharacterControllerTest {
         // 메인 캐릭터를 잘 받아오는지 테스트
         Assertions.assertThat(data.getCharacterDto().isMain()).isEqualTo(true);
 
+    }
+
+    @Test
+    @DisplayName("캐릭터의 색 변경 테스트")
+    void changeColorTest() throws Exception{
+        // given
+        UserGameInfo userGameInfo = new UserGameInfo();
+        userGameInfo.setUserId("ssafy");
+        em.persist(userGameInfo);
+
+        MainCharacterReqDto mainCharacterReqDto = new MainCharacterReqDto();
+        Long mainCharacterIdx = characterService.create("ssafy");
+
+        mainCharacterReqDto.setUserId("ssafy");
+        mainCharacterReqDto.setMainCharacterIdx(mainCharacterIdx);
+
+        // when
+        ResponseEntity<HttpResult> res = characterController.changeCharacterColor(mainCharacterReqDto);
+
+        // then
+        CharacterWithUserIdResDto data = (CharacterWithUserIdResDto) res.getBody().getData();
+
+        Assertions.assertThat(data.getUserId()).isEqualTo(userGameInfo.getUserId());
+        Assertions.assertThat(data.getCharacterDto().getCharacterIdx())
+                .isEqualTo(mainCharacterIdx);
     }
 }
