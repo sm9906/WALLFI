@@ -1,7 +1,7 @@
 package com.shinhan.walfi.service;
 
-import com.shinhan.walfi.dto.game.CharacterResDto;
-import com.shinhan.walfi.dto.game.MainCharacterResDto;
+import com.shinhan.walfi.dto.game.CharacterListResDto;
+import com.shinhan.walfi.dto.game.CharacterWithUserIdResDto;
 
 public interface CharacterService {
 
@@ -9,8 +9,9 @@ public interface CharacterService {
 
     Long shop(String userId);
 
-    CharacterResDto searchCharacters(String userId);
+    CharacterListResDto searchCharacters(String userId);
 
-    MainCharacterResDto searchMainCharacter(String userId);
+    CharacterWithUserIdResDto searchMainCharacter(String userId);
 
+    CharacterWithUserIdResDto changeCharacterColor(String userId, Long mainCharacterIdx);
 }

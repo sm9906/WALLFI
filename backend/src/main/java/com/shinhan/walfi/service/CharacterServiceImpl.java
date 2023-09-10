@@ -1,11 +1,13 @@
 package com.shinhan.walfi.service;
 
 import com.shinhan.walfi.domain.CharacterType;
+import com.shinhan.walfi.domain.TierPerColor;
 import com.shinhan.walfi.domain.game.GameCharacter;
 import com.shinhan.walfi.domain.game.UserGameInfo;
 import com.shinhan.walfi.dto.game.CharacterDto;
-import com.shinhan.walfi.dto.game.CharacterResDto;
-import com.shinhan.walfi.dto.game.MainCharacterResDto;
+import com.shinhan.walfi.dto.game.CharacterListResDto;
+import com.shinhan.walfi.dto.game.CharacterWithUserIdResDto;
+import com.shinhan.walfi.dto.game.MainCharacterReqDto;
 import com.shinhan.walfi.repository.CharacterRepository;
 import com.shinhan.walfi.repository.UserGameInfoRepository;
 import lombok.RequiredArgsConstructor;
@@ -90,7 +92,7 @@ public class CharacterServiceImpl implements CharacterService {
      * @return 캐릭터 DTO
      */
     @Override
-    public CharacterResDto searchCharacters(String userId) {
+    public CharacterListResDto searchCharacters(String userId) {
         UserGameInfo userGameInfo = userGameInfoRepository.findById(userId);
 
         List<GameCharacter> characters = characterRepository.findCharactersByUserGameInfo(userGameInfo);
@@ -99,12 +101,12 @@ public class CharacterServiceImpl implements CharacterService {
                 .map(character -> getCharacterDto(character))
                 .collect(Collectors.toList());
 
-        CharacterResDto characterResDto = CharacterResDto.builder()
+        CharacterListResDto characterListResDto = CharacterListResDto.builder()
                 .characterDtoList(dtoList)
                 .userId(userId)
                 .build();
 
-        return characterResDto;
+        return characterListResDto;
     }
 
     /**
@@ -114,20 +116,65 @@ public class CharacterServiceImpl implements CharacterService {
      * @return 홈 캐릭터 DTO
      */
     @Override
-    public MainCharacterResDto searchMainCharacter(String userId) {
+    public CharacterWithUserIdResDto searchMainCharacter(String userId) {
         UserGameInfo userGameInfo = userGameInfoRepository.findById(userId);
-        GameCharacter mainCharacter = characterRepository.findHomeCharacter(userGameInfo);
+        GameCharacter mainCharacter = characterRepository.findMainCharacter(userGameInfo);
 
         CharacterDto characterDto = getCharacterDto(mainCharacter);
 
-        MainCharacterResDto mainCharacterResDto = MainCharacterResDto.builder()
-                .userId(userId)
-                .characterDto(characterDto)
-                .build();
+        CharacterWithUserIdResDto characterWithUserIdResDto = getCharacterWithUserIdResDto(userId, characterDto);
 
-        return mainCharacterResDto;
+        return characterWithUserIdResDto;
     }
 
+    /**
+     *  사용자의 메인 캐릭터 색을 변경하고 캐릭터 정보를 반환
+     *
+     * @param userId
+     * @param mainCharacterIdx
+     * @return CharacterWithUserIdResDto
+     */
+    @Override
+    public CharacterWithUserIdResDto changeCharacterColor(String userId, Long mainCharacterIdx) {
+        UserGameInfo userGameInfo = userGameInfoRepository.findById(userId);
+        GameCharacter mainCharacter = characterRepository.findMainCharacter(userGameInfo);
+
+        if (mainCharacter.getCharacterIdx() != mainCharacterIdx) {
+            // TODO: 전송한 캐릭터가 사용자의 main 캐릭터가 아닐 시 예외 처리
+        }
+
+        // 랜덤으로 색 뽑기 로직
+        Random random = new Random();
+        double rand = random.nextDouble() * 100; // 0 ~ 100
+
+        double basicPercent = TierPerColor.BASIC.getGrade().getPercent();
+        double epicPercent = TierPerColor.WHITE.getGrade().getPercent() + basicPercent;
+        double uniquePercent = TierPerColor.MINT.getGrade().getPercent() + epicPercent;
+        double legendPercent = TierPerColor.LED.getGrade().getPercent() + uniquePercent;
+
+        if (rand < basicPercent) { // 0 ~ 1.9999
+            mainCharacter.setColor(TierPerColor.BASIC);
+        } else if (rand < epicPercent) { // 2 ~ 6.9999
+            mainCharacter.setColor(TierPerColor.WHITE);
+        } else if (rand < uniquePercent) { // 7 ~ 99.998
+            mainCharacter.setColor(TierPerColor.MINT);
+        } else if (rand <= legendPercent) { // 99.999 ~ 100
+            mainCharacter.setColor(TierPerColor.LED);
+        }
+
+        GameCharacter saveGameCharacter = characterRepository.save(mainCharacter);
+        CharacterDto characterDto = getCharacterDto(saveGameCharacter);
+        CharacterWithUserIdResDto characterWithUserIdResDto = getCharacterWithUserIdResDto(userId, characterDto);
+
+        return characterWithUserIdResDto;
+    }
+
+    /**
+     * GameCharacter를 CharacterDto로 변환하는 기능
+     *
+     * @param gameCharacter
+     * @return CharacterDto
+     */
     private CharacterDto getCharacterDto(GameCharacter gameCharacter) {
         return CharacterDto.builder()
                 .characterIdx(gameCharacter.getCharacterIdx())
@@ -143,5 +190,19 @@ public class CharacterServiceImpl implements CharacterService {
                 .build();
     }
 
+    /**
+     * CharacterDto를 CharacterWithUserIdResDto로 변환하는 기능
+     *
+     * @param userId
+     * @param characterDto
+     * @return CharacterWithUserIdResDto
+     */
+    private CharacterWithUserIdResDto getCharacterWithUserIdResDto(String userId, CharacterDto characterDto) {
+        CharacterWithUserIdResDto characterWithUserIdResDto = CharacterWithUserIdResDto.builder()
+                .userId(userId)
+                .characterDto(characterDto)
+                .build();
+        return characterWithUserIdResDto;
+    }
 
 }
