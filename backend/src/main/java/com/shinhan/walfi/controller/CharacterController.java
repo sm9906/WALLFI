@@ -2,15 +2,13 @@ package com.shinhan.walfi.controller;
 
 import com.shinhan.walfi.domain.HttpResult;
 
-import com.shinhan.walfi.dto.banking.ExchangeResDto;
 import com.shinhan.walfi.dto.game.CharacterReqDto;
-import com.shinhan.walfi.dto.game.CharacterResDto;
-import com.shinhan.walfi.dto.game.MainCharacterResDto;
+import com.shinhan.walfi.dto.game.CharacterListResDto;
+import com.shinhan.walfi.dto.game.MainCharacterReqDto;
+import com.shinhan.walfi.dto.game.CharacterWithUserIdResDto;
 import com.shinhan.walfi.service.CharacterService;
 import lombok.RequiredArgsConstructor;
 
-import org.json.simple.parser.ParseException;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,12 +46,12 @@ public class CharacterController {
     @PostMapping("/getcharacters")
     public ResponseEntity<HttpResult> getCharacters(@RequestBody CharacterReqDto characterReqDto) {
         String userId = characterReqDto.getUserId();
-        CharacterResDto characterResDto = characterService.searchCharacters(userId);
+        CharacterListResDto characterListResDto = characterService.searchCharacters(userId);
 
         HttpResult res;
 
         res = HttpResult.getSuccess();
-        res.setData(characterResDto);
+        res.setData(characterListResDto);
 
         return ResponseEntity.status(res.getStatus()).body(res);
     }
@@ -61,12 +59,27 @@ public class CharacterController {
     @PostMapping("/getmain")
     public ResponseEntity<HttpResult> getMainCharacter(@RequestBody CharacterReqDto characterReqDto) {
         String userId = characterReqDto.getUserId();
-        MainCharacterResDto mainCharacterResDto = characterService.searchMainCharacter(userId);
+        CharacterWithUserIdResDto characterWithUserIdResDto = characterService.searchMainCharacter(userId);
 
         HttpResult res;
 
         res = HttpResult.getSuccess();
-        res.setData(mainCharacterResDto);
+        res.setData(characterWithUserIdResDto);
+
+        return ResponseEntity.status(res.getStatus()).body(res);
+    }
+
+    @PutMapping("/change/color")
+    public ResponseEntity<HttpResult> changeCharacterColor(@RequestBody MainCharacterReqDto mainCharacterReqDto) {
+        String userId = mainCharacterReqDto.getUserId();
+        Long mainCharacterIdx = mainCharacterReqDto.getMainCharacterIdx();
+
+        CharacterWithUserIdResDto characterWithUserIdResDto = characterService.changeCharacterColor(userId, mainCharacterIdx);
+
+        HttpResult res;
+
+        res = HttpResult.getSuccess();
+        res.setData(characterWithUserIdResDto);
 
         return ResponseEntity.status(res.getStatus()).body(res);
     }
