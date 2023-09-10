@@ -21,10 +21,13 @@ class BranchMapperTest {
     void getBranches() {
         BranchListDao dao = new BranchListDao();
         dao.setMinLatitude(36);
+        dao.setPlusLatitude(37);
+        dao.setMinLongitude(128);
+        dao.setPlusLongitude(129);
         List<BranchListResDto> branchListResDtos = branchMapper.getBranches(dao);
 
-        System.out.println("hello");
         System.out.println(branchListResDtos.size());
-        Assertions.assertNull(branchListResDtos);
+        System.out.println(branchListResDtos.get(0).get지점명());
     }
+
 }

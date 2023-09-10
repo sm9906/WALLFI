@@ -11,5 +11,4 @@ import java.util.List;
 public interface BranchMapper {
 
     List<BranchListResDto> getBranches(BranchListDao dao);
-
 }
