@@ -197,5 +197,29 @@ class CharacterServiceTest {
                 .isEqualTo(updateValue + defaultHp);
     }
 
+    @Test
+    @Order(6)
+    @DisplayName("메인이 아닌 캐릭터를 메인으로 변경하는 기능 테스트")
+    void changeMainTest() throws Exception{
+        // given
+        UserGameInfo userGameInfo = new UserGameInfo();
+        userGameInfo.setUserId("1234");
+        em.persist(userGameInfo);
 
+        Long mainCharacterIdx = characterService.create(userGameInfo.getUserId());
+        Long shopCharacterIdx = characterService.shop(userGameInfo.getUserId());
+
+        String updateStatus = "isMain";
+        int updateValue = 0;
+
+        // when
+        characterService.changeCharacterStatus(userGameInfo.getUserId(), shopCharacterIdx, updateStatus, updateValue);
+
+        // then
+
+        // 메인이었던 캐릭터가 더이상 메인이 아닌지 확인
+        assertThat(characterRepository.findCharacterByIdx(mainCharacterIdx).isMain()).isEqualTo(false);
+        // 메인이 아니었던 캐릭터가 메인으로 변경되었는지 확인
+        assertThat(characterRepository.findCharacterByIdx(shopCharacterIdx).isMain()).isEqualTo(true);
+    }
 }
