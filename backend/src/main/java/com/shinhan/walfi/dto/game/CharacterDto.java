@@ -1,6 +1,7 @@
 package com.shinhan.walfi.dto.game;
 
 import com.shinhan.walfi.domain.CharacterType;
+import com.shinhan.walfi.domain.LevelUp;
 import com.shinhan.walfi.domain.TierPerColor;
 import lombok.*;
 
@@ -18,7 +19,7 @@ public class CharacterDto {
 
     private TierPerColor color;
 
-    private int level;
+    private LevelUp level;
 
     private int exp;
 

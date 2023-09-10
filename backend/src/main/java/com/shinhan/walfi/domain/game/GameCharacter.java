@@ -1,6 +1,7 @@
 package com.shinhan.walfi.domain.game;
 
 import com.shinhan.walfi.domain.CharacterType;
+import com.shinhan.walfi.domain.LevelUp;
 import com.shinhan.walfi.domain.TierPerColor;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -32,7 +33,8 @@ public class GameCharacter {
     @Enumerated(EnumType.STRING)
     private TierPerColor color;
 
-    private int level;
+    @Enumerated(EnumType.STRING)
+    private LevelUp level;
 
     private int exp;
 
@@ -60,7 +62,7 @@ public class GameCharacter {
 
         gameCharacter.characterType = characterType;
         gameCharacter.color = TierPerColor.BASIC;
-        gameCharacter.level = 1;
+        gameCharacter.level = LevelUp.LEVEL_01;
         gameCharacter.exp = 0;
         gameCharacter.hp = 50;
         gameCharacter.atk = 0;
