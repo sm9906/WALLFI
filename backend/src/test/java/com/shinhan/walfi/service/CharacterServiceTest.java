@@ -461,4 +461,32 @@ class CharacterServiceTest {
         assertThat(characterRepository.findCharacterByIdx(characterIdx).getLevel()).isSameAs(expectLevel);
         assertThat(characterRepository.findCharacterByIdx(characterIdx).getExp()).isEqualTo(expectExp);
     }
+
+    @Test
+    @Order(9)
+    @DisplayName("(레벨10, exp 10에서 시작) 캐릭터의 레벨과 exp가 고정되는지 확인하는 테스트")
+    void changeExpLevelFrom_LEVEL_TEN_EXP_10_Test() throws Exception{
+        // given
+        UserGameInfo userGameInfo = new UserGameInfo();
+        userGameInfo.setUserId("1234");
+        em.persist(userGameInfo);
+
+        Long characterIdx = characterService.create(userGameInfo.getUserId());
+        GameCharacter character = characterRepository.findCharacterByIdx(characterIdx);
+        character.setExp(10);
+        character.setLevel(LevelUp.LEVEL_10);
+
+        String updateStatus = "exp";
+        int updateValue = 50000;
+
+        // when
+        characterService.changeCharacterStatus(userGameInfo.getUserId(), characterIdx, updateStatus, updateValue);
+
+        // then
+        LevelUp expectLevel = LevelUp.LEVEL_10;
+        int expectExp = expectLevel.getNeededExp();
+
+        assertThat(characterRepository.findCharacterByIdx(characterIdx).getLevel()).isSameAs(expectLevel);
+        assertThat(characterRepository.findCharacterByIdx(characterIdx).getExp()).isEqualTo(expectExp);
+    }
 }
