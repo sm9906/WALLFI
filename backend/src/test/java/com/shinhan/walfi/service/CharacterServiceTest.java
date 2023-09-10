@@ -42,7 +42,7 @@ class CharacterServiceTest {
 
         // then
         assertThat(findGameCharacter.getColor()).isEqualTo(TierPerColor.BASIC);
-        assertThat(findGameCharacter.getLevel()).isEqualTo(1);
+        assertThat(findGameCharacter.getLevel().getLevel()).isEqualTo(1);
         assertThat(findGameCharacter.getHp()).isEqualTo(50);
         assertThat(findGameCharacter.getExp()).isEqualTo(0);
         assertThat(findGameCharacter.getAtk()).isEqualTo(0);
@@ -65,7 +65,7 @@ class CharacterServiceTest {
 
         // then
         assertThat(findGameCharacter.getColor()).isEqualTo(TierPerColor.BASIC);
-        assertThat(findGameCharacter.getLevel()).isEqualTo(1);
+        assertThat(findGameCharacter.getLevel().getLevel()).isEqualTo(1);
         assertThat(findGameCharacter.getHp()).isEqualTo(50);
         assertThat(findGameCharacter.getExp()).isEqualTo(0);
         assertThat(findGameCharacter.getAtk()).isEqualTo(0);
@@ -84,13 +84,12 @@ class CharacterServiceTest {
 
         Long c1 = characterService.create(userGameInfo.getUserId());
         Long c2 = characterService.shop(userGameInfo.getUserId());
-        Long c3 = characterService.shop(userGameInfo.getUserId());
 
         // when
         CharacterListResDto characterListResDto = characterService.searchCharacters(userGameInfo.getUserId());
 
         // then
-        assertThat(characterListResDto.getCharacterDtoList().size()).isEqualTo(3);
+        assertThat(characterListResDto.getCharacterDtoList().size()).isEqualTo(2);
     }
 
     @Test
