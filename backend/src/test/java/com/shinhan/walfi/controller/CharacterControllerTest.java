@@ -1,6 +1,7 @@
 package com.shinhan.walfi.controller;
 
 import com.shinhan.walfi.domain.HttpResult;
+import com.shinhan.walfi.domain.game.GameCharacter;
 import com.shinhan.walfi.domain.game.UserGameInfo;
 import com.shinhan.walfi.dto.game.*;
 import com.shinhan.walfi.repository.CharacterRepository;
@@ -245,5 +246,36 @@ class CharacterControllerTest {
         CharacterWithUserIdResDto data = (CharacterWithUserIdResDto) res.getBody().getData();
 
         Assertions.assertThat(data.getCharacterDto().getHp()).isEqualTo(60);
+    }
+
+    @Test
+    @DisplayName("메인 캐릭터 변경 테스트")
+    void changeMainTest() throws Exception{
+        // given
+        UserGameInfo userGameInfo = new UserGameInfo();
+        userGameInfo.setUserId("ssafy");
+        em.persist(userGameInfo);
+
+        CharacterStatusReqDto characterStatusReqDto = new CharacterStatusReqDto();
+        Long mainCharacterIdx = characterService.create("ssafy");
+        Long shopCharacterIdx = characterService.shop("ssafy");
+
+        characterStatusReqDto.setUserId("ssafy");
+        characterStatusReqDto.setCharacterIdx(shopCharacterIdx);
+        characterStatusReqDto.setStatusType("isMain");
+        characterStatusReqDto.setValue(10);
+
+        GameCharacter mainCharacter = characterRepository.findCharacterByIdx(mainCharacterIdx);
+
+        // when
+        ResponseEntity<HttpResult> res = characterController.changeCharacterStatus(characterStatusReqDto);
+
+        // then
+        CharacterWithUserIdResDto data = (CharacterWithUserIdResDto) res.getBody().getData();
+
+        // 요청한 캐릭터가 main으로 변경되었는지 확인
+        Assertions.assertThat(data.getCharacterDto().isMain()).isEqualTo(true);
+        // 기존 메인 캐릭터가 메인이 아니게 변경되었는지 확인
+        Assertions.assertThat(mainCharacter.isMain()).isEqualTo(false);
     }
 }
