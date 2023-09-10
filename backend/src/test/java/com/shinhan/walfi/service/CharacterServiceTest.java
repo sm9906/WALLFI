@@ -5,10 +5,8 @@ import com.shinhan.walfi.domain.game.GameCharacter;
 import com.shinhan.walfi.domain.game.UserGameInfo;
 import com.shinhan.walfi.dto.game.CharacterListResDto;
 import com.shinhan.walfi.dto.game.CharacterWithUserIdResDto;
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
+import com.shinhan.walfi.repository.CharacterRepository;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,13 +14,17 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import static org.assertj.core.api.Assertions.*;
+
 @SpringBootTest
 @Transactional
+@TestMethodOrder(value = MethodOrderer.OrderAnnotation.class)
 class CharacterServiceTest {
     @PersistenceContext
     EntityManager em;
 
     @Autowired CharacterService characterService;
+    @Autowired CharacterRepository characterRepository;
 
     @Test
     @Order(1)
@@ -38,13 +40,13 @@ class CharacterServiceTest {
         GameCharacter findGameCharacter = em.find(GameCharacter.class, findGameIdx);
 
         // then
-        Assertions.assertThat(findGameCharacter.getColor()).isEqualTo(TierPerColor.BASIC);
-        Assertions.assertThat(findGameCharacter.getLevel()).isEqualTo(1);
-        Assertions.assertThat(findGameCharacter.getHp()).isEqualTo(50);
-        Assertions.assertThat(findGameCharacter.getExp()).isEqualTo(0);
-        Assertions.assertThat(findGameCharacter.getAtk()).isEqualTo(0);
-        Assertions.assertThat(findGameCharacter.getDef()).isEqualTo(0);
-        Assertions.assertThat(findGameCharacter.isMain()).isEqualTo(true);
+        assertThat(findGameCharacter.getColor()).isEqualTo(TierPerColor.BASIC);
+        assertThat(findGameCharacter.getLevel()).isEqualTo(1);
+        assertThat(findGameCharacter.getHp()).isEqualTo(50);
+        assertThat(findGameCharacter.getExp()).isEqualTo(0);
+        assertThat(findGameCharacter.getAtk()).isEqualTo(0);
+        assertThat(findGameCharacter.getDef()).isEqualTo(0);
+        assertThat(findGameCharacter.isMain()).isEqualTo(true);
     }
 
     @Test
@@ -61,13 +63,13 @@ class CharacterServiceTest {
         GameCharacter findGameCharacter = em.find(GameCharacter.class, findGameIdx);
 
         // then
-        Assertions.assertThat(findGameCharacter.getColor()).isEqualTo(TierPerColor.BASIC);
-        Assertions.assertThat(findGameCharacter.getLevel()).isEqualTo(1);
-        Assertions.assertThat(findGameCharacter.getHp()).isEqualTo(50);
-        Assertions.assertThat(findGameCharacter.getExp()).isEqualTo(0);
-        Assertions.assertThat(findGameCharacter.getAtk()).isEqualTo(0);
-        Assertions.assertThat(findGameCharacter.getDef()).isEqualTo(0);
-        Assertions.assertThat(findGameCharacter.isMain()).isEqualTo(false);
+        assertThat(findGameCharacter.getColor()).isEqualTo(TierPerColor.BASIC);
+        assertThat(findGameCharacter.getLevel()).isEqualTo(1);
+        assertThat(findGameCharacter.getHp()).isEqualTo(50);
+        assertThat(findGameCharacter.getExp()).isEqualTo(0);
+        assertThat(findGameCharacter.getAtk()).isEqualTo(0);
+        assertThat(findGameCharacter.getDef()).isEqualTo(0);
+        assertThat(findGameCharacter.isMain()).isEqualTo(false);
     }
 
     @Test
@@ -87,7 +89,7 @@ class CharacterServiceTest {
         CharacterListResDto characterListResDto = characterService.searchCharacters(userGameInfo.getUserId());
 
         // then
-        Assertions.assertThat(characterListResDto.getCharacterDtoList().size()).isEqualTo(3);
+        assertThat(characterListResDto.getCharacterDtoList().size()).isEqualTo(3);
     }
 
     @Test
@@ -107,11 +109,12 @@ class CharacterServiceTest {
         CharacterWithUserIdResDto characterWithUserIdResDto = characterService.searchMainCharacter(userGameInfo.getUserId());
 
         // then
-        Assertions.assertThat(characterWithUserIdResDto.getCharacterDto().isMain()).isEqualTo(true);
-        Assertions.assertThat(characterWithUserIdResDto.getCharacterDto().getCharacterIdx()).isEqualTo(mainCharacterIdx);
+        assertThat(characterWithUserIdResDto.getCharacterDto().isMain()).isEqualTo(true);
+        assertThat(characterWithUserIdResDto.getCharacterDto().getCharacterIdx()).isEqualTo(mainCharacterIdx);
     }
 
     @Test
+    @Order(4)
     @DisplayName("사용자가 전달한 메인 캐릭터의 색을 변경하는 기능 테스트 (변경이 되는건진 정확히 알 수 없음...)")
     void changeColorTest() throws Exception{
         // given
@@ -123,7 +126,76 @@ class CharacterServiceTest {
 
         // when
         characterService.changeCharacterColor(userGameInfo.getUserId(), mainCharacterIdx);
+    }
+
+    @Test
+    @Order(5)
+    @DisplayName("atk를 변경하는 테스트")
+    void changeAtkTest() throws Exception{
+        // given
+        UserGameInfo userGameInfo = new UserGameInfo();
+        userGameInfo.setUserId("1234");
+        em.persist(userGameInfo);
+
+        Long characterIdx = characterService.create(userGameInfo.getUserId());
+        int defaultAtk = characterRepository.findCharacterByIdx(characterIdx).getAtk();
+
+        int updateValue = 2;
+        String updateStatus = "atk";
+
+        // when
+        characterService.changeCharacterStatus(userGameInfo.getUserId(), characterIdx, updateStatus, updateValue);
 
         // then
+        assertThat(characterRepository.findCharacterByIdx(characterIdx).getAtk())
+                .isEqualTo(updateValue + defaultAtk);
     }
+
+    @Test
+    @Order(5)
+    @DisplayName("def를 변경하는 테스트")
+    void changeDefTest() throws Exception{
+        // given
+        UserGameInfo userGameInfo = new UserGameInfo();
+        userGameInfo.setUserId("1234");
+        em.persist(userGameInfo);
+
+        Long characterIdx = characterService.create(userGameInfo.getUserId());
+        int defaultDef = characterRepository.findCharacterByIdx(characterIdx).getDef();
+
+        int updateValue = 5;
+        String updateStatus = "def";
+
+        // when
+        characterService.changeCharacterStatus(userGameInfo.getUserId(), characterIdx, updateStatus, updateValue);
+
+        // then
+        assertThat(characterRepository.findCharacterByIdx(characterIdx).getDef())
+                .isEqualTo(updateValue + defaultDef);
+    }
+
+    @Test
+    @Order(5)
+    @DisplayName("hp를 변경하는 테스트")
+    void changeHpTest() throws Exception{
+        // given
+        UserGameInfo userGameInfo = new UserGameInfo();
+        userGameInfo.setUserId("1234");
+        em.persist(userGameInfo);
+
+        Long characterIdx = characterService.create(userGameInfo.getUserId());
+        int defaultHp = characterRepository.findCharacterByIdx(characterIdx).getHp();
+
+        int updateValue = 50;
+        String updateStatus = "hp";
+
+        // when
+        characterService.changeCharacterStatus(userGameInfo.getUserId(), characterIdx, updateStatus, updateValue);
+
+        // then
+        assertThat(characterRepository.findCharacterByIdx(characterIdx).getHp())
+                .isEqualTo(updateValue + defaultHp);
+    }
+
+
 }
