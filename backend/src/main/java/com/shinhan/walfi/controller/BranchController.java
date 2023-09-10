@@ -4,6 +4,7 @@ import com.shinhan.walfi.domain.HttpResult;
 import com.shinhan.walfi.domain.game.Branch;
 import com.shinhan.walfi.dto.game.BranchListReqDto;
 import com.shinhan.walfi.dto.game.BranchListResDto;
+import com.shinhan.walfi.dto.game.BranchResDto;
 import com.shinhan.walfi.service.BranchService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +34,7 @@ public class BranchController {
     @GetMapping
     public ResponseEntity<HttpResult> getBranch(@RequestParam long idx){
 
-        Branch branch = branchService.getBranch(idx);
+        BranchResDto branch = branchService.getBranch(idx);
         HttpResult res;
         res = HttpResult.getSuccess();
         res.setData(branch);

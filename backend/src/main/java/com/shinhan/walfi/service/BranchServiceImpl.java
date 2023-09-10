@@ -4,6 +4,7 @@ import com.shinhan.walfi.dao.BranchListDao;
 import com.shinhan.walfi.domain.game.Branch;
 import com.shinhan.walfi.dto.game.BranchListReqDto;
 import com.shinhan.walfi.dto.game.BranchListResDto;
+import com.shinhan.walfi.dto.game.BranchResDto;
 import com.shinhan.walfi.mapper.BranchMapper;
 import com.shinhan.walfi.repository.BranchRepository;
 import lombok.RequiredArgsConstructor;
@@ -42,11 +43,13 @@ public class BranchServiceImpl implements BranchService {
     }
 
     @Override
-    public Branch getBranch(long id) {
-        Optional<Branch> branch = branchRepository.findById(id);
-        if(!branch.isPresent()){
-            return null;
-        }
-        return branch.get();
+    public BranchResDto getBranch(long id) {
+//        Optional<Branch> branch = branchRepository.findById(id);
+//        if(!branch.isPresent()){
+//            return null;
+//        }
+//        return branch.get();
+        BranchResDto branch = branchMapper.getBranch(id);
+        return branch;
     }
 }
