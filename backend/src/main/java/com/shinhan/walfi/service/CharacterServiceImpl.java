@@ -75,7 +75,7 @@ public class CharacterServiceImpl implements CharacterService {
         int typesRandomNum = random.nextInt(characterTypes.length);
         CharacterType randomCharacterType = characterTypes[typesRandomNum];
 
-        List<GameCharacter> characters = characterRepository.findCharacters(userGameInfo);
+        List<GameCharacter> characters = userGameInfo.getGameCharacters();
         boolean isSame = characters.stream()
                 .anyMatch(character -> character.getCharacterType().equals(randomCharacterType));
         if (isSame) {
@@ -104,7 +104,7 @@ public class CharacterServiceImpl implements CharacterService {
     public CharacterListResDto searchCharacters(String userId) {
         UserGameInfo userGameInfo = userGameInfoRepository.findById(userId);
 
-        List<GameCharacter> characters = characterRepository.findCharacters(userGameInfo);
+        List<GameCharacter> characters = userGameInfo.getGameCharacters();
 
         List<CharacterDto> dtoList = characters.stream()
                 .map(character -> getCharacterDto(character))

@@ -24,12 +24,6 @@ public class CharacterRepository {
         return gameCharacter;
     }
 
-    public List<GameCharacter> findCharacters(UserGameInfo userGameInfo) {
-        List characterList = em.createQuery("select g from GameCharacter g where g.userGameInfo=userGameInfo")
-                .getResultList();
-        return characterList;
-    }
-
     public GameCharacter findMainCharacter(UserGameInfo userGameInfo) {
         GameCharacter result = (GameCharacter) em.createQuery(
                 "select g from GameCharacter g " +
