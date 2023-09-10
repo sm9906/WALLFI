@@ -3,6 +3,7 @@ package com.shinhan.walfi.service;
 import com.shinhan.walfi.dao.BattleDao;
 import com.shinhan.walfi.domain.game.Branch;
 import com.shinhan.walfi.domain.game.UserGameInfo;
+import com.shinhan.walfi.dto.game.BattleRankResDto;
 import com.shinhan.walfi.dto.game.BattleReqDto;
 import com.shinhan.walfi.mapper.BattleMapper;
 import com.shinhan.walfi.repository.BranchRepository;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -29,6 +31,7 @@ public class BattleServiceImpl implements BattleService{
         if(oBranch.isEmpty()){
             // Exception
         } else{
+            // Todo : manager인 경우 기록하지 않도록 한다.
             Branch branch = oBranch.get();
             LocalDateTime start = branch.getStartTime();
             BattleDao dao = new BattleDao();
@@ -48,5 +51,10 @@ public class BattleServiceImpl implements BattleService{
                 진 사람의 user_game_info status를 "도전자"로 변경
             */
         }
+    }
+
+    @Override
+    public List<BattleRankResDto> getRank(Long idx) {
+        return battleMapper.getRank(idx);
     }
 }
