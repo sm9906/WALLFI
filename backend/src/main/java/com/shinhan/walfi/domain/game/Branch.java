@@ -49,4 +49,23 @@ public class Branch {
     @OneToMany(mappedBy = "branch")
     private List<BattleHistory> battleHistories = new ArrayList<>();
 
+    public void setManagerLevel(int managerLevel) {
+        this.managerLevel = managerLevel;
+    }
+
+    public void setManagerExp(int managerExp) {
+        this.managerExp = managerExp;
+    }
+
+    public void setManagerHp(int managerHp) {
+        this.managerHp = managerHp;
+    }
+
+    public void setManagerAtk(int managerAtk) {
+        this.managerAtk = managerAtk;
+    }
+
+    public void setManagerDef(int managerDef) {
+        this.managerDef = managerDef;
+    }
 }
