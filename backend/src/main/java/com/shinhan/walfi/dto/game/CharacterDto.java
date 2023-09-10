@@ -19,7 +19,7 @@ public class CharacterDto {
 
     private TierPerColor color;
 
-    private LevelUp level;
+    private int level;
 
     private int exp;
 

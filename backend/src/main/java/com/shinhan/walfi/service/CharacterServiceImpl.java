@@ -305,7 +305,7 @@ public class CharacterServiceImpl implements CharacterService {
                 .characterIdx(gameCharacter.getCharacterIdx())
                 .characterType(gameCharacter.getCharacterType())
                 .color(gameCharacter.getColor())
-                .level(gameCharacter.getLevel())
+                .level(gameCharacter.getLevel().getLevel())
                 .exp(gameCharacter.getExp())
                 .hp(gameCharacter.getHp())
                 .atk(gameCharacter.getAtk())
