@@ -221,25 +221,35 @@ public class CharacterServiceImpl implements CharacterService {
                 int newExp = 0;
 
 
+
                 if (defaultLevel.getNeededExp() <= (defaultExp + statusValue)) {
-                    int sumExp = 0;
+
                     LevelUp newLevel = null;
-                    for (LevelUp l : LevelUp.values()) {
-                        if (l.getLevel() < defaultLevel.getLevel()) {
-                            continue;
-                        }
 
-                        sumExp += l.getNeededExp();
+                    // 사용자의 경험치가 이미 max인 경우 레벨과 경험치가 더 오를 수 없음
+                    if (defaultLevel.equals(LevelUp.LEVEL_10)) {
+                        character.setLevel(LevelUp.LEVEL_10);
+                        character.setExp(LevelUp.LEVEL_10.getNeededExp());
+                    } else {
+                        int sumExp = 0;
+                        for (LevelUp l : LevelUp.values()) {
+                            if (l.getLevel() < defaultLevel.getLevel()) {
+                                continue;
+                            }
 
-                        if (totalRaiseExp < sumExp) {
-                            newLevel = LevelUp.getLevelUpByLevel(l.getLevel());
-                            newExp = l.getNeededExp() - (sumExp - totalRaiseExp);
-                            break;
+                            sumExp += l.getNeededExp();
+
+                            if (totalRaiseExp < sumExp) {
+                                newLevel = LevelUp.getLevelUpByLevel(l.getLevel());
+                                newExp = l.getNeededExp() - (sumExp - totalRaiseExp);
+
+                                break;
+                            }
                         }
+                        character.setLevel(newLevel);
+                        character.setExp(newExp);
                     }
 
-                    character.setLevel(newLevel);
-                    character.setExp(newExp);
                 } else {
                     newExp = defaultExp + statusValue;
                     character.setExp(newExp);
