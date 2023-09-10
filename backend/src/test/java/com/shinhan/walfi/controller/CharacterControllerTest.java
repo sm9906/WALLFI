@@ -277,5 +277,62 @@ class CharacterControllerTest {
         Assertions.assertThat(data.getCharacterDto().isMain()).isEqualTo(true);
         // 기존 메인 캐릭터가 메인이 아니게 변경되었는지 확인
         Assertions.assertThat(mainCharacter.isMain()).isEqualTo(false);
+
     }
+
+    @Test
+    @DisplayName("캐릭터의 exp 상승 (level+1, exp+10) 테스트")
+    void changeExpTest() throws Exception{
+        // given
+        UserGameInfo userGameInfo = new UserGameInfo();
+        userGameInfo.setUserId("ssafy");
+        em.persist(userGameInfo);
+
+        CharacterStatusReqDto characterStatusReqDto = new CharacterStatusReqDto();
+        Long characterIdx = characterService.create("ssafy");
+
+        characterStatusReqDto.setUserId("ssafy");
+        characterStatusReqDto.setCharacterIdx(characterIdx);
+        characterStatusReqDto.setStatusType("exp");
+        characterStatusReqDto.setValue(50);
+
+        // when
+        ResponseEntity<HttpResult> res = characterController.changeCharacterStatus(characterStatusReqDto);
+
+        // then
+        CharacterWithUserIdResDto data = (CharacterWithUserIdResDto) res.getBody().getData();
+
+        Assertions.assertThat(data.getCharacterDto().getLevel()).isEqualTo(2);
+        Assertions.assertThat(data.getCharacterDto().getExp()).isEqualTo(10);
+
+    }
+
+    @Test
+    @DisplayName("캐릭터의 exp 상승 (level+2, exp+10) 테스트")
+    void changeExpLevelTwoTest() throws Exception{
+        // given
+        UserGameInfo userGameInfo = new UserGameInfo();
+        userGameInfo.setUserId("ssafy");
+        em.persist(userGameInfo);
+
+        CharacterStatusReqDto characterStatusReqDto = new CharacterStatusReqDto();
+        Long characterIdx = characterService.create("ssafy");
+
+        characterStatusReqDto.setUserId("ssafy");
+        characterStatusReqDto.setCharacterIdx(characterIdx);
+        characterStatusReqDto.setStatusType("exp");
+        characterStatusReqDto.setValue(130);
+
+        // when
+        ResponseEntity<HttpResult> res = characterController.changeCharacterStatus(characterStatusReqDto);
+
+        // then
+        CharacterWithUserIdResDto data = (CharacterWithUserIdResDto) res.getBody().getData();
+
+        Assertions.assertThat(data.getCharacterDto().getLevel()).isEqualTo(3);
+        Assertions.assertThat(data.getCharacterDto().getExp()).isEqualTo(10);
+
+    }
+
+
 }
