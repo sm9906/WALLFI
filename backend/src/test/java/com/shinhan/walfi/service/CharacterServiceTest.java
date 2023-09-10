@@ -3,8 +3,8 @@ package com.shinhan.walfi.service;
 import com.shinhan.walfi.domain.TierPerColor;
 import com.shinhan.walfi.domain.game.GameCharacter;
 import com.shinhan.walfi.domain.game.UserGameInfo;
-import com.shinhan.walfi.dto.game.CharacterResDto;
-import com.shinhan.walfi.dto.game.MainCharacterResDto;
+import com.shinhan.walfi.dto.game.CharacterListResDto;
+import com.shinhan.walfi.dto.game.CharacterWithUserIdResDto;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
@@ -84,10 +84,10 @@ class CharacterServiceTest {
         Long c3 = characterService.shop(userGameInfo.getUserId());
 
         // when
-        CharacterResDto characterResDto = characterService.searchCharacters(userGameInfo.getUserId());
+        CharacterListResDto characterListResDto = characterService.searchCharacters(userGameInfo.getUserId());
 
         // then
-        Assertions.assertThat(characterResDto.getCharacterDtoList().size()).isEqualTo(3);
+        Assertions.assertThat(characterListResDto.getCharacterDtoList().size()).isEqualTo(3);
     }
 
     @Test
@@ -104,10 +104,26 @@ class CharacterServiceTest {
         Long c3 = characterService.shop(userGameInfo.getUserId());
 
         // when
-        MainCharacterResDto mainCharacterResDto = characterService.searchMainCharacter(userGameInfo.getUserId());
+        CharacterWithUserIdResDto characterWithUserIdResDto = characterService.searchMainCharacter(userGameInfo.getUserId());
 
         // then
-        Assertions.assertThat(mainCharacterResDto.getCharacterDto().isMain()).isEqualTo(true);
-        Assertions.assertThat(mainCharacterResDto.getCharacterDto().getCharacterIdx()).isEqualTo(mainCharacterIdx);
+        Assertions.assertThat(characterWithUserIdResDto.getCharacterDto().isMain()).isEqualTo(true);
+        Assertions.assertThat(characterWithUserIdResDto.getCharacterDto().getCharacterIdx()).isEqualTo(mainCharacterIdx);
+    }
+
+    @Test
+    @DisplayName("사용자가 전달한 메인 캐릭터의 색을 변경하는 기능 테스트 (변경이 되는건진 정확히 알 수 없음...)")
+    void changeColorTest() throws Exception{
+        // given
+        UserGameInfo userGameInfo = new UserGameInfo();
+        userGameInfo.setUserId("1234");
+        em.persist(userGameInfo);
+
+        Long mainCharacterIdx = characterService.create(userGameInfo.getUserId());
+
+        // when
+        characterService.changeCharacterColor(userGameInfo.getUserId(), mainCharacterIdx);
+
+        // then
     }
 }
