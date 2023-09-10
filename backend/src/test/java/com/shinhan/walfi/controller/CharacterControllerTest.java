@@ -196,4 +196,29 @@ class CharacterControllerTest {
 
         Assertions.assertThat(data.getCharacterDto().getAtk()).isEqualTo(10);
     }
+
+    @Test
+    @DisplayName("캐릭터의 def 변경 테스트")
+    void changeDefTest() throws Exception{
+        // given
+        UserGameInfo userGameInfo = new UserGameInfo();
+        userGameInfo.setUserId("ssafy");
+        em.persist(userGameInfo);
+
+        CharacterStatusReqDto characterStatusReqDto = new CharacterStatusReqDto();
+        Long characterIdx = characterService.create("ssafy");
+
+        characterStatusReqDto.setUserId("ssafy");
+        characterStatusReqDto.setCharacterIdx(characterIdx);
+        characterStatusReqDto.setStatusType("def");
+        characterStatusReqDto.setValue(10);
+
+        // when
+        ResponseEntity<HttpResult> res = characterController.changeCharacterStatus(characterStatusReqDto);
+
+        // then
+        CharacterWithUserIdResDto data = (CharacterWithUserIdResDto) res.getBody().getData();
+
+        Assertions.assertThat(data.getCharacterDto().getDef()).isEqualTo(10);
+    }
 }
