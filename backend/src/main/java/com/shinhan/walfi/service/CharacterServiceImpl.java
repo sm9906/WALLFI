@@ -110,10 +110,10 @@ public class CharacterServiceImpl implements CharacterService {
     }
 
     /**
-     * 사용자의 홈 캐릭터 조회
+     * 사용자의 메인 캐릭터 조회
      *
      * @param userId
-     * @return 홈 캐릭터 DTO
+     * @return CharacterWithUserIdResDto
      */
     @Override
     public CharacterWithUserIdResDto searchMainCharacter(String userId) {
@@ -162,7 +162,58 @@ public class CharacterServiceImpl implements CharacterService {
             mainCharacter.setColor(TierPerColor.LED);
         }
 
+        // 변경한 색 반영하여 저장
         GameCharacter saveGameCharacter = characterRepository.save(mainCharacter);
+
+        // dto로 변환
+        CharacterDto characterDto = getCharacterDto(saveGameCharacter);
+        CharacterWithUserIdResDto characterWithUserIdResDto = getCharacterWithUserIdResDto(userId, characterDto);
+
+        return characterWithUserIdResDto;
+    }
+
+    /**
+     * 캐릭터의 스텟 변경하는 기능
+     *
+     * @param userId
+     * @param characterIdx
+     * @param statusType
+     * @param statusValue
+     * @return CharacterWithUserIdResDto
+     */
+    @Override
+    public CharacterWithUserIdResDto changeCharacterStatus(String userId,
+                                                           Long characterIdx,
+                                                           String statusType,
+                                                           int statusValue) {
+
+        UserGameInfo userGameInfo = userGameInfoRepository.findById(userId);
+        GameCharacter character = characterRepository.findMainCharacter(userGameInfo);
+
+        if (character.getCharacterIdx() != characterIdx) {
+            // TODO: 전송한 캐릭터가 사용자의 캐릭터가 아닐 시 예외 처리
+        }
+
+        // atk, def, hp, exp(레벨업 로직), isMain(메인 캐릭터인거 아니게 바꾸는 로직 포함)
+        if (statusType.equals("atk")) {
+            int defaultAtk = character.getAtk();
+            character.setAtk(defaultAtk + statusValue);
+        } else if (statusType.equals("def")) {
+            int defaultDef = character.getDef();
+            character.setDef(defaultDef + statusValue);
+        } else if (statusType.equals("hp")) {
+            int defaultHp = character.getHp();
+            character.setHp(defaultHp + statusValue);
+        } else if (statusType.equals("exp")) {
+
+        } else if (statusType.equals("isMain")) {
+
+        }
+
+        // 변경한 색 스텟 반영하여 저장
+        GameCharacter saveGameCharacter = characterRepository.save(character);
+
+        // dto로 변환
         CharacterDto characterDto = getCharacterDto(saveGameCharacter);
         CharacterWithUserIdResDto characterWithUserIdResDto = getCharacterWithUserIdResDto(userId, characterDto);
 

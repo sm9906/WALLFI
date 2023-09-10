@@ -14,4 +14,6 @@ public interface CharacterService {
     CharacterWithUserIdResDto searchMainCharacter(String userId);
 
     CharacterWithUserIdResDto changeCharacterColor(String userId, Long mainCharacterIdx);
+
+    CharacterWithUserIdResDto changeCharacterStatus(String userId, Long characterIdx, String statusType, int statusValue);
 }
