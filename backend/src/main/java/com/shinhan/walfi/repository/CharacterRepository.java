@@ -19,6 +19,11 @@ public class CharacterRepository {
         return gameCharacter;
     }
 
+    public GameCharacter findCharacterByIdx(Long characterIdx){
+        GameCharacter gameCharacter = em.find(GameCharacter.class, characterIdx);
+        return gameCharacter;
+    }
+
     public List<GameCharacter> findCharactersByUserGameInfo(UserGameInfo userGameInfo) {
         List characterList = em.createQuery("select g from GameCharacter g where g.userGameInfo=userGameInfo")
                 .getResultList();
