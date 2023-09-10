@@ -14,8 +14,9 @@ public class CharacterRepository {
 
     private final EntityManager em;
 
-    public void save(GameCharacter gameCharacter) {
+    public GameCharacter save(GameCharacter gameCharacter) {
         em.persist(gameCharacter);
+        return gameCharacter;
     }
 
     public List<GameCharacter> findCharactersByUserGameInfo(UserGameInfo userGameInfo) {
@@ -24,7 +25,7 @@ public class CharacterRepository {
         return characterList;
     }
 
-    public GameCharacter findHomeCharacter(UserGameInfo userGameInfo) {
+    public GameCharacter findMainCharacter(UserGameInfo userGameInfo) {
         GameCharacter result = (GameCharacter) em.createQuery(
                 "select g from GameCharacter g " +
                         "where g.userGameInfo=userGameInfo " +
@@ -33,4 +34,5 @@ public class CharacterRepository {
 
         return result;
     }
+
 }
