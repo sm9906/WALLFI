@@ -1,6 +1,7 @@
 package com.shinhan.walfi.repository;
 
 import com.shinhan.walfi.domain.User;
+import com.shinhan.walfi.domain.game.UserGameInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
