@@ -2,10 +2,7 @@ package com.shinhan.walfi.controller;
 
 import com.shinhan.walfi.domain.HttpResult;
 
-import com.shinhan.walfi.dto.game.CharacterReqDto;
-import com.shinhan.walfi.dto.game.CharacterListResDto;
-import com.shinhan.walfi.dto.game.MainCharacterReqDto;
-import com.shinhan.walfi.dto.game.CharacterWithUserIdResDto;
+import com.shinhan.walfi.dto.game.*;
 import com.shinhan.walfi.service.CharacterService;
 import lombok.RequiredArgsConstructor;
 
@@ -75,6 +72,24 @@ public class CharacterController {
         Long mainCharacterIdx = mainCharacterReqDto.getMainCharacterIdx();
 
         CharacterWithUserIdResDto characterWithUserIdResDto = characterService.changeCharacterColor(userId, mainCharacterIdx);
+
+        HttpResult res;
+
+        res = HttpResult.getSuccess();
+        res.setData(characterWithUserIdResDto);
+
+        return ResponseEntity.status(res.getStatus()).body(res);
+    }
+
+    @PutMapping("/change/status")
+    public ResponseEntity<HttpResult> changeCharacterStatus(@RequestBody CharacterStatusReqDto characterStatusReqDto) {
+        String userId = characterStatusReqDto.getUserId();
+        Long characterIdx = characterStatusReqDto.getCharacterIdx();
+        String statusType = characterStatusReqDto.getStatusType();
+        int statusValue = characterStatusReqDto.getValue();
+
+        CharacterWithUserIdResDto characterWithUserIdResDto
+                = characterService.changeCharacterStatus(userId, characterIdx, statusType, statusValue);
 
         HttpResult res;
 
