@@ -1,22 +1,52 @@
-import { StatusBar } from "expo-status-bar";
+import React, { useEffect, useState } from 'react';
 import {
+    StatusBar,
     StyleSheet,
-    Dimensions,
     Text,
     View,
-    Image
+    Image,
+    ImageBackground,
+    TouchableOpacity,
 } from 'react-native';
-import GameHeader from '../homecomponents/GameHeader.js';
+import { globalStyles } from "../homestyles/global.js";
 
-export const SCREEN_WIDTH = Dimensions.get("window").width;
-export const SCREEN_HEIGHT = Dimensions.get("window").height;
+import GameHeader from '../homecomponents/GameHeader.js';
+import mission from '../../.././assets/background/mission.png'
+import backHome from '../../.././assets/game/button/backHome.png';
 
 export default function Mission({navigation}) {
+
     return (
-        <View style={{ flex: 1 }}>
-            <GameHeader />
-            <Text style={{ flex: 1.2 }}>미션</Text>
-            <View style={{ flex: 6.5 }}></View>
+        <View style={globalStyles.container}>
+            <ImageBackground source={mission} style={[globalStyles.bgImg, { alignItems: 'center' }]}>
+                <GameHeader />
+                <MissionHeader navigation={navigation}/>
+                <View style={{ flex: 6.5 }}></View>
+            </ImageBackground>
+            <StatusBar />
         </View>
     )
 }
+
+function MissionHeader(props) {
+
+    return (
+        <View style={{ flex: 1.2, flexDirection: 'row', alignItems: 'center' }}>
+            <TouchableOpacity style={[globalStyles.navigationBtn, { backgroundColor: '#76009F' }]} onPress={() => props.navigation.navigate('GameHome')}>
+                <Image source={backHome} style={globalStyles.btnIcon}/>
+            </TouchableOpacity>
+            <Text style={[globalStyles.navigationText, { color: '#76009F' }]}>미션</Text>
+        </View>
+    );
+}
+
+function MenuBar(props) {
+
+    return (
+        <View></View>
+    );
+}
+
+const styles = StyleSheet.create({
+
+})

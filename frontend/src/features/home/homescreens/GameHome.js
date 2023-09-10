@@ -11,8 +11,7 @@ import {
     Modal,
     Alert,
 } from 'react-native';
-
-import { SCREEN_WIDTH } from '../homecomponents/ScreenSize.js';
+import { globalStyles } from '../homestyles/global.js';
 
 import GameHeader from '../homecomponents/GameHeader.js';
 import home from '../../.././assets/background/home.png';
@@ -37,8 +36,8 @@ export default function GameHome({navigation}) {
     const [modalVisible, setModalVisible] = useState(false);
 
     return (
-        <View style={styles.container}>
-            <ImageBackground source={home} style={styles.bgImg}>
+        <View style={globalStyles.container}>
+            <ImageBackground source={home} style={globalStyles.bgImg}>
                 <Modal
                     animationType='fade'
                     transparent={true}
@@ -48,17 +47,21 @@ export default function GameHome({navigation}) {
                         setModalVisible(!modalVisible);
                     }}
                 >
-                    <View style={{ 
-                        backgroundColor: 'white',
-                        width: '90%',
-                        height: '90%',
-                        marginHorizontal: '5%',
-                        marginVertical: '10%',
-                    }}>
-                        <TouchableOpacity onPress={() => setModalVisible(false)}>
-                            <Image source={modalClose} />
+                    <View style={styles.modalBackground}>
+                        <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.modalCloseBtn}>
+                            <Image source={modalClose} style={{ resizeMode: 'contain', width: '10%', height: '50%' }} />
                         </TouchableOpacity>
-                        <Text>공지사항</Text>
+                        <View style={{
+                            flex: 10.5,
+                            width: '100%',
+                            backgroundColor: '#FFF5EA',
+                            alignItems: 'center'
+                        }}>
+                            <Text style={{ flex: 1, marginTop: '5%', fontSize: 30 }}>--- 공지 ---</Text>
+                            <Text style={{ flex: 3 }}>공지사항</Text>
+                            <Text style={{ flex: 3 }}>공지사항</Text>
+                        </View>
+                        <View style={{ flex: 1 }}></View>
                     </View>
                 </Modal>
                 <GameHeader />
@@ -78,7 +81,7 @@ function Season() {
         <View style={styles.season}>
             <LinearGradient style={styles.box} colors={['rgba(142, 170, 245, 1)', 'rgba(72, 122, 255, 0.4)', 'transparent']}>
                 <Image source={trophy} style={styles.trophy}/>
-                <Text style={styles.seasonText}>시즌 1</Text>
+                <Text style={styles.seasonText}>1 시즌</Text>
             </LinearGradient>
         </View>
     )
@@ -302,36 +305,28 @@ function Bottom(props) {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
-    bgImg: {
-        flex: 1,
-        width: SCREEN_WIDTH,
-        height: '100%',
-        resizeMode: 'cover',
-    },
     season: {
         flex: 1.2,
         alignItems: 'center',
         justifyContent: 'flex-end',
     },
     box: {
+        flex: 0.6,
         flexDirection: 'row',
-        justifyContent: 'space-evenly',
+        alignItems: 'center',
         width: '50%',
-        height: '70%',
         borderColor: 'white',
         borderWidth: 4,
         borderRadius: 10,
-        alignItems: 'center',
     },
     trophy: {
-        width: '20%',
-        height: '100%',
+        flex: 1,
+        height: '80%',
         resizeMode: 'contain',
     },
     seasonText: {
+        flex: 1.3,
+        height: '50%',
         fontSize: 20,
         fontWeight: 'bold',
         color: '#E3B75A',
@@ -420,5 +415,19 @@ const styles = StyleSheet.create({
         textShadowColor: 'black',
         textShadowOffset: { width: 2, height: 1 },
         textShadowRadius: 3,
+    },
+    modalBackground: { 
+        flex: 1,
+        backgroundColor: 'rgba(50, 68, 143, 0.95)',
+        width: '90%',
+        marginHorizontal: '5%',
+        marginVertical: '30%',
+        borderRadius: 20,
+    },
+    modalCloseBtn: { 
+        flex: 1.5, 
+        alignItems: 'flex-end', 
+        justifyContent: 'center', 
+        marginEnd: '5%' 
     }
 })
