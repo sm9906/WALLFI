@@ -221,4 +221,29 @@ class CharacterControllerTest {
 
         Assertions.assertThat(data.getCharacterDto().getDef()).isEqualTo(10);
     }
+
+    @Test
+    @DisplayName("캐릭터의 hp 변경 테스트")
+    void changeHpTest() throws Exception{
+        // given
+        UserGameInfo userGameInfo = new UserGameInfo();
+        userGameInfo.setUserId("ssafy");
+        em.persist(userGameInfo);
+
+        CharacterStatusReqDto characterStatusReqDto = new CharacterStatusReqDto();
+        Long characterIdx = characterService.create("ssafy");
+
+        characterStatusReqDto.setUserId("ssafy");
+        characterStatusReqDto.setCharacterIdx(characterIdx);
+        characterStatusReqDto.setStatusType("hp");
+        characterStatusReqDto.setValue(10);
+
+        // when
+        ResponseEntity<HttpResult> res = characterController.changeCharacterStatus(characterStatusReqDto);
+
+        // then
+        CharacterWithUserIdResDto data = (CharacterWithUserIdResDto) res.getBody().getData();
+
+        Assertions.assertThat(data.getCharacterDto().getHp()).isEqualTo(60);
+    }
 }
