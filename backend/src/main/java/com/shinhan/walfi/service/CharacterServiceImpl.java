@@ -1,6 +1,7 @@
 package com.shinhan.walfi.service;
 
 import com.shinhan.walfi.domain.CharacterType;
+import com.shinhan.walfi.domain.LevelUp;
 import com.shinhan.walfi.domain.TierPerColor;
 import com.shinhan.walfi.domain.game.GameCharacter;
 import com.shinhan.walfi.domain.game.UserGameInfo;
@@ -195,32 +196,74 @@ public class CharacterServiceImpl implements CharacterService {
             // TODO: 전송한 캐릭터가 사용자의 캐릭터가 아닐 시 예외 처리
         }
 
-        // atk, def, hp, exp(레벨업 로직), isMain(메인 캐릭터인거 아니게 바꾸는 로직 포함)
-        if (statusType.equals("atk")) {
-            int defaultAtk = character.getAtk();
-            character.setAtk(defaultAtk + statusValue);
-        } else if (statusType.equals("def")) {
-            int defaultDef = character.getDef();
-            character.setDef(defaultDef + statusValue);
-        } else if (statusType.equals("hp")) {
-            int defaultHp = character.getHp();
-            character.setHp(defaultHp + statusValue);
-        } else if (statusType.equals("exp")) {
+        // atk, def, hp, exp(레벨업 로직), isMain(메인 캐릭터인걸 아니게 바꾸는 로직 포함)
+        switch (statusType) {
 
-        } else if (statusType.equals("isMain")) {
-            if (character.isMain()) {
-                // TODO: 사용자의 캐릭터가 이미 메인 캐릭터임으로 변경할 수 없다는 예외 발생
-            }
+            case "atk":
+                int defaultAtk = character.getAtk();
+                character.setAtk(defaultAtk + statusValue);
+                break;
 
-            // 기존 메인 캐릭터를 메인이 아니게 변경
-            GameCharacter mainCharacter = characterRepository.findMainCharacter(userGameInfo);
-            mainCharacter.setMain(false);
-            characterRepository.save(mainCharacter);
+            case "def":
+                int defaultDef = character.getDef();
+                character.setDef(defaultDef + statusValue);
+                break;
 
-            // 전송한 캐릭터를 메인 캐릭터로 변경
-            character.setMain(true);
-        } else {
-            // TODO: 전송한 스테이터스를 알 수 없을 때 예외 발생
+            case "hp":
+                int defaultHp = character.getHp();
+                character.setHp(defaultHp + statusValue);
+                break;
+
+            case "exp":
+                LevelUp defaultLevel = character.getLevel();
+                int defaultExp = character.getExp();
+                int totalRaiseExp = defaultExp + statusValue;
+                int newExp = 0;
+
+
+                if (defaultLevel.getNeededExp() <= (defaultExp + statusValue)) {
+                    int sumExp = 0;
+                    LevelUp newLevel = null;
+                    for (LevelUp l : LevelUp.values()) {
+                        if (l.getLevel() < defaultLevel.getLevel()) {
+                            continue;
+                        }
+
+                        sumExp += l.getNeededExp();
+
+                        if (totalRaiseExp < sumExp) {
+                            newLevel = LevelUp.getLevelUpByLevel(l.getLevel());
+                            newExp = l.getNeededExp() - (sumExp - totalRaiseExp);
+                            break;
+                        }
+                    }
+
+                    character.setLevel(newLevel);
+                    character.setExp(newExp);
+                } else {
+                    newExp = defaultExp + statusValue;
+                    character.setExp(newExp);
+                }
+
+                break;
+
+            case "isMain":
+                if (character.isMain()) {
+                    // TODO: 사용자의 캐릭터가 이미 메인 캐릭터임으로 변경할 수 없다는 예외 발생
+                }
+
+                // 기존 메인 캐릭터를 메인이 아니게 변경
+                GameCharacter mainCharacter = characterRepository.findMainCharacter(userGameInfo);
+                mainCharacter.setMain(false);
+                characterRepository.save(mainCharacter);
+
+                // 전송한 캐릭터를 메인 캐릭터로 변경
+                character.setMain(true);
+                break;
+
+            default:
+                // TODO: 전송한 스테이터스를 알 수 없을 때 예외 발생
+                break;
         }
 
         // 변경한 스텟 반영하여 저장
