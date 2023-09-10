@@ -18,6 +18,7 @@ import java.util.Random;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class GameCharacter {
 
