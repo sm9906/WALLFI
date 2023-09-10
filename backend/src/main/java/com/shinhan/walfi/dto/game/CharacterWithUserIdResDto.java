@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Builder
 @Getter
-public class MainCharacterResDto {
+public class CharacterWithUserIdResDto {
 
     String userId;
 
