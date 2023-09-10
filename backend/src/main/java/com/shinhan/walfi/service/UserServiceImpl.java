@@ -15,16 +15,17 @@ public class UserServiceImpl implements UserService{
 
     private final UserGameInfoRepository userGameInfoRepository;
 
-    @Override
-    public void signup(User user) {
-        // user 생성
-        userRepository.save(user);
-        // usergameinfo 생성
-        userGameInfoRepository.save(user.userGameInfoByUser());
-    }
+//    @Override
+//    public void signup(User user) {
+//        // user 생성
+//        userRepository.save(user);
+//        // usergameinfo 생성
+//        userGameInfoRepository.save(user.userGameInfoByUser());
+//    }
 
     @Override
-    public int login(String userId, String password) {
+    public User login(String userId, String password) {
+        System.out.println(userId+" "+password);
         return userRepository.login(userId, password);
     }
 

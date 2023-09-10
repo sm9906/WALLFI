@@ -5,7 +5,7 @@ import com.shinhan.walfi.dto.banking.SignupReqDto;
 
 public interface UserService {
 
-    void signup(User user);
+//    void signup(User user);
 
-    int login(String userId, String password);
+    User login(String userId, String password);
 }

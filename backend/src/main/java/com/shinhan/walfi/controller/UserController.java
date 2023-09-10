@@ -3,8 +3,6 @@ package com.shinhan.walfi.controller;
 import com.shinhan.walfi.domain.HttpResult;
 import com.shinhan.walfi.domain.User;
 import com.shinhan.walfi.dto.banking.LoginReqDto;
-import com.shinhan.walfi.dto.banking.SignupReqDto;
-import com.shinhan.walfi.service.AccountService;
 import com.shinhan.walfi.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,26 +17,22 @@ public class UserController {
 
     private final UserService userService;
 
-    private final AccountService accountService;
-
-    @PostMapping("/signup")
-    public ResponseEntity<HttpResult> signup(@RequestBody SignupReqDto signupReqDto){
-        User user = signupReqDto.dtoToEntity();
-        userService.signup(user);
-
-        accountService.makeSix(user.getUserId());
-
-        HttpResult res;
-        res = HttpResult.getSuccess();
-        return ResponseEntity.status(res.getStatus()).body(res);
-    }
+//    @PostMapping("/signup")
+//    public ResponseEntity<HttpResult> signup(@RequestBody SignupReqDto signupReqDto){
+//        User user = signupReqDto.dtoToEntity();
+//        userService.signup(user);
+//
+//        HttpResult res;
+//        res = HttpResult.getSuccess();
+//        return ResponseEntity.status(res.getStatus()).body(res);
+//    }
 
     @PostMapping("/login")
     public ResponseEntity<HttpResult> login(@RequestBody LoginReqDto loginReqDto){
-        int loginResult = userService.login(loginReqDto.getUserId(), loginReqDto.getPassword());
+        User user = userService.login(loginReqDto.getUserId(), loginReqDto.getPassword());
 
         HttpResult res;
-        if(loginResult == 1 ){
+        if(user != null ){
             res = HttpResult.getSuccess();
 
         } else{
