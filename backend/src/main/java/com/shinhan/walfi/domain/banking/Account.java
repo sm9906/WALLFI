@@ -22,10 +22,10 @@ public class Account {
 
     private String 상품명;
 
-    @Column(name = "잔액(통화별)")
+    @Column(name = "`잔액(통화별)`")
     private long 잔액통화별;
 
-    @Column(name = "평가금액(통화별)")
+    @Column(name = "`평가금액(통화별)`")
     private long 평가금액통화별;
 
     private Date 신규일;
@@ -34,17 +34,17 @@ public class Account {
 
     private String 관리점명;
 
-    @Column(name = "금리(수익률)")
+    @Column(name = "`금리(수익률)`")
     private BigDecimal 금리수익률;
 
     private String 통화;
 
     private String 과세;
 
-    @Column(name = "잔액(원화)")
+    @Column(name = "`잔액(원화)`")
     private long 잔액원화;
 
-    @Column(name = "평가금액(원화)")
+    @Column(name = "`평가금액(원화)`")
     private long 평가금액원화;
 
     private byte 자동해지여부;
