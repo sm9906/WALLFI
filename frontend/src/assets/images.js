@@ -29,6 +29,8 @@ import skill_1 from './battle/skill_1.png'
 import skill_2 from './battle/skill_2.png'
 import skill_3 from './battle/skill_3.png'
 import enemy from './battle/enemy.png'
+import question from './battle/question.png'
+import time from './battle/time.png'
 
 const images = {
     animal : {
@@ -66,7 +68,9 @@ const images = {
         skill_1: skill_1,
         skill_2: skill_2,
         skill_3: skill_3,
-        enemy_0: enemy
+        enemy_0: enemy,
+        question_0: question,
+        time_0: time,
     },
 };
 
