@@ -12,4 +12,13 @@
         FROM account a
         WHERE `대표계좌`= #{mainWithdrawalAccountNumber};
     </select>
+
+    <select id="findSubWithdrawalAccountNumber" resultType="String" parameterType="String">
+        SELECT
+            a.계좌번호
+        FROM account a
+        WHERE
+            `대표계좌`= #{mainWithdrawalAccountNumber} AND
+            `통화` = #{currencyCode};
+    </select>
 </mapper>

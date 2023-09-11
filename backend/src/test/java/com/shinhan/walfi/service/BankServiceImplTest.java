@@ -25,6 +25,8 @@ class BankServiceImplTest {
 
     // 테스트 시, 필요한 변수들
     final String WITHDRAWAL_MAIN_ACCOUNT_NUMBER = "0001";
+    final String WITHDRAWAL_SUB_ACCOUNT_NUMBER = "1111";
+    final String CURRENCY_CODE = "KRW";
 
     // 테스트 시, 필요한 Component 주입
     @Autowired
@@ -49,7 +51,7 @@ class BankServiceImplTest {
         userRepo.save(userA);
         userRepo.save(userB);
 
-        Account accountA = new Account("1111", "KRW", 10000L, userA);
+        Account accountA = new Account(WITHDRAWAL_SUB_ACCOUNT_NUMBER, "KRW", 10000L, userA);
         Account accountB = new Account("2222", "KRW", 10000L, userB);
 
         userA.getAccounts().add(accountA);
@@ -91,5 +93,13 @@ class BankServiceImplTest {
         Assertions.assertEquals(result, 1);
     }
 
-    
+    @Test
+    @Order(3)
+    public void 출금_세부_계좌_번호_조회() {
+        String result = bankMapper.findSubWithdrawalAccountNumber(
+                WITHDRAWAL_MAIN_ACCOUNT_NUMBER,
+                CURRENCY_CODE
+        );
+        Assertions.assertEquals(result, WITHDRAWAL_SUB_ACCOUNT_NUMBER);
+    }
 }

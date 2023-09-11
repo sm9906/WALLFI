@@ -15,7 +15,7 @@ public interface BankMapper {
     int findMainWithdrawalAccountNumber(String mainWithdrawalAccountNumber);
 
     // 출금 세부 계좌 번호 조회
-    int findSubWithdrawalAccountNumber();
+    String findSubWithdrawalAccountNumber(String mainWithdrawalAccountNumber, String currencyCode);
 
     // 입금 대표 계좌 번호 조회
     int findMainDepositAccountNumber(String mainDepositAccountNumber);
