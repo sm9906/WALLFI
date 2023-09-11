@@ -193,21 +193,71 @@ function OneEgg(props) {
 }
 
 function TenEgg(props) {
+    
+    const images = [
+        { id: 1, imageUrl: require('../../.././assets/eggs/australia_egg.png')},
+        { id: 2, imageUrl: require('../../.././assets/eggs/australia_egg.png')},
+        { id: 3, imageUrl: require('../../.././assets/eggs/australia_egg.png')},
+        { id: 4, imageUrl: require('../../.././assets/eggs/australia_egg.png')},
+        { id: 5, imageUrl: require('../../.././assets/eggs/australia_egg.png')},
+        { id: 6, imageUrl: require('../../.././assets/eggs/australia_egg.png')},
+        { id: 7, imageUrl: require('../../.././assets/eggs/australia_egg.png')},
+        { id: 8, imageUrl: require('../../.././assets/eggs/australia_egg.png')},
+        { id: 9, imageUrl: require('../../.././assets/eggs/australia_egg.png')},
+        { id: 10, imageUrl: require('../../.././assets/eggs/australia_egg.png')},
+        { id: 11, imageUrl: null},
+        { id: 12, imageUrl: null},
+    ];
 
-    const viewRender = () => {
-        return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((a, i) => {
-            <View key={i}
+    const arr = [
+        [1, 2, 3],
+        [4, 5, 6],
+        [7, 8, 9],
+        [10, 11, 12]
+    ];
 
-            >
-                <Text>{a}</Text>
+    const GridWithImages = () => {
+        return (
+            <View style={{
+                flex: 0.95,
+                width: '95%',
+                flexDirection: 'column',
+                justifyContent:'center',
+                alignItems: 'center',
+            }}>
+                { arr.map((row, i) => (
+                    <View key={i} style={{ 
+                        flex: 1, 
+                        width: '95%', 
+                        flexDirection: 'row', 
+                        marginVertical: '2%',
+                    }}>
+                        { row.map((item) => (
+                                <View key={item} style={{ 
+                                    flex: 1, 
+                                    height: '100%', 
+                                    backgroundColor: 'white', 
+                                    alignItems: 'center',
+                                    marginHorizontal: '2%',
+                                    borderRadius: 10
+                                }}>
+                                    <Image source={images[item - 1].imageUrl} style={{
+                                        width: '100%',
+                                        height: '100%',
+                                        resizeMode: 'contain'
+                                    }} />
+                                </View>
+                        ))}
+                    </View>
+                ))}
             </View>
-        })
+        )
     }
 
     return(
         <View style={styles.modalStyle}>
             <View style={styles.modalBox}>
-                {viewRender()}
+                <GridWithImages />
             </View>
             <TouchableOpacity
                 style={styles.okBtn}
