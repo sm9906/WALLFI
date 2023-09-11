@@ -11,18 +11,15 @@ import {
   StyleSheet
 } from 'react-native';
 import { ViewPropTypes, TextPropTypes } from 'deprecated-react-native-prop-types';
-import { ConvPad } from './ConvKeypad';
 
 const BACK = 'back';
 const CLEAR = 'clear';
 const PRESS_MODE_STRING = 'string';
 
 export default class VirtualKeyboard extends Component {
-
 	static propTypes = {
 		pressMode: PropTypes.oneOf(['string', 'char']),
 		color: PropTypes.string,
-		onPress: PropTypes.func.isRequired,
 		backspaceImg: PropTypes.number,
 		applyBackspaceTint: PropTypes.bool,
 		decimal: PropTypes.bool,
@@ -44,9 +41,6 @@ export default class VirtualKeyboard extends Component {
 
 	constructor(props) {
 		super(props);
-		this.state = {
-			text: '',
-		};
 	}
 
 	renderDecimal() {
@@ -60,7 +54,7 @@ export default class VirtualKeyboard extends Component {
 	render() {
 		return (
       <View>
-        <ConvPad />
+        {/* <ConvPad /> */}
         <View style={[styles.container, this.props.style]}>
           {this.Row([1, 2, 3])}
           {this.Row([4, 5, 6])}
@@ -77,8 +71,8 @@ export default class VirtualKeyboard extends Component {
 
 	Backspace() {
 		return (
-			<TouchableOpacity accessibilityLabel='backspace' style={styles.backspace} onPress={() => { this.onPress(BACK) }}
-				onLongPress={() => { if(this.props.clearOnLongPress) this.onPress(CLEAR) }}
+			<TouchableOpacity accessibilityLabel='backspace' style={styles.backspace} onPress={() => { this.props.addMoney(BACK) }}
+				onLongPress={() => { if(this.props.clearOnLongPress) this.props.addMoney(CLEAR) }}
 			>
 				<Image source={this.props.backspaceImg} resizeMode='contain' style={this.props.applyBackspaceTint && ({ tintColor: this.props.color })} />
 			</TouchableOpacity>
@@ -96,31 +90,11 @@ export default class VirtualKeyboard extends Component {
 
 	Cell(symbol) {
 		return (
-			<TouchableOpacity style={[styles.cell, this.props.cellStyle]} key={symbol} accessibilityLabel={symbol.toString()} onPress={() => { this.onPress(symbol.toString()) }}>
+			<TouchableOpacity style={[styles.cell, this.props.cellStyle]} key={symbol} 
+				accessibilityLabel={symbol.toString()} onPress={() => { this.props.addMoney(symbol.toString()) }}>
 				<Text style={[styles.number, this.props.textStyle, { color: symbol==='완료'?'#498AC6':this.props.color }]}>{symbol}</Text>
 			</TouchableOpacity>
 		);
-	}
-
-	onPress(val) {
-		if (this.props.pressMode === PRESS_MODE_STRING) {
-			let curText = this.state.text;
-			if (isNaN(val)) {
-				if (val === BACK) {
-					curText = curText.slice(0, -1);
-				} else if (val === CLEAR) {
-					curText = "";
-				} else {
-					curText += val;
-				}
-			} else {
-				curText += val;
-			}
-			this.setState({ text: curText });
-			this.props.onPress(curText);
-		} else /* if (props.pressMode == 'char')*/ {
-			this.props.onPress(val);
-		}
 	}
 
 }
