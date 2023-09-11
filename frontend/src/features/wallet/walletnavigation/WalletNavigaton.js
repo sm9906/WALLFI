@@ -6,7 +6,7 @@ import WalletHome from '../walletscreens/WalletHome';
 import ExchangeSearch from '../walletscreens/ExchangeSearch';
 import SendWho from '../walletscreens/SendWho';
 import SendHow from '../walletscreens/SendHow';
-import SendMemo from '../walletscreens/sendMemo';
+import SendMemo from '../walletscreens/SendMemo';
 
 const Stack = createNativeStackNavigator();
 

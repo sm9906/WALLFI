@@ -10,13 +10,11 @@ import {CardInfo} from './CardInfo';
 const CardItem = (props) => {
   // configuring navigation
   const navigation = useNavigation();
-
-  const info = {
-    nation: '한국',
-    accountnum : '1111111',
-    balance: '1,000,000'
+  const data ={
+    nation:'KRW',
+    accountnum:'1111111111',
+    balance:1000000,
   }
-  const data = new CardInfo(info);
   // move to balance page
   const handlePress = () => {
     console.log();
@@ -29,7 +27,7 @@ const CardItem = (props) => {
        <Text style={styles.cardinfo}>{data.nation}{data.accountnum}</Text>
       </View> 
       <View style={styles.balance}>
-        <Text style={{...styles.cardinfo, fontSize:30, }}>{data.balance}</Text>
+        <Text style={{...styles.cardinfo, fontSize:30, }}>{data.balance.toLocaleString('es-US')}</Text>
         <View style={styles.buttons}>
           <TouchableOpacity onPress={()=>navigation.navigate('SendWho')} style={styles.button}>
             <Text>송금하기</Text>

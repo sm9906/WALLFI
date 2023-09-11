@@ -8,7 +8,7 @@ export default function SendHow({route, navigation}){
   const accountTo = route.params.account;
   const bankTo = route.params.bank;
 
-  const [money, setMoney] = useState('0');
+  const [money, setMoney] = useState(0);
 
   const addMoney=(value)=>{
     const currMon = money;
@@ -30,7 +30,7 @@ export default function SendHow({route, navigation}){
       }
     }  
   }
-
+  const num_money=Number(money).toLocaleString('es-US');
   return(
     <View style={styles.background}>
       <View style={styles.textContainer}>
@@ -38,7 +38,7 @@ export default function SendHow({route, navigation}){
           <Text style={{...styles.accountTo,marginBottom:'5%' }}>{bankTo} {accountTo}</Text>
           <Text style={styles.infoText}>얼마를 보낼까요?</Text>
         </View>
-        <Text style={styles.currMoney}>{money}원</Text>
+        <Text style={styles.currMoney}>{num_money}원</Text>
         <View style={styles.myAccount}>
           <Text style={styles.accountTo} >신한 110-556-869686 0원</Text>
         </View>
