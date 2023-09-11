@@ -8,6 +8,7 @@ import com.shinhan.walfi.repository.CharacterRepository;
 import com.shinhan.walfi.repository.UserGameInfoRepository;
 import com.shinhan.walfi.service.CharacterService;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,20 +30,37 @@ class CharacterControllerTest {
     @Autowired CharacterRepository characterRepository;
     @PersistenceContext EntityManager em;
 
+    String userId = "ssafy";
+
+    Long mainCharacterIdx;
+
+    Long shopCharacterIdx_1;
+
+    Long shopCharacterIdx_2;
+
+    @BeforeEach
+    void create() {
+        UserGameInfo userGameInfo = new UserGameInfo();
+        userGameInfo.setUserId(userId);
+        em.persist(userGameInfo);
+
+        mainCharacterIdx = characterService.create(userId).getCharacterDto().getCharacterIdx();
+        shopCharacterIdx_1 = characterService.shop(userId).getCharacterDto().getCharacterIdx();
+        shopCharacterIdx_2 = characterService.shop(userId).getCharacterDto().getCharacterIdx();
+
+    }
+
+
     @Test
     @DisplayName("캐릭터 생성 api 테스트")
     public void createCharacterTest() throws Exception {
         // given
-        UserGameInfo userGameInfo = new UserGameInfo();
-        userGameInfo.setUserId("ssafy");
-        em.persist(userGameInfo);
-
         CharacterReqDto characterReqDto = new CharacterReqDto();
-        characterReqDto.setUserId("ssafy");
+        characterReqDto.setUserId(userId);
 
         // when
         ResponseEntity<HttpResult> res = characterController.createRandomCharacter(characterReqDto);
-        UserGameInfo findUserGameInfo = userGameInfoRepository.findById("ssafy");
+        UserGameInfo findUserGameInfo = userGameInfoRepository.findById(userId);
 
         // then
 
@@ -61,16 +79,12 @@ class CharacterControllerTest {
     @DisplayName("캐릭터 뽑기 api 테스트")
     public void shopCharacterTest() throws Exception {
         // given
-        UserGameInfo userGameInfo = new UserGameInfo();
-        userGameInfo.setUserId("ssafy");
-        em.persist(userGameInfo);
-
         CharacterReqDto characterReqDto = new CharacterReqDto();
-        characterReqDto.setUserId("ssafy");
+        characterReqDto.setUserId(userId);
 
         // when
         ResponseEntity<HttpResult> res = characterController.shopRandomCharacter(characterReqDto);
-        UserGameInfo findUserGameInfo = userGameInfoRepository.findById("ssafy");
+        UserGameInfo findUserGameInfo = userGameInfoRepository.findById(userId);
 
         // then
 
@@ -81,7 +95,6 @@ class CharacterControllerTest {
         // UserGameInfo에 캐릭터 등록이 잘 되었는지 테스트
         Assertions.assertThat(findUserGameInfo.getGameCharacters().size()).isEqualTo(1);
 
-
         // isMain 테스트 1이 true 0이 false
         Assertions.assertThat(findUserGameInfo.getGameCharacters().get(0).isMain()).isEqualTo(false);
     }
@@ -90,12 +103,8 @@ class CharacterControllerTest {
     @DisplayName("캐릭터 리스트 받기 테스트")
     public void getCharacterListTest() throws Exception {
         // given
-        UserGameInfo userGameInfo = new UserGameInfo();
-        userGameInfo.setUserId("ssafy");
-        em.persist(userGameInfo);
-
         CharacterReqDto characterReqDto = new CharacterReqDto();
-        characterReqDto.setUserId("ssafy");
+        characterReqDto.setUserId(userId);
 
 
         // when
@@ -120,18 +129,14 @@ class CharacterControllerTest {
     @DisplayName("메인 캐릭터 조회 테스트")
     public void getMainTest() throws Exception {
         // given
-        UserGameInfo userGameInfo = new UserGameInfo();
-        userGameInfo.setUserId("ssafy");
-        em.persist(userGameInfo);
-
         CharacterReqDto characterReqDto = new CharacterReqDto();
-        characterReqDto.setUserId("ssafy");
+        characterReqDto.setUserId(userId);
 
 
         // when
-        Long mainCharacterIdx = characterService.create(userGameInfo.getUserId());
-        characterService.shop(userGameInfo.getUserId());
-        characterService.shop(userGameInfo.getUserId());
+        CharacterWithUserIdResDto characterWithUserIdResDto = characterService.create(userId);
+        characterService.shop(userId);
+        characterService.shop(userId);
 
         ResponseEntity<HttpResult> res = characterController.getMainCharacter(characterReqDto);
 
@@ -144,7 +149,7 @@ class CharacterControllerTest {
         Assertions.assertThat(res.getBody().getStatus()).isSameAs(HttpStatus.OK);
 
         // 메인 캐릭터를 잘 받아오는지 테스트
-        Assertions.assertThat(data.getCharacterDto().isMain()).isEqualTo(true);
+        Assertions.assertThat(characterWithUserIdResDto.getCharacterDto().isMain()).isEqualTo(true);
 
     }
 
@@ -152,14 +157,12 @@ class CharacterControllerTest {
     @DisplayName("캐릭터의 색 변경 테스트")
     void changeColorTest() throws Exception{
         // given
-        UserGameInfo userGameInfo = new UserGameInfo();
-        userGameInfo.setUserId("ssafy");
-        em.persist(userGameInfo);
-
         MainCharacterReqDto mainCharacterReqDto = new MainCharacterReqDto();
-        Long mainCharacterIdx = characterService.create("ssafy");
+        CharacterWithUserIdResDto characterWithUserIdResDto = characterService.create(userId);
+        Long mainCharacterIdx = characterWithUserIdResDto.getCharacterDto().getCharacterIdx();
 
-        mainCharacterReqDto.setUserId("ssafy");
+
+        mainCharacterReqDto.setUserId(userId);
         mainCharacterReqDto.setMainCharacterIdx(mainCharacterIdx);
 
         // when
@@ -168,7 +171,7 @@ class CharacterControllerTest {
         // then
         CharacterWithUserIdResDto data = (CharacterWithUserIdResDto) res.getBody().getData();
 
-        Assertions.assertThat(data.getUserId()).isEqualTo(userGameInfo.getUserId());
+        Assertions.assertThat(data.getUserId()).isEqualTo(userId);
         Assertions.assertThat(data.getCharacterDto().getCharacterIdx())
                 .isEqualTo(mainCharacterIdx);
     }
@@ -177,14 +180,10 @@ class CharacterControllerTest {
     @DisplayName("캐릭터의 atk 변경 테스트")
     void changeAtkTest() throws Exception{
         // given
-        UserGameInfo userGameInfo = new UserGameInfo();
-        userGameInfo.setUserId("ssafy");
-        em.persist(userGameInfo);
-
         CharacterStatusReqDto characterStatusReqDto = new CharacterStatusReqDto();
-        Long characterIdx = characterService.create("ssafy");
+        Long characterIdx = characterService.create(userId).getCharacterDto().getCharacterIdx();
 
-        characterStatusReqDto.setUserId("ssafy");
+        characterStatusReqDto.setUserId(userId);
         characterStatusReqDto.setCharacterIdx(characterIdx);
         characterStatusReqDto.setStatusType("atk");
         characterStatusReqDto.setValue(10);
@@ -202,14 +201,10 @@ class CharacterControllerTest {
     @DisplayName("캐릭터의 def 변경 테스트")
     void changeDefTest() throws Exception{
         // given
-        UserGameInfo userGameInfo = new UserGameInfo();
-        userGameInfo.setUserId("ssafy");
-        em.persist(userGameInfo);
-
         CharacterStatusReqDto characterStatusReqDto = new CharacterStatusReqDto();
-        Long characterIdx = characterService.create("ssafy");
+        Long characterIdx = characterService.create(userId).getCharacterDto().getCharacterIdx();
 
-        characterStatusReqDto.setUserId("ssafy");
+        characterStatusReqDto.setUserId(userId);
         characterStatusReqDto.setCharacterIdx(characterIdx);
         characterStatusReqDto.setStatusType("def");
         characterStatusReqDto.setValue(10);
@@ -227,14 +222,10 @@ class CharacterControllerTest {
     @DisplayName("캐릭터의 hp 변경 테스트")
     void changeHpTest() throws Exception{
         // given
-        UserGameInfo userGameInfo = new UserGameInfo();
-        userGameInfo.setUserId("ssafy");
-        em.persist(userGameInfo);
-
         CharacterStatusReqDto characterStatusReqDto = new CharacterStatusReqDto();
-        Long characterIdx = characterService.create("ssafy");
+        Long characterIdx = characterService.create(userId).getCharacterDto().getCharacterIdx();
 
-        characterStatusReqDto.setUserId("ssafy");
+        characterStatusReqDto.setUserId(userId);
         characterStatusReqDto.setCharacterIdx(characterIdx);
         characterStatusReqDto.setStatusType("hp");
         characterStatusReqDto.setValue(10);
@@ -252,16 +243,10 @@ class CharacterControllerTest {
     @DisplayName("메인 캐릭터 변경 테스트")
     void changeMainTest() throws Exception{
         // given
-        UserGameInfo userGameInfo = new UserGameInfo();
-        userGameInfo.setUserId("ssafy");
-        em.persist(userGameInfo);
-
         CharacterStatusReqDto characterStatusReqDto = new CharacterStatusReqDto();
-        Long mainCharacterIdx = characterService.create("ssafy");
-        Long shopCharacterIdx = characterService.shop("ssafy");
 
-        characterStatusReqDto.setUserId("ssafy");
-        characterStatusReqDto.setCharacterIdx(shopCharacterIdx);
+        characterStatusReqDto.setUserId(userId);
+        characterStatusReqDto.setCharacterIdx(shopCharacterIdx_1);
         characterStatusReqDto.setStatusType("isMain");
         characterStatusReqDto.setValue(10);
 
@@ -284,15 +269,10 @@ class CharacterControllerTest {
     @DisplayName("캐릭터의 exp 상승 (level+1, exp+10) 테스트")
     void changeExpTest() throws Exception{
         // given
-        UserGameInfo userGameInfo = new UserGameInfo();
-        userGameInfo.setUserId("ssafy");
-        em.persist(userGameInfo);
-
         CharacterStatusReqDto characterStatusReqDto = new CharacterStatusReqDto();
-        Long characterIdx = characterService.create("ssafy");
 
-        characterStatusReqDto.setUserId("ssafy");
-        characterStatusReqDto.setCharacterIdx(characterIdx);
+        characterStatusReqDto.setUserId(userId);
+        characterStatusReqDto.setCharacterIdx(mainCharacterIdx);
         characterStatusReqDto.setStatusType("exp");
         characterStatusReqDto.setValue(50);
 
@@ -311,15 +291,10 @@ class CharacterControllerTest {
     @DisplayName("캐릭터의 exp 상승 (level+2, exp+10) 테스트")
     void changeExpLevelTwoTest() throws Exception{
         // given
-        UserGameInfo userGameInfo = new UserGameInfo();
-        userGameInfo.setUserId("ssafy");
-        em.persist(userGameInfo);
-
         CharacterStatusReqDto characterStatusReqDto = new CharacterStatusReqDto();
-        Long characterIdx = characterService.create("ssafy");
 
-        characterStatusReqDto.setUserId("ssafy");
-        characterStatusReqDto.setCharacterIdx(characterIdx);
+        characterStatusReqDto.setUserId(userId);
+        characterStatusReqDto.setCharacterIdx(mainCharacterIdx);
         characterStatusReqDto.setStatusType("exp");
         characterStatusReqDto.setValue(130);
 

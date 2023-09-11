@@ -34,7 +34,7 @@ public class CharacterServiceImpl implements CharacterService {
      */
     @Override
     @Transactional
-    public Long create(String userId) {
+    public CharacterWithUserIdResDto create(String userId) {
         UserGameInfo userGameInfo = userGameInfoRepository.findById(userId);
 
 
@@ -54,7 +54,9 @@ public class CharacterServiceImpl implements CharacterService {
         // db에 저장
         characterRepository.save(gameCharacter);
 
-        return gameCharacter.getCharacterIdx();
+        CharacterDto characterDto = getCharacterDto(gameCharacter);
+        CharacterWithUserIdResDto characterWithUserIdResDto = getCharacterWithUserIdResDto(userId, characterDto);
+        return characterWithUserIdResDto;
     }
 
     /**
@@ -65,10 +67,11 @@ public class CharacterServiceImpl implements CharacterService {
      */
     @Override
     @Transactional
-    public Long shop(String userId) {
+    public CharacterWithUserIdResDto shop(String userId) {
         UserGameInfo userGameInfo = userGameInfoRepository.findById(userId);
 
         Random random = new Random();
+
 
         // 캐릭터 타입 랜덤 생성
         CharacterType[] characterTypes = CharacterType.values();
@@ -76,22 +79,27 @@ public class CharacterServiceImpl implements CharacterService {
         CharacterType randomCharacterType = characterTypes[typesRandomNum];
 
         List<GameCharacter> characters = userGameInfo.getGameCharacters();
-        boolean isSame = characters.stream()
-                .anyMatch(character -> character.getCharacterType().equals(randomCharacterType));
-        if (isSame) {
-            return null;
-            // TODO: 이미 있는 캐릭터라면 어떻게 할지 로직
-
-        }
 
         // 캐릭터 생성
         Boolean isMain = false;
         GameCharacter gameCharacter = GameCharacter.createCharacter(userGameInfo, randomCharacterType, isMain);
 
+        boolean isSame = characters.stream()
+                .anyMatch(character -> character.getCharacterType().equals(randomCharacterType));
+        if (isSame) {
+//            return getCharacterWithUserIdResDto(userId, getCharacterDto(gameCharacter));
+            // TODO: 이미 있는 캐릭터라면 어떻게 할지 로직
+        }
+
+
+
         // db에 저장
         characterRepository.save(gameCharacter);
 
-        return gameCharacter.getCharacterIdx();
+        CharacterDto characterDto = getCharacterDto(gameCharacter);
+        CharacterWithUserIdResDto characterWithUserIdResDto = getCharacterWithUserIdResDto(userId, characterDto);
+
+        return characterWithUserIdResDto;
     }
 
     /**

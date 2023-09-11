@@ -5,9 +5,9 @@ import com.shinhan.walfi.dto.game.CharacterWithUserIdResDto;
 
 public interface CharacterService {
 
-    Long create(String userId);
+    CharacterWithUserIdResDto create(String userId);
 
-    Long shop(String userId);
+    CharacterWithUserIdResDto shop(String userId);
 
     CharacterListResDto searchCharacters(String userId);
 
