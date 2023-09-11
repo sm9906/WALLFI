@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shinhan.walfi.mapper.BankMapper">
+
+    <select id="findMainWithdrawalAccountNumber" resultType="int" parameterType="String">
+        SELECT
+            CASE
+                WHEN count(*) != 0 THEN TRUE
+                ELSE FALSE
+            END AS `count`
+        FROM account a
+        WHERE `대표계좌`= #{mainWithdrawalAccountNumber};
+    </select>
+</mapper>

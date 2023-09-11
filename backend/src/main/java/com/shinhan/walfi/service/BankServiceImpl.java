@@ -3,11 +3,11 @@ package com.shinhan.walfi.service;
 import com.shinhan.walfi.dto.transfer.LocalTransferDTO;
 import com.shinhan.walfi.mapper.BankMapper;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 
-@Log4j
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class BankServiceImpl implements BankService {
@@ -26,6 +26,6 @@ public class BankServiceImpl implements BankService {
      */
     @Override
     public void localCurrencyTransferDTO(LocalTransferDTO localTransferDTO) {
-        
+
     }
 }

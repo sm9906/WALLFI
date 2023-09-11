@@ -23,6 +23,10 @@ import java.util.Optional;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class BankServiceImplTest {
 
+    // 테스트 시, 필요한 변수들
+    final String WITHDRAWAL_MAIN_ACCOUNT_NUMBER = "0001";
+
+    // 테스트 시, 필요한 Component 주입
     @Autowired
     BankMapper bankMapper;
 
@@ -35,10 +39,12 @@ class BankServiceImplTest {
     @BeforeAll
     void 테스트_데이터_넣기() {
         User userA = new User("ssafy", "ssafy@ssafy.com", "ssafy",
-                "김싸피", LocalDateTime.now(), "010-1234-5678", "0001", new ArrayList<>());
+                "김싸피", LocalDateTime.now(), "010-1234-5678",
+                WITHDRAWAL_MAIN_ACCOUNT_NUMBER, new ArrayList<>());
 
         User userB = new User("ssafyA", "ssafyA@ssafy.com", "ssafyA",
-                "박싸피", LocalDateTime.now(), "010-1234-5678", "0002", new ArrayList<>());
+                "박싸피", LocalDateTime.now(), "010-1234-5678", "0002",
+                new ArrayList<>());
 
         userRepo.save(userA);
         userRepo.save(userB);
@@ -77,4 +83,13 @@ class BankServiceImplTest {
             throw new EntityNotFoundException("AccountA를 찾을 수 없습니다.");
         });
     }
+
+    @Test
+    @Order(2)
+    public void 출금_대표_계좌_번호_조회() {
+        int result = bankMapper.findMainWithdrawalAccountNumber(WITHDRAWAL_MAIN_ACCOUNT_NUMBER);
+        Assertions.assertEquals(result, 1);
+    }
+
+    
 }
