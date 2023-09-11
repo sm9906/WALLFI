@@ -2,6 +2,8 @@ package com.shinhan.walfi.domain.banking;
 
 import com.shinhan.walfi.domain.User;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -11,8 +13,11 @@ import java.util.List;
 
 import static javax.persistence.FetchType.LAZY;
 
+
 @Entity
 @Getter
+@Setter
+@NoArgsConstructor
 public class Account {
 
     @Id
@@ -50,8 +55,8 @@ public class Account {
     private byte 자동해지여부;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "대표계좌", nullable = false, referencedColumnName = "대표계좌")
+    private User 대표계좌;
 
     @OneToMany(mappedBy = "account")
     private List<KrwTransaction> krwTransactions = new ArrayList<>();
@@ -64,4 +69,20 @@ public class Account {
 
     @OneToMany(mappedBy = "account")
     private List<GlobalAccountTransaction> globalAccountTransactions = new ArrayList<>();
+
+    public Account(String 계좌번호, String 통화, long currentMoney, User user) {
+        this.계좌번호 = 계좌번호;
+        this.구분 = "예적금";
+        this.상품명 = "저축예금";
+        this.잔액통화별 = currentMoney;
+        this.평가금액통화별 = currentMoney;
+        this.관리점명 = "영업부";
+        this.금리수익률 = BigDecimal.valueOf(0);
+        this.통화 = 통화;
+        this.과세 = "일반과세";
+        this.잔액원화 = currentMoney;
+        this.평가금액원화 = currentMoney;
+        this.자동해지여부 = 0;
+        this.대표계좌 = user;
+    }
 }

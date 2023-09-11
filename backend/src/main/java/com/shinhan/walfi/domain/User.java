@@ -1,20 +1,27 @@
 package com.shinhan.walfi.domain;
 
 import com.shinhan.walfi.domain.banking.Account;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+
 @Entity
 @Getter
 @Setter
-public class User {
+@NoArgsConstructor
+@AllArgsConstructor
+public class User implements Serializable {
 
     @Id
     private String userId;
@@ -29,7 +36,9 @@ public class User {
 
     private String phoneNumber;
 
-    @OneToMany(mappedBy = "user")
-    private List<Account> accounts = new ArrayList<>();
+    @Column(name = "대표계좌", unique=true)
+    private String mainAccount;
 
+    @OneToMany(mappedBy = "대표계좌")
+    private List<Account> accounts = new ArrayList<>();
 }
