@@ -44,26 +44,24 @@ public class BattleServiceImpl implements BattleService{
         if(oBranch.isEmpty()){
             // Exception
         } else{
-            // Todo : manager인 경우 기록하지 않도록 한다. (임시 지점장이 초기 상태인 경우)
 
             // battle 기록
             Branch branch = oBranch.get();
-            LocalDateTime start = branch.getStartTime(); // 패배한 임시 지점장이 지점을 먹기 시작한 시간
-            BattleDao dao = new BattleDao();
-            dao.setBranchIdx(branch.getBranchIdx());
-            dao.setUserId(branch.getUserGameInfo().getUserId());
-            dao.setStartTime(start);
-            battleMapper.write(dao); // start 시간을 기준으로 occupyTime을 계산하여 저장
-
             String loser = branch.getUserGameInfo().getUserId();
+            if(!"manager".equals(loser)){ // 패배한 임시 지점장이 두더지 상태 (manager)인 경우에는 기록하지 않는다. 따라서 manager가 아닐때만 기록
+                LocalDateTime start = branch.getStartTime(); // 패배한 임시 지점장이 지점을 먹기 시작한 시간
+                BattleDao dao = new BattleDao();
+                dao.setBranchIdx(branch.getBranchIdx());
+                dao.setUserId(branch.getUserGameInfo().getUserId());
+                dao.setStartTime(start);
+                battleMapper.write(dao); // start 시간을 기준으로 occupyTime을 계산하여 저장
+            }
 
-            // user_game_info update
             // 이긴사람 정보 불러와서 업데이트
             UserGameInfo userGameInfo = userGameInfoRepository.findById(battleReqDto.getUserId());
             userGameInfo.setStatus("지점장");
             userGameInfoRepository.save(userGameInfo);
 
-            // branch update
             // 이긴 사람의 메인 캐릭터 불러와서 브랜치 업데이트
             GameCharacter winner = characterRepository.findMainCharacter(userGameInfo);
             branch.setManagerLevel(winner.getLevel());
