@@ -34,7 +34,7 @@ public class CharacterServiceImpl implements CharacterService {
      */
     @Override
     @Transactional
-    public Long create(String userId) {
+    public CharacterWithUserIdResDto create(String userId) {
         UserGameInfo userGameInfo = userGameInfoRepository.findById(userId);
 
 
@@ -54,7 +54,9 @@ public class CharacterServiceImpl implements CharacterService {
         // db에 저장
         characterRepository.save(gameCharacter);
 
-        return gameCharacter.getCharacterIdx();
+        CharacterDto characterDto = getCharacterDto(gameCharacter);
+        CharacterWithUserIdResDto characterWithUserIdResDto = getCharacterWithUserIdResDto(userId, characterDto);
+        return characterWithUserIdResDto;
     }
 
     /**
@@ -65,7 +67,7 @@ public class CharacterServiceImpl implements CharacterService {
      */
     @Override
     @Transactional
-    public Long shop(String userId) {
+    public CharacterWithUserIdResDto shop(String userId) {
         UserGameInfo userGameInfo = userGameInfoRepository.findById(userId);
 
         Random random = new Random();
@@ -91,7 +93,10 @@ public class CharacterServiceImpl implements CharacterService {
         // db에 저장
         characterRepository.save(gameCharacter);
 
-        return gameCharacter.getCharacterIdx();
+        CharacterDto characterDto = getCharacterDto(gameCharacter);
+        CharacterWithUserIdResDto characterWithUserIdResDto = getCharacterWithUserIdResDto(userId, characterDto);
+
+        return characterWithUserIdResDto;
     }
 
     /**

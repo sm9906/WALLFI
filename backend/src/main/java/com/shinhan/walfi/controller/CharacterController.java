@@ -19,23 +19,25 @@ public class CharacterController {
     @PostMapping("/create")
     public ResponseEntity<HttpResult> createRandomCharacter(@RequestBody CharacterReqDto characterReqDto) {
         String userId = characterReqDto.getUserId();
-        characterService.create(userId);
+        CharacterWithUserIdResDto characterWithUserIdResDto = characterService.create(userId);
 
         HttpResult res;
 
         res = HttpResult.getSuccess();
-        
+        res.setData(characterWithUserIdResDto);
+
         return ResponseEntity.status(res.getStatus()).body(res);
     }
 
     @PostMapping("/shop")
     public ResponseEntity<HttpResult> shopRandomCharacter(@RequestBody CharacterReqDto characterReqDto) {
         String userId = characterReqDto.getUserId();
-        characterService.shop(userId);
+        CharacterWithUserIdResDto characterWithUserIdResDto = characterService.shop(userId);
 
         HttpResult res;
 
         res = HttpResult.getSuccess();
+        res.setData(characterWithUserIdResDto);
 
         return ResponseEntity.status(res.getStatus()).body(res);
     }
