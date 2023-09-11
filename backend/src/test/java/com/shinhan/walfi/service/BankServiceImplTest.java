@@ -103,4 +103,11 @@ class BankServiceImplTest {
         );
         Assertions.assertEquals(result, WITHDRAWAL_SUB_ACCOUNT_NUMBER);
     }
+
+    @Test
+    @Order(4)
+    public void 입금_대표_계좌_번호_조회() {
+        int result = bankMapper.findMainAccountNumber(DEPOSIT_MAIN_ACCOUNT_NUMBER);
+        Assertions.assertEquals(result, 1);
+    }
 }
