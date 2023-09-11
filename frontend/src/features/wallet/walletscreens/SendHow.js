@@ -10,6 +10,9 @@ export default function SendHow({route, navigation}){
 
   const [money, setMoney] = useState(0);
   const num_money=Number(money).toLocaleString('es-US');
+
+  const balance = '1,000,000'.replace(/,/g, '');;
+  const isOver = Number(balance) < Number(money)
   const addMoney=(value)=>{
     const currMon = money;
     if(typeof(value)==='number'){
@@ -24,7 +27,7 @@ export default function SendHow({route, navigation}){
       }else if(value==='all'){
         console.log('전액')
       }else if(value==='완료'){
-        navigation.navigate('SendMemo', props = {accountTo, bankTo, num_money})
+        !isOver?navigation.navigate('SendMemo', props = {accountTo, bankTo, num_money}):null
       }else{
         setMoney((prev)=>prev==='0'?value:prev+value)
       }
@@ -37,7 +40,7 @@ export default function SendHow({route, navigation}){
           <Text style={{...styles.accountTo,marginBottom:'5%' }}>{bankTo} {accountTo}</Text>
           <Text style={styles.infoText}>얼마를 보낼까요?</Text>
         </View>
-        <Text style={styles.currMoney}>{num_money}원</Text>
+        <Text style={{...styles.currMoney, color:isOver?'red':'black'}}>{num_money}원</Text>
         <View style={styles.myAccount}>
           <Text style={styles.accountTo} >신한 110-556-869686 0원</Text>
         </View>

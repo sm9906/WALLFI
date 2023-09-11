@@ -45,7 +45,7 @@ const SendMoney = () => {
             onChangeText={text => setAccount(text)}
           />
         </View>
-        <TouchableOpacity style={{...ButtonStyle.button, marginTop:'10%'}} onPress={()=>navigation.navigate('SendHow',{account, bank})}>
+        <TouchableOpacity style={{...ButtonStyle.button, marginTop:'10%'}} onPress={()=>navigation.navigate('SendHow',{type: '송금', account, bank})}>
           <Text style={ButtonStyle.btnFont}>다음</Text>
         </TouchableOpacity>
       </View>
@@ -85,7 +85,7 @@ const Exchange = () => {
         />
         
       </View>
-      <TouchableOpacity style={{...ButtonStyle.button, marginTop:'10%'}} onPress={()=>navigation.navigate('SendHow',{nation})}>
+      <TouchableOpacity style={{...ButtonStyle.button, marginTop:'10%'}} onPress={()=>navigation.navigate('SendHow',{nation, type: '환전'})}>
           <Text style={ButtonStyle.btnFont}>다음</Text>
       </TouchableOpacity>
     </View>
