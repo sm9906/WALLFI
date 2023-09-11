@@ -10,4 +10,5 @@ public class BattleReqDto {
     private String userId;
 
     private Long branchIdx;
+
 }

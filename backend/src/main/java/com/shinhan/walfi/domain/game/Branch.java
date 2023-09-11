@@ -1,5 +1,6 @@
 package com.shinhan.walfi.domain.game;
 
+import com.shinhan.walfi.domain.LevelUp;
 import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -29,7 +30,8 @@ public class Branch {
 
     private double longitude;
 
-    private int managerLevel;
+    @Enumerated(EnumType.STRING)
+    private LevelUp managerLevel;
 
     private int managerExp;
 
@@ -49,7 +51,7 @@ public class Branch {
     @OneToMany(mappedBy = "branch")
     private List<BattleHistory> battleHistories = new ArrayList<>();
 
-    public void setManagerLevel(int managerLevel) {
+    public void setManagerLevel(LevelUp managerLevel) {
         this.managerLevel = managerLevel;
     }
 
@@ -67,5 +69,13 @@ public class Branch {
 
     public void setManagerDef(int managerDef) {
         this.managerDef = managerDef;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public void setUserGameInfo(UserGameInfo userGameInfo) {
+        this.userGameInfo = userGameInfo;
     }
 }
