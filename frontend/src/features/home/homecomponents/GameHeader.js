@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     },
     profile: { 
         width: '65%',
-        height: '80%',
+        height: '85%',
         backgroundColor: '#0F6828',
         borderRadius: 20,
         borderColor: '#5C4800',
@@ -80,6 +80,7 @@ const styles = StyleSheet.create({
         textShadowRadius: 2,
         textShadowOffset: { width: 2, height: 2 },
         elevation: 1,
+        marginTop: '5%',
     },
     headerRight: { 
         flex: 1,
