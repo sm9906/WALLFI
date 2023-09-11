@@ -110,4 +110,15 @@ class BankServiceImplTest {
         int result = bankMapper.findMainAccountNumber(DEPOSIT_MAIN_ACCOUNT_NUMBER);
         Assertions.assertEquals(result, 1);
     }
+
+    @Test
+    @Order(5)
+    public void 입금_세부_계좌_번호_조회() {
+        String result = bankMapper.findSubAccountNumberByCurrencyCode(
+                DEPOSIT_MAIN_ACCOUNT_NUMBER,
+                CURRENCY_CODE
+        );
+
+        Assertions.assertEquals(result, DEPOSIT_SUB_ACCOUNT_NUMBER);
+    }
 }
