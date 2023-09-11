@@ -20,11 +20,11 @@ export const ConvPad = React.memo(function ConvPad({addMoney}){
   }
   return(
     <>
-    <View style={styles.convPad}>{
+    <View style={convStyle.convPad}>{
       convInput.map((conv, index)=>{
         return(
-        <TouchableOpacity style={styles.convBtn} key={index} onPress={()=>{pressConvBtn(index)}}>
-          <Text style={styles.convFont}>{conv}</Text>
+        <TouchableOpacity style={convStyle.convBtn} key={index} onPress={()=>{pressConvBtn(index)}}>
+          <Text style={convStyle.convFont}>{conv}</Text>
         </TouchableOpacity>)
       })}
     </View>
@@ -33,7 +33,7 @@ export const ConvPad = React.memo(function ConvPad({addMoney}){
   )
 })
 
-const styles = StyleSheet.create({
+export const convStyle = StyleSheet.create({
   convPad:{
     width:'100%',
     height:SCREEN_HEIGHT*0.04,

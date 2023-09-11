@@ -7,7 +7,7 @@ import SelectDropdown from 'react-native-select-dropdown'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "./WalletHome";
 const BANKS=['신한','농협','하나','카카오뱅크','토스뱅크']
 
-export default function SendWho({navigation, props}){
+export default function SendWho({navigation}){
   const [account, setAccount] = useState('');
   const [bank, setBank] = useState('신한');
   return(

@@ -9,7 +9,7 @@ export default function SendHow({route, navigation}){
   const bankTo = route.params.bank;
 
   const [money, setMoney] = useState(0);
-
+  const num_money=Number(money).toLocaleString('es-US');
   const addMoney=(value)=>{
     const currMon = money;
     if(typeof(value)==='number'){
@@ -24,13 +24,12 @@ export default function SendHow({route, navigation}){
       }else if(value==='all'){
         console.log('전액')
       }else if(value==='완료'){
-        navigation.navigate('WalletHome')
+        navigation.navigate('SendMemo', props = {accountTo, bankTo, num_money})
       }else{
         setMoney((prev)=>prev==='0'?value:prev+value)
       }
     }  
   }
-  const num_money=Number(money).toLocaleString('es-US');
   return(
     <View style={styles.background}>
       <View style={styles.textContainer}>

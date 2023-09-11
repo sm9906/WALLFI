@@ -6,6 +6,7 @@ import { AntDesign } from '@expo/vector-icons';
 import Promotion from '../../../assets/wallet/Promotion.png'
 import { Background } from '../walletcomponents/CommonStyle';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from './WalletHome';
+import GoFight from '../walletcomponents/GoFight';
 
 export default function ExchangeSearch(){
   const [exchanges, setExchages] = useState();
@@ -36,6 +37,7 @@ export default function ExchangeSearch(){
       </View>
       <Image source={Promotion} style={{width:SCREEN_WIDTH*0.8, resizeMode:'contain'}}>
       </Image>
+      <GoFight />
     </View>
   )
 }

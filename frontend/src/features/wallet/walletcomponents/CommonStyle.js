@@ -18,11 +18,12 @@ export const ButtonStyle = StyleSheet.create({
     height:SCREEN_HEIGHT*0.05,
     backgroundColor:'#293694',
     justifyContent:'center',
-    alignItems:'center'
+    alignItems:'center',
+    borderRadius:10
   },
   btnFont:{
     fontSize:RFPercentage(2),
     color:'white',
-    fontWeight:'bold'
+    fontWeight:'bold',
   }
 })
