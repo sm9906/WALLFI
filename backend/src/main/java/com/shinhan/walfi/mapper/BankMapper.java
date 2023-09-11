@@ -11,17 +11,11 @@ public interface BankMapper {
      *  =============================
      */
 
-    // 출금 대표 계좌 번호 조회
-    int findMainWithdrawalAccountNumber(String mainWithdrawalAccountNumber);
+    // 대표 계좌 번호 조회
+    int findMainAccountNumber(String mainWithdrawalAccountNumber);
 
-    // 출금 세부 계좌 번호 조회
-    String findSubWithdrawalAccountNumber(String mainWithdrawalAccountNumber, String currencyCode);
-
-    // 입금 대표 계좌 번호 조회
-    int findMainDepositAccountNumber(String mainDepositAccountNumber);
-
-    // 입금 세부 계좌 번호 조회
-    int findSubDepositAccountNumber();
+    // 세부 계좌 번호 통화 코드로 조회
+    String findSubAccountNumberByCurrencyCode(String mainWithdrawalAccountNumber, String currencyCode);
 
     // 출금 계좌에 이체 금액 이상의 돈이 있는지 확인
     boolean checkSufficientMoneyForTransfer();

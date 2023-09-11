@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.shinhan.walfi.mapper.BankMapper">
 
-    <select id="findMainWithdrawalAccountNumber" resultType="int" parameterType="String">
+    <select id="findMainAccountNumber" resultType="int" parameterType="String">
         SELECT
             CASE
                 WHEN count(*) != 0 THEN TRUE
@@ -13,7 +13,7 @@
         WHERE `대표계좌`= #{mainWithdrawalAccountNumber};
     </select>
 
-    <select id="findSubWithdrawalAccountNumber" resultType="String" parameterType="String">
+    <select id="findSubAccountNumberByCurrencyCode" resultType="String" parameterType="String">
         SELECT
             a.계좌번호
         FROM account a

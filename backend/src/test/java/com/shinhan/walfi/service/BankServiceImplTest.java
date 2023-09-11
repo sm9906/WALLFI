@@ -5,7 +5,6 @@ import com.shinhan.walfi.domain.banking.Account;
 import com.shinhan.walfi.mapper.BankMapper;
 import com.shinhan.walfi.repository.AccountRepo;
 import com.shinhan.walfi.repository.UserRepo;
-import org.apache.ibatis.javassist.NotFoundException;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -26,6 +25,8 @@ class BankServiceImplTest {
     // 테스트 시, 필요한 변수들
     final String WITHDRAWAL_MAIN_ACCOUNT_NUMBER = "0001";
     final String WITHDRAWAL_SUB_ACCOUNT_NUMBER = "1111";
+    final String DEPOSIT_MAIN_ACCOUNT_NUMBER = "0002";
+    final String DEPOSIT_SUB_ACCOUNT_NUMBER = "2222";
     final String CURRENCY_CODE = "KRW";
 
     // 테스트 시, 필요한 Component 주입
@@ -45,14 +46,14 @@ class BankServiceImplTest {
                 WITHDRAWAL_MAIN_ACCOUNT_NUMBER, new ArrayList<>());
 
         User userB = new User("ssafyA", "ssafyA@ssafy.com", "ssafyA",
-                "박싸피", LocalDateTime.now(), "010-1234-5678", "0002",
-                new ArrayList<>());
+                "박싸피", LocalDateTime.now(), "010-1234-5678",
+                DEPOSIT_MAIN_ACCOUNT_NUMBER, new ArrayList<>());
 
         userRepo.save(userA);
         userRepo.save(userB);
 
         Account accountA = new Account(WITHDRAWAL_SUB_ACCOUNT_NUMBER, "KRW", 10000L, userA);
-        Account accountB = new Account("2222", "KRW", 10000L, userB);
+        Account accountB = new Account(DEPOSIT_SUB_ACCOUNT_NUMBER, "KRW", 10000L, userB);
 
         userA.getAccounts().add(accountA);
         userB.getAccounts().add(accountB);
@@ -89,14 +90,14 @@ class BankServiceImplTest {
     @Test
     @Order(2)
     public void 출금_대표_계좌_번호_조회() {
-        int result = bankMapper.findMainWithdrawalAccountNumber(WITHDRAWAL_MAIN_ACCOUNT_NUMBER);
+        int result = bankMapper.findMainAccountNumber(WITHDRAWAL_MAIN_ACCOUNT_NUMBER);
         Assertions.assertEquals(result, 1);
     }
 
     @Test
     @Order(3)
     public void 출금_세부_계좌_번호_조회() {
-        String result = bankMapper.findSubWithdrawalAccountNumber(
+        String result = bankMapper.findSubAccountNumberByCurrencyCode(
                 WITHDRAWAL_MAIN_ACCOUNT_NUMBER,
                 CURRENCY_CODE
         );
