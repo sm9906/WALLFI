@@ -16,12 +16,11 @@ export default function SendMemo({route,navigation}) {
       </View>
       <Text style={styles.infoTxt}>{route.params.num_money}원 {'\n'} 보냈어요</Text>
       <TouchableOpacity style={{...convStyle.convBtn, height:'6%', width:'30%'}}>
-        <Text style={{...convStyle.convFont, fontWeight:'bold', fontSize:RFPercentage(2)}}>추가 이체</Text> 
+        <Text style={{...convStyle.convFont, fontWeight:'bold', fontSize:RFPercentage(2)}} onPress={()=>navigation.navigate('SendWho')}>추가 이체</Text> 
       </TouchableOpacity>
-      <TouchableOpacity style={{...ButtonStyle.button, height:'8%'}}>
+      <TouchableOpacity style={{...ButtonStyle.button, height:'8%'}} onPress={()=>navigation.navigate('WalletHome')}>
         <Text style={ButtonStyle.btnFont}>확인</Text> 
       </TouchableOpacity>
-
     </View>
   );
 }

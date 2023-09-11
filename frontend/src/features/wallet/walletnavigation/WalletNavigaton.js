@@ -20,7 +20,7 @@ const WalletNavigation = () => {
       <Stack.Screen name="ExchangeSearch" component={ExchangeSearch} options={{title:'환율'}} />
       <Stack.Screen name="SendWho" component={SendWho} options={{title:''}} />
       <Stack.Screen name="SendHow" component={SendHow} options={{title:''}} />
-      <Stack.Screen name="SendMemo" component={SendMemo} options={{title:''}} />
+      <Stack.Screen name="SendMemo" component={SendMemo} options={{ headerShown: false }} />
     </Stack.Navigator>
     )
 }
