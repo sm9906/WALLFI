@@ -28,6 +28,7 @@ class BankServiceImplTest {
     final String DEPOSIT_MAIN_ACCOUNT_NUMBER = "0002";
     final String DEPOSIT_SUB_ACCOUNT_NUMBER = "2222";
     final String CURRENCY_CODE = "KRW";
+    final int TRANSFER_MONEY = 2000;
 
     // 테스트 시, 필요한 Component 주입
     @Autowired
@@ -120,5 +121,17 @@ class BankServiceImplTest {
         );
 
         Assertions.assertEquals(result, DEPOSIT_SUB_ACCOUNT_NUMBER);
+    }
+
+    @Test
+    @Order(6)
+    public void 출금_계좌에_이체_금액_이상의_돈이_있는지_확인() {
+
+        int result = bankMapper.checkSufficientMoneyForTransfer(
+                WITHDRAWAL_SUB_ACCOUNT_NUMBER,
+                TRANSFER_MONEY
+        );
+
+        Assertions.assertEquals(result, 1);
     }
 }

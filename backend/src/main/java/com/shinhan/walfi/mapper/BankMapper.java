@@ -1,6 +1,7 @@
 package com.shinhan.walfi.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 
 @Mapper
@@ -18,7 +19,8 @@ public interface BankMapper {
     String findSubAccountNumberByCurrencyCode(String mainWithdrawalAccountNumber, String currencyCode);
 
     // 출금 계좌에 이체 금액 이상의 돈이 있는지 확인
-    boolean checkSufficientMoneyForTransfer();
+    int checkSufficientMoneyForTransfer(@Param("subAccountNumber") String subAccountNumber,
+                                        @Param("transferMoney") int transferMoney);
 
     // 출금 계좌에 이체 금액만큼 차감
     int decreaseMoneyFromWithdrawalAccount(int money);
