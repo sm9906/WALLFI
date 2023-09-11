@@ -7,9 +7,10 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface BankMapper {
 
-    /** =============================
-     *  ===== 이체 관련 Method ======
-     *  =============================
+    /**
+     * =============================
+     * ===== 이체 관련 Method ======
+     * =============================
      */
 
     // 대표 계좌 번호 조회
@@ -23,8 +24,10 @@ public interface BankMapper {
                                         @Param("transferMoney") int transferMoney);
 
     // 출금 계좌에 이체 금액만큼 차감
-    int decreaseMoneyFromWithdrawalAccount(int money);
+    int withdrawTransferMoneyFromAccount(@Param("accountNumber") String accountNumber,
+                                         @Param("transferMoney") int transferMoney);
 
     // 입금 계좌에 이체 금액만큼 입금
-    int increaseMoneyToDepositAccount(int money);
+    int depositTransferMoneyFromAccount(@Param("accountNumber") String accountNumber,
+                                        @Param("transferMoney") int transferMoney);
 }
