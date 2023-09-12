@@ -1,11 +1,12 @@
 import React from 'react';
+import './ReactotronConfig';
+import store from './src/store/store'
 import { Provider } from 'react-redux';
-import store from './src/common/stroe'
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import FightNavigator from './src/features/fight/fightnavigation/FightNavigtion';
 import WalletNavigation from './src/features/wallet/walletnavigation/WalletNavigaton';
 import GoogleMapNavigator from './src/features/googlemap/googlemapnavigation/GoogleMapNavigaton';
-import FightNavigator from './src/features/fight/fightnavigation/FightNavigtion';
 
 const RootStack = createNativeStackNavigator();
 

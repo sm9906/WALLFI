@@ -1,6 +1,6 @@
 import React from "react";
-import { StyleSheet, Image } from "react-native";
 import images from "../../../assets/images";
+import { StyleSheet, Image } from "react-native";
 import { ScreenHeight, ScreenWidth } from "./../fightcomponents/ScreenSize";
 
 const Animal = ({ aType, aSize = 1, aPosition = 1 }) => {

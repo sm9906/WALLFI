@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
+import Card from "../fightcomponents/Card";
 import { View, StyleSheet, Text } from "react-native";
 import { ScreenHeight, ScreenWidth } from "./../fightcomponents/ScreenSize";
-import Card from "../fightcomponents/Card";
 
 const GameHeader = () => {
+  // const [seconds, setSeconds] = useState(0);
+  // const [isActive, setIsActive] = useState(false);
   return (
     <View style={styles.gameHeader}>
       <View style={styles.time}>

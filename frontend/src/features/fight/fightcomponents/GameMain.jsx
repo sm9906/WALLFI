@@ -1,24 +1,42 @@
+import HpBar from "./HpBar";
 import React, { useState } from "react";
-import { View, StyleSheet } from "react-native";
-import { ScreenHeight, ScreenWidth } from "./../fightcomponents/ScreenSize";
 import Card from "../fightcomponents/Card";
 import Animal from "../fightcomponents/Animal";
-import HpBar from "./HpBar";
+import { View, StyleSheet } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import { ScreenHeight, ScreenWidth } from "./../fightcomponents/ScreenSize";
 
 const GameMain = () => {
-  const [cardNumber, setCardNumber] = useState([1, 1, 1, 1, 1]);
-  const [myHp, setMyHp] = useState(100)
-  const [enemyHp, setEnemyHp] = useState(100)
+  const playerCard = useSelector((state) => state.cardReducer.playerSelect);
+  const enemyCard = useSelector((state) => state.cardReducer.enemySelect);
+  const battleLoading = useSelector(
+    (state) => state.loadingReducer.battleLoading
+  );
+
+  const [playerHp, setPlayerHp] = useState(100);
+  const [enemyHp, setEnemyHp] = useState(100);
   return (
     <View style={styles.CardAAnimal}>
       <View style={styles.CardSelect}>
-        <Card cType={"skill"} cNumber={cardNumber[4]} cStyle={0.8} />
-        <Card cType={"enemy"} cNumber={0} cStyle={0.8} />
+        <Card
+          cType={playerCard.type}
+          cNumber={playerCard.number}
+          cStyle={0.8}
+        />
+        {battleLoading ? (
+          <Card
+            cType={enemyCard.type}
+            cNumber={enemyCard.number}
+            cStyle={0.8}
+          />
+        ) : (
+          <Card cType={"enemy"} cNumber={0} cStyle={0.8} />
+        )}
       </View>
       <View style={styles.AnimalAHp}>
         <View style={styles.MyAnimal}>
           <Animal aType={"lion"} aPosition={-1} aSize={1} />
-          <HpBar hP={myHp}></HpBar>
+          <HpBar hP={playerHp}></HpBar>
         </View>
         <View style={styles.EnemyAnimal}>
           <Animal aType={"panda"} aSize={1} />
