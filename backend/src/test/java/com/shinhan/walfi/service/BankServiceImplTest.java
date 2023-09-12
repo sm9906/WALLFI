@@ -91,8 +91,8 @@ class BankServiceImplTest {
     @Test
     @Order(2)
     public void 출금_대표_계좌_번호_조회() {
-        int result = bankMapper.findMainAccountNumber(WITHDRAWAL_MAIN_ACCOUNT_NUMBER);
-        Assertions.assertEquals(result, 1);
+        boolean result = bankMapper.findMainAccountNumber(WITHDRAWAL_MAIN_ACCOUNT_NUMBER);
+        Assertions.assertEquals(result, true);
     }
 
     @Test
@@ -108,8 +108,8 @@ class BankServiceImplTest {
     @Test
     @Order(4)
     public void 입금_대표_계좌_번호_조회() {
-        int result = bankMapper.findMainAccountNumber(DEPOSIT_MAIN_ACCOUNT_NUMBER);
-        Assertions.assertEquals(result, 1);
+        boolean result = bankMapper.findMainAccountNumber(DEPOSIT_MAIN_ACCOUNT_NUMBER);
+        Assertions.assertEquals(result, true);
     }
 
     @Test
@@ -127,12 +127,12 @@ class BankServiceImplTest {
     @Order(6)
     public void 출금_계좌에_이체_금액_이상의_돈이_있는지_확인() {
 
-        int result = bankMapper.checkSufficientMoneyForTransfer(
+        boolean result = bankMapper.checkSufficientMoneyForTransfer(
                 WITHDRAWAL_SUB_ACCOUNT_NUMBER,
                 TRANSFER_MONEY
         );
 
-        Assertions.assertEquals(result, 1);
+        Assertions.assertEquals(result, true);
     }
 
     @Test
