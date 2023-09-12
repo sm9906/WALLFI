@@ -1,5 +1,6 @@
 package com.shinhan.walfi.repository;
 
+import com.shinhan.walfi.domain.game.GameCharacter;
 import com.shinhan.walfi.domain.game.UserGameInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -14,5 +15,10 @@ public class UserGameInfoRepository {
 
     public UserGameInfo findById(String userId) {
         return em.find(UserGameInfo.class, userId);
+    }
+
+    public UserGameInfo save(UserGameInfo userGameInfo) {
+        em.persist(userGameInfo);
+        return userGameInfo;
     }
 }

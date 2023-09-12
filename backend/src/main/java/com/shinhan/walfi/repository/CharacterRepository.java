@@ -25,10 +25,11 @@ public class CharacterRepository {
     }
 
     public GameCharacter findMainCharacter(UserGameInfo userGameInfo) {
-        GameCharacter result = (GameCharacter) em.createQuery(
-                "select g from GameCharacter g " +
-                        "where g.userGameInfo=userGameInfo " +
-                        "and g.isMain=true")
+        GameCharacter result = em.createQuery(
+                        "select g from GameCharacter g " +
+                                "where g.userGameInfo=:userGameInfo " +
+                                "and g.isMain=true", GameCharacter.class)
+                .setParameter("userGameInfo", userGameInfo)
                 .getSingleResult();
 
         return result;

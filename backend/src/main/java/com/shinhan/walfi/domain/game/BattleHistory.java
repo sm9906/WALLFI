@@ -17,10 +17,10 @@ public class BattleHistory {
 
     private String userId;
 
-    private LocalDateTime occupyTime;
+    private Long occupyTime;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "branch_code")
+    @JoinColumn(name = "branch_idx")
     private Branch branch;
 
 }
