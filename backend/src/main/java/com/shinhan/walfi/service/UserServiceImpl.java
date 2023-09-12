@@ -7,6 +7,8 @@ import com.shinhan.walfi.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService{
@@ -25,8 +27,13 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User login(String userId, String password) {
-        System.out.println(userId+" "+password);
         return userRepository.login(userId, password);
+    }
+
+    @Override
+    public List<User> getUserList() {
+        List<User> userList = userRepository.findAll();
+        return userList;
     }
 
 }

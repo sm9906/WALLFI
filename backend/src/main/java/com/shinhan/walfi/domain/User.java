@@ -30,15 +30,9 @@ public class User {
 
     private String phoneNumber;
 
+    private String 대표계좌;
+
     @OneToMany(mappedBy = "user")
     private List<Account> accounts = new ArrayList<>();
-
-    public UserGameInfo userGameInfoByUser(){
-        UserGameInfo userGameInfo = new UserGameInfo();
-        userGameInfo.setUserId(userId);
-        userGameInfo.setStatus("도전자");
-        userGameInfo.setPoint(0);
-        return userGameInfo;
-    }
 
 }

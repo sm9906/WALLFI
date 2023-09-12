@@ -7,9 +7,12 @@ import com.shinhan.walfi.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController("/user")
 @RequiredArgsConstructor
@@ -34,10 +37,19 @@ public class UserController {
         HttpResult res;
         if(user != null ){
             res = HttpResult.getSuccess();
-
         } else{
             res = new HttpResult(HttpStatus.FORBIDDEN, HttpResult.Result.FAIL, "로그인 실패");
         }
+        return ResponseEntity.status(res.getStatus()).body(res);
+    }
+
+    @GetMapping
+    public ResponseEntity<HttpResult> getUserList(){
+        List<User> userList = userService.getUserList();
+
+        HttpResult res;
+        res = HttpResult.getSuccess();
+        res.setData(userList);
         return ResponseEntity.status(res.getStatus()).body(res);
     }
 }
