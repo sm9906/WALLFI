@@ -1,24 +1,14 @@
 package com.shinhan.walfi.repository;
 
 import com.shinhan.walfi.domain.User;
-import com.shinhan.walfi.domain.game.UserGameInfo;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
-import javax.persistence.EntityManager;
+public interface UserRepository extends JpaRepository<User, String> {
 
-@Repository
-@RequiredArgsConstructor
-public class UserRepository {
-    private final EntityManager em;
+    @Query(value = "select * from user where user_id = ?1 and password= ?2", nativeQuery = true)
+    User login(String userId, String password);
 
-    public String join(User user) {
-        em.persist(user);
-        return user.getUserId();
-    }
-
-    public User findUserById(String userId) {
-        return em.find(User.class, userId);
-    }
-
+    @Query(value = "select * from user where user_id = ?1", nativeQuery = true)
+    User find(String userId);
 }
