@@ -146,4 +146,16 @@ class BankServiceImplTest {
 
         Assertions.assertEquals(result, 1);
     }
+
+    @Test
+    @Order(8)
+    public void 입금_계좌에_이체_금액만큼_입금() {
+
+        int result = bankMapper.depositTransferMoneyFromAccount(
+                DEPOSIT_SUB_ACCOUNT_NUMBER,
+                TRANSFER_MONEY
+        );
+
+        Assertions.assertEquals(result, 1);
+    }
 }
