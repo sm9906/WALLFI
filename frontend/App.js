@@ -1,6 +1,6 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import {store} from './src/common/store'
+import store from './src/common/store'
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import WalletNavigation from './src/features/wallet/walletnavigation/WalletNavigaton';

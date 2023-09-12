@@ -6,7 +6,8 @@ import { RFPercentage } from "react-native-responsive-fontsize";
 export default function SendHow({route, navigation}){
 
   const accountTo = route.params.account;
-  const bankTo = route.params.bank;
+  const bankTo = route.params.bank; 
+  const type = route.params.type;
 
   const [money, setMoney] = useState(0);
   const num_money=Number(money).toLocaleString('es-US');
@@ -27,7 +28,7 @@ export default function SendHow({route, navigation}){
       }else if(value==='all'){
         console.log('전액')
       }else if(value==='완료'){
-        !isOver?navigation.navigate('SendMemo', props = {accountTo, bankTo, num_money}):null
+        !isOver?navigation.navigate('SendMemo', props = {type, accountTo, bankTo, num_money}):null
       }else{
         setMoney((prev)=>prev==='0'?value:prev+value)
       }

@@ -1,13 +1,12 @@
 // import { ImageSourcePropType } from "react-naitve";
 
-const colors = ['#4758DE','#00A8FF','#0518AB','#293694','#8FD9FF','#1C41FF'];
-
+export const colors = ['#293694','#4758DE','#0518AB','#1C41FF','#00A8FF'];
 
 export class CardInfo{
   constructor(props){
-    this.cardType = props.cardType // 'Saving || I/O'
+    this.accId = props.accId
+    this.cardType = props.cardType // '저축예금 || 정기적금'
     this.ntnCode = props.ntnCode;
-    this.nation = props.nation;
     this.accountnum = props.accountnum;
     this.balance = props.balance;
   }
