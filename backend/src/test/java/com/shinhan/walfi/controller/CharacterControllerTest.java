@@ -44,10 +44,6 @@ class CharacterControllerTest {
         userGameInfo.setUserId(userId);
         em.persist(userGameInfo);
 
-        mainCharacterIdx = characterService.create(userId).getCharacterDto().getCharacterIdx();
-        shopCharacterIdx_1 = characterService.shop(userId).getCharacterDto().getCharacterIdx();
-        shopCharacterIdx_2 = characterService.shop(userId).getCharacterDto().getCharacterIdx();
-
     }
 
 
@@ -243,25 +239,29 @@ class CharacterControllerTest {
     @DisplayName("메인 캐릭터 변경 테스트")
     void changeMainTest() throws Exception{
         // given
+        CharacterWithUserIdResDto shopCharacter = characterService.shop(userId);
+        CharacterWithUserIdResDto mainCharacter = characterService.create(userId);
+
+        Long shopCharacterIdx = shopCharacter.getCharacterDto().getCharacterIdx();
+        Long mainCharacterIdx = mainCharacter.getCharacterDto().getCharacterIdx();
+
         CharacterStatusReqDto characterStatusReqDto = new CharacterStatusReqDto();
 
         characterStatusReqDto.setUserId(userId);
-        characterStatusReqDto.setCharacterIdx(shopCharacterIdx_1);
+        characterStatusReqDto.setCharacterIdx(shopCharacterIdx);
         characterStatusReqDto.setStatusType("isMain");
         characterStatusReqDto.setValue(10);
 
-        GameCharacter mainCharacter = characterRepository.findCharacterByIdx(mainCharacterIdx);
-
         // when
         ResponseEntity<HttpResult> res = characterController.changeCharacterStatus(characterStatusReqDto);
-
+        GameCharacter earlierMainCharacter = characterRepository.findCharacterByIdx(mainCharacterIdx);
         // then
         CharacterWithUserIdResDto data = (CharacterWithUserIdResDto) res.getBody().getData();
 
         // 요청한 캐릭터가 main으로 변경되었는지 확인
         Assertions.assertThat(data.getCharacterDto().isMain()).isEqualTo(true);
         // 기존 메인 캐릭터가 메인이 아니게 변경되었는지 확인
-        Assertions.assertThat(mainCharacter.isMain()).isEqualTo(false);
+        Assertions.assertThat(earlierMainCharacter.isMain()).isEqualTo(false);
 
     }
 
@@ -269,6 +269,9 @@ class CharacterControllerTest {
     @DisplayName("캐릭터의 exp 상승 (level+1, exp+10) 테스트")
     void changeExpTest() throws Exception{
         // given
+        CharacterWithUserIdResDto mainCharacter = characterService.create(userId);
+        Long mainCharacterIdx = mainCharacter.getCharacterDto().getCharacterIdx();
+
         CharacterStatusReqDto characterStatusReqDto = new CharacterStatusReqDto();
 
         characterStatusReqDto.setUserId(userId);
@@ -291,6 +294,9 @@ class CharacterControllerTest {
     @DisplayName("캐릭터의 exp 상승 (level+2, exp+10) 테스트")
     void changeExpLevelTwoTest() throws Exception{
         // given
+        CharacterWithUserIdResDto mainCharacter = characterService.create(userId);
+        Long mainCharacterIdx = mainCharacter.getCharacterDto().getCharacterIdx();
+
         CharacterStatusReqDto characterStatusReqDto = new CharacterStatusReqDto();
 
         characterStatusReqDto.setUserId(userId);
