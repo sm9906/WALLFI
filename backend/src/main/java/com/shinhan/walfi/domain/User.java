@@ -5,6 +5,7 @@ import com.shinhan.walfi.domain.game.UserGameInfo;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -31,6 +32,7 @@ public class User implements Serializable {
 
     private String phoneNumber;
 
+    @Column(name = "대표계좌")
     private String 대표계좌;
 
     @OneToMany(mappedBy = "user")
