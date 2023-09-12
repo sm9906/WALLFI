@@ -5,6 +5,7 @@ import com.shinhan.walfi.domain.game.Branch;
 import com.shinhan.walfi.dto.game.BranchListReqDto;
 import com.shinhan.walfi.dto.game.BranchListResDto;
 import com.shinhan.walfi.dto.game.BranchResDto;
+import com.shinhan.walfi.mapper.BranchMapper;
 import com.shinhan.walfi.service.BranchService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,8 @@ import java.util.List;
 public class BranchController {
 
     private final BranchService branchService;
+
+    private final BranchMapper branchMapper;
 
     @PostMapping
     public ResponseEntity<HttpResult> getBranches(@RequestBody BranchListReqDto branchListReqDto){
@@ -38,6 +41,15 @@ public class BranchController {
         HttpResult res;
         res = HttpResult.getSuccess();
         res.setData(branch);
+        return ResponseEntity.status(res.getStatus()).body(res);
+    }
+
+    @PostMapping("/insert")
+    public ResponseEntity<HttpResult> getBranches(){
+
+        branchMapper.insert();
+        HttpResult res;
+        res = HttpResult.getSuccess();
         return ResponseEntity.status(res.getStatus()).body(res);
     }
 
