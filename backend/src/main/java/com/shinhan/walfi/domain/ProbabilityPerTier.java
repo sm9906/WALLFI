@@ -1,5 +1,8 @@
 package com.shinhan.walfi.domain;
 
+import lombok.Getter;
+
+@Getter
 public enum ProbabilityPerTier {
 
     NORMAL(2),
