@@ -50,7 +50,7 @@ public class Account {
     private byte 자동해지여부;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "대표계좌")
+    @JoinColumn(name = "userId")
     private User user;
 
     @OneToMany(mappedBy = "account")
