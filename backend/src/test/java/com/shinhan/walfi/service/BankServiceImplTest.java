@@ -156,6 +156,6 @@ class BankServiceImplTest {
                 TRANSFER_MONEY
         );
 
-        Assertions.assertEquals(result, 1);
+        Assertions.assertNotEquals(result, 0);
     }
 }

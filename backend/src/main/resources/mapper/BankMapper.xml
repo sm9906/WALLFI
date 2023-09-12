@@ -29,22 +29,26 @@
         WHERE `계좌번호` = #{subAccountNumber};
     </select>
 
-    <update id="withdrawTransferMoneyFromAccount" parameterType="Map">
+    <select id="withdrawTransferMoneyFromAccount" resultType="int" parameterType="Map">
         UPDATE account
-        SET `잔액(통화별)`   = `잔액(통화별)` - #{transferMoney},
+        SET `잔액(통화별)`     = `잔액(통화별)` - #{transferMoney},
             `평가금액(통화별)` = `평가금액(통화별)` - #{transferMoney},
-            `잔액(원화)`    = `잔액(원화)` - #{transferMoney},
-            `평가금액(원화)`  = `평가금액(원화)` - #{transferMoney}
-        WHERE `계좌번호` = #{accountNumber}
-    </update>
+            `잔액(원화)`       = @result := `잔액(원화)` - #{transferMoney},
+            `평가금액(원화)`   = `평가금액(원화)` - #{transferMoney}
+        WHERE `계좌번호` = #{accountNumber};
 
-    <update id="depositTransferMoneyFromAccount" parameterType="Map">
+        select @result;
+    </select>
+
+    <select id="depositTransferMoneyFromAccount" resultType="int" parameterType="Map">
         UPDATE account
-        SET `잔액(통화별)`   = `잔액(통화별)` + #{transferMoney},
+        SET `잔액(통화별)`     = `잔액(통화별)` + #{transferMoney},
             `평가금액(통화별)` = `평가금액(통화별)` + #{transferMoney},
-            `잔액(원화)`    = `잔액(원화)` + #{transferMoney},
-            `평가금액(원화)`  = `평가금액(원화)` + #{transferMoney}
-        WHERE `계좌번호` = #{accountNumber}
-    </update>
+            `잔액(원화)`       = @result := `잔액(원화)` + #{transferMoney},
+            `평가금액(원화)`   = `평가금액(원화)` + #{transferMoney}
+        WHERE `계좌번호` = #{accountNumber};
+
+        select @result;
+    </select>
 
 </mapper>

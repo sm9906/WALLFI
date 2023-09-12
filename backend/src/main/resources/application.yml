@@ -1,8 +1,8 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/walfi?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-    username: ssafy
+    url: jdbc:mysql://localhost:3306/walfi?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8&allowMultiQueries=true
+    username: root
     password: ssafy
   mvc:
     pathmatch:
@@ -26,3 +26,4 @@ mybatis:
 logging:
   level:
     org.hibernate.SQL: debug
+    com.shinhan.walfi: debug

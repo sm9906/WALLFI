@@ -90,7 +90,20 @@ public class BankServiceImpl implements BankService {
         }
 
         log.debug("{}원 송금 진행: {} -> {}", TRANSFER_MONEY, WITHDRAWAL_SUB_ACCOUNT_NUMBER, DEPOSIT_SUB_ACCOUNT_NUMBER);
-        bankMapper.withdrawTransferMoneyFromAccount(WITHDRAWAL_SUB_ACCOUNT_NUMBER, TRANSFER_MONEY);
-        bankMapper.depositTransferMoneyFromAccount(DEPOSIT_SUB_ACCOUNT_NUMBER, TRANSFER_MONEY);
+
+        int withdrawAccountRemainMoney = bankMapper.withdrawTransferMoneyFromAccount(
+                WITHDRAWAL_SUB_ACCOUNT_NUMBER,
+                TRANSFER_MONEY
+        );
+
+        int depositAccountCurrentMoney = bankMapper.depositTransferMoneyFromAccount(
+                DEPOSIT_SUB_ACCOUNT_NUMBER,
+                TRANSFER_MONEY
+        );
+
+        log.debug("이체 보낸 사람 남은 돈: {}", withdrawAccountRemainMoney);
+        log.debug("이체 받은 사람 남은 돈: {}", depositAccountCurrentMoney);
+
+        
     }
 }
