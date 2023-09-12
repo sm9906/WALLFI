@@ -7,6 +7,7 @@ import ExchangeSearch from '../walletscreens/ExchangeSearch';
 import SendWho from '../walletscreens/SendWho';
 import SendHow from '../walletscreens/SendHow';
 import SendMemo from '../walletscreens/SendMemo';
+import WalletLoading from '../walletscreens/WalletLoading';
 
 const Stack = createNativeStackNavigator();
 
@@ -21,6 +22,7 @@ const WalletNavigation = () => {
       <Stack.Screen name="SendWho" component={SendWho} options={{title:''}} />
       <Stack.Screen name="SendHow" component={SendHow} options={{title:''}} />
       <Stack.Screen name="SendMemo" component={SendMemo} options={{ headerShown: false }} />
+      <Stack.Screen name="WalletLoading" component={WalletLoading} options={{headerShown: false}}/>
     </Stack.Navigator>
     )
 }

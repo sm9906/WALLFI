@@ -9,6 +9,12 @@ export const Background=StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor:'#F3F6FB',
+  },
+  whiteback:{
+    flex:1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor:'white',
   }
 })
 

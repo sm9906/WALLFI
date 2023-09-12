@@ -5,7 +5,7 @@ import { StyleSheet,
 import CardItem from '../walletcomponents/walletcards/WalletCard';
 import GoFight from '../walletcomponents/GoFight';
 import {Background} from '../walletcomponents/CommonStyle';
-import SinhanLogo from '../../../assets/wallet/SinhanLogo.png';
+import ShinhanLogo from '../../../assets/wallet/ShinhanLogo.png';
 import Exchange from '../../../assets/wallet/Exchange.png'
 
 export const SCREEN_WIDTH = Dimensions.get("window").width;
@@ -17,7 +17,7 @@ export default function WalletHome({navigation}) {
       <CardItem />
       <View style={styles.buttons}>
         <TouchableOpacity style={styles.button} onPress={()=>navigation.navigate('MakeAccount')}>
-          <Image source={SinhanLogo} style={{width:'20%', height:'35%', resizeMode:'contain'}}></Image>
+          <Image source={ShinhanLogo} style={{width:'20%', height:'35%', resizeMode:'contain'}}></Image>
           <Text>예적금 만들기</Text>
           <Text style={{marginLeft:'40%'}}>></Text>
         </TouchableOpacity>  

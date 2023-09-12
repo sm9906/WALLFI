@@ -9,7 +9,7 @@ import { SCREEN_HEIGHT, SCREEN_WIDTH } from "./WalletHome";
 const BANKS=['신한','농협','하나','카카오뱅크','토스뱅크']
 
 export default function SendWho({route, navigation}){
-  const type = route.params // '송금' || '환전'
+  const type = route.params.type // '송금' || '환전'
   return(
     <View style={{...Background.background, justifyContent:'none'}}>
         {type==='송금'?<SendMoney />:<Exchange />}        

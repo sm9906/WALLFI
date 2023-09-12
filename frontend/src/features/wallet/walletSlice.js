@@ -4,6 +4,21 @@ const initialState = {
   cards:[], // 월렛 들어갈 때 카드 컴포넌트 받아오면서 저장.
 }
 
+// 환율 정보 불러오기
+export const rcvExchangeRate = createAsyncThunk('RCV_EXCHANGE_RATE', async()=>{
+  try{
+    const response = await axios.get('http://192.168.100.210:8088/exchange/info',{
+      headers:{
+        'Content-Type': 'application/json'
+      }
+    });
+    console.log(response);
+  }catch(err){
+    console.log('authSlice.rcvExchangeRate',err);
+  }
+});
+
+
 // 처음 로그인 해서 계좌 불러오는 action
 
 // 처음 불러온 카드 추가 로직 
