@@ -18,6 +18,7 @@ import home from '../../.././assets/background/home.png';
 import trophy from '../../.././assets/game/icon/trophy.png';
 import collection from '../../.././assets/game/button/collection.png';
 import eat from '../../.././assets/game/button/eat.png';
+import notice from '../../.././assets/game/button/notice.png';
 import training from '../../.././assets/game/button/training.png';
 import mission from '../../.././assets/game/button/mission.png'
 import map from '../../.././assets/game/button/map.png'
@@ -55,11 +56,23 @@ export default function GameHome({navigation}) {
                             flex: 10.5,
                             width: '100%',
                             backgroundColor: '#FFF5EA',
-                            alignItems: 'center'
                         }}>
-                            <Text style={{ flex: 1, marginTop: '5%', fontSize: 30 }}>--- 공지 ---</Text>
-                            <Text style={{ flex: 3 }}>공지사항</Text>
-                            <Text style={{ flex: 3 }}>공지사항</Text>
+                            <Text style={{ flex: 1, marginTop: '5%', fontSize: 35, alignSelf: 'center', color: '#293694', fontWeight: 'bold' }}>&lt;공지&gt;</Text>
+                            <View style={{ flex: 1, alignItems: 'flex-start', marginStart: '5%', marginTop: '7%' }}>
+                                <Text style={{ fontSize: 22, fontWeight: 'bold' }}>서버 점검 및 업데이트 공지</Text>
+                            </View>
+                            <View style={{ flex: 1.5, alignItems: 'flex-start', marginStart: '5%' }}>
+                                <Text style={{ fontSize: 16, color: 'red', marginBottom: '3%' }}>점검 시간: 9월 18일 11:00 ~ 13:00</Text>
+                                <Text style={{ fontSize: 16, color: 'red' }}>대상 서버: 전체 서버</Text>
+                            </View>
+                            <View style={{ flex: 4, alignItems: 'flex-start', marginStart: '5%' }}>
+                                <Text style={{ fontSize: 12 }}>서버 점검 10분전에 데이터 보호를 위해 미리 게임을</Text>
+                                <Text style={{ fontSize: 12, marginBottom: '3%' }}>종료하시기 바랍니다.</Text>
+                                <Text style={{ fontSize: 12 }}>코인 용사님들의 더 풍부한 모험을 위해 새로운 컨텐츠를</Text>
+                                <Text style={{ fontSize: 12 }}>추가하였습니다. 해당 업데이트 내용은 아래와 같이</Text>
+                                <Text style={{ fontSize: 12 }}>참고하시기 바랍니다. 항상 코인 용사님들이 새로운 모험을</Text>
+                                <Text style={{ fontSize: 12 }}>즐길 수 있도록 최선을 다하겠습니다.</Text>
+                            </View>
                         </View>
                         <View style={{ flex: 1 }}></View>
                     </View>
@@ -268,7 +281,7 @@ function Content(props) {
                     style={styles.button}
                     onPress={() => props.setModalVisible(true)}
                 >
-                    <Image source={mission} style={styles.buttonContent} />
+                    <Image source={notice} style={styles.buttonContent} />
                     <Text style={styles.btnText}>공지</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate('Mission')}>
