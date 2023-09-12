@@ -4,8 +4,11 @@
 <mapper namespace="com.shinhan.walfi.mapper.QuestMapper">
 
     <select id="readRandomDailyQuestByLimit" parameterType="int">
-        SELECT q.quest_idx AS `idx`, q.quest_type AS `type`, q.quest_title AS `title`, q.content AS `content`
-            FROM quest q
+        SELECT q.quest_idx     AS `idx`,
+               q.quest_type    AS `type`,
+               q.quest_title   AS `title`,
+               q.quest_content AS `content`
+        FROM quest q
         ORDER BY rand()
         LIMIT #{limit};
     </select>
