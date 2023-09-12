@@ -1,6 +1,7 @@
 package com.shinhan.walfi.domain;
 
 import com.shinhan.walfi.domain.banking.Account;
+import com.shinhan.walfi.domain.game.UserGameInfo;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -28,6 +29,8 @@ public class User {
     private LocalDateTime birthDate;
 
     private String phoneNumber;
+
+    private String 대표계좌;
 
     @OneToMany(mappedBy = "user")
     private List<Account> accounts = new ArrayList<>();

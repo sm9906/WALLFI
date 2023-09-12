@@ -1,5 +1,6 @@
 package com.shinhan.walfi.repository;
 
+
 import com.shinhan.walfi.domain.game.GameCharacter;
 import com.shinhan.walfi.domain.game.UserGameInfo;
 import lombok.RequiredArgsConstructor;
