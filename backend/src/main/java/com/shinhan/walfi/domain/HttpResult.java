@@ -25,7 +25,7 @@ public class HttpResult {
     }
 
     public static enum Result {
-        SUCCESS, ERROR
+        SUCCESS, ERROR, FAIL
     }
 
     static public HttpResult getSuccess(){
