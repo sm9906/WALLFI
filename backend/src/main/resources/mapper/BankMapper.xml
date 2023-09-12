@@ -51,4 +51,10 @@
         select @result;
     </select>
 
+    <insert id="saveAccountTransaction" parameterType="com.shinhan.walfi.dto.transfer.KRWTransactionAccountDTO">
+        INSERT INTO krw_account_transaction
+            (상대계좌번호, 입금은행코드, 이체종류, 이체금액, 입금계좌통장메모, 출금계좌통장메모, 거래후잔액, 계좌번호)
+        VALUES
+            (#{상대계좌번호}, #{입금은행코드}, #{이체종류}, #{이체금액}, #{입금계좌통장메모}, #{출금계좌통장메모}, #{거래후잔액}, #{계좌번호})
+    </insert>
 </mapper>

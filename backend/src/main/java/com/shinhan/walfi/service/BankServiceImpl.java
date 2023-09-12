@@ -1,5 +1,6 @@
 package com.shinhan.walfi.service;
 
+import com.shinhan.walfi.dto.transfer.KRWTransactionAccountDTO;
 import com.shinhan.walfi.dto.transfer.LocalTransferDTO;
 import com.shinhan.walfi.exception.TransferErrorCode;
 import com.shinhan.walfi.exception.TransferException;
@@ -104,6 +105,19 @@ public class BankServiceImpl implements BankService {
         log.debug("이체 보낸 사람 남은 돈: {}", withdrawAccountRemainMoney);
         log.debug("이체 받은 사람 남은 돈: {}", depositAccountCurrentMoney);
 
-        
+        KRWTransactionAccountDTO transactionDTO = KRWTransactionAccountDTO.builder()
+                .계좌번호(DEPOSIT_SUB_ACCOUNT_NUMBER)
+                .상대계좌번호(WITHDRAWAL_SUB_ACCOUNT_NUMBER)
+                .입금은행코드("008")
+                .이체종류("입금")
+                .이체금액(TRANSFER_MONEY)
+                .거래후잔액(depositAccountCurrentMoney)
+                .입금계좌통장메모("입금 메모")
+                .출금계좌통장메모("출금 메모")
+                .build();
+
+        log.debug("tx: {}", transactionDTO);
+        bankMapper.saveAccountTransaction(transactionDTO);
+        bankMapper.saveAccountTransaction(transactionDTO.revert(withdrawAccountRemainMoney));
     }
 }
