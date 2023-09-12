@@ -5,24 +5,25 @@ import {Text, TouchableOpacity,
 
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../ScreenSize";
 import { useNavigation } from "@react-navigation/native";
-import {CardInfo} from './CardInfo';
+import {colors} from './CardInfo';
 
 const CardItem = (props) => {
   // configuring navigation
   const navigation = useNavigation();
+  console.log(props)
   const data ={
     nation:'KRW',
     accountnum:'1111111111',
     balance:1000000,
   }
+  const id = props.data.accId
   // move to balance page
   const handlePress = () => {
     console.log();
   };
 
   return (
-    <>
-     <View style={styles.card}>
+    <View style={{...styles.card, backgroundColor:colors[id%5]}}>
       <View style={styles.account}>
        <Text style={styles.cardinfo}>{data.nation}{data.accountnum}</Text>
       </View> 
@@ -37,8 +38,7 @@ const CardItem = (props) => {
           </TouchableOpacity>
         </View>
       </View>
-     </View>
-    </>
+    </View>
   );
 };
 
@@ -47,13 +47,14 @@ export default CardItem;
 const styles = StyleSheet.create({
   card:{
     width: SCREEN_WIDTH * 0.8,
-    height: SCREEN_HEIGHT * 0.23,
+    height: SCREEN_HEIGHT * 0.22,
     backgroundColor: '#293694',
     borderRadius: 15,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: '10%',
-    paddingVertical:'5%'
+    paddingHorizontal: SCREEN_WIDTH * 0.08,
+    paddingVertical:SCREEN_HEIGHT * 0.23 * 0.05,
+    marginHorizontal: SCREEN_WIDTH * 0.05
   },
   cardinfo:{
     color:'white'

@@ -33,8 +33,6 @@ export const rcvAccount = createAsyncThunk('', async (userInfo, { rejectWithValu
 
 const initialState = {
   name:'',
-  cards:[], // 월렛 들어갈 때 카드 컴포넌트 받아오면서 저장.
-  exchangeRate:[],
 }
 
 export const authSlice = createSlice({
@@ -44,12 +42,6 @@ export const authSlice = createSlice({
     
     // 카드 추가, 돈 추가, 빼는 로직 
   },
-  extraReducers:(builder)=>{
-    builder.addCase(rcvExchangeRate.fulfilled, (state, {payload})=>{
-      console.log(payload)
-      // state.exchangeRate = payload
-    })
-  }
 })
 
 

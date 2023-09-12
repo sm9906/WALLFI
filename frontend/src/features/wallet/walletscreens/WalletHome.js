@@ -1,20 +1,31 @@
 import { StyleSheet,
   Dimensions,
   Text, View, Image, 
-  TouchableOpacity } from 'react-native';
+  TouchableOpacity,
+  ScrollView
+ } from 'react-native';
 import CardItem from '../walletcomponents/walletcards/WalletCard';
 import GoFight from '../walletcomponents/GoFight';
 import {Background} from '../walletcomponents/CommonStyle';
 import ShinhanLogo from '../../../assets/wallet/ShinhanLogo.png';
 import Exchange from '../../../assets/wallet/Exchange.png'
 
+import { useSelector } from 'react-redux';
+
 export const SCREEN_WIDTH = Dimensions.get("window").width;
 export const SCREEN_HEIGHT= Dimensions.get("window").height;
 
 export default function WalletHome({navigation}) {
+  const {cards} = useSelector(state=>state.wallet)
   return (
     <View style={Background.background}>
-      <CardItem />
+      <View style={{height:SCREEN_HEIGHT*0.25}}>
+        <ScrollView pagingEnabled showsHorizontalScrollIndicator={false} horizontal={true} style={{marginHorizontal:SCREEN_WIDTH*0.05}}>
+          {cards&&cards.map((card, index)=>{
+              return(<CardItem key={index} data={card} />)
+          })}
+        </ScrollView>
+      </View>
       <View style={styles.buttons}>
         <TouchableOpacity style={styles.button} onPress={()=>navigation.navigate('MakeAccount')}>
           <Image source={ShinhanLogo} style={{width:'20%', height:'35%', resizeMode:'contain'}}></Image>
