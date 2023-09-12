@@ -1,15 +1,55 @@
+import { useRef, useState, useEffect } from 'react';
 import {
     StyleSheet,
     Text,
     View,
     Image,
+    Animated
 } from 'react-native';
+import * as Animatable from 'react-native-animatable';
+
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from '../homecomponents/ScreenSize.js';
 import IMG_URL from '../../.././assets/characters/default/default_4.png';
 import coin from '../../.././assets/game/icon/coin.png'
 
 function GameHeader(props) {
 
+    const TextTransition = () => {
+        const textRef1 = useRef('');
+        const textRef2 = useRef('');
+        const [currentText, setCurrentText] = useState(0);
+        const texts = [
+            { money: '달러: 1300', point: '(▲ 0.15)' }, 
+            { money: '엔: 903', point: '(▼ 4.85)' }, 
+            { money: '유럽연합: 1424', point: '(▼ 3.86)' }
+        ];
+
+        useEffect(() => {
+            const timeout = setTimeout(() => {
+                setCurrentText((prevText) => (prevText === texts.length - 1 ? 0 : prevText + 1));
+                textRef1.current.fadeIn(1000).then(() => {
+                    textRef1.current.fadeOut(1000);
+                });
+                textRef2.current.fadeIn(1000).then(() => {
+                    textRef2.current.fadeOut(1000);
+                });
+            }, 2000); // 3초마다 텍스트 변경
+
+            return () => clearTimeout(timeout);
+        }, [currentText]);
+
+        return (
+            <View style={styles.rightBottomBox}>
+                <Animatable.View ref={textRef1}>
+                    <Text style={{ fontSize: 12, fontWeight: 'bold', color: 'white', height: '50%' }}>{ texts[currentText].money }</Text>
+                </Animatable.View>
+                <Animatable.View ref={textRef2}>
+                    <Text style={{ fontSize: 12, fontWeight: 'bold', color: texts[currentText].point[1] == '▲' ? 'red' : texts[currentText].point[1] == '=' ? 'black' : 'blue', height: '50%' }}> { texts[currentText].point }</Text>
+                </Animatable.View>
+            </View>
+        )
+    }
+    
     return (
         <View style={styles.header}>
             <View style={{ flexDirection: 'column', flex: 1 }}>
@@ -36,10 +76,7 @@ function GameHeader(props) {
                         </View>
                     </View>
                     <View style={styles.headerRight}>
-                        <View style={styles.rightBottomBox}>
-                            <Text style={{ fontSize: 14, fontWeight: 'bold', color: 'white', height: '70%' }}>달러 : 1300</Text>
-                            <Text style={{ fontSize: 14, fontWeight: 'bold', color: 'red', height: '70%' }}> (▲ 0.15)</Text>
-                        </View>
+                        <TextTransition />
                     </View>
             </View>
         </View>
