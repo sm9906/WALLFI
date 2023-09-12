@@ -32,7 +32,7 @@ public class User implements Serializable {
 
     private String phoneNumber;
 
-    @Column(name = "대표계좌")
+    @Column(name = "`대표계좌`")
     private String 대표계좌;
 
     @OneToMany(mappedBy = "user")
