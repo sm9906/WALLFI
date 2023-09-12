@@ -21,13 +21,13 @@ public interface BankMapper {
 
     // 출금 계좌에 이체 금액 이상의 돈이 있는지 확인
     boolean checkSufficientMoneyForTransfer(@Param("subAccountNumber") String subAccountNumber,
-                                        @Param("transferMoney") int transferMoney);
+                                            @Param("transferMoney") long transferMoney);
 
     // 출금 계좌에 이체 금액만큼 차감
     int withdrawTransferMoneyFromAccount(@Param("accountNumber") String accountNumber,
-                                         @Param("transferMoney") int transferMoney);
+                                         @Param("transferMoney") long transferMoney);
 
     // 입금 계좌에 이체 금액만큼 입금
     int depositTransferMoneyFromAccount(@Param("accountNumber") String accountNumber,
-                                        @Param("transferMoney") int transferMoney);
+                                        @Param("transferMoney") long transferMoney);
 }

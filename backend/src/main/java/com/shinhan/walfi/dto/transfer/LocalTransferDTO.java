@@ -12,7 +12,7 @@ public class LocalTransferDTO {
 
     private String 입금은행코드;
 
-    private int 이체금액;
+    private long 이체금액;
 
     private String 입금계좌번호;
 
