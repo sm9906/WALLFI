@@ -134,4 +134,16 @@ class BankServiceImplTest {
 
         Assertions.assertEquals(result, 1);
     }
+
+    @Test
+    @Order(7)
+    public void 출금_계좌에_이체_금액만큼_차감() {
+
+        int result = bankMapper.withdrawTransferMoneyFromAccount(
+                WITHDRAWAL_SUB_ACCOUNT_NUMBER,
+                TRANSFER_MONEY
+        );
+
+        Assertions.assertEquals(result, 1);
+    }
 }
