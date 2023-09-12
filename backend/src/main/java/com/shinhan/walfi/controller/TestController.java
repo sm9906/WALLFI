@@ -1,13 +1,13 @@
 package com.shinhan.walfi.controller;
 
 import com.shinhan.walfi.domain.banking.TestEntity;
+import com.shinhan.walfi.dto.TestEntityDTO;
+import com.shinhan.walfi.mapper.BankMapper;
 import com.shinhan.walfi.repository.TestRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Optional;
 
 
 @RestController
@@ -16,6 +16,7 @@ import java.util.Optional;
 public class TestController {
 
     private final TestRepo testRepo;
+    private final BankMapper bankMapper;
 
     @GetMapping
     public String test(){
@@ -36,5 +37,12 @@ public class TestController {
         testRepo.save(testEntity);
 
         return testRepo.findById(1L).get();
+    }
+
+    @GetMapping("/testa")
+    public TestEntityDTO test2() {
+        bankMapper.testAddData();
+        TestEntityDTO testEntityDTO = bankMapper.testLoadData();
+        return testEntityDTO;
     }
 }

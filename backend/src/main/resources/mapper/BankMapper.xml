@@ -4,6 +4,15 @@
 
 <mapper namespace="com.shinhan.walfi.mapper.BankMapper">
 
+    <select id="testLoadData" resultType="com.shinhan.walfi.dto.TestEntityDTO">
+        select id, 한글칼럼영어데이터, 한글칼럼한글데이터, eng_column_eng_data, eng_column_kor_data from test_entity
+    </select>
+
+    <insert id="testAddData">
+        insert into test_entity (id, 한글칼럼영어데이터, 한글칼럼한글데이터, eng_column_eng_data, eng_column_kor_data)
+        values (1, 'english', '한글데이터', 'english_data', '한글데이터')
+    </insert>
+
     <select id="findMainAccountNumber" resultType="boolean" parameterType="String">
         SELECT CASE
                    WHEN count(*) != 0 THEN TRUE

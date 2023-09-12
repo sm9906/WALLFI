@@ -1,5 +1,6 @@
 package com.shinhan.walfi.mapper;
 
+import com.shinhan.walfi.dto.TestEntityDTO;
 import com.shinhan.walfi.dto.transfer.KRWTransactionAccountDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -33,4 +34,8 @@ public interface BankMapper {
                                         @Param("transferMoney") long transferMoney);
 
     void saveAccountTransaction(KRWTransactionAccountDTO krwTransactionAccountDTO);
+
+    void testAddData();
+
+    TestEntityDTO testLoadData();
 }
