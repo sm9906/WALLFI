@@ -40,7 +40,7 @@
     </select>
 
     <insert id="insert">
-        INSERT INTO `walfi`.`branch` (`branch_idx`, `address`, `branch_name`, `branch_type`, `branch_phone_number`, `latitude`, `longitude`, `manager_level`, `manager_exp`, `manager_hp`, `manager_atk`, `manager_def`, `start_time`, `user_id`) VALUES ('333', '3', '가나다라마바사', '3', '3', '3', '3', '3', '3', '3', '3', '3', '2022-02-22', 'ssafy');
+        INSERT INTO `walfi`.`branch` (`branch_idx`, `address`, `branch_name`, `branch_type`, `branch_phone_number`, `latitude`, `longitude`, `manager_level`, `manager_exp`, `manager_hp`, `manager_atk`, `manager_def`, `start_time`, `user_id`) VALUES ('1000', '3', '가나다라마바사', '3', '3', '3', '3', 'LEVEL_03', '3', '3', '3', '3', '2022-02-22', 'ssafy');
     </insert>
 
 </mapper>
