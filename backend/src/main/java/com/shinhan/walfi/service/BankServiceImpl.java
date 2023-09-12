@@ -1,6 +1,8 @@
 package com.shinhan.walfi.service;
 
 import com.shinhan.walfi.dto.transfer.LocalTransferDTO;
+import com.shinhan.walfi.exception.TransferErrorCode;
+import com.shinhan.walfi.exception.TransferException;
 import com.shinhan.walfi.mapper.BankMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -8,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
+import static com.shinhan.walfi.exception.TransferErrorCode.*;
 import static java.util.Objects.isNull;
 
 
@@ -45,14 +48,14 @@ public class BankServiceImpl implements BankService {
         result = bankMapper.findMainAccountNumber(WITHDRAWAL_MAIN_ACCOUNT_NUMBER);
         if (!result) {
             log.error("출금 대표 계좌가 조회 불가");
-            return;
+            throw new TransferException(NOT_FOUND_WITHDRAWAL_MAIN_ACCOUNT_NUMBER);
         }
 
         log.debug("=== 입금 대표 계좌 번호 조회 중 ===");
         result = bankMapper.findMainAccountNumber(DEPOSIT_MAIN_ACCOUNT_NUMBER);
         if (!result) {
             log.error("입금 대표 계좌가 조회 불가");
-            return;
+            throw new TransferException(NOT_FOUND_DEPOSIT_MAIN_ACCOUNT_NUMBER);
         }
 
         log.debug("=== 출금 세부 계좌 번호 조회 중 ===");
@@ -62,6 +65,7 @@ public class BankServiceImpl implements BankService {
         );
         if (isNull(WITHDRAWAL_SUB_ACCOUNT_NUMBER)) {
             log.error("출금 세부 계좌 번호 조회 불가");
+            throw new TransferException(NOT_FOUND_WITHDRAWAL_SUB_ACCOUNT_NUMBER);
         }
 
 
@@ -72,6 +76,7 @@ public class BankServiceImpl implements BankService {
         );
         if (isNull(DEPOSIT_SUB_ACCOUNT_NUMBER)) {
             log.error("입금 세부 계좌 번호 조회 불가");
+            throw new TransferException(NOT_FOUND_DEPOSIT_SUB_ACCOUNT_NUMBER);
         }
 
         log.debug("=== 출금 계좌에 이체 금액 이상의 돈이 있는지 확인 ===");
@@ -81,7 +86,7 @@ public class BankServiceImpl implements BankService {
         );
         if (!result) {
             log.error("잔액 부족");
-            return;
+            throw new TransferException(OVERDRAWN);
         }
 
         log.debug("{}원 송금 진행: {} -> {}", TRANSFER_MONEY, WITHDRAWAL_SUB_ACCOUNT_NUMBER, DEPOSIT_SUB_ACCOUNT_NUMBER);
