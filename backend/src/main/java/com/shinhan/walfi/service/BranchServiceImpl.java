@@ -44,12 +44,12 @@ public class BranchServiceImpl implements BranchService {
 
     @Override
     public BranchResDto getBranch(long id) {
-//        Optional<Branch> branch = branchRepository.findById(id);
-//        if(!branch.isPresent()){
-//            return null;
-//        }
-//        return branch.get();
-        BranchResDto branch = branchMapper.getBranch(id);
-        return branch;
+        Optional<Branch> obranch = branchRepository.findById(id);
+        if(!obranch.isPresent()){
+            // Exception
+            return null;
+        }
+        BranchResDto branchResDto = obranch.get().entityToDto();
+        return branchResDto;
     }
 }

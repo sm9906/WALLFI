@@ -1,6 +1,7 @@
 package com.shinhan.walfi.domain.game;
 
 import com.shinhan.walfi.domain.LevelUp;
+import com.shinhan.walfi.dto.game.BranchResDto;
 import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -77,5 +78,10 @@ public class Branch {
 
     public void setUserGameInfo(UserGameInfo userGameInfo) {
         this.userGameInfo = userGameInfo;
+    }
+
+    public BranchResDto entityToDto() {
+        BranchResDto branchResDto = new BranchResDto(branchIdx, branchName, address, branchPhoneNumber, latitude, longitude, managerLevel.getLevel(), managerExp, managerHp, managerAtk, managerDef);
+        return branchResDto;
     }
 }
