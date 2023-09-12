@@ -4,7 +4,7 @@
 
 <mapper namespace="com.shinhan.walfi.mapper.BankMapper">
 
-    <select id="findMainAccountNumber" resultType="int" parameterType="String">
+    <select id="findMainAccountNumber" resultType="boolean" parameterType="String">
         SELECT CASE
                    WHEN count(*) != 0 THEN TRUE
                    ELSE FALSE
@@ -20,7 +20,7 @@
           AND `통화` = #{currencyCode};
     </select>
 
-    <select id="checkSufficientMoneyForTransfer" resultType="int" parameterType="Map">
+    <select id="checkSufficientMoneyForTransfer" resultType="boolean" parameterType="Map">
         SELECT CASE
                    WHEN a.`잔액(원화)` >= #{transferMoney} THEN TRUE
                    ELSE FALSE
