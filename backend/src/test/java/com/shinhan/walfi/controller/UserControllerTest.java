@@ -2,6 +2,9 @@ package com.shinhan.walfi.controller;
 
 import com.shinhan.walfi.domain.HttpResult;
 import com.shinhan.walfi.domain.User;
+import com.shinhan.walfi.dto.LoginReqDto;
+import com.shinhan.walfi.exception.UserErrorCode;
+import com.shinhan.walfi.exception.UserException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -61,6 +64,39 @@ class UserControllerTest {
         // then
         Assertions.assertThat(res.getBody().getResult()).isSameAs(HttpResult.Result.SUCCESS);
         Assertions.assertThat(data.size()).isEqualTo(2);
+    }
+
+    @Test
+    @DisplayName("로그인 비밀번호가 틀렸을 때 exception 발생 테스트")
+    public void loginExceptioinWrongPwdTest() throws Exception {
+        // given
+        LoginReqDto loginReqDto = new LoginReqDto();
+        loginReqDto.setUserId("1");
+        loginReqDto.setPassword("aaa");
+
+        // when
+        UserException e = assertThrows(UserException.class,
+                () -> userController.login(loginReqDto));
+
+        // then
+        Assertions.assertThat(e.getUserErrorCode().getMessage()).isSameAs(UserErrorCode.NO_MATCHING_USER.getMessage());
+    }
+
+    @Test
+    @DisplayName("조회되지 않는 회원일 경우 예외 처리")
+    public void loginExceptioinNoUserTest() throws Exception {
+        // given
+        LoginReqDto loginReqDto = new LoginReqDto();
+        loginReqDto.setUserId("111111");
+        loginReqDto.setPassword("aaa");
+
+        // when
+        UserException e = assertThrows(UserException.class,
+                () -> userController.login(loginReqDto));
+
+        // then
+        Assertions.assertThat(e.getUserErrorCode().getMessage()).isSameAs(UserErrorCode.NO_MATCHING_USER.getMessage());
+
     }
 
 }

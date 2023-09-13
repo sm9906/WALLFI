@@ -83,6 +83,7 @@ class UserServiceImplTest {
         // when
         UserException e = assertThrows(UserException.class,
                 () -> userService.login("1", "aaa"));
+
         // then
         Assertions.assertThat(e.getUserErrorCode().getMessage()).isSameAs(UserErrorCode.NO_MATCHING_USER.getMessage());
     }
@@ -95,6 +96,7 @@ class UserServiceImplTest {
         // when
         UserException e = assertThrows(UserException.class,
                 () -> userService.login("111111", ""));
+
         // then
         Assertions.assertThat(e.getUserErrorCode().getMessage()).isSameAs(UserErrorCode.NO_MATCHING_USER.getMessage());
     }
