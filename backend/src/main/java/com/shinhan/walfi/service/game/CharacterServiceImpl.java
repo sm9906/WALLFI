@@ -140,6 +140,11 @@ public class CharacterServiceImpl implements CharacterService {
     public CharacterListResDto searchCharacters(String userId) {
         UserGameInfo userGameInfo = userGameInfoRepository.findById(userId);
 
+        if (userGameInfo == null) {
+            log.error("=== 틀린 비밀번호이거나 존재하지 않는 회원 ===");
+            throw new UserException(UserErrorCode.NO_MATCHING_USER);
+        }
+
         List<GameCharacter> characters = userGameInfo.getGameCharacters();
 
         List<CharacterDto> dtoList = characters.stream()
@@ -163,6 +168,12 @@ public class CharacterServiceImpl implements CharacterService {
     @Override
     public CharacterWithUserIdResDto searchMainCharacter(String userId) {
         UserGameInfo userGameInfo = userGameInfoRepository.findById(userId);
+
+        if (userGameInfo == null) {
+            log.error("=== 틀린 비밀번호이거나 존재하지 않는 회원 ===");
+            throw new UserException(UserErrorCode.NO_MATCHING_USER);
+        }
+
         GameCharacter mainCharacter = characterRepository.findMainCharacter(userGameInfo);
 
         CharacterDto characterDto = getCharacterDto(mainCharacter);
