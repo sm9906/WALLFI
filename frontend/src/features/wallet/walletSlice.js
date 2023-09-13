@@ -72,11 +72,10 @@ export const walletSlice = createSlice({
   initialState,
   reducers:{
     minusMoney(state, action){
-      console.log(action.payload);
-      // state.cards -= action.payload
+      console.log(action);
+      const data = action.payload
+      state.cards[data.accId].balance -= data.num_money
     }
-
-    
     // 카드 추가, 돈 추가, 빼는 로직 
   },
   extraReducers: (builder)=>{
@@ -91,5 +90,5 @@ export const walletSlice = createSlice({
 })
 
 
-export const {} = walletSlice.actions
+export const { minusMoney } = walletSlice.actions
 export default walletSlice.reducer
