@@ -14,6 +14,4 @@ public interface BranchMapper {
     List<BranchListResDto> getBranches(BranchListDao dao);
 
     BranchResDto getBranch(long id);
-
-    void insert();
 }
