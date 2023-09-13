@@ -8,16 +8,23 @@ import com.shinhan.walfi.domain.game.UserGameInfo;
 import com.shinhan.walfi.dto.game.CharacterDto;
 import com.shinhan.walfi.dto.game.CharacterListResDto;
 import com.shinhan.walfi.dto.game.CharacterWithUserIdResDto;
+import com.shinhan.walfi.exception.CharacterErrorCode;
+import com.shinhan.walfi.exception.CharacterException;
+import com.shinhan.walfi.exception.UserErrorCode;
+import com.shinhan.walfi.exception.UserException;
 import com.shinhan.walfi.repository.game.CharacterRepository;
 import com.shinhan.walfi.repository.game.UserGameInfoRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -29,6 +36,8 @@ public class CharacterServiceImpl implements CharacterService {
     /**
      * 캐릭터 타입 랜덤 설정 후 캐릭터 생성
      *
+     * @exception 'NO_MATCHING_USER' - 비밀번호가 틀리거나 존재하지 않는 사용자의 경우 예외 발생
+     * @exception 'HAS_MAIN_CHARACTER' - 메인 캐릭터가 존재하는 유저의 경우 뽑기 기능을 사용해야 하므로 예외 발생
      * @param userId
      * @return 생성한 캐릭터 idx 반환
      */
@@ -37,8 +46,18 @@ public class CharacterServiceImpl implements CharacterService {
     public CharacterWithUserIdResDto create(String userId) {
         UserGameInfo userGameInfo = userGameInfoRepository.findById(userId);
 
+        if (userGameInfo == null) {
+            log.error("=== 틀린 비밀번호이거나 존재하지 않는 회원 ===");
+            throw new UserException(UserErrorCode.NO_MATCHING_USER);
+        }
 
-        // TODO: 만약 메인 캐릭터가 존재하면 create가 아닌 shop으로 캐릭터를 뽑아야 함으로 예외처리
+        boolean hasMain = userGameInfo.getGameCharacters().stream()
+                .anyMatch(character -> character.isMain() == true);
+
+        if (hasMain) {
+            log.error("=== 메인 캐릭터가 존재하는 회원, 캐릭터 뽑기 기능 사용해야함 ===");
+            throw new CharacterException(CharacterErrorCode.HAS_MAIN_CHARACTER);
+        }
 
         Random random = new Random();
 
@@ -60,8 +79,9 @@ public class CharacterServiceImpl implements CharacterService {
     }
 
     /**
-     * 캐릭터 뽑기
+     * 캐릭터 뽑기 (이미 존재하는 캐릭터 뽑을 경우 공방 + 1 상승)
      *
+     * @exception 'NO_MATCHING_USER' - 비밀번호가 틀리거나 존재하지 않는 사용자의 경우 예외 발생
      * @param userId
      * @return 뽑은 캐릭터 idx 반환
      */
@@ -69,6 +89,11 @@ public class CharacterServiceImpl implements CharacterService {
     @Transactional
     public CharacterWithUserIdResDto shop(String userId) {
         UserGameInfo userGameInfo = userGameInfoRepository.findById(userId);
+
+        if (userGameInfo == null) {
+            log.error("=== 틀린 비밀번호이거나 존재하지 않는 회원 ===");
+            throw new UserException(UserErrorCode.NO_MATCHING_USER);
+        }
 
         Random random = new Random();
 
@@ -80,18 +105,21 @@ public class CharacterServiceImpl implements CharacterService {
 
         List<GameCharacter> characters = userGameInfo.getGameCharacters();
 
+        Optional<GameCharacter> matchingCharacter = characters.stream()
+                .filter(character -> character.getCharacterType().equals(randomCharacterType))
+                .findFirst();
+
+        if (matchingCharacter.isPresent()) {
+            GameCharacter character = matchingCharacter.get();
+            updateCharacterStatus(userId, character.getCharacterIdx(), "atk", 1);
+            updateCharacterStatus(userId, character.getCharacterIdx(), "def", 1);
+
+            return getCharacterWithUserIdResDto(userId, getCharacterDto(character));
+        }
+
         // 캐릭터 생성
         Boolean isMain = false;
         GameCharacter gameCharacter = GameCharacter.createCharacter(userGameInfo, randomCharacterType, isMain);
-
-        boolean isSame = characters.stream()
-                .anyMatch(character -> character.getCharacterType().equals(randomCharacterType));
-        if (isSame) {
-//            return getCharacterWithUserIdResDto(userId, getCharacterDto(gameCharacter));
-            // TODO: 이미 있는 캐릭터라면 어떻게 할지 로직
-        }
-
-
 
         // db에 저장
         characterRepository.save(gameCharacter);
@@ -201,7 +229,7 @@ public class CharacterServiceImpl implements CharacterService {
      */
     @Override
     @Transactional
-    public CharacterWithUserIdResDto changeCharacterStatus(String userId,
+    public CharacterWithUserIdResDto updateCharacterStatus(String userId,
                                                            Long characterIdx,
                                                            String statusType,
                                                            int statusValue) {
