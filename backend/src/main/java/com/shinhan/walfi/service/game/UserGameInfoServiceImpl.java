@@ -61,11 +61,7 @@ public class UserGameInfoServiceImpl implements UserGameInfoService{
         int defaultPoint = findUserGameInfo.getPoint();
         int newPoint = defaultPoint + updatePoint;
 
-        System.out.println("defaultPoint = " + defaultPoint);
-        System.out.println("newPoint = " + newPoint);
-
         findUserGameInfo.setPoint(newPoint);
-        System.out.println("findUserGameInfo = " + findUserGameInfo.getPoint());
         UserGameInfo updateUserGameInfo = userGameInfoRepository.save(findUserGameInfo);
 
         log.info("=== " + userId + "사용자: 포인트 " + defaultPoint + " -> " + newPoint + "===");
