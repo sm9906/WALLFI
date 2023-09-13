@@ -1,4 +1,4 @@
-package com.shinhan.walfi.service;
+package com.shinhan.walfi.service.game;
 
 import com.shinhan.walfi.dto.game.BattleRankResDto;
 import com.shinhan.walfi.dto.game.BattleReqDto;

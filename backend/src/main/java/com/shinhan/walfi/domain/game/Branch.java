@@ -1,6 +1,6 @@
 package com.shinhan.walfi.domain.game;
 
-import com.shinhan.walfi.domain.LevelUp;
+import com.shinhan.walfi.domain.enums.LevelUp;
 import com.shinhan.walfi.dto.game.BranchResDto;
 import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;

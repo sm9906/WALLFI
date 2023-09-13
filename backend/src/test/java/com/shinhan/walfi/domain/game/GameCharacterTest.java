@@ -1,8 +1,7 @@
 package com.shinhan.walfi.domain.game;
 
-import com.shinhan.walfi.domain.CharacterType;
-import com.shinhan.walfi.repository.CharacterRepository;
-import org.junit.jupiter.api.Assertions;
+import com.shinhan.walfi.domain.enums.CharacterType;
+import com.shinhan.walfi.repository.game.CharacterRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional

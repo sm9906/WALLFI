@@ -1,8 +1,7 @@
-package com.shinhan.walfi.service;
+package com.shinhan.walfi.service.banking;
 
 import com.shinhan.walfi.dto.transfer.KRWTransactionAccountDTO;
 import com.shinhan.walfi.dto.transfer.LocalTransferDTO;
-import com.shinhan.walfi.exception.TransferErrorCode;
 import com.shinhan.walfi.exception.TransferException;
 import com.shinhan.walfi.mapper.BankMapper;
 import lombok.RequiredArgsConstructor;

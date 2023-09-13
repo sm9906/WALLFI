@@ -1,12 +1,13 @@
 package com.shinhan.walfi.service;
 
-import com.shinhan.walfi.domain.LevelUp;
-import com.shinhan.walfi.domain.TierPerColor;
+import com.shinhan.walfi.domain.enums.LevelUp;
+import com.shinhan.walfi.domain.enums.TierPerColor;
 import com.shinhan.walfi.domain.game.GameCharacter;
 import com.shinhan.walfi.domain.game.UserGameInfo;
 import com.shinhan.walfi.dto.game.CharacterListResDto;
 import com.shinhan.walfi.dto.game.CharacterWithUserIdResDto;
-import com.shinhan.walfi.repository.CharacterRepository;
+import com.shinhan.walfi.repository.game.CharacterRepository;
+import com.shinhan.walfi.service.game.CharacterService;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,7 +26,8 @@ class CharacterServiceTest {
     @PersistenceContext
     EntityManager em;
 
-    @Autowired CharacterService characterService;
+    @Autowired
+    CharacterService characterService;
     @Autowired CharacterRepository characterRepository;
 
     String userId = "ssafy";

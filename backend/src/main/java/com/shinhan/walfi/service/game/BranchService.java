@@ -1,4 +1,4 @@
-package com.shinhan.walfi.service;
+package com.shinhan.walfi.service.game;
 
 import com.shinhan.walfi.domain.game.Branch;
 import com.shinhan.walfi.dto.game.BranchListReqDto;

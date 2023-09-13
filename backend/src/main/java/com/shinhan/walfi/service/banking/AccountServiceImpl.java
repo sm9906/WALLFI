@@ -1,4 +1,4 @@
-package com.shinhan.walfi.service;
+package com.shinhan.walfi.service.banking;
 
 import com.shinhan.walfi.domain.User;
 import com.shinhan.walfi.domain.banking.Account;

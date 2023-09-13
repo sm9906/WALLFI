@@ -1,4 +1,4 @@
-package com.shinhan.walfi.repository;
+package com.shinhan.walfi.repository.game;
 
 import com.shinhan.walfi.domain.game.GameCharacter;
 import com.shinhan.walfi.domain.game.UserGameInfo;

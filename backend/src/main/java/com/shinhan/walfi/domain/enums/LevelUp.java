@@ -1,4 +1,4 @@
-package com.shinhan.walfi.domain;
+package com.shinhan.walfi.domain.enums;
 
 import lombok.Getter;
 

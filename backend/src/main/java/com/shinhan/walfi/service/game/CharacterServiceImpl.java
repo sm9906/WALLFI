@@ -1,15 +1,15 @@
-package com.shinhan.walfi.service;
+package com.shinhan.walfi.service.game;
 
-import com.shinhan.walfi.domain.CharacterType;
-import com.shinhan.walfi.domain.LevelUp;
-import com.shinhan.walfi.domain.TierPerColor;
+import com.shinhan.walfi.domain.enums.CharacterType;
+import com.shinhan.walfi.domain.enums.LevelUp;
+import com.shinhan.walfi.domain.enums.TierPerColor;
 import com.shinhan.walfi.domain.game.GameCharacter;
 import com.shinhan.walfi.domain.game.UserGameInfo;
 import com.shinhan.walfi.dto.game.CharacterDto;
 import com.shinhan.walfi.dto.game.CharacterListResDto;
 import com.shinhan.walfi.dto.game.CharacterWithUserIdResDto;
-import com.shinhan.walfi.repository.CharacterRepository;
-import com.shinhan.walfi.repository.UserGameInfoRepository;
+import com.shinhan.walfi.repository.game.CharacterRepository;
+import com.shinhan.walfi.repository.game.UserGameInfoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

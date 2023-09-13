@@ -1,24 +1,21 @@
-package com.shinhan.walfi.service;
+package com.shinhan.walfi.service.game;
 
 import com.shinhan.walfi.dao.BattleDao;
-import com.shinhan.walfi.domain.LevelUp;
 import com.shinhan.walfi.domain.game.Branch;
 import com.shinhan.walfi.domain.game.GameCharacter;
 import com.shinhan.walfi.domain.game.UserGameInfo;
 import com.shinhan.walfi.dto.game.BattleRankResDto;
 import com.shinhan.walfi.dto.game.BattleReqDto;
 import com.shinhan.walfi.mapper.BattleMapper;
-import com.shinhan.walfi.mapper.BranchMapper;
-import com.shinhan.walfi.repository.BranchRepository;
-import com.shinhan.walfi.repository.CharacterRepository;
-import com.shinhan.walfi.repository.UserGameInfoRepository;
+import com.shinhan.walfi.repository.game.BranchRepository;
+import com.shinhan.walfi.repository.game.CharacterRepository;
+import com.shinhan.walfi.repository.game.UserGameInfoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 

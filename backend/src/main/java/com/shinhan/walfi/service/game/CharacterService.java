@@ -1,4 +1,4 @@
-package com.shinhan.walfi.service;
+package com.shinhan.walfi.service.game;
 
 import com.shinhan.walfi.dto.game.CharacterListResDto;
 import com.shinhan.walfi.dto.game.CharacterWithUserIdResDto;
