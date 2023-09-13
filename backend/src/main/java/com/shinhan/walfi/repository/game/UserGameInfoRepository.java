@@ -22,4 +22,5 @@ public class UserGameInfoRepository {
         em.persist(userGameInfo);
         return userGameInfo;
     }
+
 }
