@@ -44,13 +44,4 @@ public class BranchController {
         return ResponseEntity.status(res.getStatus()).body(res);
     }
 
-    @PostMapping("/insert")
-    public ResponseEntity<HttpResult> getBranches(){
-
-        branchMapper.insert();
-        HttpResult res;
-        res = HttpResult.getSuccess();
-        return ResponseEntity.status(res.getStatus()).body(res);
-    }
-
 }

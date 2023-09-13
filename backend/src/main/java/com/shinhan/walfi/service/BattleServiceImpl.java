@@ -32,8 +32,6 @@ public class BattleServiceImpl implements BattleService{
 
     private final BattleMapper battleMapper;
 
-    private final BranchMapper branchMapper;
-
     private final CharacterRepository characterRepository;
 
     private final UserGameInfoRepository userGameInfoRepository;
