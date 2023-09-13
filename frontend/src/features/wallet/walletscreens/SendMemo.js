@@ -12,7 +12,8 @@ export default function SendMemo({route,navigation}) {
   return (
     <View style={{...Background.whiteback, justifyContent:'space-evenly'}}>
       <View style={{alignItems:'center'}}>
-        <Image source={SendCheck} />
+        {/* <Image source={SendCheck} /> */}
+        <Image source={require('../../../assets/wallet/SendCheck.png')}/>
         <Text style={styles.infoTxt}>{route.params.bankTo} {route.params.accountTo}</Text>
       </View>
       <Text style={styles.infoTxt}>{route.params.form_money}원 {'\n'} 보냈어요</Text>

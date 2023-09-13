@@ -22,10 +22,10 @@ export default function MakeAccount({ navigation }){
   return(
     <View style={Background.background} >
       <TouchableOpacity onPress={()=>navigation.navigate('WalletHome')}>
-        <Image source={JumpAccount} style={{width:SCREEN_WIDTH*0.9, resizeMode:'contain'}}/>
+        <Image source={JumpAccount} style={{width:SCREEN_WIDTH*0.9, height:SCREEN_HEIGHT*0.3, resizeMode:'contain'}}/>
       </TouchableOpacity>
       <TouchableOpacity onPress={()=>navigation.navigate('WalletHome')}>
-        <Image source={BaseballAccount} style={{width:SCREEN_WIDTH*0.9, resizeMode:'contain'}}/>
+        <Image source={BaseballAccount} style={{width:SCREEN_WIDTH*0.9, height:SCREEN_HEIGHT*0.3, resizeMode:'contain'}}/>
       </TouchableOpacity>
       {/* <Image source={BaseballAccount} style={{width:'90%', resizeMode:'contain'}}/> */}
       <GoFight/>

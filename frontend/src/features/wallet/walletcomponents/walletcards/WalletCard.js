@@ -27,10 +27,10 @@ const CardItem = (props) => {
       <View style={styles.balance}>
         <Text style={{...styles.cardinfo}}>{data.balance.toLocaleString('es-US')}</Text>
         <View style={styles.buttons}>
-          <TouchableOpacity onPress={()=>navigation.navigate('SendWho', {type:'송금', id} )} style={styles.button}>
+          <TouchableOpacity onPress={()=>navigation.navigate('SendWho', {type:'송금', data})} style={styles.button}>
             <Text style={styles.txtSize}>송금하기</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={()=>navigation.navigate('SendWho', {type:'환전', id})} style={styles.button}>
+          <TouchableOpacity onPress={()=>navigation.navigate('SendWho', {type:'환전', data})} style={styles.button}>
             <Text style={styles.txtSize}>환전하기</Text>
           </TouchableOpacity>
         </View>

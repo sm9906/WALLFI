@@ -7,21 +7,23 @@ import { minusMoney } from "../walletSlice";
 import { useDispatch } from "react-redux";
 
 export default function SendHow({route, navigation}){
-  console.log(route)
+  console.log('얼마나 보낼까요',route)
 
   const dispatch = useDispatch();
   
-  const accountTo = route.params.account;
-  const bankTo = route.params.bank; 
+  const accountTo = route.params.account||'';
+  const bankTo = route.params.bank||''; 
   const type = route.params.type;
-  const nation = route.params.nation;
-  const accId = route.params.accId;
+  const nationTo = type==='환전'?route.params.nation:'';
+  const {accId, accountnum, balance} = route.params.data
+
+  // dispatch()
 
   const [money, setMoney] = useState(0);
   const num_money=Number(money);
   const form_money=Number(money).toLocaleString('es-US');
-  const balance = '1,000,000'.replace(/,/g, '');;
-  const isOver = Number(balance) < num_money
+  const form_balance = Number(balance).toLocaleString('es-US');
+  const isOver = balance < num_money
   
   const sendMoney = async() => {
     console.log(typeof(money))
@@ -55,12 +57,12 @@ export default function SendHow({route, navigation}){
     <View style={styles.background}>
       <View style={styles.textContainer}>
         <View>
-          <Text style={{...styles.accountTo,marginBottom:'5%' }}>{bankTo} {accountTo} {nation}</Text>
+          <Text style={{...styles.accountTo,marginBottom:'5%' }}>{bankTo} {accountTo} {nationTo}</Text>
           <Text style={styles.infoText}>얼마를 {type==='송금'?'보낼':'바꿀'}까요?</Text>
         </View>
         <Text style={{...styles.currMoney, color:isOver?'red':'black'}}>{form_money}원</Text>
         <View style={styles.myAccount}>
-          <Text style={styles.accountTo} >신한 110-556-869686 0원</Text>
+          <Text style={styles.accountTo} >신한 {accountnum}   {form_balance}원</Text>
         </View>
       </View>
       {type==="송금"?<ConvPad addMoney={addMoney} />:<VirtualKeyboard addMoney={addMoney}/>}

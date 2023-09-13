@@ -16,13 +16,14 @@ export default function SendWho({route, navigation}){
   const type = route.params.type // '송금' || '환전'
   const [account, setAccount] = useState('');
   const [bank, setBank] = useState('신한');
-  const [nation, setNation]= useState('');
-  accId = route.params.id
+  const [nation, setNation]= useState('USD');
+  accId = route.params.data.accId
+  const data = route.params.data
   return(
     <View style={{...Background.background, justifyContent:'none'}}>
       <View style={{height:SCREEN_HEIGHT*0.7, justifyContent:'center', alignItems:'center'}} >
         {type==='송금'?<SendMoney setBank={setBank} setAccount={setAccount}  />:<Exchange setNation={setNation}/>} 
-        <TouchableOpacity style={{...ButtonStyle.button, marginTop:'10%'}} onPress={()=>navigation.navigate('SendHow',{type: type, account, bank, nation, accId})}>
+        <TouchableOpacity style={{...ButtonStyle.button, marginTop:'10%'}} onPress={()=>navigation.navigate('SendHow',{type: type, account, bank, nation, data})}>
           <Text style={ButtonStyle.btnFont}>다음</Text>
         </TouchableOpacity>       
     </View>

@@ -1,5 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import axios from  '../../common/http-common';
+
+
 import flagKRW from '../../assets/flag/KRW.png';
 import flagUSD from '../../assets/flag/USD.png';
 import flagEUR from '../../assets/flag/EUR.png';
@@ -18,15 +20,20 @@ const flagImage = {
 // 환율 정보 불러오기
 export const getExchangeRate = createAsyncThunk('GET_EXCHANGE_RATE', async(_,{ rejectWithValue })=>{
   try{
-    const response = await axios.get('http://j9d101a.p.ssafy.io:8094/exchange/info',{
-      headers:{
-        'Content-Type': 'application/json'
-      }
-    })
+    const response = await axios.get('exchange/info')
     const exchangeDtoList = response.data.data.exchangeDtoList;
     return exchangeDtoList 
   }catch(err){
     return rejectWithValue(err.response) 
+  }
+});
+
+export const signup = createAsyncThunk('SIGNUP', async (userInfo, { rejectWithValue }) => {
+  try {
+    const response = await axios.post('/user/signup', userInfo);
+    return response;
+  } catch (err) {
+    return rejectWithValue(err.response);
   }
 });
 
@@ -36,11 +43,7 @@ export const getExchangeRate = createAsyncThunk('GET_EXCHANGE_RATE', async(_,{ r
 // 처음 불러온 카드 추가 로직 
 export const getAccount = createAsyncThunk('GET_ACCOUNT', async (_, { rejectWithValue }) => {
   try {
-    const response = await axios.post('http://j9d101a.p.ssafy.io:8094/account?userId=ssafy',{
-      headers:{
-        'Content-Type': 'application/json'
-      }
-    })
+    const response = await axios.post('account?userId=ssafy')
     const accountDtoList = response.data.data.accountDtoList;
       const accounts = accountDtoList.map((account, index)=>{
         const data = {
@@ -49,7 +52,7 @@ export const getAccount = createAsyncThunk('GET_ACCOUNT', async (_, { rejectWith
           ntnCode:account.통화, 
           balance: account.잔액통화별,
           cardType: account.상품명,
-          image: flagImage[account.통화]
+          image: flagImage[account.통화],
         }
         return data
       })
@@ -75,6 +78,16 @@ export const walletSlice = createSlice({
       console.log(action);
       const data = action.payload
       state.cards[data.accId].balance -= data.num_money
+    },
+    exchangeMoney(state, action){
+      console.log(action.payload);
+      // 내 통장, ntnCode 받아서 ntnCode에 해당하는 통장 id 찾기. 
+      // 내 통장에서 금액 차감하고 ntnCode 해당 통장에는 넣어야 한다. 
+      // 여기서 환율? 을 뽑아내야함. 
+    },
+    checkAcc(state, action){
+      console.log(action.payload)
+      // 해당 Id에 해당하는 통장의 내역을 보여줌. 
     }
     // 카드 추가, 돈 추가, 빼는 로직 
   },
