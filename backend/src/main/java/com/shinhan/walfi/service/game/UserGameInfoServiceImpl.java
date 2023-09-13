@@ -22,7 +22,7 @@ public class UserGameInfoServiceImpl implements UserGameInfoService{
     /**
      * 유저의 게임 포인트, 게임 내 타이틀을 반환하는 기능
      *
-     * @exception NO_MATCHING_USER - 존재하지 않는 사용자의 경우 예외 발생
+     * @exception 'NO_MATCHING_USER' - 존재하지 않는 사용자의 경우 예외 발생
      * @param userId
      * @return
      */
@@ -38,6 +38,33 @@ public class UserGameInfoServiceImpl implements UserGameInfoService{
 
         return getUserGameInfoDto(findUserGameInfo);
 
+    }
+
+    /**
+     * 유저의 게임 포인트를 상승 시키는 기능
+     *
+     * @exception 'NO_MATCHING_USER' - 존재하지 않는 사용자의 경우 예외 발생
+     * @param userId
+     * @param point
+     * @return
+     */
+    @Override
+    public UserGameInfoDto updatePoint(String userId, int point) {
+
+        UserGameInfo findUserGameInfo = userGameInfoRepository.findById(userId);
+
+        if (findUserGameInfo == null) {
+            log.error("틀린 비밀번호이거나 존재하지 않는 회원");
+            throw new UserException(NO_MATCHING_USER);
+        }
+        int defaultPoint = findUserGameInfo.getPoint();
+        int newPoint = defaultPoint + point;
+
+        findUserGameInfo.setPoint(newPoint);
+        UserGameInfo updateUserGameInfo = userGameInfoRepository.save(findUserGameInfo);
+
+        log.info("=== " + userId + "사용자: 포인트 " + defaultPoint + " -> " + newPoint + "===");
+        return getUserGameInfoDto(updateUserGameInfo);
     }
 
     /**

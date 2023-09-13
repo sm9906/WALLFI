@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService{
     /**
      * 로그인 기능
      *
-     * @exception NO_MATCHING_USER - 비밀번호가 틀리거나 존재하지 않는 사용자의 경우 예외 발생
+     * @exception 'NO_MATCHING_USER' - 비밀번호가 틀리거나 존재하지 않는 사용자의 경우 예외 발생
      * @param userId
      * @param password
      * @return
