@@ -23,7 +23,7 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<HttpResult> getUserList(){
-        List<User> userList = userService.getUserList();
+        List<UserDto> userList = userService.getUserList();
 
         HttpResult res;
         res = HttpResult.getSuccess();

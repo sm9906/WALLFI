@@ -2,23 +2,29 @@ package com.shinhan.walfi.service;
 
 import com.shinhan.walfi.domain.User;
 import com.shinhan.walfi.dto.UserDto;
-import com.shinhan.walfi.repository.UserGameInfoRepository;
 import com.shinhan.walfi.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService{
 
     private final UserRepository userRepository;
 
     @Override
-    public List<User> getUserList() {
+    public List<UserDto> getUserList() {
+        System.out.println("============================");
         List<User> userList = userRepository.findAll();
-        return userList;
+
+        List<UserDto> dto = userList.stream().map(user -> getUserDto(user)).collect(Collectors.toList());
+        System.out.println("userList = " + dto);
+        return dto;
     }
 
     @Override
