@@ -34,12 +34,10 @@ public class UserController {
     public ResponseEntity<HttpResult> login(@RequestBody LoginReqDto loginReqDto){
         User user = userService.login(loginReqDto.getUserId(), loginReqDto.getPassword());
 
+        // TODO: user가 없다면 exception 처리
         HttpResult res;
-        if(user != null ){
-            res = HttpResult.getSuccess();
-        } else{
-            res = new HttpResult(HttpStatus.FORBIDDEN, HttpResult.Result.FAIL, "로그인 실패");
-        }
+        res = HttpResult.getSuccess();
+
         return ResponseEntity.status(res.getStatus()).body(res);
     }
 
