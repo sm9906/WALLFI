@@ -11,8 +11,6 @@ public interface UserService {
 
     UserDto login(String userId, String password);
 
-    UserGameInfoDto getUserGameInfo(String userId);
-
 }
 
 //    void signup(User user);

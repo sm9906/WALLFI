@@ -42,15 +42,6 @@ public class UserController {
         return ResponseEntity.status(res.getStatus()).body(res);
     }
 
-    @PostMapping("/game")
-    public ResponseEntity<HttpResult> getUserGameInfo(@RequestBody UserReqDto userReqDto){
-        UserGameInfoDto userGameInfoDto = userService.getUserGameInfo(userReqDto.getUserId());
 
-        HttpResult res;
-        res = HttpResult.getSuccess();
-        res.setData(userGameInfoDto);
-
-        return ResponseEntity.status(res.getStatus()).body(res);
-    }
 
 }

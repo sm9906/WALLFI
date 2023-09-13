@@ -18,9 +18,10 @@ import java.util.stream.Collectors;
 
 import static com.shinhan.walfi.exception.UserErrorCode.NO_MATCHING_USER;
 
-@Service
-@Transactional
+
 @Slf4j
+@Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService{
 
@@ -59,27 +60,6 @@ public class UserServiceImpl implements UserService{
     }
 
     /**
-     * 유저의 게임 포인트, 게임 내 타이틀을 반환하는 기능
-     *
-     * @exception NO_MATCHING_USER - 존재하지 않는 사용자의 경우 예외 발생
-     * @param userId
-     * @return
-     */
-    @Override
-    public UserGameInfoDto getUserGameInfo(String userId) {
-
-        UserGameInfo findUserGameInfo = userGameInfoRepository.findById(userId);
-
-        if (findUserGameInfo == null) {
-            log.error("틀린 비밀번호이거나 존재하지 않는 회원");
-            throw new UserException(NO_MATCHING_USER);
-        }
-
-        return getUserGameInfoDto(findUserGameInfo);
-
-    }
-
-    /**
      * user 정보를 UserDto로 변환하는 기능
      *
      * @param user
@@ -92,20 +72,6 @@ public class UserServiceImpl implements UserService{
                 .birthDate(user.getBirthDate())
                 .phoneNumber(user.getPhoneNumber())
                 .userMainAccount(user.get대표계좌())
-                .build();
-    }
-
-    /**
-     * userGameInfo 정보를 UserGameInfoDto로 변환하는 기능
-     *
-     * @param userGameInfo
-     * @return UserDto
-     */
-    private UserGameInfoDto getUserGameInfoDto(UserGameInfo userGameInfo) {
-        return UserGameInfoDto.builder()
-                .userId(userGameInfo.getUserId())
-                .point(userGameInfo.getPoint())
-                .status(userGameInfo.getStatus())
                 .build();
     }
 
