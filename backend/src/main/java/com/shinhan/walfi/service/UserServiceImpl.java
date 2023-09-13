@@ -16,18 +16,18 @@ public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
 
     @Override
+    public List<User> getUserList() {
+        List<User> userList = userRepository.findAll();
+        return userList;
+    }
+
+    @Override
     public UserDto login(String userId, String password) {
         User findUser = userRepository.login(userId, password);
 
         //Todo: findUser가 null이면 비밀번호가 틀렸거나 없는 유저임으로 exception
 
         return getUserDto(findUser);
-    }
-
-    @Override
-    public List<User> getUserList() {
-        List<User> userList = userRepository.findAll();
-        return userList;
     }
 
     /**
