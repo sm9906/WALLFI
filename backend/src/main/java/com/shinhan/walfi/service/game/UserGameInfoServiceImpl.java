@@ -24,7 +24,7 @@ public class UserGameInfoServiceImpl implements UserGameInfoService{
      *
      * @exception 'NO_MATCHING_USER' - 존재하지 않는 사용자의 경우 예외 발생
      * @param userId
-     * @return
+     * @return UserGameInfoDto
      */
     @Override
     public UserGameInfoDto getUserGameInfo(String userId) {
@@ -45,8 +45,8 @@ public class UserGameInfoServiceImpl implements UserGameInfoService{
      *
      * @exception 'NO_MATCHING_USER' - 존재하지 않는 사용자의 경우 예외 발생
      * @param userId
-     * @param point
-     * @return
+     * @param updatePoint
+     * @return UserGameInfoDto
      */
     @Override
     @Transactional
