@@ -1,10 +1,13 @@
 package com.shinhan.walfi.service;
 
 import com.shinhan.walfi.domain.User;
+import com.shinhan.walfi.domain.game.UserGameInfo;
 import com.shinhan.walfi.dto.UserDto;
+import com.shinhan.walfi.dto.game.UserGameInfoDto;
 import com.shinhan.walfi.exception.UserErrorCode;
 import com.shinhan.walfi.exception.UserException;
 import com.shinhan.walfi.repository.UserRepository;
+import com.shinhan.walfi.repository.game.UserGameInfoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,6 +25,8 @@ import static com.shinhan.walfi.exception.UserErrorCode.NO_MATCHING_USER;
 public class UserServiceImpl implements UserService{
 
     private final UserRepository userRepository;
+
+    private final UserGameInfoRepository userGameInfoRepository;
 
     @Override
     public List<UserDto> getUserList() {
@@ -54,21 +59,55 @@ public class UserServiceImpl implements UserService{
     }
 
     /**
+     * 유저의 게임 포인트, 게임 내 타이틀을 반환하는 기능
+     *
+     * @exception NO_MATCHING_USER - 존재하지 않는 사용자의 경우 예외 발생
+     * @param userId
+     * @return
+     */
+    @Override
+    public UserGameInfoDto getUserGameInfo(String userId) {
+
+        UserGameInfo findUserGameInfo = userGameInfoRepository.findById(userId);
+
+        if (findUserGameInfo == null) {
+            log.error("틀린 비밀번호이거나 존재하지 않는 회원");
+            throw new UserException(NO_MATCHING_USER);
+        }
+
+        return getUserGameInfoDto(findUserGameInfo);
+
+    }
+
+    /**
      * user 정보를 UserDto로 변환하는 기능
      *
-     * @param findUser
+     * @param user
      * @return UserDto
      */
-    private UserDto getUserDto(User findUser) {
+    private UserDto getUserDto(User user) {
         return UserDto.builder()
-                .userId(findUser.getUserId())
-                .email(findUser.getEmail())
-                .birthDate(findUser.getBirthDate())
-                .phoneNumber(findUser.getPhoneNumber())
-                .userMainAccount(findUser.get대표계좌())
+                .userId(user.getUserId())
+                .email(user.getEmail())
+                .birthDate(user.getBirthDate())
+                .phoneNumber(user.getPhoneNumber())
+                .userMainAccount(user.get대표계좌())
                 .build();
     }
 
+    /**
+     * userGameInfo 정보를 UserGameInfoDto로 변환하는 기능
+     *
+     * @param userGameInfo
+     * @return UserDto
+     */
+    private UserGameInfoDto getUserGameInfoDto(UserGameInfo userGameInfo) {
+        return UserGameInfoDto.builder()
+                .userId(userGameInfo.getUserId())
+                .point(userGameInfo.getPoint())
+                .status(userGameInfo.getStatus())
+                .build();
+    }
 
 }
 
