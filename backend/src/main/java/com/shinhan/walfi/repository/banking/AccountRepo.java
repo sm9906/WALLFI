@@ -1,4 +1,4 @@
-package com.shinhan.walfi.repository;
+package com.shinhan.walfi.repository.banking;
 
 import com.shinhan.walfi.domain.banking.Account;
 import org.springframework.data.jpa.repository.JpaRepository;

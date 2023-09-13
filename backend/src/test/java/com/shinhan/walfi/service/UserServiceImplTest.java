@@ -54,7 +54,7 @@ class UserServiceImplTest {
         // given
 
         // when
-        List<User> userList = userService.getUserList();
+        List<UserDto> userList = userService.getUserList();
 
         // then
         Assertions.assertThat(userList.size()).isEqualTo(2);

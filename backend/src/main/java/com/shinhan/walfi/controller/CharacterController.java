@@ -3,7 +3,7 @@ package com.shinhan.walfi.controller;
 import com.shinhan.walfi.domain.HttpResult;
 
 import com.shinhan.walfi.dto.game.*;
-import com.shinhan.walfi.service.CharacterService;
+import com.shinhan.walfi.service.game.CharacterService;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.ResponseEntity;

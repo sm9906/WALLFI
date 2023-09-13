@@ -1,8 +1,8 @@
-package com.shinhan.walfi.domain;
+package com.shinhan.walfi.domain.enums;
 
 import lombok.Getter;
 
-import static com.shinhan.walfi.domain.ProbabilityPerTier.*;
+import static com.shinhan.walfi.domain.enums.ProbabilityPerTier.*;
 
 @Getter
 public enum TierPerColor {

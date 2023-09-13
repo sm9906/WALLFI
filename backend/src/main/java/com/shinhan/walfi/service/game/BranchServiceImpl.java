@@ -1,4 +1,4 @@
-package com.shinhan.walfi.service;
+package com.shinhan.walfi.service.game;
 
 import com.shinhan.walfi.dao.BranchListDao;
 import com.shinhan.walfi.domain.game.Branch;
@@ -6,7 +6,7 @@ import com.shinhan.walfi.dto.game.BranchListReqDto;
 import com.shinhan.walfi.dto.game.BranchListResDto;
 import com.shinhan.walfi.dto.game.BranchResDto;
 import com.shinhan.walfi.mapper.BranchMapper;
-import com.shinhan.walfi.repository.BranchRepository;
+import com.shinhan.walfi.repository.game.BranchRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

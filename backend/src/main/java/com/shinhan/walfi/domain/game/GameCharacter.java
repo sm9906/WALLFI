@@ -1,8 +1,8 @@
 package com.shinhan.walfi.domain.game;
 
-import com.shinhan.walfi.domain.CharacterType;
-import com.shinhan.walfi.domain.LevelUp;
-import com.shinhan.walfi.domain.TierPerColor;
+import com.shinhan.walfi.domain.enums.CharacterType;
+import com.shinhan.walfi.domain.enums.LevelUp;
+import com.shinhan.walfi.domain.enums.TierPerColor;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,12 +10,9 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
-import java.awt.*;
 import java.time.LocalDateTime;
 
 import static javax.persistence.FetchType.LAZY;
-
-import java.util.Random;
 
 @Entity
 @Getter

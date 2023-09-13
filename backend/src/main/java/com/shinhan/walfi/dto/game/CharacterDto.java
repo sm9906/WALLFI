@@ -1,8 +1,7 @@
 package com.shinhan.walfi.dto.game;
 
-import com.shinhan.walfi.domain.CharacterType;
-import com.shinhan.walfi.domain.LevelUp;
-import com.shinhan.walfi.domain.TierPerColor;
+import com.shinhan.walfi.domain.enums.CharacterType;
+import com.shinhan.walfi.domain.enums.TierPerColor;
 import lombok.*;
 
 import java.time.LocalDateTime;
