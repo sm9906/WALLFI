@@ -11,6 +11,7 @@ import {
   StyleSheet
 } from 'react-native';
 import { ViewPropTypes, TextPropTypes } from 'deprecated-react-native-prop-types';
+import { RFPercentage } from 'react-native-responsive-fontsize';
 
 const BACK = 'back';
 const CLEAR = 'clear';
@@ -111,7 +112,7 @@ const styles = StyleSheet.create({
 		marginTop: 15,
 	},
 	number: {
-		fontSize: 25,
+		fontSize: RFPercentage(3),
 		textAlign: 'center',
 	},
 	backspace: {

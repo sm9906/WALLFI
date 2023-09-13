@@ -11,6 +11,7 @@ import ShinhanLogo from '../../../assets/wallet/ShinhanLogo.png';
 import Exchange from '../../../assets/wallet/Exchange.png'
 
 import { useSelector } from 'react-redux';
+import { RFPercentage } from 'react-native-responsive-fontsize';
 
 export const SCREEN_WIDTH = Dimensions.get("window").width;
 export const SCREEN_HEIGHT= Dimensions.get("window").height;
@@ -29,12 +30,12 @@ export default function WalletHome({navigation}) {
       <View style={styles.buttons}>
         <TouchableOpacity style={styles.button} onPress={()=>navigation.navigate('MakeAccount')}>
           <Image source={ShinhanLogo} style={{width:'20%', height:'35%', resizeMode:'contain'}}></Image>
-          <Text>예적금 만들기</Text>
+          <Text style={styles.txtSize}>예적금 만들기</Text>
           <Text style={{marginLeft:'40%'}}>></Text>
         </TouchableOpacity>  
         <TouchableOpacity style={styles.button} onPress={()=>navigation.navigate('ExchangeSearch')}>
           <Image source={Exchange} style={{width:'20%', height:'35%', resizeMode:'contain'}}></Image>
-          <Text>오늘의 환율</Text>
+          <Text style={styles.txtSize}>오늘의 환율</Text>
           <Text style={{marginLeft:'40%'}}>></Text>
         </TouchableOpacity>
       </View>
@@ -60,6 +61,9 @@ const styles = StyleSheet.create({
     paddingHorizontal:'10%',
     alignItems:'center',
     justifyContent:'flex-start',
+  },
+  txtSize:{
+    fontSize:RFPercentage(2)
   }
 
 });

@@ -6,23 +6,34 @@ import SelectDropdown from 'react-native-select-dropdown'
 import { useNavigation } from "@react-navigation/native";
 import { AntDesign } from '@expo/vector-icons';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "./WalletHome";
+
+
 const BANKS=['신한','농협','하나','카카오뱅크','토스뱅크']
+
+let accId = 0;
 
 export default function SendWho({route, navigation}){
   const type = route.params.type // '송금' || '환전'
+  const [account, setAccount] = useState('');
+  const [bank, setBank] = useState('신한');
+  const [nation, setNation]= useState('USD');
+  accId = route.params.data.accId
+  const data = route.params.data
   return(
     <View style={{...Background.background, justifyContent:'none'}}>
-        {type==='송금'?<SendMoney />:<Exchange />}        
+      <View style={{height:SCREEN_HEIGHT*0.7, justifyContent:'center', alignItems:'center'}} >
+        {type==='송금'?<SendMoney setBank={setBank} setAccount={setAccount}  />:<Exchange setNation={setNation}/>} 
+        <TouchableOpacity style={{...ButtonStyle.button, marginTop:'10%'}} onPress={()=>navigation.navigate('SendHow',{type: type, account, bank, nation, data})}>
+          <Text style={ButtonStyle.btnFont}>다음</Text>
+        </TouchableOpacity>       
+    </View>
     </View>
   )
 }
 
-const SendMoney = () => {
-  const navigation = useNavigation()
-  const [account, setAccount] = useState('');
-  const [bank, setBank] = useState('신한');
+const SendMoney = (props) => {
   return(
-    <View style={{height:SCREEN_HEIGHT*0.7, justifyContent:'center', alignItems:'center'}}>
+    <View style={{height:SCREEN_HEIGHT*0.3, justifyContent:'center', alignItems:'center'}}>
        <View style={styles.info}>
           <Text style={styles.infoText}>누구에게 {"\n"}보낼까요?</Text>
         </View> 
@@ -30,41 +41,35 @@ const SendMoney = () => {
           <SelectDropdown
             data={BANKS}
             onSelect={(selectedItem, index)=>{
-              setBank(selectedItem)
+              props.setBank(selectedItem)
             }}
             buttonTextAfterSelection={(selectedItem, index)=>{
               return selectedItem
             }}
             defaultValue={BANKS[0]}
             buttonStyle={styles.bankSel}
+            buttonTextStyle={styles.txtSize}
           />
           <TextInput keyboardType="number-pad" 
             keyboardShouldPersistTaps="handled" 
             style={styles.accountInput}
             placeholder="계좌번호"
-            onChangeText={text => setAccount(text)}
+            onChangeText={text => props.setAccount(text)}
           />
         </View>
-        <TouchableOpacity style={{...ButtonStyle.button, marginTop:'10%'}} onPress={()=>navigation.navigate('SendHow',{type: '송금', account, bank})}>
-          <Text style={ButtonStyle.btnFont}>다음</Text>
-        </TouchableOpacity>
       </View>
   )
 }
 
-const Exchange = () => {
-  const navigation = useNavigation();
-  // const 뱅크 나를 제외하고 나라들 배열
-  const fromKRW = ['USD','JPY','EUR','GBP','AUD'] 
-  const toKRW = ['KRW']
-
-  const [nation, setNation]= useState('USD');
+const Exchange = (props) => {
+  const fromNation ='KRW'
+  const toNation = fromNation === 'KRW' ?['USD','JPY','EUR','GBP','AUD']:['KRW'];  
   return(
-    <View style={{height:SCREEN_HEIGHT*0.7, justifyContent:'center', alignItems:'center'}}>
+    <View style={{height:SCREEN_HEIGHT*0.3, justifyContent:'center', alignItems:'center'}}>
     {/* // <View style={{height:SCREEN_HEIGHT*0.7, justifyContent:'center', alignItems:'center'}}> */}
       <View style={styles.info}>
-          <Text style={styles.infoText}>어디로 {"\n"}보낼까요?</Text>
-          <Text style={{color:'#908686'}}>해외 통장은 원화로만 가능합니다.</Text>
+          <Text style={styles.infoText}>어떤 화폐로 {"\n"}바꿀까요?</Text>
+          <Text style={{color:'#908686', fontSize:RFPercentage(2)}}>해외 통장은 원화로만 가능합니다.</Text>
       </View>
       <View style={styles.exchangeInput}>
         <View style={{ width:'40%'}}>
@@ -72,22 +77,18 @@ const Exchange = () => {
         </View>
         <AntDesign name="arrowright" size={RFPercentage(3)} color="black" />
         <SelectDropdown
-          data={fromKRW}
+          data={toNation}
           onSelect={(selectedItem, index)=>{
-            setNation(selectedItem)
+            props.setNation(selectedItem)
           }}
           buttonTextAfterSelection={(selectedItem, index)=>{
             return selectedItem
           }}
-          defaultValue={fromKRW[0]}
+          defaultValue={toNation[0]}
           buttonStyle={{backgroundColor:'white',width:'40%'}}
-          buttonTextStyle={styles.exTxt}
+          buttonTextStyle={{...styles.txtSize, fontWeight:'bold'}}
         />
-        
       </View>
-      <TouchableOpacity style={{...ButtonStyle.button, marginTop:'10%'}} onPress={()=>navigation.navigate('SendHow',{nation, type: '환전'})}>
-          <Text style={ButtonStyle.btnFont}>다음</Text>
-      </TouchableOpacity>
     </View>
   )
 }
@@ -113,7 +114,7 @@ const styles = StyleSheet.create({
   exchangeInput:{
     backgroundColor:'white',
     width:SCREEN_WIDTH*0.8,
-    height:'15%',
+    height:'30%',
     flexDirection:'row',
     justifyContent:'space-between',
     alignItems:'center',
@@ -125,12 +126,17 @@ const styles = StyleSheet.create({
   },
   bankSel:{
     width:'100%',
+    height:'50%',
     backgroundColor:'white',
     borderRadius: 10,
     borderBottomColor: Background.background.backgroundColor,
     borderBottomWidth: StyleSheet.hairlineWidth*5,
   },
   accountInput:{
+    fontSize:RFPercentage(2),
     flex:1
   },
+  txtSize:{
+    fontSize:RFPercentage(2)
+  }
 })
