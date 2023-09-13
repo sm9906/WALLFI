@@ -26,3 +26,9 @@ mybatis:
 logging:
   level:
     org.hibernate.SQL: debug
+server:
+  servlet:
+    encoding:
+      force-response: true
+      force-request: true
+      force: true
