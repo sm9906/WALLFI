@@ -3,7 +3,7 @@ import axios from "axios";
 // 환율 정보 불러오기
 export const getExchangeRate = createAsyncThunk('GET_EXCHANGE_RATE', async(_,{ rejectWithValue })=>{
   try{
-    const response = await axios.get('http://192.168.100.134:8080/exchange/info',{
+    const response = await axios.get('http://j9d101a.p.ssafy.io:8094/exchange/info',{
       headers:{
         'Content-Type': 'application/json'
       }
@@ -21,7 +21,7 @@ export const getExchangeRate = createAsyncThunk('GET_EXCHANGE_RATE', async(_,{ r
 // 처음 불러온 카드 추가 로직 
 export const getAccount = createAsyncThunk('GET_ACCOUNT', async (_, { rejectWithValue }) => {
   try {
-    const response = await axios.post('http://192.168.100.134:8080/account?userId=ssafy',{
+    const response = await axios.post('http://j9d101a.p.ssafy.io:8094/account?userId=ssafy',{
       headers:{
         'Content-Type': 'application/json'
       }

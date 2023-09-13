@@ -2,13 +2,14 @@ import React, {useState} from "react";
 import { View, Text, StyleSheet } from 'react-native';
 import { ConvPad } from "../walletcomponents/sendmoney/ConvKeypad";
 import { RFPercentage } from "react-native-responsive-fontsize";
-
+import VirtualKeyboard from "../walletcomponents/sendmoney/VirtualKeypad";
 export default function SendHow({route, navigation}){
-
+  console.log(route)
   const accountTo = route.params.account;
   const bankTo = route.params.bank; 
   const type = route.params.type;
-
+  const nation = route.params.nation;
+  
   const [money, setMoney] = useState(0);
   const num_money=Number(money).toLocaleString('es-US');
 
@@ -38,15 +39,15 @@ export default function SendHow({route, navigation}){
     <View style={styles.background}>
       <View style={styles.textContainer}>
         <View>
-          <Text style={{...styles.accountTo,marginBottom:'5%' }}>{bankTo} {accountTo}</Text>
-          <Text style={styles.infoText}>얼마를 보낼까요?</Text>
+          <Text style={{...styles.accountTo,marginBottom:'5%' }}>{bankTo} {accountTo} {nation}</Text>
+          <Text style={styles.infoText}>얼마를 {type==='송금'?'보낼':'바꿀'}까요?</Text>
         </View>
         <Text style={{...styles.currMoney, color:isOver?'red':'black'}}>{num_money}원</Text>
         <View style={styles.myAccount}>
           <Text style={styles.accountTo} >신한 110-556-869686 0원</Text>
         </View>
       </View>
-      <ConvPad addMoney={addMoney} />
+      {type==="송금"?<ConvPad addMoney={addMoney} />:<VirtualKeyboard addMoney={addMoney}/>}
     </View>
   )
 }
@@ -70,6 +71,7 @@ const styles = StyleSheet.create({
     paddingHorizontal:'5%'
   },
   accountTo:{
+    fontSize:RFPercentage(1.5),
     color:'#646566',
   },
   infoText:{

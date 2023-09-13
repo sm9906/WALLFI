@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, TextInput, Image, ScrollView , TouchableOpacity, StyleSheet } from 'react-native';
 import VirtualKeyboard from './VirtualKeypad';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../ScreenSize';
+import { RFPercentage } from 'react-native-responsive-fontsize';
 
 const convInput = ['+1만', '+5만', '+10만', '+100만', '전액'];
 
@@ -50,6 +51,7 @@ export const convStyle = StyleSheet.create({
     alignItems:'center'
   },
   convFont:{
+    fontSize:RFPercentage(1.5),
     color:'#498AC6',
     fontWeight:'bold',
   }

@@ -8,6 +8,7 @@ import {
 } from 'react-native'
 import { ButtonStyle } from "../../wallet/walletcomponents/CommonStyle";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../wallet/walletcomponents/ScreenSize";
+import { RFPercentage } from "react-native-responsive-fontsize";
 
 export default function LogIn({navigation}){
   const [ID, setID] = useState('');
@@ -19,7 +20,7 @@ export default function LogIn({navigation}){
     <View style={styles.background}>
       
       <View style={styles.txtContainer}>
-        <Text>아이디</Text>
+        <Text style={styles.txtSize}>아이디</Text>
         <TextInput 
               keyboardShouldPersistTaps="handled" 
               placeholder="  아이디"
@@ -28,7 +29,7 @@ export default function LogIn({navigation}){
         />
       </View>
       <View style={styles.txtContainer}>
-        <Text>비밀번호</Text>
+        <Text style={styles.txtSize}>비밀번호</Text>
         <TextInput  
               keyboardShouldPersistTaps="handled" 
               placeholder="  비밀번호"
@@ -59,11 +60,15 @@ const styles = StyleSheet.create({
     borderRadius:5,
     height:SCREEN_HEIGHT*0.05,
     marginTop:SCREEN_HEIGHT*0.01,
+    fontSize:RFPercentage(2)
   },
   txtContainer:{
     width:SCREEN_WIDTH*0.8,
     height:SCREEN_HEIGHT*0.07,
     marginBottom: SCREEN_HEIGHT*0.03
+  },
+  txtSize:{
+    fontSize:RFPercentage(2)
   }
 
 })

@@ -37,6 +37,7 @@ const SendMoney = () => {
             }}
             defaultValue={BANKS[0]}
             buttonStyle={styles.bankSel}
+            buttonTextStyle={styles.txtSize}
           />
           <TextInput keyboardType="number-pad" 
             keyboardShouldPersistTaps="handled" 
@@ -63,8 +64,8 @@ const Exchange = () => {
     <View style={{height:SCREEN_HEIGHT*0.7, justifyContent:'center', alignItems:'center'}}>
     {/* // <View style={{height:SCREEN_HEIGHT*0.7, justifyContent:'center', alignItems:'center'}}> */}
       <View style={styles.info}>
-          <Text style={styles.infoText}>어디로 {"\n"}보낼까요?</Text>
-          <Text style={{color:'#908686'}}>해외 통장은 원화로만 가능합니다.</Text>
+          <Text style={styles.infoText}>어떤 화폐로 {"\n"}바꿀까요?</Text>
+          <Text style={{color:'#908686', fontSize:RFPercentage(2)}}>해외 통장은 원화로만 가능합니다.</Text>
       </View>
       <View style={styles.exchangeInput}>
         <View style={{ width:'40%'}}>
@@ -81,11 +82,11 @@ const Exchange = () => {
           }}
           defaultValue={fromKRW[0]}
           buttonStyle={{backgroundColor:'white',width:'40%'}}
-          buttonTextStyle={styles.exTxt}
+          buttonTextStyle={{...styles.txtSize, fontWeight:'bold'}}
         />
         
       </View>
-      <TouchableOpacity style={{...ButtonStyle.button, marginTop:'10%'}} onPress={()=>navigation.navigate('SendHow',{nation, type: '환전'})}>
+      <TouchableOpacity style={{...ButtonStyle.button, marginTop:'10%'}} onPress={()=>navigation.navigate('SendHow',{nation, bank: '신한' ,type: '환전'})}>
           <Text style={ButtonStyle.btnFont}>다음</Text>
       </TouchableOpacity>
     </View>
@@ -125,12 +126,17 @@ const styles = StyleSheet.create({
   },
   bankSel:{
     width:'100%',
+    height:'50%',
     backgroundColor:'white',
     borderRadius: 10,
     borderBottomColor: Background.background.backgroundColor,
     borderBottomWidth: StyleSheet.hairlineWidth*5,
   },
   accountInput:{
+    fontSize:RFPercentage(2),
     flex:1
   },
+  txtSize:{
+    fontSize:RFPercentage(2)
+  }
 })

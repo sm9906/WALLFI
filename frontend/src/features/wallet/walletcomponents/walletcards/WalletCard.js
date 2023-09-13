@@ -6,6 +6,8 @@ import {Text, TouchableOpacity,
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../ScreenSize";
 import { useNavigation } from "@react-navigation/native";
 import {colors} from './CardInfo';
+import { RFPercentage } from "react-native-responsive-fontsize";
+
 
 const CardItem = (props) => {
   // configuring navigation
@@ -25,16 +27,16 @@ const CardItem = (props) => {
   return (
     <View style={{...styles.card, backgroundColor:colors[id%5]}}>
       <View style={styles.account}>
-       <Text style={styles.cardinfo}>{data.nation}{data.accountnum}</Text>
+       <Text style={{...styles.cardinfo, fontSize:RFPercentage(2)}}>{data.nation}{data.accountnum}</Text>
       </View> 
       <View style={styles.balance}>
-        <Text style={{...styles.cardinfo, fontSize:30, }}>{data.balance.toLocaleString('es-US')}</Text>
+        <Text style={{...styles.cardinfo}}>{data.balance.toLocaleString('es-US')}</Text>
         <View style={styles.buttons}>
           <TouchableOpacity onPress={()=>navigation.navigate('SendWho', {type:'송금'})} style={styles.button}>
-            <Text>송금하기</Text>
+            <Text style={styles.txtSize}>송금하기</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={()=>navigation.navigate('SendWho', {type:'환전'})} style={styles.button}>
-            <Text>환전하기</Text>
+            <Text style={styles.txtSize}>환전하기</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -57,7 +59,8 @@ const styles = StyleSheet.create({
     marginHorizontal: SCREEN_WIDTH * 0.05
   },
   cardinfo:{
-    color:'white'
+    color:'white',
+    fontSize:RFPercentage(3),
   },
   account:{
     borderBottomColor: 'white',
@@ -83,5 +86,8 @@ const styles = StyleSheet.create({
     paddingHorizontal:'5%',
     paddingVertical:'2%',
     backgroundColor:'white',
-  }
+  },
+  txtSize:{
+    fontSize:RFPercentage(2) 
+   }
 });
