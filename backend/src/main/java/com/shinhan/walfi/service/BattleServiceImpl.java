@@ -8,6 +8,7 @@ import com.shinhan.walfi.domain.game.UserGameInfo;
 import com.shinhan.walfi.dto.game.BattleRankResDto;
 import com.shinhan.walfi.dto.game.BattleReqDto;
 import com.shinhan.walfi.mapper.BattleMapper;
+import com.shinhan.walfi.mapper.BranchMapper;
 import com.shinhan.walfi.repository.BranchRepository;
 import com.shinhan.walfi.repository.CharacterRepository;
 import com.shinhan.walfi.repository.UserGameInfoRepository;
@@ -30,6 +31,8 @@ public class BattleServiceImpl implements BattleService{
     private final BranchRepository branchRepository;
 
     private final BattleMapper battleMapper;
+
+    private final BranchMapper branchMapper;
 
     private final CharacterRepository characterRepository;
 
@@ -57,10 +60,7 @@ public class BattleServiceImpl implements BattleService{
                 battleMapper.write(dao); // start 시간을 기준으로 occupyTime을 계산하여 저장
             }
 
-            // 이긴사람 정보 불러와서 업데이트
             UserGameInfo userGameInfo = userGameInfoRepository.findById(battleReqDto.getUserId());
-            userGameInfo.setStatus("지점장");
-            userGameInfoRepository.save(userGameInfo);
 
             // 이긴 사람의 메인 캐릭터 불러와서 브랜치 업데이트
             GameCharacter winner = characterRepository.findMainCharacter(userGameInfo);
@@ -72,6 +72,16 @@ public class BattleServiceImpl implements BattleService{
             branch.setStartTime(LocalDateTime.now());
             branch.setUserGameInfo(userGameInfo);
             branchRepository.save(branch);
+
+            // 이긴사람 정보 업데이트
+            StringBuilder title = new StringBuilder();
+            //이긴 사람이 지금 먹고 있는 지점 중에 점유 시작이 가장 옛날인 브랜치명 조회
+            String branchName = branchRepository.getOldestStart(userGameInfo.getUserId());
+            System.out.println(branchName);
+            title.append(branchName);
+            title.append(" 지점장");
+            userGameInfo.setStatus(title.toString());
+            userGameInfoRepository.save(userGameInfo);
 
             /* 진 사람의 정보 업데이트
                 user_id가 진 사람의 아이디인 브랜치를 조회하여 count한 수가 0과 같으면
