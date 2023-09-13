@@ -49,7 +49,8 @@ public class UserGameInfoServiceImpl implements UserGameInfoService{
      * @return
      */
     @Override
-    public UserGameInfoDto updatePoint(String userId, int point) {
+    @Transactional
+    public UserGameInfoDto updatePoint(String userId, int updatePoint) {
 
         UserGameInfo findUserGameInfo = userGameInfoRepository.findById(userId);
 
@@ -58,9 +59,13 @@ public class UserGameInfoServiceImpl implements UserGameInfoService{
             throw new UserException(NO_MATCHING_USER);
         }
         int defaultPoint = findUserGameInfo.getPoint();
-        int newPoint = defaultPoint + point;
+        int newPoint = defaultPoint + updatePoint;
+
+        System.out.println("defaultPoint = " + defaultPoint);
+        System.out.println("newPoint = " + newPoint);
 
         findUserGameInfo.setPoint(newPoint);
+        System.out.println("findUserGameInfo = " + findUserGameInfo.getPoint());
         UserGameInfo updateUserGameInfo = userGameInfoRepository.save(findUserGameInfo);
 
         log.info("=== " + userId + "사용자: 포인트 " + defaultPoint + " -> " + newPoint + "===");

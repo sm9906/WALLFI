@@ -32,7 +32,8 @@ public class UserGameInfoController {
 
     @PostMapping("/pointup")
     public ResponseEntity<HttpResult> updatePoint(@RequestBody UserGamePointReqDto userGamePointReqDto){
-        UserGameInfoDto userGameInfoDto = userGameInfoService.getUserGameInfo(userGamePointReqDto.getUserId());
+        UserGameInfoDto userGameInfoDto = userGameInfoService
+                .updatePoint(userGamePointReqDto.getUserId(), userGamePointReqDto.getPoint());
 
         HttpResult res;
         res = HttpResult.getSuccess();
