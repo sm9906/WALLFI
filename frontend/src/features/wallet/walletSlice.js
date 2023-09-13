@@ -1,5 +1,20 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import flagKRW from '../../assets/flag/KRW.png';
+import flagUSD from '../../assets/flag/USD.png';
+import flagEUR from '../../assets/flag/EUR.png';
+import flagCNY from '../../assets/flag/CNY.png';
+import flagJPY from '../../assets/flag/JPY.png';
+import flagAUD from '../../assets/flag/AUD.png';
+
+const flagImage = {
+  'KRW': flagKRW,
+  'USD': flagUSD,
+  'EUR': flagEUR,
+  'JPY': flagJPY,
+  'CNY': flagCNY,
+  'AUD': flagAUD 
+}
 // 환율 정보 불러오기
 export const getExchangeRate = createAsyncThunk('GET_EXCHANGE_RATE', async(_,{ rejectWithValue })=>{
   try{
@@ -33,7 +48,8 @@ export const getAccount = createAsyncThunk('GET_ACCOUNT', async (_, { rejectWith
           accountnum: account.계좌번호,
           ntnCode:account.통화, 
           balance: account.잔액통화별,
-          cardType: account.상품명
+          cardType: account.상품명,
+          image: flagImage[account.통화]
         }
         return data
       })
@@ -55,6 +71,10 @@ export const walletSlice = createSlice({
   name: 'wallet',
   initialState,
   reducers:{
+    minusMoney(state, action){
+      console.log(action.payload);
+      // state.cards -= action.payload
+    }
 
     
     // 카드 추가, 돈 추가, 빼는 로직 

@@ -9,33 +9,28 @@ import {colors} from './CardInfo';
 import { RFPercentage } from "react-native-responsive-fontsize";
 
 
+
 const CardItem = (props) => {
   // configuring navigation
   const navigation = useNavigation();
-  console.log(props)
-  const data ={
-    nation:'KRW',
-    accountnum:'1111111111',
-    balance:1000000,
-  }
-  const id = props.data.accId
-  // move to balance page
-  const handlePress = () => {
-    console.log();
-  };
+  const data = props.data;
 
+  // const flag = require(`../../../../assets/flag`)
+  const id = props.data.accId
+  console.log(id)
   return (
     <View style={{...styles.card, backgroundColor:colors[id%5]}}>
       <View style={styles.account}>
-       <Text style={{...styles.cardinfo, fontSize:RFPercentage(2)}}>{data.nation}{data.accountnum}</Text>
+        {data.image&&<Image source={data.image} style={styles.flagImg}/>}
+        <Text style={{...styles.cardinfo, fontSize:RFPercentage(2)}}>   {data.ntnCode}   {data.accountnum}</Text>
       </View> 
       <View style={styles.balance}>
         <Text style={{...styles.cardinfo}}>{data.balance.toLocaleString('es-US')}</Text>
         <View style={styles.buttons}>
-          <TouchableOpacity onPress={()=>navigation.navigate('SendWho', {type:'송금'})} style={styles.button}>
+          <TouchableOpacity onPress={()=>navigation.navigate('SendWho', {type:'송금', id} )} style={styles.button}>
             <Text style={styles.txtSize}>송금하기</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={()=>navigation.navigate('SendWho', {type:'환전'})} style={styles.button}>
+          <TouchableOpacity onPress={()=>navigation.navigate('SendWho', {type:'환전', id})} style={styles.button}>
             <Text style={styles.txtSize}>환전하기</Text>
           </TouchableOpacity>
         </View>
@@ -61,15 +56,17 @@ const styles = StyleSheet.create({
   cardinfo:{
     color:'white',
     fontSize:RFPercentage(3),
+    fontWeight:'bold'
   },
   account:{
     borderBottomColor: 'white',
     borderBottomWidth: StyleSheet.hairlineWidth*3,
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    paddingTop:'5%',
+    paddingVertical:'5%',
     width: '100%',
     height:'30%',
+    alignItems:'center'
   },
   balance:{
     height:'70%',
@@ -89,5 +86,12 @@ const styles = StyleSheet.create({
   },
   txtSize:{
     fontSize:RFPercentage(2) 
-   }
+  },
+  flagImg:{
+    resizeMode:'contain',
+    marginTop:'2%',
+    height: SCREEN_WIDTH*0.05,
+    width: SCREEN_WIDTH*0.05,
+    borderRadius:100
+  }
 });
