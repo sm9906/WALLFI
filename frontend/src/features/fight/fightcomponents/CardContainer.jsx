@@ -1,3 +1,4 @@
+import animals from "../dummy/animals";
 import React, { useState } from "react";
 import startBattle from "./startBattle";
 import Card from "../fightcomponents/Card";
@@ -12,6 +13,9 @@ const cardContainer = () => {
   const playerCard = useSelector((state) => state.cardReducer.playerCard);
   const enemyCard = useSelector((state) => state.cardReducer.enemyCard);
 
+  const playerAnimal = animals[0] // api 맞춰서 수정할거
+  const enemyAnimal = animals[1] // 동일
+
   const [doubleClick, setDoubleClick] = useState("");
 
   const handleCardClick = (type, number) => {
@@ -22,7 +26,7 @@ const cardContainer = () => {
 
       if (isSkillAndMax || isNotSkillAndAvailable) {
         dispatch(decreaseCard(type));
-        startBattle(dispatch, type, enemyCard); 
+        startBattle(dispatch, type, playerCard, enemyCard, playerAnimal, enemyAnimal); 
       }
       setDoubleClick("");
     } else {
