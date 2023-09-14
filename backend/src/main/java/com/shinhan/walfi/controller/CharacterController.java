@@ -89,9 +89,10 @@ public class CharacterController {
         Long characterIdx = characterStatusReqDto.getCharacterIdx();
         String statusType = characterStatusReqDto.getStatusType();
         int statusValue = characterStatusReqDto.getValue();
+        String act = characterStatusReqDto.getAct();
 
         CharacterWithUserIdResDto characterWithUserIdResDto
-                = characterService.updateCharacterStatus(userId, characterIdx, statusType, statusValue);
+                = characterService.updateCharacterStatus(userId, characterIdx, statusType, statusValue, act);
 
         HttpResult res;
 
