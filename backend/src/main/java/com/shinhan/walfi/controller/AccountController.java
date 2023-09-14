@@ -18,7 +18,7 @@ public class AccountController {
     private final AccountService accountService;
 
     @PostMapping
-    public ResponseEntity<HttpResult> record(AccountReqDto accountReqDto){
+    public ResponseEntity<HttpResult> getAccounts(AccountReqDto accountReqDto){
 
         AccountResDto accountResDto = accountService.getAccounts(accountReqDto.getUserId(), accountReqDto.getUserMainAccount());
 

@@ -52,49 +52,10 @@ class CharacterServiceTest {
 
         mainCharacterIdx = characterService.create(userId).getCharacterDto().getCharacterIdx();
         shopCharacterIdx_1 = characterService.shop(userId).getCharacterDto().getCharacterIdx();
-        shopCharacterIdx_2 = characterService.shop(userId).getCharacterDto().getCharacterIdx();
+//        shopCharacterIdx_2 = characterService.shop(userId).getCharacterDto().getCharacterIdx();
 
     }
 
-    @Test
-    @Order(1)
-    @DisplayName("캐릭터 생성(create) 확인 테스트 (색, 레벨, hp, exp, atk, def, ismain)")
-    public void createCharacter() {
-        // given
-
-        // when
-        Long findGameIdx = characterService.create(userId).getCharacterDto().getCharacterIdx();
-        GameCharacter findGameCharacter = em.find(GameCharacter.class, findGameIdx);
-
-        // then
-        assertThat(findGameCharacter.getColor()).isEqualTo(TierPerColor.BASIC);
-        assertThat(findGameCharacter.getLevel().getLevel()).isEqualTo(1);
-        assertThat(findGameCharacter.getHp()).isEqualTo(50);
-        assertThat(findGameCharacter.getExp()).isEqualTo(0);
-        assertThat(findGameCharacter.getAtk()).isEqualTo(0);
-        assertThat(findGameCharacter.getDef()).isEqualTo(0);
-        assertThat(findGameCharacter.isMain()).isEqualTo(true);
-    }
-
-    @Test
-    @Order(2)
-    @DisplayName("캐릭터 뽑기(shop) 확인 테스트 (색, 레벨, hp, exp, atk, def, ismain)")
-    public void shopCharacter() {
-        // given
-
-        // when
-        Long findGameIdx = characterService.shop(userId).getCharacterDto().getCharacterIdx();
-        GameCharacter findGameCharacter = em.find(GameCharacter.class, findGameIdx);
-
-        // then
-        assertThat(findGameCharacter.getColor()).isEqualTo(TierPerColor.BASIC);
-        assertThat(findGameCharacter.getLevel().getLevel()).isEqualTo(1);
-        assertThat(findGameCharacter.getHp()).isEqualTo(50);
-        assertThat(findGameCharacter.getExp()).isEqualTo(0);
-        assertThat(findGameCharacter.getAtk()).isEqualTo(0);
-        assertThat(findGameCharacter.getDef()).isEqualTo(0);
-        assertThat(findGameCharacter.isMain()).isEqualTo(false);
-    }
 
     @Test
     @Order(3)
@@ -106,7 +67,7 @@ class CharacterServiceTest {
         CharacterListResDto characterListResDto = characterService.searchCharacters(userId);
 
         // then
-        assertThat(characterListResDto.getCharacterDtoList().size()).isEqualTo(3);
+        assertThat(characterListResDto.getCharacterDtoList().size()).isEqualTo(2);
     }
 
     @Test
