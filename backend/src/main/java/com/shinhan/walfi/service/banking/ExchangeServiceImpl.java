@@ -100,7 +100,7 @@ public class ExchangeServiceImpl implements ExchangeService {
         bankMapper.withdrawTransferMoneyFromAccount(krwAccount, kwrConvertPrice);
         bankMapper.depositTransferMoneyFromAccount(globalAccount, 금액);
 
-        log.info("=== id: " + userId + " 금액: " + 금액 + 통화코드 + " 환전 완료 ===" );
+        log.info("=== id: " + userId + "의 요처에 따라 " + 금액 + 통화코드 + " 환전 완료 ===" );
 
     }
 
