@@ -11,57 +11,90 @@ import {
     Modal,
     Alert
 } from 'react-native';
-
+import { useDispatch } from 'react-redux';
+import { getCharacterList, updateCharacter, getMainCharacter } from '../homeSlice.js';
 import { globalStyles } from "../homestyles/global.js";
-
+import { images } from '../../../common/imgDict.js';
 import GameHeader from '../homecomponents/GameHeader.js';
-import modalClose from '../../.././assets/game/button/modalClose.png';
-import collection from '../../.././assets/background/collection.png'
-import backHome from '../../.././assets/game/button/backHome.png';
 
 export default function Collection({navigation}) {
 
     const [modalVisible, setModalVisible] = useState(false);
+    const [charactersData, setCharactersData] = useState([]);
     const [selectedCharacter, setSelectedCharacter] = useState(null);
+    const characters = [];
 
-    const characters = [
-        { id: 1, name: '독수리', imageUrl: require('../../.././assets/characters/default/default_1.png')},
-        { id: 2, name: '사자', imageUrl: require('../../.././assets/characters/default/default_2.png')},
-        { id: 3, name: '판다', imageUrl: require('../../.././assets/characters/default/default_3.png')},
-        { id: 4, name: '쿼카', imageUrl: require('../../.././assets/characters/default/default_4.png')},
-        { id: 5, name: '호랑이', imageUrl: require('../../.././assets/characters/default/default_5.png')},
-        { id: 6, name: '시바견', imageUrl: require('../../.././assets/characters/default/default_6.png')},
-    ];
-    
+    const dispatch = useDispatch();
+    useEffect(() => {
+        getData();
+    }, [])
+
+    const getData = async () => {
+        try {
+            await dispatch(getCharacterList('ssafy')).then(res => {
+                
+                let array = res.payload;
+                let copy = [...array];
+
+                setCharactersData(copy);
+
+            })
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    charactersData.map((a) => {
+        characters.push({
+            id: a.characterIdx,
+            name: a.characterType == "EAGLE" ? "독수리" 
+            : a.characterType == "LION" ? "사자" : a.characterType == "PANDA" ? "판다"
+            : a.characterType == "QUOKKA" ? "쿼카" : a.characterType == "SHIBA" ? "시바"
+            : "호랑이",
+            imageUrl: images.defaultCharacter[a.characterType][a.color],
+            level: 'Lv.' + a.level,
+            exp: a.exp,
+            main: a.main
+        })
+    })
 
     const Item = ({item}) => (
         <TouchableOpacity
             style={{
-                backgroundColor: 'rgba(255, 255, 255, 0.8)',
-                flex: 0.5,
+                backgroundColor: 'rgba(255, 255, 255, 0.7)',
+                flex: 1,
                 marginHorizontal: '5%',
                 marginVertical: '5%',
                 borderRadius: 20,
                 aspectRatio: 1,
-                overflow: 'hidden'
+                overflow: 'hidden',
             }}
             onPress={() => {
                 setModalVisible(true);
                 setSelectedCharacter({...item});
         }}>
-            <View>
+            <View style={{
+                flex: 1,
+                alignItems: 'center'
+            }}>
                 <Image source={item.imageUrl} style={{ 
                     resizeMode: 'contain',
                     width: '100%',
                     height: '100%',
-                }}/>
+                }}/>    
             </View>
         </TouchableOpacity>
     )
+
+    const setMain = () => {
+
+        dispatch(updateCharacter({characterIdx: selectedCharacter.id, statusType: 'isMain', userId: 'ssafy', value: 0}))
+        getData();
+    }
     
     return (
         <View style={globalStyles.container}>
-            <ImageBackground source={collection} style={[globalStyles.bgImg, { alignItems: 'center' }]}>
+            <ImageBackground source={images.background.collection} style={[globalStyles.bgImg, { alignItems: 'center' }]}>
                 <GameHeader />
                 <Modal
                     animationType='fade'
@@ -72,7 +105,14 @@ export default function Collection({navigation}) {
                         setModalVisible(!modalVisible);
                     }}
                 >
-                    <DetailPage modalVisible={modalVisible} setModalVisible={setModalVisible} selectedCharacter={selectedCharacter} setSelectedCharacter={setSelectedCharacter}/>
+                    <DetailPage modalVisible={modalVisible} 
+                        setModalVisible={setModalVisible} 
+                        selectedCharacter={selectedCharacter} 
+                        setSelectedCharacter={setSelectedCharacter}
+                        charactersData={charactersData}
+                        setCharactersData={setCharactersData}
+                        setMain={setMain}
+                    />
                 </Modal>
                 <CollectionHeader navigation={navigation}/>
                 <View style={{ flex: 6.5, width: '100%' }}>
@@ -94,8 +134,9 @@ function CollectionHeader(props) {
     
     return (
         <View style={{ flex: 1.2, flexDirection: 'row', alignItems: 'center' }}>
-            <TouchableOpacity style={[globalStyles.navigationBtn, { backgroundColor: '#DD4F00' }]} onPress={() => props.navigation.navigate('GameHome')}>
-                <Image source={backHome} style={globalStyles.btnIcon}/>
+            <TouchableOpacity style={[globalStyles.navigationBtn, { backgroundColor: '#DD4F00' }]} 
+                onPress={() => props.navigation.navigate('GameHome')}>
+                <Image source={images.btnSource.backHome} style={globalStyles.btnIcon}/>
             </TouchableOpacity>
             <Text style={[globalStyles.navigationText, { color: '#DD4F00' }]}>동물도감</Text>
         </View>
@@ -111,7 +152,7 @@ function DetailPage(props) {
                    <Text style={{ fontSize: 25, fontWeight: 'bold' }}>{props.selectedCharacter.name}</Text>
                 </View>
                 <TouchableOpacity onPress={() => props.setModalVisible(false)} style={{ flex: 1 }}>
-                    <Image source={modalClose} style={{ resizeMode: 'contain', width: '70%' }} />
+                    <Image source={images.btnSource.modalClose} style={{ resizeMode: 'contain', width: '70%' }} />
                 </TouchableOpacity>
             </View>
             <View style={{ 
@@ -134,11 +175,27 @@ function DetailPage(props) {
                     borderRadius: 15,
                     borderWidth: 2,
                     borderColor: '#BE4400'
-                }}>
+                }} onPress={props.setMain}>
                     <Text style={{ fontSize: 15, fontWeight: 'bold', color: 'white' }}>대표동물</Text>
                 </TouchableOpacity>
             </View>
-            <View style={{ flex: 2, width: '100%', backgroundColor: '#FFF2BA', marginBottom: '10%' }}>
+            <View style={{ 
+                flex: 2, 
+                width: '100%', 
+                backgroundColor: '#FFF2BA', 
+                marginBottom: '10%',
+                justifyContent: 'center',
+                alignItems: 'center'
+            }}>
+                <Text style={{ 
+                    fontSize: 24, 
+                    fontWeight: 'bold', 
+                    color: '#FFF5DC',  
+                    textShadowColor: '#FF5C00',
+                    textShadowRadius: 1,
+                    textShadowOffset: { width: 2, height: 2 },
+                    elevation: 4, 
+                }}>{props.selectedCharacter.level}</Text>
             </View>
         </View>
     )

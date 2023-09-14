@@ -9,20 +9,12 @@ import {
     ImageBackground,
     TouchableOpacity,
     Modal,
-    Alert,
+    Alert
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import { getMainCharacter } from '../homeSlice.js';
+import { getGameInfo, getMainCharacter, updateCharacter } from '../homeSlice.js';
 import { globalStyles } from '../homestyles/global.js';
-import { 
-    background, 
-    defaultCharacter, 
-    eatCharacter, 
-    eggs, 
-    btnSource, 
-    gameIcon, 
-    marketSource  
-} from '../../../common/imgDict.js';
+import { images } from '../../../common/imgDict.js';
 import GameHeader from '../homecomponents/GameHeader.js';
 
 // 상태바 겹침현상을 없애려면 react-native에서 StatusBar를 import 해줘야함
@@ -30,34 +22,10 @@ import GameHeader from '../homecomponents/GameHeader.js';
 export default function GameHome({navigation}) {
 
     const [modalVisible, setModalVisible] = useState(false);
-    const [imageSource, setImageSource] = useState('');
-
-    const dispatch = useDispatch();
-    useEffect(() => {
-        getData();
-    }, [])
-
-    const getData = async () => {
-        try {
-            await dispatch(getMainCharacter()).then((res) => {
-                console.log(res.payload)
-                
-                let type = 'TIGER';
-                let color = 'MINT';
-                let imageUrl = defaultCharacter[type][color];
-
-                setImageSource(imageUrl);
-        })
-            props.navigation.navigate('Home')
-
-        } catch (err) {
-            console.log(err);
-        }
-    };
 
     return (
         <View style={globalStyles.container}>
-            <ImageBackground source={background.home} style={globalStyles.bgImg}>
+            <ImageBackground source={images.background.home} style={globalStyles.bgImg}>
                 <Modal
                     animationType='fade'
                     transparent={true}
@@ -69,7 +37,7 @@ export default function GameHome({navigation}) {
                 >
                     <View style={styles.modalBackground}>
                         <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.modalCloseBtn}>
-                            <Image source={btnSource.modalClose} style={{ resizeMode: 'contain', width: '10%', height: '50%' }} />
+                            <Image source={images.btnSource.modalClose} style={{ resizeMode: 'contain', width: '10%', height: '50%' }} />
                         </TouchableOpacity>
                         <View style={{
                             flex: 10.5,
@@ -98,8 +66,6 @@ export default function GameHome({navigation}) {
                 <Content navigation={navigation} 
                     modalVisible={modalVisible} 
                     setModalVisible={setModalVisible}
-                    imageSource={imageSource}
-                    setImageSource={setImageSource}
                 />
                 <Bottom navigation={navigation}/>
             </ImageBackground>
@@ -114,7 +80,7 @@ function Season() {
     return (
         <View style={styles.season}>
             <LinearGradient style={styles.box} colors={['rgba(142, 170, 245, 1)', 'rgba(72, 122, 255, 0.4)', 'transparent']}>
-                <Image source={gameIcon.trophy} style={styles.trophy}/>
+                <Image source={images.gameIcon.trophy} style={styles.trophy}/>
                 <Text style={styles.seasonText}>1 시즌</Text>
             </LinearGradient>
         </View>
@@ -123,141 +89,182 @@ function Season() {
 
 function Content(props) {
 
+    const mainCharacter = useSelector((state) => state.home.mainCharacter);
 
-    // // 먹이
-    // const [isTimerRunning_1, setIsTimerRunning_1] = useState(false);
-    // const [isButtonDisabled_1, setIsButtonDisabled_1] = useState(false);
-    // const [lastButtonClickTime_1, setLastButtonClickTime_1] = useState(null);
+    // 메인 캐릭터, 칭호
+    let img;
+    const [imageSource, setImageSource] = useState('');
+    const [userStatus, setUserStatus] = useState('');
 
-    // // 훈련
-    // const [timeText, setTimeText] = useState(null);
-    // const [isTimerRunning_2, setIsTimerRunning_2] = useState(false);
-    // const [isButtonDisabled_2, setIsButtonDisabled_2] = useState(false);
-    // const [lastButtonClickTime_2, setLastButtonClickTime_2] = useState(null);
+    // 먹이
+    const [isTimerRunning_1, setIsTimerRunning_1] = useState(false);
+    const [isButtonDisabled_1, setIsButtonDisabled_1] = useState(false);
+    const [lastButtonClickTime_1, setLastButtonClickTime_1] = useState(null);
 
+    // 훈련
+    const [timeText, setTimeText] = useState(null);
+    const [isTimerRunning_2, setIsTimerRunning_2] = useState(false);
+    const [isButtonDisabled_2, setIsButtonDisabled_2] = useState(false);
+    const [lastButtonClickTime_2, setLastButtonClickTime_2] = useState(null);
 
-    // function changeImage() {
-    //     const currentTime = new Date().getTime();
+    const dispatch = useDispatch();
+    useEffect(() => {
+        getData();
+    }, [mainCharacter])
 
-    //     if (isTimerRunning_1) {
-    //         Alert.alert(
-    //             '경고',
-    //             '밥 먹는 중입니다.',
-    //             [
-    //                 { text: '확인', onPress: () => {}, style: 'default' }
-    //             ]
-    //         );
-    //         return;
-    //     }
+    const getData = async () => {
+        try {
+            await dispatch(getMainCharacter('ssafy')).then((res) => {
 
-    //     if (isTimerRunning_2) {
-    //         Alert.alert(
-    //             '경고',
-    //             '훈련중입니다.',
-    //             [
-    //                 { text: '확인', onPress: () => {}, style: 'default' }
-    //             ]
-    //         );
-    //         return;
-    //     }
+                let type = res.payload.characterType;
+                let color = res.payload.color;
+                let imageUrl = images.defaultCharacter[type][color];
+                img = imageUrl;
 
-    //     if (isTimerRunning_1 === false && isButtonDisabled_1) {
-    //         Alert.alert(
-    //             '경고',
-    //             '4시간 동안은 밥을 다시 줄 수 없습니다.',
-    //             [
-    //                 { text: '확인', onPress: () => {}, style: 'default' }
-    //             ]
-    //         );
-    //         return;
-    //     }
+                setImageSource(imageUrl);
+            })
 
-    //     setLastButtonClickTime_1(currentTime);
-    //     setIsButtonDisabled_1(true);
+            await dispatch(getGameInfo('ssafy')).then((res) => {
 
-    //     setTimeout(() => {
-    //         setIsButtonDisabled_1(false);
-    //         setLastButtonClickTime_1(null);
-    //     }, 4 * 60 * 60 * 1000);
+                let user = res.payload.status;
+                setUserStatus(user);
 
-    //     setImageSource(eatCharacter);
-    //     setIsTimerRunning_1(true);
-    // }
+            })
 
-    // function train() {
-    //     const currentTime = new Date().getTime();
+            props.navigation.navigate('Home')
 
-    //     if (isTimerRunning_1) {
-    //         Alert.alert(
-    //             '경고',
-    //             '밥 먹는 중입니다.',
-    //             [
-    //                 { text: '확인', onPress: () => {}, style: 'default' }
-    //             ]
-    //         );
-    //         return;
-    //     }
+        } catch (err) {
+            console.log(err);
+        }
+    };
 
-    //     if (isTimerRunning_2) {
-    //         Alert.alert(
-    //             '경고',
-    //             '훈련중입니다.',
-    //             [
-    //                 { text: '확인', onPress: () => {}, style: 'default' }
-    //             ]
-    //         );
-    //         return;
-    //     }
+    function changeImage() {
+        const currentTime = new Date().getTime();
 
-    //     if (isTimerRunning_2 === false && isButtonDisabled_2) {
-    //         Alert.alert(
-    //             '경고',
-    //             '24시간 동안은 다시 훈련할 수 없습니다.',
-    //             [
-    //                 { text: '확인', onPress: () => {}, style: 'default' }
-    //             ]
-    //         );
-    //         return;
-    //     }
+        if (isTimerRunning_1) {
+            Alert.alert(
+                '경고',
+                '밥 먹는 중입니다.',
+                [
+                    { text: '확인', onPress: () => {}, style: 'default' }
+                ]
+            );
+            return;
+        }
 
-    //     setLastButtonClickTime_2(currentTime);
-    //     setIsButtonDisabled_2(true);
+        if (isTimerRunning_2) {
+            Alert.alert(
+                '경고',
+                '훈련중입니다.',
+                [
+                    { text: '확인', onPress: () => {}, style: 'default' }
+                ]
+            );
+            return;
+        }
 
-    //     setTimeout(() => {
-    //         setIsButtonDisabled_2(false);
-    //         setLastButtonClickTime_2(null);
-    //     }, 24 * 60 * 60 * 1000);
+        if (isTimerRunning_1 === false && isButtonDisabled_1) {
+            Alert.alert(
+                '경고',
+                '4시간 동안은 밥을 다시 줄 수 없습니다.',
+                [
+                    { text: '확인', onPress: () => {}, style: 'default' }
+                ]
+            );
+            return;
+        }
 
-    //     setTimeText('훈련중..');
-    //     setIsTimerRunning_2(true);
+        setLastButtonClickTime_1(currentTime);
+        setIsButtonDisabled_1(true);
 
-    // }
+        setTimeout(() => {
+            setIsButtonDisabled_1(false);
+            setLastButtonClickTime_1(null);
+        // }, 4 * 60 * 60 * 1000);
+        }, 3000);
 
-    // useEffect(() => {
-    //     let timer;
+        
 
-    //     if (isTimerRunning_1) {
-    //         timer = setTimeout(() => {
-    //             setImageSource(character);
-    //             setIsTimerRunning_1(false);
-    //         }, 60 * 1000);
-    //     }
+        setImageSource(images.eatCharacter[mainCharacter.characterType]);
+        setIsTimerRunning_1(true);
+    }
 
-    //     return () => clearTimeout(timer);
-    // }, [isTimerRunning_1]);
+    function train() {
+        const currentTime = new Date().getTime();
 
-    // useEffect(() => {
-    //     let timer;
+        if (isTimerRunning_1) {
+            Alert.alert(
+                '경고',
+                '밥 먹는 중입니다.',
+                [
+                    { text: '확인', onPress: () => {}, style: 'default' }
+                ]
+            );
+            return;
+        }
 
-    //     if (isTimerRunning_2) {
-    //         timer = setTimeout(() => {
-    //             setTimeText(null);
-    //             setIsTimerRunning_2(false);
-    //         }, 60 * 1000);
-    //     }
+        if (isTimerRunning_2) {
+            Alert.alert(
+                '경고',
+                '훈련중입니다.',
+                [
+                    { text: '확인', onPress: () => {}, style: 'default' }
+                ]
+            );
+            return;
+        }
 
-    //     return () => clearTimeout(timer);
-    // }, [isTimerRunning_2]);
+        if (isTimerRunning_2 === false && isButtonDisabled_2) {
+            Alert.alert(
+                '경고',
+                '4시간 동안은 다시 훈련할 수 없습니다.',
+                [
+                    { text: '확인', onPress: () => {}, style: 'default' }
+                ]
+            );
+            return;
+        }
+
+        setLastButtonClickTime_2(currentTime);
+        setIsButtonDisabled_2(true);
+
+        setTimeout(() => {
+            setIsButtonDisabled_2(false);
+            setLastButtonClickTime_2(null);
+        }, 4 * 60 * 60 * 1000);
+
+        setTimeText('훈련중..');
+        setIsTimerRunning_2(true);
+
+    }
+
+    useEffect(() => {
+        let timer;
+
+        if (isTimerRunning_1) {
+            timer = setTimeout(() => {
+                setImageSource(img);
+                setIsTimerRunning_1(false);
+                dispatch(updateCharacter({characterIdx: mainCharacter.id, statusType: 'atk', userId: 'ssafy', value: 1}));
+            }, 1000);
+        }
+
+        return () => clearTimeout(timer);
+    }, [isTimerRunning_1]);
+
+    useEffect(() => {
+        let timer;
+
+        if (isTimerRunning_2) {
+            timer = setTimeout(() => {
+                setTimeText(null);
+                setIsTimerRunning_2(false);
+                dispatch(updateCharacter({characterIdx: mainCharacter.id, statusType: 'def', userId: 'ssafy', value: 1}));
+            }, 60 * 1000);
+        }
+
+        return () => clearTimeout(timer);
+    }, [isTimerRunning_2]);
 
     return (
         <View style={styles.content}>
@@ -265,28 +272,28 @@ function Content(props) {
                 <TouchableOpacity style={styles.button} onPress={() => {
                     props.navigation.navigate('Collection');
                 }}>
-                    <Image source={btnSource.collection} style={styles.buttonContent} />
+                    <Image source={images.btnSource.collection} style={styles.buttonContent} />
                     <Text style={styles.btnText}>동물도감</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.button} >
-                    <Image source={btnSource.eat} style={styles.buttonContent} />
+                <TouchableOpacity style={styles.button} onPress={changeImage}>
+                    <Image source={images.btnSource.eat} style={styles.buttonContent} />
                     <Text style={styles.btnText}>밥 주기</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.button} >
-                    <Image source={btnSource.training} style={styles.buttonContent} />
+                <TouchableOpacity style={styles.button} onPress={train}>
+                    <Image source={images.btnSource.training} style={styles.buttonContent} />
                     <Text style={styles.btnText}>훈련</Text>
                 </TouchableOpacity>
             </View>
             <View style={styles.main}>
-                <Image source={props.imageSource} 
-                    style={{ width: '100%', height: '40%', resizeMode: 'contain' }}
+                <Image source={imageSource} 
+                    style={{ width: '100%', height: '50%', resizeMode: 'contain' }}
                 />
                 <Text style={{
                     color: '#3B3B3B',
                     fontWeight: 'bold',
                     fontSize: 25,
                     margin: '5%',
-                }}>{}</Text>
+                }}>&lt;{userStatus}&gt;</Text>
                 <Text style={{
                     color: 'white',
                     fontSize: 18,
@@ -295,22 +302,22 @@ function Content(props) {
                     textShadowRadius: 2,
                     textShadowOffset: { width: 1, height: 2 },
                     elevation: 2,
-                }}>{}</Text>
+                }}>{timeText}</Text>
             </View>
             <View style={styles.sideBar}>
                 <TouchableOpacity
                     style={styles.button}
                     onPress={() => props.setModalVisible(true)}
                 >
-                    <Image source={btnSource.notice} style={styles.buttonContent} />
+                    <Image source={images.btnSource.notice} style={styles.buttonContent} />
                     <Text style={styles.btnText}>공지</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate('Mission')}>
-                    <Image source={btnSource.mission} style={styles.buttonContent} />
+                    <Image source={images.btnSource.mission} style={styles.buttonContent} />
                     <Text style={styles.btnText}>미션</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate('Mission')}>
-                    <Image source={btnSource.map} style={styles.buttonContent} />
+                    <Image source={images.btnSource.map} style={styles.buttonContent} />
                     <Text style={styles.btnText}>지도</Text>
                 </TouchableOpacity>
             </View>
@@ -323,15 +330,15 @@ function Bottom(props) {
     return (
         <View style={styles.bottom}>
             <TouchableOpacity style={styles.bottomBtn} onPress={() => props.navigation.navigate('Mission')}>
-                <Image source={btnSource.wallet} style={styles.buttonContent}/>
+                <Image source={images.btnSource.wallet} style={styles.buttonContent}/>
                 <Text style={styles.btnText}>지갑으로</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.bottomCenterBtn} onPress={() => props.navigation.navigate('Mission')}>
-                <Image source={btnSource.battle} style={styles.challengeBtn}/>
+                <Image source={images.btnSource.battle} style={styles.challengeBtn}/>
                 <Text style={styles.btnText}>일일도전</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.bottomBtn} onPress={() => { props.navigation.navigate('Market') }}>
-                <Image source={btnSource.market} style={styles.buttonContent}/>
+                <Image source={images.btnSource.market} style={styles.buttonContent}/>
                 <Text style={styles.btnText}>상점</Text>
             </TouchableOpacity>
         </View>
