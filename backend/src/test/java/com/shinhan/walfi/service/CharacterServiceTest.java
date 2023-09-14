@@ -1,5 +1,6 @@
 package com.shinhan.walfi.service;
 
+import com.shinhan.walfi.domain.enums.CharacterType;
 import com.shinhan.walfi.domain.enums.LevelUp;
 import com.shinhan.walfi.domain.enums.TierPerColor;
 import com.shinhan.walfi.domain.game.GameCharacter;
@@ -50,9 +51,17 @@ class CharacterServiceTest {
         userGameInfo.setUserId(userId);
         em.persist(userGameInfo);
 
-        mainCharacterIdx = characterService.create(userId).getCharacterDto().getCharacterIdx();
-        shopCharacterIdx_1 = characterService.shop(userId).getCharacterDto().getCharacterIdx();
-        shopCharacterIdx_2 = characterService.shop(userId).getCharacterDto().getCharacterIdx();
+        GameCharacter main = GameCharacter.createCharacter(userGameInfo, CharacterType.LION, true);
+        GameCharacter shop1 = GameCharacter.createCharacter(userGameInfo, CharacterType.TIGER, false);
+        GameCharacter shop2 = GameCharacter.createCharacter(userGameInfo, CharacterType.SHIBA, false);
+
+        em.persist(main);
+        em.persist(shop1);
+        em.persist(shop2);
+
+        mainCharacterIdx = main.getCharacterIdx();
+        shopCharacterIdx_1 = shop1.getCharacterIdx();
+        shopCharacterIdx_2 = shop2.getCharacterIdx();
 
     }
 
