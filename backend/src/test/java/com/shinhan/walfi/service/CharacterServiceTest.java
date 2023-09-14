@@ -399,4 +399,7 @@ class CharacterServiceTest {
         // TODO: 색 변경시 공방 상승 테스트
     }
 
+    //TODO: 스테이터스 -1 시 예외 발생 테스트
+    //TODO: 밥먹기를 보냈는데 atk를 +하지 않았을때 예외 발생 테스트
+    //TODO: 훈련하기를 했는데 def를 +하지 않았을때 예외 발생 테스트
 }
