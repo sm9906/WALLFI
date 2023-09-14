@@ -6,9 +6,6 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface BranchRepository extends JpaRepository<Branch, Long> {
 
-    @Query(value = "select * from branch where branch_idx = ?1", nativeQuery = true)
-    Branch findByIdx(Long branchIdx);
-
     @Query(value = "select count(*) from branch where user_id = ?1", nativeQuery = true)
     int countOccupiedBranch(String userId);
 

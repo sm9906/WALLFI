@@ -11,6 +11,7 @@ import com.shinhan.walfi.exception.CharacterException;
 import com.shinhan.walfi.repository.game.CharacterRepository;
 import com.shinhan.walfi.repository.game.UserGameInfoRepository;
 import com.shinhan.walfi.service.game.CharacterService;
+import org.junit.Before;
 import org.junit.jupiter.api.*;
 import org.mockito.Mockito;
 import org.mockito.stubbing.OngoingStubbing;
