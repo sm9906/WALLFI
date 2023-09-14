@@ -1,35 +1,57 @@
-import React, {useState} from "react";
+import React, {useEffect, useState, useMemo} from "react";
 import { View, Text, StyleSheet } from 'react-native';
 import { ConvPad } from "../walletcomponents/sendmoney/ConvKeypad";
 import { RFPercentage } from "react-native-responsive-fontsize";
 import VirtualKeyboard from "../walletcomponents/sendmoney/VirtualKeypad";
-import { minusMoney } from "../walletSlice";
-import { useDispatch } from "react-redux";
+import { minusMoney, exchangeMoney } from "../walletSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function SendHow({route, navigation}){
-  console.log('얼마나 보낼까요',route)
 
   const dispatch = useDispatch();
-  
-  const accountTo = route.params.account||'';
-  const bankTo = route.params.bank||''; 
-  const type = route.params.type;
-  const nationTo = type==='환전'?route.params.nation:'';
-  const {accId, accountnum, balance} = route.params.data
 
-  // dispatch()
+  // console.log('얼마나 보낼까요',route)
+  const type= route.params.type;
+  const outAcc = route.params.outAcc;
+  const balance = outAcc.balance; 
+  const outAccId = outAcc.accId
+  // 이체 필요한 부분
+  const toAccount = type==='송금'?route.params.account : '';
+  const toBank = type==='송금'?route.params.bank : '';
+  // 환전 필요 부분
+  const exchangeRate = type==='환전'?route.params.exchange:'0';
+  const toNation = type==='환전'?route.params.toNation:'';
+  const ISO = type==='환전'?route.params.ISO:outAcc.ISO;
 
-  const [money, setMoney] = useState(0);
-  const num_money=Number(money);
-  const form_money=Number(money).toLocaleString('es-US');
-  const form_balance = Number(balance).toLocaleString('es-US');
-  const isOver = balance < num_money
+
+  const [money, setMoney] = useState(0); // 입력 금액 (문자)
+
+  const form_balance = Number(balance).toLocaleString('es-US'); // 잔액을 돈 형식 정규화
+
+  const num_money=Number(money); // 입력 금액 -> 숫자
+  const form_money=Number(money).toLocaleString('es-US'); // 돈 형식으로 정규화
+
+  const exchangedMoney = ((Number(exchangeRate)*num_money)/(ISO==='¥'?100:1)).toFixed(0) // 환전 시 매매율 * 입력 금액해서 원화 표기 
   
+  const form_exchangedMoney = Number(exchangedMoney).toLocaleString('es-US');
+
+  const isOver = type==='송금'||toNation==='KRW'? 
+      balance < num_money: balance< Number(exchangedMoney) // 잔액을 초과하는가?
+
   const sendMoney = async() => {
-    console.log(typeof(money))
-    await dispatch(minusMoney({num_money, accId}))
-    navigation.navigate('SendMemo', props = {type, accountTo, bankTo, form_money})
+    await dispatch(minusMoney({num_money, outAccId}))
+    const outISO = ISO
+    const formMoney = form_money
+    navigation.navigate('SendMemo', props = {type, toNation, toAccount, toBank, formMoney, outISO})
   }
+
+  const sendExchange = async() => {
+    await dispatch(exchangeMoney({num_money,exchangedMoney,outAccId,toNation}))
+    const outISO = toNation==='KRW'? '원' : ISO
+    const formMoney = toNation==='KRW'? form_exchangedMoney : form_money
+    navigation.navigate('SendMemo', props = {type, toNation, toAccount, toBank, formMoney, outISO})
+  }
+
   
   const addMoney=(value)=>{
     const currMon = money;
@@ -45,7 +67,11 @@ export default function SendHow({route, navigation}){
       }else if(value==='all'){
         console.log('전액')
       }else if(value==='완료'){
-        !isOver?sendMoney():null
+        if(type==='송금'){
+          !isOver?sendMoney():null
+        }else{
+          !isOver?sendExchange():null
+        }
       }else{
         setMoney((prev)=>prev==='0'?value:prev+value)
       }
@@ -57,12 +83,13 @@ export default function SendHow({route, navigation}){
     <View style={styles.background}>
       <View style={styles.textContainer}>
         <View>
-          <Text style={{...styles.accountTo,marginBottom:'5%' }}>{bankTo} {accountTo} {nationTo}</Text>
+          <Text style={{...styles.accountTo,marginBottom:'5%' }}>{toBank} {toAccount} {toNation}</Text>
           <Text style={styles.infoText}>얼마를 {type==='송금'?'보낼':'바꿀'}까요?</Text>
         </View>
-        <Text style={{...styles.currMoney, color:isOver?'red':'black'}}>{form_money}원</Text>
+        <Text style={{...styles.currMoney, color:isOver?'red':'black'}}>{form_money}{ISO||'원'}</Text>
+        {type==='환전'&&<Text style={{textAlign:'center', fontSize:RFPercentage(2), color:'grey'}}>{form_exchangedMoney}원</Text>}
         <View style={styles.myAccount}>
-          <Text style={styles.accountTo} >신한 {accountnum}   {form_balance}원</Text>
+          <Text style={styles.accountTo} >신한 {outAcc.accountnum}   {form_balance}{ISO||'원'}</Text>
         </View>
       </View>
       {type==="송금"?<ConvPad addMoney={addMoney} />:<VirtualKeyboard addMoney={addMoney}/>}

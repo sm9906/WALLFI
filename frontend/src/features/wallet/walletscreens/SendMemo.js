@@ -9,14 +9,14 @@ import { Background } from "../walletcomponents/CommonStyle";
 
 export default function SendMemo({route,navigation}) {
   const type = route.params.type
+  console.log( route.params)
   return (
     <View style={{...Background.whiteback, justifyContent:'space-evenly'}}>
       <View style={{alignItems:'center'}}>
-        {/* <Image source={SendCheck} /> */}
         <Image source={require('../../../assets/wallet/SendCheck.png')}/>
-        <Text style={styles.infoTxt}>{route.params.bankTo} {route.params.accountTo}</Text>
+        <Text style={styles.infoTxt}>{route.params.toank} {route.params.toAccount} {route.params.toNation}</Text>
       </View>
-      <Text style={styles.infoTxt}>{route.params.form_money}원 {'\n'} 보냈어요</Text>
+      <Text style={styles.infoTxt}>{route.params.formMoney}{route.params.outISO} {'\n'} {type}했어요</Text>
       <TouchableOpacity style={{...convStyle.convBtn, height:'6%', width:'30%'}}>
         <Text style={{...convStyle.convFont, fontWeight:'bold', fontSize:RFPercentage(2)}} onPress={()=>navigation.navigate('SendWho',{type})}>추가 이체</Text> 
       </TouchableOpacity>
