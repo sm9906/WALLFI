@@ -1,8 +1,8 @@
 import { useRef, useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import * as Animatable from 'react-native-animatable';
-import { useDispatch } from 'react-redux'
-import { getExchangeInfo, getGameInfo, getMainCharacter } from '../homeSlice.js';
+import { useDispatch, useSelector } from 'react-redux'
+import { getExchangeInfo } from '../homeSlice.js';
 import { images } from '../../../common/imgDict.js'
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from '../homecomponents/ScreenSize.js';
 
@@ -62,6 +62,8 @@ function GameHeader(props) {
         )
     }
 
+    const gameUser = useSelector(state => state.home.userGameInfo);
+
     const dispatch = useDispatch();
     useEffect(() => {
         getData();
@@ -69,18 +71,12 @@ function GameHeader(props) {
 
     const getData = async () => {
         try {
-            await dispatch(getGameInfo('ssafy')).then((res) => {
-                let name = res.payload.userId;
-                let point = res.payload.point;
-
-                setUserInfo({name: name, point: point});
-            })
-
             await dispatch(getExchangeInfo()).then((res) => {
                 let data = res.payload;
                 let copy = [...data];
 
                 setExchange(copy);
+                setUserInfo({name: gameUser.userId, point: gameUser.point})
 
             })
         } catch(e) {

@@ -11,8 +11,8 @@ import {
     Modal,
     Alert
 } from 'react-native';
-import { useSelector, useDispatch } from 'react-redux';
-import { getGameInfo, getMainCharacter, updateCharacter } from '../homeSlice.js';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateCharacter } from '../homeSlice.js';
 import { globalStyles } from '../homestyles/global.js';
 import { images } from '../../../common/imgDict.js';
 import GameHeader from '../homecomponents/GameHeader.js';
@@ -89,12 +89,15 @@ function Season() {
 
 function Content(props) {
 
-    const mainCharacter = useSelector((state) => state.home.mainCharacter);
+    const dispatch = useDispatch();
 
-    // 메인 캐릭터, 칭호
+    const userInfo = useSelector(state => state.home.userGameInfo);
+    const mainCharacter = useSelector(state => state.home.mainCharacter);
+
+    // 메인캐릭터, 칭호
+    const [imageUrl, setImageUrl] = useState('');
+    const [userName, setUserName] = useState('');
     let img;
-    const [imageSource, setImageSource] = useState('');
-    const [userStatus, setUserStatus] = useState('');
 
     // 먹이
     const [isTimerRunning_1, setIsTimerRunning_1] = useState(false);
@@ -107,36 +110,16 @@ function Content(props) {
     const [isButtonDisabled_2, setIsButtonDisabled_2] = useState(false);
     const [lastButtonClickTime_2, setLastButtonClickTime_2] = useState(null);
 
-    const dispatch = useDispatch();
     useEffect(() => {
-        getData();
-    }, [mainCharacter])
+        const userStatus = userInfo.status;
+        const type = mainCharacter.characterType;
+        const color = mainCharacter.color;
+        const image = images.defaultCharacter[type][color];
+        img = image;
 
-    const getData = async () => {
-        try {
-            await dispatch(getMainCharacter('ssafy')).then((res) => {
-
-                let type = res.payload.characterType;
-                let color = res.payload.color;
-                let imageUrl = images.defaultCharacter[type][color];
-                img = imageUrl;
-
-                setImageSource(imageUrl);
-            })
-
-            await dispatch(getGameInfo('ssafy')).then((res) => {
-
-                let user = res.payload.status;
-                setUserStatus(user);
-
-            })
-
-            props.navigation.navigate('Home')
-
-        } catch (err) {
-            console.log(err);
-        }
-    };
+        setUserName(userStatus);
+        setImageUrl(image);
+    })
 
     function changeImage() {
         const currentTime = new Date().getTime();
@@ -180,12 +163,11 @@ function Content(props) {
         setTimeout(() => {
             setIsButtonDisabled_1(false);
             setLastButtonClickTime_1(null);
-        // }, 4 * 60 * 60 * 1000);
         }, 3000);
 
         
 
-        setImageSource(images.eatCharacter[mainCharacter.characterType]);
+        setImageUrl(images.eatCharacter[mainCharacter.characterType]);
         setIsTimerRunning_1(true);
     }
 
@@ -240,13 +222,15 @@ function Content(props) {
 
     useEffect(() => {
         let timer;
-
+        console.log('렌더링1');
         if (isTimerRunning_1) {
+            console.log('렌더링2');
             timer = setTimeout(() => {
-                setImageSource(img);
+                setImageUrl(img);
                 setIsTimerRunning_1(false);
-                dispatch(updateCharacter({characterIdx: mainCharacter.id, statusType: 'atk', userId: 'ssafy', value: 1}));
-            }, 1000);
+                dispatch(updateCharacter({act: '밥먹기', characterIdx: mainCharacter.characterIdx, statusType: 'atk', userId: 'ssafy', value: 1})).then(res => console.log(res));
+                console.log('밥주기완료', mainCharacter);
+            }, 5000);
         }
 
         return () => clearTimeout(timer);
@@ -254,12 +238,14 @@ function Content(props) {
 
     useEffect(() => {
         let timer;
-
+        console.log('렌더링3');
         if (isTimerRunning_2) {
+            console.log('렌더링4');
             timer = setTimeout(() => {
                 setTimeText(null);
                 setIsTimerRunning_2(false);
-                dispatch(updateCharacter({characterIdx: mainCharacter.id, statusType: 'def', userId: 'ssafy', value: 1}));
+                dispatch(updateCharacter({act: '훈련하기', characterIdx: mainCharacter.characterIdx, statusType: 'def', userId: 'ssafy', value: 1}));
+                console.log('훈련완료', mainCharacter);
             }, 60 * 1000);
         }
 
@@ -285,7 +271,7 @@ function Content(props) {
                 </TouchableOpacity>
             </View>
             <View style={styles.main}>
-                <Image source={imageSource} 
+                <Image source={imageUrl} 
                     style={{ width: '100%', height: '50%', resizeMode: 'contain' }}
                 />
                 <Text style={{
@@ -293,7 +279,7 @@ function Content(props) {
                     fontWeight: 'bold',
                     fontSize: 25,
                     margin: '5%',
-                }}>&lt;{userStatus}&gt;</Text>
+                }}>&lt;{userName}&gt;</Text>
                 <Text style={{
                     color: 'white',
                     fontSize: 18,

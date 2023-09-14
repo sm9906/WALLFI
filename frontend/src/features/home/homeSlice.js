@@ -155,16 +155,6 @@ export const homeSlice = createSlice({
       state.userGameInfo = action.payload;
     }).addCase(getExchangeInfo.fulfilled, (state, action) => {
       state.exchangeInfo = action.payload;
-    }).addCase(updateCharacter.fulfilled, (state, action) => {
-      const {characterIdx, main} = action.payload;
-
-      if (main) {
-        const characterToUpdate = state.characters.find((character) => {
-          if (characterToUpdate) {
-            characterToUpdate.main = true;
-          }
-        })
-      }
     })
   }
 })

@@ -11,8 +11,8 @@ import {
     Modal,
     Alert
 } from 'react-native';
-import { useDispatch } from 'react-redux';
-import { getCharacterList, updateCharacter, getMainCharacter } from '../homeSlice.js';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateCharacter } from '../homeSlice.js';
 import { globalStyles } from "../homestyles/global.js";
 import { images } from '../../../common/imgDict.js';
 import GameHeader from '../homecomponents/GameHeader.js';
@@ -20,41 +20,26 @@ import GameHeader from '../homecomponents/GameHeader.js';
 export default function Collection({navigation}) {
 
     const [modalVisible, setModalVisible] = useState(false);
-    const [charactersData, setCharactersData] = useState([]);
     const [selectedCharacter, setSelectedCharacter] = useState(null);
+
+    const characterList = useSelector(state => state.home.characters);
+    console.log('도감들어옴', characterList);
+
     const characters = [];
 
     const dispatch = useDispatch();
-    useEffect(() => {
-        getData();
-    }, [])
 
-    const getData = async () => {
-        try {
-            await dispatch(getCharacterList('ssafy')).then(res => {
-                
-                let array = res.payload;
-                let copy = [...array];
-
-                setCharactersData(copy);
-
-            })
-        } catch (e) {
-            console.log(e);
-        }
-    }
-
-    charactersData.map((a) => {
+    characterList.map((character) => {
         characters.push({
-            id: a.characterIdx,
-            name: a.characterType == "EAGLE" ? "독수리" 
-            : a.characterType == "LION" ? "사자" : a.characterType == "PANDA" ? "판다"
-            : a.characterType == "QUOKKA" ? "쿼카" : a.characterType == "SHIBA" ? "시바"
+            id: character.characterIdx,
+            name: character.characterType == "EAGLE" ? "독수리" 
+            : character.characterType == "LION" ? "사자" : character.characterType == "PANDA" ? "판다"
+            : character.characterType == "QUOKKA" ? "쿼카" : character.characterType == "SHIBA" ? "시바"
             : "호랑이",
-            imageUrl: images.defaultCharacter[a.characterType][a.color],
-            level: 'Lv.' + a.level,
-            exp: a.exp,
-            main: a.main
+            imageUrl: images.defaultCharacter[character.characterType][character.color],
+            level: 'Lv.' + character.level,
+            exp: character.exp,
+            main: character.main
         })
     })
 
@@ -89,7 +74,6 @@ export default function Collection({navigation}) {
     const setMain = () => {
 
         dispatch(updateCharacter({characterIdx: selectedCharacter.id, statusType: 'isMain', userId: 'ssafy', value: 0}))
-        getData();
     }
     
     return (
@@ -109,8 +93,6 @@ export default function Collection({navigation}) {
                         setModalVisible={setModalVisible} 
                         selectedCharacter={selectedCharacter} 
                         setSelectedCharacter={setSelectedCharacter}
-                        charactersData={charactersData}
-                        setCharactersData={setCharactersData}
                         setMain={setMain}
                     />
                 </Modal>
@@ -135,7 +117,7 @@ function CollectionHeader(props) {
     return (
         <View style={{ flex: 1.2, flexDirection: 'row', alignItems: 'center' }}>
             <TouchableOpacity style={[globalStyles.navigationBtn, { backgroundColor: '#DD4F00' }]} 
-                onPress={() => props.navigation.navigate('GameHome')}>
+                onPress={() => props.navigation.navigate('GameLoading')}>
                 <Image source={images.btnSource.backHome} style={globalStyles.btnIcon}/>
             </TouchableOpacity>
             <Text style={[globalStyles.navigationText, { color: '#DD4F00' }]}>동물도감</Text>
@@ -175,7 +157,7 @@ function DetailPage(props) {
                     borderRadius: 15,
                     borderWidth: 2,
                     borderColor: '#BE4400'
-                }} onPress={props.setMain}>
+                }} >
                     <Text style={{ fontSize: 15, fontWeight: 'bold', color: 'white' }}>대표동물</Text>
                 </TouchableOpacity>
             </View>
