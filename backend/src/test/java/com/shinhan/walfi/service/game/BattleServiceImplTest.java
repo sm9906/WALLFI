@@ -9,6 +9,7 @@ import com.shinhan.walfi.dto.game.BattleReqDto;
 import com.shinhan.walfi.dto.game.CharacterReqDto;
 import com.shinhan.walfi.exception.BranchException;
 import com.shinhan.walfi.exception.UserException;
+import com.shinhan.walfi.mapper.BattleMapper;
 import com.shinhan.walfi.repository.game.BranchRepository;
 import com.shinhan.walfi.repository.game.CharacterRepository;
 import com.shinhan.walfi.repository.game.UserGameInfoRepository;
@@ -40,6 +41,7 @@ class BattleServiceImplTest {
     @Autowired CharacterRepository characterRepository;
     @Autowired UserGameInfoRepository userGameInfoRepository;
     @Autowired BranchRepository branchRepository;
+
 
     String userId = "ssafy";
     Long characterIdx;
@@ -83,19 +85,19 @@ class BattleServiceImplTest {
     @DisplayName("배틀 기록시 exp +50 테스트")
     void battleHistoryExpTest() {
         // given
-//        BattleReqDto battleReqDto = new BattleReqDto();
-//        battleReqDto.setBranchIdx(branchIdx);
-//        battleReqDto.setUserId(userId);
-//
-//        UserGameInfo userGameInfo = userGameInfoRepository.findById(userId);
+        BattleReqDto battleReqDto = new BattleReqDto();
+        battleReqDto.setBranchIdx(branchIdx);
+        battleReqDto.setUserId(userId);
 
-        // when
-//        battleService.write(battleReqDto);
+        UserGameInfo userGameInfo = userGameInfoRepository.findById(userId);
 
-//        GameCharacter mainCharacter = characterRepository.findMainCharacter(userGameInfo);
+//         when
+        battleService.write(battleReqDto);
 
-        // then
-//        assertThat(mainCharacter.getExp()).isEqualTo(10);
+        GameCharacter mainCharacter = characterRepository.findMainCharacter(userGameInfo);
+
+//         then
+        assertThat(mainCharacter.getExp()).isEqualTo(10);
 
     }
     // TODO: 사용자 point + 50 확인

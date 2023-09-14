@@ -99,9 +99,10 @@ class CharacterServiceTest {
 
         int updateValue = 2;
         String updateStatus = "atk";
+        String act = "밥먹기";
 
         // when
-        characterService.updateCharacterStatus(userId, mainCharacterIdx, updateStatus, updateValue);
+        characterService.updateCharacterStatus(userId, mainCharacterIdx, updateStatus, updateValue, act);
 
         // then
         assertThat(characterRepository.findCharacterByIdx(mainCharacterIdx).getAtk())
@@ -117,9 +118,10 @@ class CharacterServiceTest {
 
         int updateValue = 5;
         String updateStatus = "def";
+        String act = "훈련하기";
 
         // when
-        characterService.updateCharacterStatus(userId, mainCharacterIdx, updateStatus, updateValue);
+        characterService.updateCharacterStatus(userId, mainCharacterIdx, updateStatus, updateValue, act);
 
         // then
         assertThat(characterRepository.findCharacterByIdx(mainCharacterIdx).getDef())
