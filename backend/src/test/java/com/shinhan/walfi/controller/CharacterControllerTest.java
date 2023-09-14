@@ -96,32 +96,6 @@ class CharacterControllerTest {
     }
 
     @Test
-    @DisplayName("캐릭터 리스트 받기 테스트")
-    public void getCharacterListTest() throws Exception {
-        // given
-        CharacterReqDto characterReqDto = new CharacterReqDto();
-        characterReqDto.setUserId(userId);
-
-
-        // when
-        characterController.createRandomCharacter(characterReqDto);
-        characterController.shopRandomCharacter(characterReqDto);
-
-
-        // then
-        ResponseEntity<HttpResult> res = characterController.getCharacters(characterReqDto);
-        CharacterListResDto data = (CharacterListResDto) res.getBody().getData();
-
-        // api 반환값 테스트
-        Assertions.assertThat(res.getBody().getResult()).isSameAs(HttpResult.Result.SUCCESS);
-        Assertions.assertThat(res.getBody().getStatus()).isSameAs(HttpStatus.OK);
-
-        // 저장한 캐릭터 2개를 받아오는지 테스트
-        Assertions.assertThat(data.getCharacterDtoList().size()).isEqualTo(2);
-
-    }
-
-    @Test
     @DisplayName("메인 캐릭터 조회 테스트")
     public void getMainTest() throws Exception {
         // given

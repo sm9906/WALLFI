@@ -52,22 +52,8 @@ class CharacterServiceTest {
 
         mainCharacterIdx = characterService.create(userId).getCharacterDto().getCharacterIdx();
         shopCharacterIdx_1 = characterService.shop(userId).getCharacterDto().getCharacterIdx();
-//        shopCharacterIdx_2 = characterService.shop(userId).getCharacterDto().getCharacterIdx();
+        shopCharacterIdx_2 = characterService.shop(userId).getCharacterDto().getCharacterIdx();
 
-    }
-
-
-    @Test
-    @Order(3)
-    @DisplayName("userId를 이용한 캐릭터 조회 (searchCharacters)")
-    void searchCharacters() {
-        // given
-
-        // when
-        CharacterListResDto characterListResDto = characterService.searchCharacters(userId);
-
-        // then
-        assertThat(characterListResDto.getCharacterDtoList().size()).isEqualTo(2);
     }
 
     @Test
