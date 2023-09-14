@@ -27,8 +27,6 @@ public class UserServiceImpl implements UserService{
 
     private final UserRepository userRepository;
 
-    private final UserGameInfoRepository userGameInfoRepository;
-
     @Override
     public List<UserDto> getUserList() {
         List<User> userList = userRepository.findAll();
@@ -51,7 +49,7 @@ public class UserServiceImpl implements UserService{
         User findUser = userRepository.login(userId, password);
 
         if (findUser == null) {
-            log.error("틀린 비밀번호이거나 존재하지 않는 회원");
+            log.error("=== 틀린 비밀번호이거나 존재하지 않는 회원 ===");
             throw new UserException(NO_MATCHING_USER);
         }
 

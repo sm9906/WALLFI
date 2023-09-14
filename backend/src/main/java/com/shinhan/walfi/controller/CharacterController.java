@@ -91,7 +91,7 @@ public class CharacterController {
         int statusValue = characterStatusReqDto.getValue();
 
         CharacterWithUserIdResDto characterWithUserIdResDto
-                = characterService.changeCharacterStatus(userId, characterIdx, statusType, statusValue);
+                = characterService.updateCharacterStatus(userId, characterIdx, statusType, statusValue);
 
         HttpResult res;
 

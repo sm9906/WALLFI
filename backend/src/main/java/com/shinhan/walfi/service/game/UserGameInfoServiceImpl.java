@@ -32,7 +32,7 @@ public class UserGameInfoServiceImpl implements UserGameInfoService{
         UserGameInfo findUserGameInfo = userGameInfoRepository.findById(userId);
 
         if (findUserGameInfo == null) {
-            log.error("틀린 비밀번호이거나 존재하지 않는 회원");
+            log.error("=== 틀린 비밀번호이거나 존재하지 않는 회원 ===");
             throw new UserException(NO_MATCHING_USER);
         }
 
@@ -55,9 +55,10 @@ public class UserGameInfoServiceImpl implements UserGameInfoService{
         UserGameInfo findUserGameInfo = userGameInfoRepository.findById(userId);
 
         if (findUserGameInfo == null) {
-            log.error("틀린 비밀번호이거나 존재하지 않는 회원");
+            log.error("=== 틀린 비밀번호이거나 존재하지 않는 회원 ===");
             throw new UserException(NO_MATCHING_USER);
         }
+
         int defaultPoint = findUserGameInfo.getPoint();
         int newPoint = defaultPoint + updatePoint;
 

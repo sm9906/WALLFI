@@ -8,16 +8,23 @@ import com.shinhan.walfi.domain.game.UserGameInfo;
 import com.shinhan.walfi.dto.game.CharacterDto;
 import com.shinhan.walfi.dto.game.CharacterListResDto;
 import com.shinhan.walfi.dto.game.CharacterWithUserIdResDto;
+import com.shinhan.walfi.exception.CharacterErrorCode;
+import com.shinhan.walfi.exception.CharacterException;
+import com.shinhan.walfi.exception.UserErrorCode;
+import com.shinhan.walfi.exception.UserException;
 import com.shinhan.walfi.repository.game.CharacterRepository;
 import com.shinhan.walfi.repository.game.UserGameInfoRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -29,6 +36,8 @@ public class CharacterServiceImpl implements CharacterService {
     /**
      * 캐릭터 타입 랜덤 설정 후 캐릭터 생성
      *
+     * @exception 'NO_MATCHING_USER' - 비밀번호가 틀리거나 존재하지 않는 사용자의 경우 예외 발생
+     * @exception 'HAS_MAIN_CHARACTER' - 메인 캐릭터가 존재하는 유저의 경우 뽑기 기능을 사용해야 하므로 예외 발생
      * @param userId
      * @return 생성한 캐릭터 idx 반환
      */
@@ -37,8 +46,18 @@ public class CharacterServiceImpl implements CharacterService {
     public CharacterWithUserIdResDto create(String userId) {
         UserGameInfo userGameInfo = userGameInfoRepository.findById(userId);
 
+        if (userGameInfo == null) {
+            log.error("=== 틀린 비밀번호이거나 존재하지 않는 회원 ===");
+            throw new UserException(UserErrorCode.NO_MATCHING_USER);
+        }
 
-        // TODO: 만약 메인 캐릭터가 존재하면 create가 아닌 shop으로 캐릭터를 뽑아야 함으로 예외처리
+        boolean hasMain = userGameInfo.getGameCharacters().stream()
+                .anyMatch(character -> character.isMain() == true);
+
+        if (hasMain) {
+            log.error("=== 메인 캐릭터가 존재하는 회원, 캐릭터 뽑기 기능 사용해야함 ===");
+            throw new CharacterException(CharacterErrorCode.HAS_MAIN_CHARACTER);
+        }
 
         Random random = new Random();
 
@@ -60,8 +79,9 @@ public class CharacterServiceImpl implements CharacterService {
     }
 
     /**
-     * 캐릭터 뽑기
+     * 캐릭터 뽑기 (이미 존재하는 캐릭터 뽑을 경우 공방 + 1 상승)
      *
+     * @exception 'NO_MATCHING_USER' - 비밀번호가 틀리거나 존재하지 않는 사용자의 경우 예외 발생
      * @param userId
      * @return 뽑은 캐릭터 idx 반환
      */
@@ -69,6 +89,11 @@ public class CharacterServiceImpl implements CharacterService {
     @Transactional
     public CharacterWithUserIdResDto shop(String userId) {
         UserGameInfo userGameInfo = userGameInfoRepository.findById(userId);
+
+        if (userGameInfo == null) {
+            log.error("=== 틀린 비밀번호이거나 존재하지 않는 회원 ===");
+            throw new UserException(UserErrorCode.NO_MATCHING_USER);
+        }
 
         Random random = new Random();
 
@@ -80,18 +105,21 @@ public class CharacterServiceImpl implements CharacterService {
 
         List<GameCharacter> characters = userGameInfo.getGameCharacters();
 
+        Optional<GameCharacter> matchingCharacter = characters.stream()
+                .filter(character -> character.getCharacterType().equals(randomCharacterType))
+                .findFirst();
+
+        if (matchingCharacter.isPresent()) {
+            GameCharacter character = matchingCharacter.get();
+            updateCharacterStatus(userId, character.getCharacterIdx(), "atk", 1);
+            updateCharacterStatus(userId, character.getCharacterIdx(), "def", 1);
+
+            return getCharacterWithUserIdResDto(userId, getCharacterDto(character));
+        }
+
         // 캐릭터 생성
         Boolean isMain = false;
         GameCharacter gameCharacter = GameCharacter.createCharacter(userGameInfo, randomCharacterType, isMain);
-
-        boolean isSame = characters.stream()
-                .anyMatch(character -> character.getCharacterType().equals(randomCharacterType));
-        if (isSame) {
-//            return getCharacterWithUserIdResDto(userId, getCharacterDto(gameCharacter));
-            // TODO: 이미 있는 캐릭터라면 어떻게 할지 로직
-        }
-
-
 
         // db에 저장
         characterRepository.save(gameCharacter);
@@ -105,12 +133,18 @@ public class CharacterServiceImpl implements CharacterService {
     /**
      * 사용자가 가진 전체 캐릭터 조회
      *
+     * @exception 'NO_MATCHING_USER' - 비밀번호가 틀리거나 존재하지 않는 사용자의 경우 예외 발생
      * @param userId
      * @return 캐릭터 DTO
      */
     @Override
     public CharacterListResDto searchCharacters(String userId) {
         UserGameInfo userGameInfo = userGameInfoRepository.findById(userId);
+
+        if (userGameInfo == null) {
+            log.error("=== 틀린 비밀번호이거나 존재하지 않는 회원 ===");
+            throw new UserException(UserErrorCode.NO_MATCHING_USER);
+        }
 
         List<GameCharacter> characters = userGameInfo.getGameCharacters();
 
@@ -129,12 +163,19 @@ public class CharacterServiceImpl implements CharacterService {
     /**
      * 사용자의 메인 캐릭터 조회
      *
+     * @exception 'NO_MATCHING_USER' - 비밀번호가 틀리거나 존재하지 않는 사용자의 경우 예외 발생
      * @param userId
      * @return CharacterWithUserIdResDto
      */
     @Override
     public CharacterWithUserIdResDto searchMainCharacter(String userId) {
         UserGameInfo userGameInfo = userGameInfoRepository.findById(userId);
+
+        if (userGameInfo == null) {
+            log.error("=== 틀린 비밀번호이거나 존재하지 않는 회원 ===");
+            throw new UserException(UserErrorCode.NO_MATCHING_USER);
+        }
+
         GameCharacter mainCharacter = characterRepository.findMainCharacter(userGameInfo);
 
         CharacterDto characterDto = getCharacterDto(mainCharacter);
@@ -147,6 +188,7 @@ public class CharacterServiceImpl implements CharacterService {
     /**
      *  사용자의 메인 캐릭터 색을 변경하고 캐릭터 정보를 반환
      *
+     * @exception 'INFO_NO_MATCH' - 해당 메인 캐릭터가 사용자의 캐릭터가 아닐시 예외 발생
      * @param userId
      * @param mainCharacterIdx
      * @return CharacterWithUserIdResDto
@@ -158,7 +200,8 @@ public class CharacterServiceImpl implements CharacterService {
         GameCharacter mainCharacter = characterRepository.findMainCharacter(userGameInfo);
 
         if (mainCharacter.getCharacterIdx() != mainCharacterIdx) {
-            // TODO: 전송한 캐릭터가 사용자의 main 캐릭터가 아닐 시 예외 처리
+            log.error("=== ("+ mainCharacterIdx + ") 메인 캐릭터는 사용자("+ userId +")의 캐릭터가 아닙 ===");
+            throw new CharacterException(CharacterErrorCode.INFO_NO_MATCH);
         }
 
         // 랜덤으로 색 뽑기 로직
@@ -193,6 +236,9 @@ public class CharacterServiceImpl implements CharacterService {
     /**
      * 캐릭터의 스텟 변경하는 기능
      *
+     * @exception 'INFO_NO_MATCH' - 해당 메인 캐릭터가 사용자의 캐릭터가 아닐시 예외 발생
+     * @exception 'THIS_IS_ALREADY_MAIN_CHRACTER' - isMain과 함께 전송한 캐릭터가 이미 메인 캐릭터인 경우 예외 발생
+     * @exception 'CANNOT_RECOGNIZE' - 식보낸 statusType을 식별할 수 없을 때 예외 발생
      * @param userId
      * @param characterIdx
      * @param statusType
@@ -201,7 +247,7 @@ public class CharacterServiceImpl implements CharacterService {
      */
     @Override
     @Transactional
-    public CharacterWithUserIdResDto changeCharacterStatus(String userId,
+    public CharacterWithUserIdResDto updateCharacterStatus(String userId,
                                                            Long characterIdx,
                                                            String statusType,
                                                            int statusValue) {
@@ -210,7 +256,8 @@ public class CharacterServiceImpl implements CharacterService {
         GameCharacter character = characterRepository.findCharacterByIdx(characterIdx);
 
         if (character.getCharacterIdx() != characterIdx) {
-            // TODO: 전송한 캐릭터가 사용자의 캐릭터가 아닐 시 예외 처리
+            log.error("=== ("+ characterIdx + ") 메인 캐릭터는 사용자("+ userId +")의 캐릭터가 아닙 ===");
+            throw new CharacterException(CharacterErrorCode.INFO_NO_MATCH);
         }
 
         // atk, def, hp, exp(레벨업 로직), isMain(메인 캐릭터인걸 아니게 바꾸는 로직 포함)
@@ -275,7 +322,8 @@ public class CharacterServiceImpl implements CharacterService {
 
             case "isMain":
                 if (character.isMain()) {
-                    // TODO: 사용자의 캐릭터가 이미 메인 캐릭터임으로 변경할 수 없다는 예외 발생
+                    log.error("=== ("+ characterIdx + ") 메인 캐릭터는 이미 메인 캐릭터임으로 예외가 발생함 ===");
+                    throw new CharacterException(CharacterErrorCode.THIS_IS_ALREADY_MAIN_CHRACTER);
                 }
 
                 // 기존 메인 캐릭터를 메인이 아니게 변경
@@ -288,8 +336,9 @@ public class CharacterServiceImpl implements CharacterService {
                 break;
 
             default:
-                // TODO: 전송한 스테이터스를 알 수 없을 때 예외 발생
-                break;
+                log.error("=== <"+ statusType + "> 은 해당 기능에서 인식할 수 없는 문자입니다 ===");
+                throw new CharacterException(CharacterErrorCode.CANNOT_RECOGNIZE);
+
         }
 
         // 변경한 스텟 반영하여 저장
