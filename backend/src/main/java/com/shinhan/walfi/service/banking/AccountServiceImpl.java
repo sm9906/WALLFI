@@ -4,28 +4,48 @@ import com.shinhan.walfi.domain.User;
 import com.shinhan.walfi.domain.banking.Account;
 import com.shinhan.walfi.dto.banking.AccountDto;
 import com.shinhan.walfi.dto.banking.AccountResDto;
+import com.shinhan.walfi.exception.AccountErrorCode;
+import com.shinhan.walfi.exception.AccountException;
+import com.shinhan.walfi.exception.UserErrorCode;
+import com.shinhan.walfi.exception.UserException;
 import com.shinhan.walfi.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class AccountServiceImpl implements AccountService{
 
     private final UserRepository userRepository;
 
+    /**
+     * 유저와 연관된 계좌들을 조회 하는 기능
+     *
+     * @exception 'NO_MATCHING_USER' - 해당 유저를 조회할 수 없을때 예외 발생
+     * @exception 'AccountResDto' - 전송한 대표계좌가 유저의 계좌가 아니면 예외 발생
+     * @param userId
+     * @param userMainAccount
+     * @return AccountResDto
+     */
     public AccountResDto getAccounts(String userId, String userMainAccount) {
 
-        // TODO: userId와 대표계좌가 다르면 exception
-
         User user = userRepository.find(userId);
+
+        if (user == null) {
+            throw new UserException(UserErrorCode.NO_MATCHING_USER);
+        }
+
+        if (!user.get대표계좌().equals(userMainAccount)) {
+            log.error("=== " + userMainAccount + "은 " + userId + "의 계좌가 아닌 예외 " +" ===");
+            throw new AccountException(AccountErrorCode.NOT_A_USER_ACCOUNT);
+        }
 
         List<Account> accounts = user.getAccounts();
         List<AccountDto> accountDtoList = accounts.stream()
@@ -33,8 +53,8 @@ public class AccountServiceImpl implements AccountService{
                 .collect(Collectors.toList());
         AccountResDto accountResDto = getAccountResDto(userId, accountDtoList);
 
-
         return accountResDto;
+
     }
 
     /**

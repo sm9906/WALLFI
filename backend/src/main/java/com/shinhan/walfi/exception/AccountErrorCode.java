@@ -11,7 +11,7 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 @AllArgsConstructor
 public enum AccountErrorCode {
 
-    HAS_MAIN_CHARACTER(BAD_REQUEST, "이미 메인 캐릭터가 있는 사용자입니다");
+    NOT_A_USER_ACCOUNT(BAD_REQUEST, "유저 정보와 대표계좌가 일치하지 않습니다");
 
     private final HttpStatus httpStatus;
 
