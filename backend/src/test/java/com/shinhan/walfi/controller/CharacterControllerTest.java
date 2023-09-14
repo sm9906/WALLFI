@@ -8,6 +8,7 @@ import com.shinhan.walfi.repository.game.CharacterRepository;
 import com.shinhan.walfi.repository.game.UserGameInfoRepository;
 import com.shinhan.walfi.service.game.CharacterService;
 import org.assertj.core.api.Assertions;
+import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

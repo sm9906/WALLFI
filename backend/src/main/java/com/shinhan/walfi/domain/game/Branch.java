@@ -80,6 +80,7 @@ public class Branch {
 
     public void setUserGameInfo(UserGameInfo userGameInfo) {
         this.userGameInfo = userGameInfo;
+        userGameInfo.getBranches().add(this);
     }
 
     public BranchResDto entityToDto() {
