@@ -14,6 +14,7 @@ import com.shinhan.walfi.exception.UserErrorCode;
 import com.shinhan.walfi.exception.UserException;
 import com.shinhan.walfi.repository.game.CharacterRepository;
 import com.shinhan.walfi.repository.game.UserGameInfoRepository;
+import com.shinhan.walfi.util.CharacterStatusUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -31,7 +32,10 @@ import java.util.stream.Collectors;
 public class CharacterServiceImpl implements CharacterService {
 
     private final CharacterRepository characterRepository;
+
     private final UserGameInfoRepository userGameInfoRepository;
+
+    private final CharacterStatusUtil util;
 
     /**
      * 캐릭터 타입 랜덤 설정 후 캐릭터 생성
@@ -279,45 +283,7 @@ public class CharacterServiceImpl implements CharacterService {
                 break;
 
             case "exp":
-                LevelUp defaultLevel = character.getLevel();
-                int defaultExp = character.getExp();
-                int totalRaiseExp = defaultExp + statusValue;
-                int newExp = 0;
-
-                // exp가 사용자의 현재 레벨을 초과하여 오르는 경우
-                if (defaultLevel.getNeededExp() <= totalRaiseExp) {
-
-                    LevelUp newLevel = null;
-
-                    // 사용자의 경험치가 이미 max인 경우 레벨과 경험치가 더 오를 수 없음
-                    if (defaultLevel.equals(LevelUp.LEVEL_10)) {
-                        character.setLevel(LevelUp.LEVEL_10);
-                        character.setExp(LevelUp.LEVEL_10.getNeededExp());
-                    } else {
-                        int sumExp = 0;
-                        for (LevelUp l : LevelUp.values()) {
-                            if (l.getLevel() < defaultLevel.getLevel()) {
-                                continue;
-                            }
-
-                            sumExp += l.getNeededExp();
-
-                            if (totalRaiseExp < sumExp) {
-                                newLevel = LevelUp.getLevelUpByLevel(l.getLevel());
-                                newExp = l.getNeededExp() - (sumExp - totalRaiseExp);
-
-                                break;
-                            }
-                        }
-                        character.setLevel(newLevel);
-                        character.setExp(newExp);
-                    }
-
-                } else {
-                    newExp = defaultExp + statusValue;
-                    character.setExp(newExp);
-                }
-
+                character = util.updateExp(statusValue, character);
                 break;
 
             case "isMain":
@@ -350,6 +316,7 @@ public class CharacterServiceImpl implements CharacterService {
 
         return characterWithUserIdResDto;
     }
+
 
     /**
      * GameCharacter를 CharacterDto로 변환하는 기능
