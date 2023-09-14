@@ -197,7 +197,8 @@ public class CharacterServiceImpl implements CharacterService {
         GameCharacter mainCharacter = characterRepository.findMainCharacter(userGameInfo);
 
         if (mainCharacter.getCharacterIdx() != mainCharacterIdx) {
-            // TODO: 전송한 캐릭터가 사용자의 main 캐릭터가 아닐 시 예외 처리
+            log.error("=== ("+ mainCharacterIdx + ") 메인 캐릭터는 사용자("+ userId +")의 캐릭터가 아닙 ===");
+            throw new CharacterException(CharacterErrorCode.INFO_NO_MATCH);
         }
 
         // 랜덤으로 색 뽑기 로직
