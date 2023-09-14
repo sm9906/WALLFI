@@ -28,7 +28,9 @@ public class AccountServiceImpl implements AccountService{
         User user = userRepository.find(userId);
 
         List<Account> accounts = user.getAccounts();
-        List<AccountDto> accountDtoList = accounts.stream().map(account -> getAccountDto(account)).collect(Collectors.toList());
+        List<AccountDto> accountDtoList = accounts.stream()
+                .map(account -> getAccountDto(account))
+                .collect(Collectors.toList());
         AccountResDto accountResDto = getAccountResDto(userId, accountDtoList);
 
 
