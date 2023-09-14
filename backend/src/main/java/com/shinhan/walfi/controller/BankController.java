@@ -34,4 +34,6 @@ public class BankController {
         HttpResult res = new HttpResult(OK, SUCCESS, "이체 성공");
         return ResponseEntity.status(200).body(res);
     }
+
+
 }

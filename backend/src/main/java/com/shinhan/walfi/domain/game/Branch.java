@@ -3,6 +3,7 @@ package com.shinhan.walfi.domain.game;
 import com.shinhan.walfi.domain.enums.LevelUp;
 import com.shinhan.walfi.dto.game.BranchResDto;
 import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -14,6 +15,7 @@ import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Getter
+@Setter
 public class Branch {
 
     @Id

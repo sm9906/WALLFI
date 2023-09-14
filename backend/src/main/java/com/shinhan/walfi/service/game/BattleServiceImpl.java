@@ -6,6 +6,8 @@ import com.shinhan.walfi.domain.game.GameCharacter;
 import com.shinhan.walfi.domain.game.UserGameInfo;
 import com.shinhan.walfi.dto.game.BattleRankResDto;
 import com.shinhan.walfi.dto.game.BattleReqDto;
+import com.shinhan.walfi.exception.BranchErrorCode;
+import com.shinhan.walfi.exception.BranchException;
 import com.shinhan.walfi.mapper.BattleMapper;
 import com.shinhan.walfi.repository.game.BranchRepository;
 import com.shinhan.walfi.repository.game.CharacterRepository;
@@ -92,8 +94,26 @@ public class BattleServiceImpl implements BattleService{
         }
     }
 
+    /**
+     * 임시 지점장의 점유 기간을 기준으로 정렬하여 반환하는 기능
+     *
+     * @exception 'NO_MATCHING_BRANCH' - 지점 정보가 없을 때 예외 발생
+     * @param idx
+     * @return List<BattleRankResDto>
+     */
     @Override
     public List<BattleRankResDto> getRank(Long idx) {
-        return battleMapper.getRank(idx);
+
+        Branch branch = branchRepository.findByIdx(idx);
+
+        if (branch == null) {
+            log.error("=== idx: "+ idx + " 지점 정보를 찾을 수 없습니다 ===");
+            throw new BranchException(BranchErrorCode.NO_MATCHING_BRANCH);
+        }
+
+        List<BattleRankResDto> rankList = battleMapper.getRank(idx);
+
+        log.info("=== 지점 조회 ===");
+        return rankList;
     }
 }
