@@ -1,5 +1,7 @@
 package com.shinhan.walfi.domain.game;
 
+import com.shinhan.walfi.domain.enums.LevelUp;
+import com.shinhan.walfi.dto.game.BranchResDto;
 import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -25,11 +27,12 @@ public class Branch {
 
     private String branchPhoneNumber;
 
-    private float latitude;
+    private double latitude;
 
-    private float longitude;
+    private double longitude;
 
-    private int managerLevel;
+    @Enumerated(EnumType.STRING)
+    private LevelUp managerLevel;
 
     private int managerExp;
 
@@ -43,10 +46,42 @@ public class Branch {
     private LocalDateTime startTime;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "user_code")
+    @JoinColumn(name = "user_id")
     private UserGameInfo userGameInfo;
 
     @OneToMany(mappedBy = "branch")
     private List<BattleHistory> battleHistories = new ArrayList<>();
 
+    public void setManagerLevel(LevelUp managerLevel) {
+        this.managerLevel = managerLevel;
+    }
+
+    public void setManagerExp(int managerExp) {
+        this.managerExp = managerExp;
+    }
+
+    public void setManagerHp(int managerHp) {
+        this.managerHp = managerHp;
+    }
+
+    public void setManagerAtk(int managerAtk) {
+        this.managerAtk = managerAtk;
+    }
+
+    public void setManagerDef(int managerDef) {
+        this.managerDef = managerDef;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public void setUserGameInfo(UserGameInfo userGameInfo) {
+        this.userGameInfo = userGameInfo;
+    }
+
+    public BranchResDto entityToDto() {
+        BranchResDto branchResDto = new BranchResDto(branchIdx, branchName, address, branchPhoneNumber, latitude, longitude, managerLevel.getLevel(), managerExp, managerHp, managerAtk, managerDef);
+        return branchResDto;
+    }
 }

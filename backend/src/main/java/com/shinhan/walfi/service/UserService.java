@@ -1,25 +1,15 @@
 package com.shinhan.walfi.service;
 
-import com.shinhan.walfi.domain.User;
-import com.shinhan.walfi.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import com.shinhan.walfi.dto.UserDto;
 
-@Service
-@RequiredArgsConstructor
-@Transactional(readOnly = true)
-public class UserService {
+import java.util.List;
 
-    private final UserRepository userRepository;
+public interface UserService {
 
-    @Transactional
-    public String join(User user) {
-        return userRepository.join(user);
-    }
+    List<UserDto> getUserList();
 
-    public User findUserById(String userId) {
-        return userRepository.findUserById(userId);
-    }
+    UserDto login(String userId, String password);
 
 }
+
+//    void signup(User user);
