@@ -1,47 +1,37 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { CardInfo } from "../wallet/walletcomponents/walletcards/CardInfo";
-import axios from "axios";
+import axios from "../../common/http-common";
 
 // 로그인 버튼 누르면, 로그인 처리,
-// 환율 받아오기, 계좌 받아오기 
-export const rcvExchangeRate = createAsyncThunk('RCV_EXCHANGE_RATE', async()=>{
+export const postLogIn = createAsyncThunk('LOGIN', async(data, { rejectWithValue })=>{
   try{
-    const response = await axios.get('http://192.168.100.210:8088/exchange/info',{
-      headers:{
-        'Content-Type': 'application/json'
-      }
-    });
-    console.log(response);
+    console.log(data)
+    const response = await axios.post('user/login',data)
+    return response.data.data;
   }catch(err){
-    console.log('authSlice.rcvExchangeRate',err);
+    return rejectWithValue(err.response.data)
   }
-});
+})
 
-
-// 처음 로그인 해서 계좌 불러오는 action
-
-// 처음 불러온 카드 추가 로직 
-export const rcvAccount = createAsyncThunk('', async (userInfo, { rejectWithValue }) => {
-  try {
-    const response = await axios.post('', userInfo);
-    // console.log(response.data);
-    return response;
-  } catch (err) {
-    return rejectWithValue(err.response);
-  }
-});
 
 const initialState = {
-  name:'',
+  userId:'',
+  mainAccount:'',
 }
 
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers:{
-    
-    // 카드 추가, 돈 추가, 빼는 로직 
   },
+  extraReducers: (builder)=>{
+    builder
+    .addCase(postLogIn.fulfilled, (state, payload) => {
+      console.log(payload)
+      state.userId=payload.payload.userId;
+      state.mainAccount = payload.payload.userMainAccount
+    })
+  }
 })
 
 

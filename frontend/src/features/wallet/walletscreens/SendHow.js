@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { ConvPad } from "../walletcomponents/sendmoney/ConvKeypad";
 import { RFPercentage } from "react-native-responsive-fontsize";
 import VirtualKeyboard from "../walletcomponents/sendmoney/VirtualKeypad";
-import { minusMoney, exchangeMoney } from "../walletSlice";
+import { minusMoney, exchangeMoney, postSendMoney } from "../walletSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function SendHow({route, navigation}){
@@ -16,8 +16,8 @@ export default function SendHow({route, navigation}){
   const balance = outAcc.balance; 
   const outAccId = outAcc.accId
   // 이체 필요한 부분
-  const toAccount = type==='송금'?route.params.account : '';
-  const toBank = type==='송금'?route.params.bank : '';
+  const toAccount = type==='송금'?route.params.account :'';
+  const toBank = type==='송금'?route.params.bank||'신한': '';
   // 환전 필요 부분
   const exchangeRate = type==='환전'?route.params.exchange:'0';
   const toNation = type==='환전'?route.params.toNation:'';
@@ -38,8 +38,31 @@ export default function SendHow({route, navigation}){
   const isOver = type==='송금'||toNation==='KRW'? 
       balance < num_money: balance< Number(exchangedMoney) // 잔액을 초과하는가?
 
-  const sendMoney = async() => {
+  const {mainAccount} = useSelector(state=>state.auth)
+  const sendMoney = () => {
+    const data = {
+      '이체금액': num_money,
+      '입금계좌번호' : '110001785532', // 스토어에서 대표 계좌 가져와야함.
+      '입금계좌통장메모': '보냅니다',
+      '입금은행코드': toBank,
+      '출금계좌번호': mainAccount, // 일단 확인  
+      '출금계좌통장메모':'',
+      // '통화코드': outAcc.ntnCode
+    }
+    dispatch(postSendMoney(data))
+    .then((res)=>{sendMemo(res)})
+    .catch((err) => {
+      console.log(err); return 0
+    })
+    
+  }
+
+  const sendMemo = async(res) => {
+    if(res.error){
+      console.log('에러 발생')
+    }
     await dispatch(minusMoney({num_money, outAccId}))
+    
     const outISO = ISO
     const formMoney = form_money
     navigation.navigate('SendMemo', props = {type, toNation, toAccount, toBank, formMoney, outISO})

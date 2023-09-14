@@ -7,22 +7,11 @@ import Promotion from '../../../assets/wallet/Promotion.png'
 import { Background } from '../walletcomponents/CommonStyle';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from './WalletHome';
 import GoFight from '../walletcomponents/GoFight';
+import { useSelector } from 'react-redux';
 
 export default function ExchangeSearch(){
-  const [exchanges, setExchages] = useState();
-  useEffect(()=>{
-    exchangeRate();
-  }, []);
-  
-  const exchangeRate = async()=> {
-    const result = await axios.get('http://192.168.100.210:8088/exchange/info',{
-      headers:{
-        'Content-Type': 'application/json'
-      }
-    });
-    setExchages([...result.data.data.exchangeDtoList]);
-  };
-
+  const {exchangeRates} = useSelector((state)=>state.wallet); 
+  const exchanges = Object.values(exchangeRates);
   return(
     <View style={{...Background.background, justifyContent:'flex-start'}}>
       <View style={{...styles.excontainer, marginTop:'15%'}}>

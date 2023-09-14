@@ -35,7 +35,6 @@ export const getExchangeRate = createAsyncThunk('GET_EXCHANGE_RATE', async(_,{ r
     const exchanges = {} 
     exchangeDtoList.map((exchange)=>{
       exchange['ISO'] = ISO[exchange.통화코드];
-      console.log(exchange)
       exchanges[exchange.통화코드] = exchange
     })
     return exchanges
@@ -44,13 +43,13 @@ export const getExchangeRate = createAsyncThunk('GET_EXCHANGE_RATE', async(_,{ r
   }
 });
 
-
 // 처음 로그인 해서 계좌 불러오는 action
 
 // 처음 불러온 카드 추가 로직 
-export const getAccount = createAsyncThunk('GET_ACCOUNT', async (_, { rejectWithValue }) => {
+export const getAccounts = createAsyncThunk('GET_ACCOUNT', async (data, { rejectWithValue }) => {
   try {
-    const response = await axios.post('account?userId=ssafy',{
+    console.log(data)
+    const response = await axios.post(`account?userId=${data.userId}&userMainAccount=${data.mainAccount}`,{
     })
     const accountDtoList = response.data.data.accountDtoList;
       const accounts = accountDtoList.map((account, index)=>{
@@ -59,7 +58,7 @@ export const getAccount = createAsyncThunk('GET_ACCOUNT', async (_, { rejectWith
           accountnum: account.계좌번호,
           ntnCode:account.통화, 
           balance: account.잔액통화별,
-          cardType: account.상품명,
+          cardType: account.상품명, // '저축예금' || '정기적금'
           image: flagImage[account.통화],
           ISO: ISO[account.통화]
         }
@@ -72,8 +71,18 @@ export const getAccount = createAsyncThunk('GET_ACCOUNT', async (_, { rejectWith
   }
 });
 
+//이체 axios
 
-
+// export const postExchange = createAsyncThunk('POST_EXCHANGE', async())
+export const postSendMoney = createAsyncThunk('POST_SENDMONEY', async(data, { rejectWithValue }) => {
+  try {
+    console.log(data);
+    const response = await axios.post('bank/localtransfer', data)
+    return response
+  } catch (err) {
+    return rejectWithValue(err.response);
+  }
+})
 
 const initialState = {
   cards:null, // 월렛 들어갈 때 카드 컴포넌트 받아오면서 저장.
@@ -86,9 +95,9 @@ export const walletSlice = createSlice({
   initialState,
   reducers:{
     minusMoney(state, action){
-      console.log(action);
+      // console.log(action);
       const data = action.payload
-      state.cards[data.accId].balance -= data.num_money
+      state.cards[data.outAccId].balance -= data.num_money
     },
     exchangeMoney(state, action){
       const {exchangedMoney, num_money, outAccId, toNation} = action.payload;
@@ -122,7 +131,7 @@ export const walletSlice = createSlice({
     addCase(getExchangeRate.fulfilled, (state, {payload})=>{
       state.exchangeRates = payload;
     })
-    .addCase(getAccount.fulfilled, (state,{payload}) => {
+    .addCase(getAccounts.fulfilled, (state,{payload}) => {
       state.cards = payload
     })
   }
