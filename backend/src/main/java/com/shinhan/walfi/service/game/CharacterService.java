@@ -15,5 +15,14 @@ public interface CharacterService {
 
     CharacterWithUserIdResDto changeCharacterColor(String userId, Long mainCharacterIdx);
 
-    CharacterWithUserIdResDto updateCharacterStatus(String userId, Long characterIdx, String statusType, int statusValue);
+    CharacterWithUserIdResDto updateCharacterStatus(String userId,
+                                                    Long characterIdx,
+                                                    String statusType,
+                                                    int statusValue,
+                                                    String act);
+
+    CharacterWithUserIdResDto updateCharacterStatus(String userId,
+                                                    Long characterIdx,
+                                                    String statusType,
+                                                    int statusValue);
 }

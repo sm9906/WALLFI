@@ -15,4 +15,6 @@ public class CharacterStatusReqDto {
 
     private int value;
 
+    private String act;
+
 }

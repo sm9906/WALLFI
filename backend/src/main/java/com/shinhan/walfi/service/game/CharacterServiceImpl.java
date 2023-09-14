@@ -79,6 +79,8 @@ public class CharacterServiceImpl implements CharacterService {
 
         CharacterDto characterDto = getCharacterDto(gameCharacter);
         CharacterWithUserIdResDto characterWithUserIdResDto = getCharacterWithUserIdResDto(userId, characterDto);
+
+        log.info("=== 사용자: " + userId + "의 캐릭터가 생성되었습니다 ===");
         return characterWithUserIdResDto;
     }
 
@@ -115,8 +117,8 @@ public class CharacterServiceImpl implements CharacterService {
 
         if (matchingCharacter.isPresent()) {
             GameCharacter character = matchingCharacter.get();
-            updateCharacterStatus(userId, character.getCharacterIdx(), "atk", 1);
-            updateCharacterStatus(userId, character.getCharacterIdx(), "def", 1);
+            updateCharacterStatus(userId, character.getCharacterIdx(), "atk", 1, "");
+            updateCharacterStatus(userId, character.getCharacterIdx(), "def", 1, "");
 
             return getCharacterWithUserIdResDto(userId, getCharacterDto(character));
         }
@@ -131,6 +133,7 @@ public class CharacterServiceImpl implements CharacterService {
         CharacterDto characterDto = getCharacterDto(gameCharacter);
         CharacterWithUserIdResDto characterWithUserIdResDto = getCharacterWithUserIdResDto(userId, characterDto);
 
+        log.info("=== 사용자: " + userId + "가 캐릭터 뽑기를 동작시켰습니다 ===");
         return characterWithUserIdResDto;
     }
 
@@ -161,6 +164,7 @@ public class CharacterServiceImpl implements CharacterService {
                 .userId(userId)
                 .build();
 
+        log.info("=== 사용자: " + userId + "의 캐릭터 전체 조회 ===");
         return characterListResDto;
     }
 
@@ -186,6 +190,7 @@ public class CharacterServiceImpl implements CharacterService {
 
         CharacterWithUserIdResDto characterWithUserIdResDto = getCharacterWithUserIdResDto(userId, characterDto);
 
+        log.info("=== 사용자: " + userId + "의 메인 캐릭터 조회 ===");
         return characterWithUserIdResDto;
     }
 
@@ -204,7 +209,7 @@ public class CharacterServiceImpl implements CharacterService {
         GameCharacter mainCharacter = characterRepository.findMainCharacter(userGameInfo);
 
         if (mainCharacter.getCharacterIdx() != mainCharacterIdx) {
-            log.error("=== ("+ mainCharacterIdx + ") 메인 캐릭터는 사용자("+ userId +")의 캐릭터가 아닙 ===");
+            log.error("=== ("+ mainCharacterIdx + ") 메인 캐릭터는 사용자("+ userId +")의 캐릭터가 아닙니다 ===");
             throw new CharacterException(CharacterErrorCode.INFO_NO_MATCH);
         }
 
@@ -234,6 +239,7 @@ public class CharacterServiceImpl implements CharacterService {
         CharacterDto characterDto = getCharacterDto(saveGameCharacter);
         CharacterWithUserIdResDto characterWithUserIdResDto = getCharacterWithUserIdResDto(userId, characterDto);
 
+        log.info("=== 사용자: " + userId + "의 idx: " + mainCharacterIdx + "의 색상 뽑기를 동작하였습니다 ===");
         return characterWithUserIdResDto;
     }
 
@@ -241,6 +247,9 @@ public class CharacterServiceImpl implements CharacterService {
      * 캐릭터의 스텟 변경하는 기능
      *
      * @exception 'INFO_NO_MATCH' - 해당 메인 캐릭터가 사용자의 캐릭터가 아닐시 예외 발생
+     * @exception 'HAVE_TO_BE_PLUS' - 능력치를 하락시키려고 할 때 예외 발생
+     * @exception 'EAT_HAVE_TO_UPDATE_ATK' - 밥먹기가 atk를 상승시키지 않을 때 예외 발생
+     * @exception 'TRAINING_HAVE_TO_UPDATE_DEF' - 훈련하기가 def를 상승키지 않을 때 예외 발생
      * @exception 'THIS_IS_ALREADY_MAIN_CHRACTER' - isMain과 함께 전송한 캐릭터가 이미 메인 캐릭터인 경우 예외 발생
      * @exception 'CANNOT_RECOGNIZE' - 식보낸 statusType을 식별할 수 없을 때 예외 발생
      * @param userId
@@ -254,14 +263,30 @@ public class CharacterServiceImpl implements CharacterService {
     public CharacterWithUserIdResDto updateCharacterStatus(String userId,
                                                            Long characterIdx,
                                                            String statusType,
-                                                           int statusValue) {
+                                                           int statusValue,
+                                                           String act) {
 
         UserGameInfo userGameInfo = userGameInfoRepository.findById(userId);
         GameCharacter character = characterRepository.findCharacterByIdx(characterIdx);
 
         if (character.getCharacterIdx() != characterIdx) {
-            log.error("=== ("+ characterIdx + ") 메인 캐릭터는 사용자("+ userId +")의 캐릭터가 아닙 ===");
+            log.error("=== ("+ characterIdx + ") 메인 캐릭터는 사용자("+ userId +")의 캐릭터가 아닙니다 ===");
             throw new CharacterException(CharacterErrorCode.INFO_NO_MATCH);
+        }
+
+        if (statusValue < 0) {
+            log.error("=== " + statusValue + "가 마이너스 입니다. 하락시킬 수 없습니다 ===");
+            throw new CharacterException(CharacterErrorCode.HAVE_TO_BE_PLUS);
+        }
+
+        if (act.equals("밥먹기") && !statusType.equals("atk")) {
+            log.error("=== 밥먹기로 atk 상승 시키지 않았습니다 ===");
+            throw new CharacterException(CharacterErrorCode.EAT_HAVE_TO_UPDATE_ATK);
+        }
+
+        if (act.equals("훈련하기") && !statusType.equals("def")) {
+            log.error("=== 훈련하기로 def를 상승 시키지 않았습니다 ===");
+            throw new CharacterException(CharacterErrorCode.TRAINING_HAVE_TO_UPDATE_DEF);
         }
 
         // atk, def, hp, exp(레벨업 로직), isMain(메인 캐릭터인걸 아니게 바꾸는 로직 포함)
@@ -314,7 +339,16 @@ public class CharacterServiceImpl implements CharacterService {
         CharacterDto characterDto = getCharacterDto(saveGameCharacter);
         CharacterWithUserIdResDto characterWithUserIdResDto = getCharacterWithUserIdResDto(userId, characterDto);
 
+        log.info("=== 사용자: " + userId + " 의 " + statusType + "가 +" + statusValue + "상승하였습니다 ===");
         return characterWithUserIdResDto;
+    }
+
+    @Transactional
+    public CharacterWithUserIdResDto updateCharacterStatus(String userId,
+                                                           Long characterIdx,
+                                                           String statusType,
+                                                           int statusValue) {
+        return updateCharacterStatus(userId, characterIdx, statusType, statusValue, "");
     }
 
 
