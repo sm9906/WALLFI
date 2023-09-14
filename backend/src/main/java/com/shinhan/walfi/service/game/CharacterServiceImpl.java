@@ -133,6 +133,7 @@ public class CharacterServiceImpl implements CharacterService {
     /**
      * 사용자가 가진 전체 캐릭터 조회
      *
+     * @exception 'NO_MATCHING_USER' - 비밀번호가 틀리거나 존재하지 않는 사용자의 경우 예외 발생
      * @param userId
      * @return 캐릭터 DTO
      */
@@ -162,6 +163,7 @@ public class CharacterServiceImpl implements CharacterService {
     /**
      * 사용자의 메인 캐릭터 조회
      *
+     * @exception 'NO_MATCHING_USER' - 비밀번호가 틀리거나 존재하지 않는 사용자의 경우 예외 발생
      * @param userId
      * @return CharacterWithUserIdResDto
      */
@@ -186,6 +188,7 @@ public class CharacterServiceImpl implements CharacterService {
     /**
      *  사용자의 메인 캐릭터 색을 변경하고 캐릭터 정보를 반환
      *
+     * @exception 'INFO_NO_MATCH' - 해당 메인 캐릭터가 사용자의 캐릭터가 아닐시 예외 발생
      * @param userId
      * @param mainCharacterIdx
      * @return CharacterWithUserIdResDto
@@ -233,6 +236,9 @@ public class CharacterServiceImpl implements CharacterService {
     /**
      * 캐릭터의 스텟 변경하는 기능
      *
+     * @exception 'INFO_NO_MATCH' - 해당 메인 캐릭터가 사용자의 캐릭터가 아닐시 예외 발생
+     * @exception 'THIS_IS_ALREADY_MAIN_CHRACTER' - isMain과 함께 전송한 캐릭터가 이미 메인 캐릭터인 경우 예외 발생
+     * @exception 'CANNOT_RECOGNIZE' - 식보낸 statusType을 식별할 수 없을 때 예외 발생
      * @param userId
      * @param characterIdx
      * @param statusType
@@ -250,7 +256,8 @@ public class CharacterServiceImpl implements CharacterService {
         GameCharacter character = characterRepository.findCharacterByIdx(characterIdx);
 
         if (character.getCharacterIdx() != characterIdx) {
-            // TODO: 전송한 캐릭터가 사용자의 캐릭터가 아닐 시 예외 처리
+            log.error("=== ("+ characterIdx + ") 메인 캐릭터는 사용자("+ userId +")의 캐릭터가 아닙 ===");
+            throw new CharacterException(CharacterErrorCode.INFO_NO_MATCH);
         }
 
         // atk, def, hp, exp(레벨업 로직), isMain(메인 캐릭터인걸 아니게 바꾸는 로직 포함)
@@ -315,7 +322,8 @@ public class CharacterServiceImpl implements CharacterService {
 
             case "isMain":
                 if (character.isMain()) {
-                    // TODO: 사용자의 캐릭터가 이미 메인 캐릭터임으로 변경할 수 없다는 예외 발생
+                    log.error("=== ("+ characterIdx + ") 메인 캐릭터는 이미 메인 캐릭터임으로 예외가 발생함 ===");
+                    throw new CharacterException(CharacterErrorCode.THIS_IS_ALREADY_MAIN_CHRACTER);
                 }
 
                 // 기존 메인 캐릭터를 메인이 아니게 변경
@@ -328,8 +336,9 @@ public class CharacterServiceImpl implements CharacterService {
                 break;
 
             default:
-                // TODO: 전송한 스테이터스를 알 수 없을 때 예외 발생
-                break;
+                log.error("=== <"+ statusType + "> 은 해당 기능에서 인식할 수 없는 문자입니다 ===");
+                throw new CharacterException(CharacterErrorCode.CANNOT_RECOGNIZE);
+
         }
 
         // 변경한 스텟 반영하여 저장
