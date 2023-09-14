@@ -9,12 +9,21 @@ import {
 import { ButtonStyle } from "../../wallet/walletcomponents/CommonStyle";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../wallet/walletcomponents/ScreenSize";
 import { RFPercentage } from "react-native-responsive-fontsize";
+import { postLogIn } from "../authSlice";
+import { useSelector, useDispatch } from "react-redux";
 
 export default function LogIn({navigation}){
+
+  const dispatch = useDispatch();
+
   const [ID, setID] = useState('');
   const [password, setPassword] = useState('');
-  const onPress= ()=>{
-    navigation.navigate('Wallet');
+  
+  const onPress = async()=>{
+    await dispatch(postLogIn({userId:ID, password})).unwrap()
+    .then(()=>
+        navigation.navigate('Wallet')
+    )
   }
   return(
     <View style={styles.background}>
@@ -22,6 +31,7 @@ export default function LogIn({navigation}){
       <View style={styles.txtContainer}>
         <Text style={styles.txtSize}>아이디</Text>
         <TextInput 
+              autoCapitalize="none"
               keyboardShouldPersistTaps="handled" 
               placeholder="  아이디"
               onChangeText={text => setID(text)}
@@ -31,6 +41,7 @@ export default function LogIn({navigation}){
       <View style={styles.txtContainer}>
         <Text style={styles.txtSize}>비밀번호</Text>
         <TextInput  
+              autoCapitalize="none"
               keyboardShouldPersistTaps="handled" 
               placeholder="  비밀번호"
               secureTextEntry={true}
@@ -39,7 +50,7 @@ export default function LogIn({navigation}){
         />
       </View>
       
-      <TouchableOpacity style={ButtonStyle.button} onPress={() => navigation.navigate('Wallet')}>
+      <TouchableOpacity style={ButtonStyle.button} onPress={onPress}>
         <Text style={ButtonStyle.btnFont}>로그인</Text>
       </TouchableOpacity>
     </View>

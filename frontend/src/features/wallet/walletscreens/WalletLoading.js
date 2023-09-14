@@ -11,10 +11,11 @@ import ShinhanLogo from '../../../assets/wallet/ShinhanLogo.png'
 import { Background } from "../walletcomponents/CommonStyle";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "./WalletHome";
 import { useDispatch, useSelector } from "react-redux";
-import { getExchangeRate, getAccount  } from "../walletSlice";
+import { getExchangeRate, getAccounts } from "../walletSlice";
 
 export default function WalletLoading({navigation}){
   const dispatch = useDispatch();
+  const { userId, mainAccount } = useSelector(state=>state.auth);
   useEffect(()=>{
     getData()
   },[])
@@ -22,7 +23,7 @@ export default function WalletLoading({navigation}){
   const getData = async () => {
     try {
       await dispatch(getExchangeRate()).then((res) => console.log('환율 정보 조회 성공'));
-      await dispatch(getAccount()).then((res) => console.log('계좌 조회 성공'));
+      await dispatch(getAccounts({userId, mainAccount})).then((res) => console.log('계좌 조회 성공'));
       navigation.navigate('WalletHome')
     } catch (err) {
       console.log(err);
