@@ -1,9 +1,15 @@
-import { SET_BATTLE_LOADING, SET_GUTS, SET_HP_BAR } from "../actions/loadingActions";
+import { SET_BATTLE_LOADING, SET_GUTS, SET_HP_BAR, RESET_LOADING } from "../actions/loadingActions";
 
 const initialState = {
   battleLoading: false,
-  playerGuts: 0,
-  enemyGuts: 0,
+  guts: {
+    playerGuts: 0,
+    enemyGuts: 0,
+  },
+  hp: {
+    playerHp: 1000,
+    enemyHp: 1000
+  }
 }
 
 const loadingReducer = (state = initialState, action) => {
@@ -14,15 +20,52 @@ const loadingReducer = (state = initialState, action) => {
       if (action.target === 'player') {
         return {
           ...state,
-          playerGuts: action.direction === 'up' ? state.playerGuts + 1 : Math.max(0, state.playerGuts - 1)
+          guts: {
+            ...state.guts,
+            playerGuts: action.guts
+          }
         };
       } else if (action.target === 'enemy') {
         return {
           ...state,
-          enemyGuts: action.direction === 'up' ? state.enemyGuts + 1 : Math.max(0, state.enemyGuts - 1)
+          guts: {
+            ...state.guts,
+            enemyGuts: action.guts
+          }
         };
       }
       return state;
+    case SET_HP_BAR:
+      if (action.target === 'player') {
+        return {
+          ...state,
+          hp: {
+            ...state.hp,
+            playerHp: action.hp
+          }
+        };
+      } else if (action.target === 'enemy') {
+        return {
+          ...state,
+          hp: {
+            ...state.hp,
+            enemyHp: action.hp
+          }
+        };
+      }
+      return state;
+    case RESET_LOADING:
+      return {
+        battleLoading: false,
+        guts: {
+          playerGuts: 0,
+          enemyGuts: 0,
+        },
+        hp: {
+          playerHp: 1000,
+          enemyHp: 1000
+        }
+      }
     default:
       return state;
   }

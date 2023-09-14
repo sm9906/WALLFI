@@ -1,16 +1,18 @@
-import React, { useState } from "react";
+import React from "react";
+import { useSelector } from "react-redux";
 import Card from "../fightcomponents/Card";
 import { View, StyleSheet, Text } from "react-native";
 import { ScreenHeight, ScreenWidth } from "./../fightcomponents/ScreenSize";
 
 const GameHeader = () => {
+  const turn = useSelector((state) => state.turnReducer.turn);
   // const [seconds, setSeconds] = useState(0);
   // const [isActive, setIsActive] = useState(false);
   return (
     <View style={styles.gameHeader}>
       <View style={styles.time}>
-        <Card cType={"time"} cNumber={0} cStyle={0.25} />
-        <Text style={styles.timeText}>17</Text>
+        {/* <Card cType={"time"} cNumber={0} cStyle={0.25} /> */}
+        <Text style={styles.timeText}>{turn+1} 턴</Text>
       </View>
       <Card cType={"question"} cNumber={0} cStyle={0.4} />
     </View>

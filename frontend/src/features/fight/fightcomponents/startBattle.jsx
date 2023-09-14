@@ -1,9 +1,14 @@
 import selectCardMatching from "./selectCardMatching";
-import { setBattleLoading, setGuts } from "../../../actions/loadingActions";
+import {
+  setBattleLoading,
+  setGuts,
+  setHpBar,
+} from "../../../actions/loadingActions";
 import {
   setPlayerSelect,
   setEnemySelect,
   decreaseCard,
+  increaseSkillCard,
 } from "../../../actions/cardActions";
 
 const cardTypes = ["skill", "exchange", "defence", "counter", "attack"];
@@ -23,57 +28,78 @@ const getRandomCardType = (enemyCard) => {
   return availableEnemyCards[randomIndex];
 };
 
-const handleExchange = (
-  playerSelect,
-  enemySelect,
-  playerAnimal,
-  enemyCard,
-  playerCard,
-  dispatch
-) => {
-  if (
-    playerSelect === "exchange" &&
-    playerAnimal.exchange === 1 &&
-    enemySelect === "exchange" &&
-    enemyAnimal.exchange === 1
-  ) {
-    return;
-  }
+// const handleExchange = (
+//   playerSelect,
+//   enemySelect,
+//   playerAnimal,
+//   enemyAnimal,
+//   playerCard,
+//   enemyCard,
+//   dispatch
+// ) => {
+//   if (
+//     playerSelect === "exchange" &&
+//     playerAnimal.exchange === 1 &&
+//     enemySelect === "exchange" &&
+//     enemyAnimal.exchange === 1
+//   ) {
+//     return;
+//   }
 
-  if (enemySelect === "exchange" && enemyAnimal.exchange === 1) {
-    dispatch(setPlayerSelect({ type: "", number: "" }));
-    dispatch(
-      setEnemySelect({ type: playerSelect, number: playerCard[playerSelect] })
-    );
-  } else if (playerSelect === "exchange" && playerAnimal.exchange === 1) {
-    dispatch(
-      setPlayerSelect({ type: enemySelect, number: enemyCard[enemySelect] })
-    );
-    dispatch(setEnemySelect({ type: "", number: "" }));
-  }
-};
+//   if (enemySelect === "exchange" && enemyAnimal.exchange === 1) {
+//     dispatch(setPlayerSelect({ type: "", number: "" }));
+//     dispatch(
+//       setEnemySelect({ type: playerSelect, number: playerCard[playerSelect] })
+//     );
+//   } else if (playerSelect === "exchange" && playerAnimal.exchange === 1) {
+//     dispatch(
+//       setPlayerSelect({ type: enemySelect, number: enemyCard[enemySelect] })
+//     );
+//     dispatch(setEnemySelect({ type: "", number: "" }));
+//   }
+// };
 
-const setGuts = (
+const setAnimalGuts = (
+  playerGuts,
+  enemyGuts,
   playerSelect,
   enemySelect,
   playerAnimal,
   enemyAnimal,
-  dispatch
 ) => {
+  let newPlayerGuts = playerGuts;
+  let newEnemyGuts = enemyGuts;
   if (playerAnimal.name === "호랑이" && playerSelect === "skill") {
     if (enemySelect === "exchange" && enemyAnimal.exchange === 1) {
-      dispatch(setGuts("enemy", "up"));
+      newEnemyGuts += 1;
     } else {
-      dispatch(setGuts("player", "up"));
+      newPlayerGuts += 1;
     }
-  } else if (enemyAnimal.name === "호랑이" && enemySelect === "skill") {
+  } 
+  if (enemyAnimal.name === "호랑이" && enemySelect === "skill") {
     if (playerSelect === "exchange" && playerAnimal.exchange === 1) {
-      dispatch(setGuts("player", "up"));
+      newPlayerGuts += 1;
     } else {
-      dispatch(setGuts("enemy", "up"));
+      newEnemyGuts += 1;
     }
   }
+  return [newPlayerGuts, newEnemyGuts]
 };
+
+const setAnimalHp = (playerHp, enemyHp, damageResult, newPlayerGuts, newEnemyGuts) => {
+  let newPlayerHp = Math.max(0, Math.min(1000, playerHp - damageResult.playerTotalDmg));
+  let newEnemyHp = Math.max(0, Math.min(1000, enemyHp - damageResult.enemyTotalDmg));
+  if (newPlayerHp <= 0 && newPlayerGuts > 0) {
+    newPlayerHp = 1;
+    newPlayerGuts -= 1;
+  }
+
+  if (newEnemyHp <= 0 && newEnemyGuts > 0) {
+    newEnemyHp = 1;
+    newEnemyGuts -= 1;
+  }
+  return [newPlayerHp, newEnemyHp]
+}
 
 const startBattle = (
   dispatch,
@@ -81,7 +107,11 @@ const startBattle = (
   playerCard,
   enemyCard,
   playerAnimal,
-  enemyAnimal
+  enemyAnimal,
+  playerHp,
+  enemyHp,
+  playerGuts,
+  enemyGuts
 ) => {
   const enemySelect = getRandomCardType(enemyCard);
 
@@ -91,25 +121,33 @@ const startBattle = (
   );
   dispatch(decreaseCard(enemySelect, "enemy"));
 
-  handleExchange(
-    // 상대랑 카드 바꾸는 연출
+  const guts = setAnimalGuts(
+    playerGuts,
+    enemyGuts,
     playerSelect,
     enemySelect,
     playerAnimal,
-    enemyCard,
-    playerCard,
-    dispatch
-  );
-  setGuts(playerSelect, enemySelect, playerAnimal, enemyAnimal, dispatch);
+    enemyAnimal,
+  )
+
   const damageResult = selectCardMatching(
     playerSelect,
     enemySelect,
     playerAnimal,
     enemyAnimal
   );
-  // console.log(damageResult)
-  dispatch(reducePlayerHP(damageResult.playerTotalDmg));
-  dispatch(reduceEnemyHP(damageResult.enemyTotalDmg));
+
+  const animalHp = setAnimalHp(playerHp, enemyHp, damageResult, guts[0], guts[1])
+
+  dispatch(setHpBar("player", animalHp[0]));
+  dispatch(setHpBar("enemy", animalHp[1]));
+  dispatch(setGuts("player", guts[0]));
+  dispatch(setGuts("enemy", guts[1]));
+
+  // dispatch(setBattleLoading(false));
+
+  return animalHp;
 };
+
 
 export default startBattle;

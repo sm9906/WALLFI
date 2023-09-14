@@ -4,6 +4,7 @@ import startBattle from "./startBattle";
 import Card from "../fightcomponents/Card";
 import { View, StyleSheet } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
+import { setTurn, setEndGame, setResult } from "../../../actions/turnActions";
 import { ScreenHeight, ScreenWidth } from "./../fightcomponents/ScreenSize";
 import { setPlayerSelect, decreaseCard } from "../../../actions/cardActions";
 
@@ -12,11 +13,38 @@ const cardContainer = () => {
 
   const playerCard = useSelector((state) => state.cardReducer.playerCard);
   const enemyCard = useSelector((state) => state.cardReducer.enemyCard);
+  const playerHp = useSelector((state) => state.loadingReducer.hp.playerHp);
+  const enemyHp = useSelector((state) => state.loadingReducer.hp.enemyHp);
+  const playerGuts = useSelector((state) => state.loadingReducer.hp.playerGuts);
+  const enemyGuts = useSelector((state) => state.loadingReducer.hp.enemyGuts);
+  let turn = useSelector((state) => state.turnReducer.turn);
 
-  const playerAnimal = animals[0] // api 맞춰서 수정할거
-  const enemyAnimal = animals[1] // 동일
+  const playerAnimal = animals[3]; // api 맞춰서 수정할거
+  const enemyAnimal = animals[5]; // 동일
 
   const [doubleClick, setDoubleClick] = useState("");
+
+  const checkResult = ([playerHp, enemyHp]) => {
+    if (playerHp == 0 && enemyHp == 0) {
+      return "draw";
+    } else if (playerHp == 0) {
+      return "lose";
+    } else if (enemyHp == 0) {
+      return "win";
+    } else {
+      return "continue";
+    }
+  };
+
+  const finshResult = ([playerHp, enemyHp]) => {
+    if (playerHp > enemyHp) {
+      return "win"
+    } else if (playerHp < enemyHp) {
+      return "lose"
+    } else {
+      return "draw"
+    }
+  }
 
   const handleCardClick = (type, number) => {
     dispatch(setPlayerSelect({ type, number }));
@@ -26,7 +54,30 @@ const cardContainer = () => {
 
       if (isSkillAndMax || isNotSkillAndAvailable) {
         dispatch(decreaseCard(type));
-        startBattle(dispatch, type, playerCard, enemyCard, playerAnimal, enemyAnimal); 
+        const animalHp = startBattle(
+          dispatch,
+          type,
+          playerCard,
+          enemyCard,
+          playerAnimal,
+          enemyAnimal,
+          playerHp,
+          enemyHp,
+          playerGuts,
+          enemyGuts
+        );
+        const result = checkResult(animalHp);
+        if (result == "continue") {
+          turn += 1;
+          dispatch(setTurn(turn));
+          if (turn >= 7) {
+            dispatch(setEndGame(true));
+            dispatch(setResult(finshResult(animalHp)));
+          }
+        } else {
+          dispatch(setEndGame(true));
+          dispatch(setResult(result));
+        }
       }
       setDoubleClick("");
     } else {

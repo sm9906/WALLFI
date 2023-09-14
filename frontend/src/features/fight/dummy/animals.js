@@ -1,4 +1,4 @@
-const characters = [
+const animals = [
     {
       name: "독수리",
       hp: 1000,
@@ -51,9 +51,9 @@ const characters = [
         def: 500,
         atk: 100,
       },
-      exchange: 1.1
+      exchange: 1
     },
   ];
   
-  export default characters;
+  export default animals;
   

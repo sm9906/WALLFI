@@ -1,3 +1,7 @@
+import Constants from "expo-constants";
+import { useState, useEffect } from "react";
+import { useLocation } from "../googlemaphooks/UseMap";
+import { useNavigation } from "@react-navigation/native";
 import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import {
   StyleSheet,
@@ -6,10 +10,8 @@ import {
   Text,
   TouchableOpacity,
   Image,
+  Button,
 } from "react-native";
-import { useState, useEffect } from "react";
-import { useLocation } from "../googlemaphooks/UseMap";
-import Constants from "expo-constants";
 
 const GOOGLE_API_KEY = Constants.expoConfig.android.config.googleMaps.apiKey;
 
@@ -19,6 +21,7 @@ const Map = () => {
   const [banks, setBanks] = useState(null);
   const [region, setRegion] = useState(null);
   const [selectedBankDetails, setSelectedBankDetails] = useState(null);
+  const navigation = useNavigation();
 
   useEffect(() => {
     if (myLocation) {
@@ -60,6 +63,11 @@ const Map = () => {
   };
 
   if (!region) return null;
+
+  const handleGoToBattle = () => {
+  const randomNum = Math.floor(Math.random() * 9) + 1;
+  navigation.navigate("MainBattle", { randomNum: randomNum });
+  }
 
   return (
     <View style={styles.screen}>
@@ -126,6 +134,10 @@ const Map = () => {
               <Text style={styles.modalText}>
                 {selectedBankDetails?.formatted_phone_number}
               </Text>
+              <Button
+                title="배틀로 이동"
+                onPress={handleGoToBattle}
+              />
               <TouchableOpacity onPress={closeModal} style={styles.closeButton}>
                 <Text>닫기</Text>
               </TouchableOpacity>
@@ -184,9 +196,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   modalImage: {
-    width: "40%",  
-    height: "40%", 
-    marginBottom: 20, 
+    width: "40%",
+    height: "40%",
+    marginBottom: 20,
   },
-  
 });

@@ -4,7 +4,6 @@ const selectCardMatching = (
   playerAnimal,
   enemyAnimal
 ) => {
-  // console.log(playerSelect, enemySelect, playerAnimal, enemyAnimal);
 
   let playerType = playerAnimal.name;
   let playerAtk = playerAnimal.stats.atk;
@@ -26,7 +25,7 @@ const selectCardMatching = (
       playerAtk *= playerExc;
       playerSelect = "attack";
     } else if (playerExc < 1) {
-      playerDef *= 2 - playerDef;
+      playerDef *= 2 - playerExc;
       playerSelect = "defence";
     } else if (playerExc == 1) {
       playerSelect = "counter";
@@ -35,7 +34,7 @@ const selectCardMatching = (
     if (enemyExc > 1) {
       enemyAtk *= enemyExc, enemySelect = "attack";
     } else if (enemyExc < 1) {
-      enemyDef *= 2 - enemyDef, enemySelect = "defence";
+      enemyDef *= 2 - playerExc, enemySelect = "defence";
     } else if (enemyExc == 1) {
       enemySelect = "counter";
     }

@@ -1,21 +1,26 @@
 export const SET_BATTLE_LOADING = "SET_BATTLE_LOADING";
 export const SET_GUTS = "SET_GUTS";
 export const SET_HP_BAR = "SET_HP_BAR";
+export const RESET_LOADING = "RESET_LOADING";
 
 export const setBattleLoading = (isLoading) => ({
     type: SET_BATTLE_LOADING,
     payload: isLoading
-    // payload: false // 오버레이 설정
 })
 
-export const setGuts = (target, direction) => ({
-    type: SET_GUTS,
-    target,
-    direction
-});
-
-export const setHpBar = (target, damage) => ({
+export const setHpBar = (target, hp) => ({
     type: SET_HP_BAR,
     target,
-    damage
+    hp
+});
+
+export const setGuts = (target, guts) => ({
+    type: SET_GUTS,
+    target,
+    guts
+});
+
+export const resetLoading = (reset) => ({
+    type: RESET_LOADING,
+    reset
 })

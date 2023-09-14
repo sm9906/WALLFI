@@ -68,7 +68,11 @@ export const LocationProvider = ({ children }) => {
 
   useEffect(() => {
     (async () => {
-      const { status } = await Location.requestBackgroundPermissionsAsync();
+      let { status } = await Location.getBackgroundPermissionsAsync();
+      if (status !== 'granted') {
+        const response = await Location.requestBackgroundPermissionsAsync();
+        status = response.status;
+      }
       if (status !== "granted") {
         console.error("위치 권한이 거부되었습니다.");
         return;

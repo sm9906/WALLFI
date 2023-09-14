@@ -3,7 +3,8 @@ export const SET_PLAYER_SELECT = 'SET_PLAYER_SELECT';
 export const SET_ENEMY_CARD = "SET_ENEMY_CARD";
 export const SET_ENEMY_SELECT = "SET_ENEMY_SELECT";
 export const DECREASE_CARD = "DECREASE_CARD";
-
+export const INCREASE_SKILL_CARD = "INCREASE_SKILL_CARD";
+export const RESET_CARD = "RESET_CARD";
 
 export const setPlayerCard = (cardType) => ({
   type: SET_PLAYER_CARD,
@@ -38,3 +39,10 @@ export const decreaseCard = (cardType, target = 'player') => {
     },
   };
 };
+
+export const resetCard = (reset) => {
+  return {
+    type: RESET_CARD,
+    reset
+  }
+}

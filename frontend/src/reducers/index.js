@@ -1,12 +1,12 @@
 import { combineReducers } from 'redux';
 import cardReducer from './cardReducer';
 import loadingReducer from './loadingReducer'
-import battleReducer from './battleReducer';
+import turnReducer from './turnReducer';
 
 const rootReducer = combineReducers({
   cardReducer: cardReducer,
   loadingReducer: loadingReducer,
-  battleReducer:battleReducer,
+  turnReducer: turnReducer,
 });
 
 export default rootReducer;
