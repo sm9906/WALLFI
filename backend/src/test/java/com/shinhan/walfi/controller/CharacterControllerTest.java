@@ -40,6 +40,7 @@ class CharacterControllerTest {
 
     @BeforeEach
     void create() {
+
         UserGameInfo userGameInfo = new UserGameInfo();
         userGameInfo.setUserId(userId);
         em.persist(userGameInfo);
