@@ -12,15 +12,17 @@ import com.shinhan.walfi.repository.UserRepository;
 import com.shinhan.walfi.repository.banking.AccountRepository;
 import com.shinhan.walfi.util.ExchangeUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Slf4j
 @Service
-@RequiredArgsConstructor
 @Transactional
+@RequiredArgsConstructor
 public class ExchangeServiceImpl implements ExchangeService {
 
     private final ExchangeUtil util;
@@ -72,10 +74,12 @@ public class ExchangeServiceImpl implements ExchangeService {
         User user = userRepository.find(userId);
 
         if (user == null) {
+            log.error("=== 틀린 비밀번호이거나 존재하지 않는 회원 ===");
             throw new UserException(UserErrorCode.NO_MATCHING_USER);
         }
 
         if (!user.get대표계좌().equals(사용자대표계좌)) {
+            log.error("=== 대표계좌: " + 사용자대표계좌 + "는 id: " + userId + "의 계좌가 아님 ===");
             throw new TransferException(TransferErrorCode.NOT_USERS_MAIN_ACCOUNT);
         }
 
@@ -83,9 +87,11 @@ public class ExchangeServiceImpl implements ExchangeService {
         String globalAccount = bankMapper.findSubAccountNumberByCurrencyCode(사용자대표계좌, 통화코드);
 
         if (krwAccount == null) {
+            log.error("=== id: " + userId + "에게는 KRW 계좌가 존재하지 않음");
             throw new TransferException(TransferErrorCode.NOT_FOUND_KRW_ACCOUNT);
         }
         if (globalAccount == null) {
+            log.error("=== id: " + userId + "에게는 " + 통화코드 + " 계좌가 존재하지 않음");
             throw new TransferException(TransferErrorCode.NOT_FOUND_GLOBAL_ACCOUNT);
         }
 
@@ -93,6 +99,8 @@ public class ExchangeServiceImpl implements ExchangeService {
 
         bankMapper.withdrawTransferMoneyFromAccount(krwAccount, kwrConvertPrice);
         bankMapper.depositTransferMoneyFromAccount(globalAccount, 금액);
+
+        log.info("=== id: " + userId + " 금액: " + 금액 + 통화코드 + " 환전 완료 ===" );
 
     }
 
