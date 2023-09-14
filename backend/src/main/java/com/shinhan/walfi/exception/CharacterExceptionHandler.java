@@ -34,5 +34,4 @@ public class CharacterExceptionHandler {
         return convertFailCodeToHttpResponse(error.getCharacterErrorCode());
     }
 
-
 }
