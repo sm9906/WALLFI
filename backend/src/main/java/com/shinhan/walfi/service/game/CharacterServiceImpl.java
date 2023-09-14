@@ -279,23 +279,25 @@ public class CharacterServiceImpl implements CharacterService {
             throw new CharacterException(CharacterErrorCode.HAVE_TO_BE_PLUS);
         }
 
+        if (act.equals("밥먹기") && !statusType.equals("atk")) {
+            log.error("=== 밥먹기로 atk 상승 시키지 않았습니다 ===");
+            throw new CharacterException(CharacterErrorCode.EAT_HAVE_TO_UPDATE_ATK);
+        }
+
+        if (act.equals("훈련하기") && !statusType.equals("def")) {
+            log.error("=== 훈련하기로 def를 상승 시키지 않았습니다 ===");
+            throw new CharacterException(CharacterErrorCode.TRAINING_HAVE_TO_UPDATE_DEF);
+        }
+
         // atk, def, hp, exp(레벨업 로직), isMain(메인 캐릭터인걸 아니게 바꾸는 로직 포함)
         switch (statusType) {
 
             case "atk":
-                if (!act.equals("밥먹기")) {
-                    log.error("=== 밥먹기로 atk 상승 시키지 않았습니다 ===");
-                    throw new CharacterException(CharacterErrorCode.EAT_HAVE_TO_UPDATE_ATK);
-                }
                 int defaultAtk = character.getAtk();
                 character.setAtk(defaultAtk + statusValue);
                 break;
 
             case "def":
-                if (!act.equals("훈련하기")) {
-                    log.error("=== 훈련하기로 def를 상승 시키지 않았습니다 ===");
-                    throw new CharacterException(CharacterErrorCode.TRAINING_HAVE_TO_UPDATE_DEF);
-                }
                 int defaultDef = character.getDef();
                 character.setDef(defaultDef + statusValue);
                 break;

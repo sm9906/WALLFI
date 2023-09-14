@@ -159,6 +159,7 @@ class CharacterControllerTest {
         characterStatusReqDto.setCharacterIdx(characterIdx);
         characterStatusReqDto.setStatusType("atk");
         characterStatusReqDto.setValue(10);
+        characterStatusReqDto.setAct("");
 
         // when
         ResponseEntity<HttpResult> res = characterController.changeCharacterStatus(characterStatusReqDto);
@@ -180,6 +181,7 @@ class CharacterControllerTest {
         characterStatusReqDto.setCharacterIdx(characterIdx);
         characterStatusReqDto.setStatusType("def");
         characterStatusReqDto.setValue(10);
+        characterStatusReqDto.setAct("");
 
         // when
         ResponseEntity<HttpResult> res = characterController.changeCharacterStatus(characterStatusReqDto);
@@ -201,6 +203,7 @@ class CharacterControllerTest {
         characterStatusReqDto.setCharacterIdx(characterIdx);
         characterStatusReqDto.setStatusType("hp");
         characterStatusReqDto.setValue(10);
+        characterStatusReqDto.setAct("");
 
         // when
         ResponseEntity<HttpResult> res = characterController.changeCharacterStatus(characterStatusReqDto);
@@ -227,6 +230,7 @@ class CharacterControllerTest {
         characterStatusReqDto.setCharacterIdx(shopCharacterIdx);
         characterStatusReqDto.setStatusType("isMain");
         characterStatusReqDto.setValue(10);
+        characterStatusReqDto.setAct("");
 
         // when
         ResponseEntity<HttpResult> res = characterController.changeCharacterStatus(characterStatusReqDto);
@@ -254,6 +258,7 @@ class CharacterControllerTest {
         characterStatusReqDto.setCharacterIdx(mainCharacterIdx);
         characterStatusReqDto.setStatusType("exp");
         characterStatusReqDto.setValue(50);
+        characterStatusReqDto.setAct("");
 
         // when
         ResponseEntity<HttpResult> res = characterController.changeCharacterStatus(characterStatusReqDto);
@@ -279,6 +284,7 @@ class CharacterControllerTest {
         characterStatusReqDto.setCharacterIdx(mainCharacterIdx);
         characterStatusReqDto.setStatusType("exp");
         characterStatusReqDto.setValue(130);
+        characterStatusReqDto.setAct("");
 
         // when
         ResponseEntity<HttpResult> res = characterController.changeCharacterStatus(characterStatusReqDto);
