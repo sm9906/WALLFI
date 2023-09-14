@@ -104,9 +104,9 @@ public class BattleServiceImpl implements BattleService{
     @Override
     public List<BattleRankResDto> getRank(Long idx) {
 
-        Branch branch = branchRepository.findByIdx(idx);
+        Optional<Branch> branch = branchRepository.findById(idx);
 
-        if (branch == null) {
+        if (branch.isEmpty()) {
             log.error("=== idx: "+ idx + " 지점 정보를 찾을 수 없습니다 ===");
             throw new BranchException(BranchErrorCode.NO_MATCHING_BRANCH);
         }
