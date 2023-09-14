@@ -80,8 +80,8 @@ public class ExchangeUtil {
         list.add(new ExchangeDto(1286.5F));
         list.add(new ExchangeDto(902.05F));
         list.add(new ExchangeDto(1411.3F));
-        list.add(new ExchangeDto(1647.85F));
-        list.add(new ExchangeDto(851.68F));
+        list.add(new ExchangeDto(855.32F));
+        list.add(new ExchangeDto(178.47F));
         return list;
     }
 }
