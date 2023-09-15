@@ -3,44 +3,39 @@ import { StatusBar } from "expo-status-bar";
 import {Text, TouchableOpacity, 
   View, Image, StyleSheet } from "react-native";
 
-import { ScreenHeight, ScreenWidth } from "../ScreenSize";
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../ScreenSize";
 import { useNavigation } from "@react-navigation/native";
-import {CardInfo} from './CardInfo';
+import {colors} from './CardInfo';
+import { RFPercentage } from "react-native-responsive-fontsize";
+
+
 
 const CardItem = (props) => {
   // configuring navigation
   const navigation = useNavigation();
+  const data = props.data;
 
-  const info = {
-    nation: '한국',
-    accountnum : '1111111',
-    balance: '1,000,000'
-  }
-  const data = new CardInfo(info);
-  // move to balance page
-  const handlePress = () => {
-    console.log();
-  };
-
+  // const flag = require(`../../../../assets/flag`)
+  const id = props.data.accId
+  console.log(id)
   return (
-    <>
-     <View style={styles.card}>
+    <View style={{...styles.card, backgroundColor:colors[id%5]}}>
       <View style={styles.account}>
-       <Text style={styles.cardinfo}>{data.nation}{data.accountnum}</Text>
+        {data.image&&<Image source={data.image} style={styles.flagImg}/>}
+        <Text style={{...styles.cardinfo, fontSize:RFPercentage(2)}}>   {data.ntnCode}   {data.accountnum}</Text>
       </View> 
       <View style={styles.balance}>
-        <Text style={{...styles.cardinfo, fontSize:30, }}>{data.balance}</Text>
+        <Text style={{...styles.cardinfo}}>{data.balance.toLocaleString('es-US')}</Text>
         <View style={styles.buttons}>
-          <TouchableOpacity onPress={()=>navigation.navigate('SendMoney')} style={styles.button}>
-            <Text>송금하기</Text>
+          <TouchableOpacity onPress={()=>navigation.navigate('SendWho', {type:'송금', data})} style={styles.button}>
+            <Text style={styles.txtSize}>송금하기</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={()=>navigation.navigate('ExchangeSearch')} style={styles.button}>
-            <Text>환전하기</Text>
+          <TouchableOpacity onPress={()=>navigation.navigate('SendWho', {type:'환전', data})} style={styles.button}>
+            <Text style={styles.txtSize}>환전하기</Text>
           </TouchableOpacity>
         </View>
       </View>
-     </View>
-    </>
+    </View>
   );
 };
 
@@ -48,26 +43,30 @@ export default CardItem;
 
 const styles = StyleSheet.create({
   card:{
-    width: ScreenWidth * 0.8,
-    height: ScreenHeight * 0.23,
+    width: SCREEN_WIDTH * 0.8,
+    height: SCREEN_HEIGHT * 0.22,
     backgroundColor: '#293694',
     borderRadius: 15,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: '10%',
-    paddingVertical:'5%'
+    paddingHorizontal: SCREEN_WIDTH * 0.08,
+    paddingVertical:SCREEN_HEIGHT * 0.23 * 0.05,
+    marginHorizontal: SCREEN_WIDTH * 0.05
   },
   cardinfo:{
-    color:'white'
+    color:'white',
+    fontSize:RFPercentage(3),
+    fontWeight:'bold'
   },
   account:{
     borderBottomColor: 'white',
     borderBottomWidth: StyleSheet.hairlineWidth*3,
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    paddingTop:'5%',
+    paddingVertical:'5%',
     width: '100%',
     height:'30%',
+    alignItems:'center'
   },
   balance:{
     height:'70%',
@@ -84,5 +83,15 @@ const styles = StyleSheet.create({
     paddingHorizontal:'5%',
     paddingVertical:'2%',
     backgroundColor:'white',
+  },
+  txtSize:{
+    fontSize:RFPercentage(2) 
+  },
+  flagImg:{
+    resizeMode:'contain',
+    marginTop:'2%',
+    height: SCREEN_WIDTH*0.05,
+    width: SCREEN_WIDTH*0.05,
+    borderRadius:100
   }
 });

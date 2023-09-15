@@ -15,6 +15,8 @@
     "@react-navigation/native-stack": "^6.9.13",
     "@react-navigation/stack": "^6.3.17",
     "axios": "^1.5.0",
+    "@reduxjs/toolkit": "^1.9.5",
+    "deprecated-react-native-prop-types": "^4.2.1",
     "expo": "~49.0.8",
     "expo-constants": "^14.4.2",
     "expo-image-manipulator": "~11.3.0",
