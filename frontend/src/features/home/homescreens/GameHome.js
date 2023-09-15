@@ -319,7 +319,7 @@ function Bottom(props) {
                 <Image source={images.btnSource.wallet} style={styles.buttonContent}/>
                 <Text style={styles.btnText}>지갑으로</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.bottomCenterBtn} onPress={() => props.navigation.navigate('Mission')}>
+            <TouchableOpacity style={styles.bottomCenterBtn} onPress={() => props.navigation.navigate('Fight')}>
                 <Image source={images.btnSource.battle} style={styles.challengeBtn}/>
                 <Text style={styles.btnText}>일일도전</Text>
             </TouchableOpacity>
