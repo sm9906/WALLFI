@@ -151,7 +151,7 @@ public class ExchangeServiceImpl implements ExchangeService {
     @Override
     public void fromGlobalExchange(String userId, String 사용자대표계좌, String 출발계좌통화코드, long 금액, float 전신환매입환율) {
         // 도착계좌의 통화코드가 원화면 안됨
-        if (출발계좌통화코드.equals("KRW")) {
+        if (!출발계좌통화코드.equals("KRW")) {
             throw new TransferException(TransferErrorCode.NOT_FOR_BUY);
         }
 
@@ -192,8 +192,8 @@ public class ExchangeServiceImpl implements ExchangeService {
         }
 
         long kwrConvertPrice = (long) Math.ceil(전신환매입환율 * 금액);
-        bankMapper.withdrawTransferMoneyFromAccount(krwAccountNum, 금액);
         bankMapper.globalWithdrawTransferMoneyFromAccount(globalAccountNum, 금액, kwrConvertPrice);
+        bankMapper.depositTransferMoneyFromAccount(krwAccountNum, kwrConvertPrice);
 
         log.info("=== id: " + userId + "의 요청에 따라 " + 금액 + 출발계좌통화코드 + " 환전 완료 ===" );
 
