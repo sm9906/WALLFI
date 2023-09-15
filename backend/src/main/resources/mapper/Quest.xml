@@ -4,13 +4,27 @@
 <mapper namespace="com.shinhan.walfi.mapper.QuestMapper">
 
     <select id="readRandomDailyQuestByLimit" parameterType="int">
-        SELECT q.quest_idx     AS `idx`,
-               q.quest_type    AS `type`,
-               q.quest_title   AS `title`,
-               q.quest_content AS `content`
+        SELECT q.quest_idx   AS `idx`,
+               q.quest_type  AS `type`,
+               q.quest_title AS `title`,
+               q.quest_total AS `total`
         FROM quest q
         ORDER BY rand()
         LIMIT #{limit};
     </select>
 
+    <update id="increaseSpecificPerformedQuest" parameterType="Map">
+        UPDATE quest_manager
+        SET count = count + 1
+        WHERE user_id = #{user_id}
+          AND quest_id = #{quest_id};
+    </update>
+
+    <select id="checkIFQuestIsComplete" resultType="boolean">
+        SELECT IF(qm.count > q.quest_total, TRUE, FALSE)
+        FROM quest_manager qm
+                 LEFT JOIN quest q ON qm.quest_id = q.quest_idx
+        WHERE qm.user_id = #{user_id}
+          AND qm.quest_id = #{quest_id};
+    </select>
 </mapper>
