@@ -6,13 +6,13 @@ const selectCardMatching = (
 ) => {
 
   let playerType = playerAnimal.animal;
-  let playerAtk = playerAnimal.attack;
-  let playerDef = playerAnimal.defence;
+  let playerAtk = playerAnimal.attack * 2;
+  let playerDef = playerAnimal.defence * 2;
   let playerExc = playerAnimal.exchange;
 
   let enemyType = enemyAnimal.animal;
-  let enemyAtk = enemyAnimal.attack;
-  let enemyDef = enemyAnimal.defence;
+  let enemyAtk = enemyAnimal.attack * 2;
+  let enemyDef = enemyAnimal.defence * 2;
   let enemyExc = enemyAnimal.exchange;
 
   let playerDmg = 0;
@@ -42,38 +42,37 @@ const selectCardMatching = (
 
   let playerSiba = false;
   let enemySiba = false;
-
   if (playerSelect == "skill") {
-    if (playerType == "독수리") {
-      if (enemySelect == "counter" || ((enemyType == "호랑이" || enemyType == "시바") && enemySelect == "skill")) {
+    if (playerType == "EAGLE") {
+      if (enemySelect == "counter" || ((enemyType == "TIGER" || enemyType == "SHIBA") && enemySelect == "skill")) {
         playerSDmg += playerAnimal.hp * 0.6;
       } else {
         enemySDmg += playerAnimal.hp * 0.4;
         playerSDmg += playerAnimal.hp * 0.2;
       }
       playerSelect = "attack"
-    } else if (playerType == "판다") {
-      if (enemySelect == "counter" || ((enemyType == "호랑이" || enemyType == "시바") && enemySelect == "skill")) {
+    } else if (playerType == "PANDA") {
+      if (enemySelect == "counter" || ((enemyType == "TIGER" || enemyType == "SHIBA") && enemySelect == "skill")) {
         enemySDmg += -playerAnimal.hp * 0.1;
       } else {
         playerSDmg += -playerAnimal.hp * 0.1;
       }
       playerSelect = "defence"
-    } else if (playerType == "호랑이") {
+    } else if (playerType == "TIGER") {
       playerSelect = "counter";
-    } else if (playerType == "사자") {
+    } else if (playerType == "LION") {
       playerAtk *= 1.5;
       playerSelect = "attack";
-    } else if (playerType == "쿼카") {
+    } else if (playerType == "QUOKKA") {
       playerDef *= 1.5;
       playerSelect = "defence";
-    } else if (playerType == "시바견") {
+    } else if (playerType == "SHIBA") {
       playerSiba = true;
       playerSelect = "counter";
     }
   } 
   if (enemySelect == "skill") {
-    if (enemyType == "독수리") {
+    if (enemyType == "EAGLE") {
       if (playerSelect == "counter") {
         enemySDmg += enemyAnimal.hp * 0.6;
       } else {
@@ -81,22 +80,22 @@ const selectCardMatching = (
         enemySDmg += enemyAnimal.hp * 0.2;
       }
       enemySelect = "attack"
-    } else if (enemyType == "판다") {
+    } else if (enemyType == "PANDA") {
       if (playerSelect == "counter") {
         playerSDmg += -enemyAnimal.hp * 0.1;
       } else {
         enemySDmg += -enemyAnimal.hp * 0.1;
       }
       enemySelect = "defence"
-    } else if (enemyType == "호랑이") {
+    } else if (enemyType == "TIGER") {
       enemySelect = "counter";
-    } else if (enemyType == "사자") {
+    } else if (enemyType == "LION") {
       enemyAtk *= 1.5;
       enemySelect = "attack";
-    } else if (enemyType == "쿼카") {
+    } else if (enemyType == "QUOKKA") {
       enemyDef *= 1.5;
       enemySelect = "defence";
-    } else if (enemyType == "시바견") {
+    } else if (enemyType == "SHIBA") {
       enemySiba = true;
       enemySelect = "counter";
     }

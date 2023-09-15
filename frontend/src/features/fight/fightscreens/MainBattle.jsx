@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import images from "../../../assets/images";
+import images from "../../../common/imgDict";
 import GameMain from "../fightcomponents/GameMain";
 import GameHeader from "../fightcomponents/GameHeader";
 import BattleFinish from "../fightcomponents/BattleFinish";

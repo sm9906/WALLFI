@@ -1,10 +1,11 @@
 import { useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
+import images from "../../../common/imgDict";
 import { useLocation } from "../googlemaphooks/UseMap";
 import { useNavigation } from "@react-navigation/native";
-import { setEnemy, setPlayer } from "../../../actions/animalAction";
 import { setMaxHpBar } from "../../../actions/loadingActions";
 import { requestPost, requestGet } from "../../../lib/api/Api";
+import { setEnemy, setPlayer } from "../../../actions/animalAction";
 import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import {
   StyleSheet,
@@ -23,7 +24,7 @@ const Map = () => {
   const [selectedBankDetails, setSelectedBankDetails] = useState(null);
   const [region, setRegion] = useState(null);
   const [myAnimal, setmyAnimal] = useState(null);
-  const [exchange, setexchange] = useState(null)
+  const [exchange, setexchange] = useState(null);
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
@@ -70,7 +71,7 @@ const Map = () => {
     } catch (error) {
       console.error("데이터를 가져오는 중 오류가 발생했습니다.", error);
     }
-  }
+  };
 
   const fetchBankDetail = async (idx) => {
     // 은행 상세정보
@@ -98,7 +99,7 @@ const Map = () => {
       console.error("메인 동물 호출중 오류가 발생했습니다.", error);
     }
   };
-  
+
   const todayExchange = async () => {
     // 오늘 환율 호출
     try {
@@ -109,24 +110,26 @@ const Map = () => {
       console.error("오늘의 환율 호출중 오류가 발생했습니다.", error);
     }
   };
-  
+
   const ANIMAL_TO_CURRENCY = {
-    "TIGER": "KRW",
-    "EAGLE": "USD",
-    "SHIBA": "JPY",
-    "LION": "EUR",
-    "QUOKA": "AUD",
-    "PANDA": "CNY",
+    TIGER: "KRW",
+    EAGLE: "USD",
+    SHIBA: "JPY",
+    LION: "EUR",
+    QUOKKA: "AUD",
+    PANDA: "CNY",
   };
-  
+
   const setExchangeForAnimal = (animalType) => {
     const currencyCode = ANIMAL_TO_CURRENCY[animalType];
-    const exchangeData = exchange.find(item => item.통화코드 === currencyCode);
+    const exchangeData = exchange.find(
+      (item) => item.통화코드 === currencyCode
+    );
     if (exchangeData) {
       return exchangeData.전일대비;
     }
     return 1;
-  }
+  };
 
   const closeModal = () => {
     // 모달창 닫음
@@ -138,7 +141,7 @@ const Map = () => {
     if (selectedBankDetails != null && myAnimal != null) {
       const playerExchange = setExchangeForAnimal(myAnimal.characterType);
       const enemyExchange = setExchangeForAnimal(selectedBankDetails.animal);
-
+      
       const playerStat = {
         animal: myAnimal?.characterType,
         Level: myAnimal?.level,
@@ -146,27 +149,32 @@ const Map = () => {
         Hp: myAnimal?.hp,
         attack: myAnimal?.atk,
         defence: myAnimal?.def,
-        exchange: playerExchange,
+        exchange: 1 + playerExchange / 10,
       };
+
       const enemyStat = {
-        animal: "", // 지점장 동물 추가해야함
+        animal: selectedBankDetails.managerAnimalType,
         Level: selectedBankDetails?.managerLevel,
         exp: selectedBankDetails.managerExp,
         Hp: selectedBankDetails?.managerHp,
         attack: selectedBankDetails?.managerAtk,
         defence: selectedBankDetails?.managerDef,
-        exchange: enemyExchange,
+        exchange: 1 + enemyExchange / 10,
       };
       dispatch(setEnemy(enemyStat));
       dispatch(setPlayer(playerStat));
-      dispatch(setMaxHpBar('player', myAnimal?.hp));
-      dispatch(setMaxHpBar('enemy', selectedBankDetails?.managerHp));
+      dispatch(setMaxHpBar("player", myAnimal?.hp));
+      dispatch(setMaxHpBar("enemy", selectedBankDetails?.managerHp));
       const randomNum = Math.floor(Math.random() * 9) + 1; // 배틀 배경 랜덤값 설정
       navigation.navigate("Fight", {
         screen: "MainBattle",
         params: { randomNum: randomNum },
       });
     }
+  };
+
+  const formatAddress = (address) => {
+    return address.replace(/(\d)([가-힣\s])/g, "$1\n$2");
   };
 
   return (
@@ -217,19 +225,25 @@ const Map = () => {
               <Text style={styles.modalText}>
                 {selectedBankDetails?.지점명} 지점장
               </Text>
-              <Image
-                // source={require("./../../../assets/images/stone.png")} // 지점장 동물 이미지 넣어야함
-                style={styles.modalImage}
-              />
+              {selectedBankDetails && (
+                <Image
+                  source={
+                    images.animal[
+                      `baby_${selectedBankDetails.managerAnimalType}`
+                    ]
+                  }
+                  style={styles.modalImage}
+                />
+              )}
               <Text style={styles.modalText}>
                 LV. {selectedBankDetails?.managerLevel}
               </Text>
               <Text style={styles.modalText}>
-                {selectedBankDetails?.지점주소}
+              {selectedBankDetails?.지점주소 ? formatAddress(selectedBankDetails.지점주소) : ''}
               </Text>
-              <Text style={styles.modalText}>
+              {/* <Text style={styles.modalText}>
                 {selectedBankDetails?.지점대표전화번호}
-              </Text>
+              </Text> */}
               <Button title="배틀로 이동" onPress={handleGoToBattle} />
               <TouchableOpacity onPress={closeModal} style={styles.closeButton}>
                 <Text>닫기</Text>
@@ -268,16 +282,20 @@ const styles = StyleSheet.create({
     borderColor: "#ffd700",
     borderWidth: 4,
     borderRadius: 15,
+    // backgroundColor: "yellow"
   },
   modalIn: {
     width: "90%",
     height: "90%",
     justifyContent: "space-between",
+    alignItems: "center",
+    // backgroundColor: "green"
   },
   modalText: {
     color: "#ffd700",
     fontSize: 18,
     fontWeight: "bold",
+    marginBottom: 2,
   },
   closeButton: {
     marginTop: 20,
@@ -292,5 +310,6 @@ const styles = StyleSheet.create({
     width: "40%",
     height: "40%",
     marginBottom: 20,
+    // backgroundColor: "red"
   },
 });
