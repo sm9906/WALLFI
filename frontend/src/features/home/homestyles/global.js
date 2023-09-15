@@ -3,13 +3,15 @@ import { SCREEN_WIDTH, SCREEN_HEIGHT } from '../homecomponents/ScreenSize.js';
 
 export const globalStyles = StyleSheet.create({
     container: {
-        flex: 1
+        // width: SCREEN_WIDTH,
+        flex: 1,
+
     },
     bgImg: {
         flex: 1,
         width: SCREEN_WIDTH,
         height: '100%',
-        resizeMode: 'cover',
+        resizeMode: 'contain',
     },
     navigationBtn: {
         flex: 1,

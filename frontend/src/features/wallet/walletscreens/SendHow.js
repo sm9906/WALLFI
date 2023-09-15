@@ -58,11 +58,12 @@ export default function SendHow({route, navigation}){
   const sendExchange= () => {
     const data = {
       "userId":userId,
-      "금액": toNation==='KRW'?money:Number(exchangedMoney),
+      "금액": toNation==='KRW'?Number(exchangedMoney):money,
       "사용자대표계좌": mainAccount,
       "전신환매도환율": exchangeRate,
-      "통화코드":outAcc.ntnCode
+      "통화코드": toNation
     }
+    console.log(data)
     dispatch(postExchangeMoney(data))
     .then((res)=>sendExchangeMemo(res))
     .catch((err)=>{

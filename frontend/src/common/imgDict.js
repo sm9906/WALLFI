@@ -1,7 +1,7 @@
-import home from '../assets/background/home.png';
-import collection from '../assets/background/collection.png';
-import market from '../assets/background/Market.png';
-import mission from '../assets/background/mission.png';
+import Home from '../assets/background/home.png';
+import Collection from '../assets/background/collection.png';
+import Market from '../assets/background/Market.png';
+import Mission from '../assets/background/mission.png';
 
 import eagle_basic from '../assets/characters/home/EAGLE_HOME/BABY_EAGLE_NORMAL.png';
 import eagle_white from '../assets/characters/home/EAGLE_HOME/BABY_EAGLE_EPIC.png';
@@ -100,11 +100,11 @@ import question from '../assets/battle/question.png'
 import time from '../assets/battle/time.png'
 
 export const images = {
-    background: {
-        home: home,
-        collection: collection,
-        market: market,
-        mission: mission
+    Background: {
+        home: Home,
+        collection: Collection,
+        market: Market,
+        mission: Mission
     },
 
     defaultCharacter: {

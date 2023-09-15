@@ -16,8 +16,8 @@ export default function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        {/* <RootStack.Navigator initialRouteName='Auth' > */}
-        <RootStack.Navigator >
+        <RootStack.Navigator initialRouteName='Auth' >
+        {/* <RootStack.Navigator > */}
           <RootStack.Screen name='Home' component={HomeNavigation} options={{ headerShown: false }} />
           <RootStack.Screen name="GoogleMap" component={GoogleMapNavigator} options={{ headerShown: false }} />
           <RootStack.Screen name="Fight" component={FightNavigator} options={{ headerShown: false }} />

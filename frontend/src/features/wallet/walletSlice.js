@@ -76,7 +76,7 @@ export const getAccounts = createAsyncThunk('GET_ACCOUNT', async (data, { reject
 // export const postExchange = createAsyncThunk('POST_EXCHANGE', async())
 export const postSendMoney = createAsyncThunk('POST_SENDMONEY', async(data, { rejectWithValue }) => {
   try {
-    console.log(data);
+    console.log('이체',data);
     const response = await axios.post('bank/transfer', data)
     return response
   } catch (err) {

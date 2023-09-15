@@ -16,16 +16,26 @@ import { updateCharacter } from '../homeSlice.js';
 import { globalStyles } from '../homestyles/global.js';
 import { images } from '../../../common/imgDict.js';
 import GameHeader from '../homecomponents/GameHeader.js';
+import background from '../../../assets/background/home.png'
+import { useFocusEffect } from '@react-navigation/native';
+import { getMainCharacter } from '../homeSlice.js';
+
 
 // 상태바 겹침현상을 없애려면 react-native에서 StatusBar를 import 해줘야함
 
 export default function GameHome({ navigation }) {
+  const dispatch = useDispatch();
 
   const [modalVisible, setModalVisible] = useState(false);
-
+  const userId = useSelector(state=>state.auth.userId);
+  
+  useFocusEffect(()=>{
+    dispatch(getMainCharacter(userId))
+  })
+//   console.log(images.background.home)
   return (
     <View style={globalStyles.container}>
-      <ImageBackground source={images.background.home} style={globalStyles.bgImg}>
+      <ImageBackground source={background} style={globalStyles.bgImg}>
         <Modal
           animationType='fade'
           transparent={true}
