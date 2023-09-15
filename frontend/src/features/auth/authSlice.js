@@ -26,9 +26,11 @@ export const authSlice = createSlice({
   },
   extraReducers: (builder)=>{
     builder
-    .addCase(postLogIn.fulfilled, (state, payload) => {
-      state.userId=payload.payload.userId;
-      state.mainAccount = payload.payload.userMainAccount
+    .addCase(postLogIn.fulfilled, (state, action) => {
+      state.userId = action.payload.userId;
+      state.mainAccount = action.payload.userMainAccount;
+    })
+    .addCase(postLogIn.rejected, (state, action) => {
     })
   }
 })

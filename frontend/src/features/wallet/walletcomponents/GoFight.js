@@ -1,12 +1,16 @@
-import { Image, StyleSheet } from 'react-native';
+import { Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { useNavigation } from "@react-navigation/native";
 
 import go from '../../../assets/wallet/GoFight.png'
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from './ScreenSize';
 
 const GoFight =()=>{
+  const navigation = useNavigation();
   return(
     <>
-     <Image source = {go}  style={gofight.go}>
-     </Image>
+    <TouchableOpacity style={gofight.go} onPress={()=>navigation.navigate('Home')}>
+      <Image source = {go}  style={gofight.go} />
+    </TouchableOpacity>
     </>
   )
 }
@@ -14,8 +18,8 @@ const GoFight =()=>{
 const gofight = StyleSheet.create({
   go:{
     position:'absolute',
-    width:'25%',
-    height:'13%',
+    width: SCREEN_WIDTH*0.25,
+    height:SCREEN_HEIGHT*0.13,
     resizeMode:'contain',
     bottom:'5%',
     right:'10%'

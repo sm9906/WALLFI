@@ -1,5 +1,5 @@
 import { StyleSheet, View, Image } from 'react-native';
-import {SCREEN_HEIGHT, SCREEN_WIDTH} from './ScreenSize';
+import {ScreenWidth, ScreenHeight} from './ScreenSize';
 
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 
@@ -20,12 +20,12 @@ export const Background=StyleSheet.create({
 
 export const ButtonStyle = StyleSheet.create({
   button:{
-    width:SCREEN_WIDTH*0.8,
-    height:SCREEN_HEIGHT*0.05,
+    width:ScreenWidth*0.8,
+    height:ScreenHeight*0.05,
     backgroundColor:'#293694',
     justifyContent:'center',
     alignItems:'center',
-    borderRadius:10
+    borderRadius:10,
   },
   btnFont:{
     fontSize:RFPercentage(2),
