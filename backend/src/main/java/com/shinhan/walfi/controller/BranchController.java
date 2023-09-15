@@ -19,8 +19,6 @@ public class BranchController {
 
     private final BranchService branchService;
 
-    private final BranchMapper branchMapper;
-
     @PostMapping
     public ResponseEntity<HttpResult> getBranches(@RequestBody BranchListReqDto branchListReqDto){
 

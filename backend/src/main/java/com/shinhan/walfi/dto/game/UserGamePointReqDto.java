@@ -1,14 +1,14 @@
-package com.shinhan.walfi.dto;
+package com.shinhan.walfi.dto.game;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class LoginReqDto {
+public class UserGamePointReqDto {
 
     private String userId;
 
-    private String password;
+    private int point;
 
 }

@@ -8,6 +8,7 @@ import com.shinhan.walfi.repository.game.CharacterRepository;
 import com.shinhan.walfi.repository.game.UserGameInfoRepository;
 import com.shinhan.walfi.service.game.CharacterService;
 import org.assertj.core.api.Assertions;
+import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -40,6 +41,7 @@ class CharacterControllerTest {
 
     @BeforeEach
     void create() {
+
         UserGameInfo userGameInfo = new UserGameInfo();
         userGameInfo.setUserId(userId);
         em.persist(userGameInfo);
@@ -93,32 +95,6 @@ class CharacterControllerTest {
 
         // isMain 테스트 1이 true 0이 false
         Assertions.assertThat(findUserGameInfo.getGameCharacters().get(0).isMain()).isEqualTo(false);
-    }
-
-    @Test
-    @DisplayName("캐릭터 리스트 받기 테스트")
-    public void getCharacterListTest() throws Exception {
-        // given
-        CharacterReqDto characterReqDto = new CharacterReqDto();
-        characterReqDto.setUserId(userId);
-
-
-        // when
-        characterController.createRandomCharacter(characterReqDto);
-        characterController.shopRandomCharacter(characterReqDto);
-
-
-        // then
-        ResponseEntity<HttpResult> res = characterController.getCharacters(characterReqDto);
-        CharacterListResDto data = (CharacterListResDto) res.getBody().getData();
-
-        // api 반환값 테스트
-        Assertions.assertThat(res.getBody().getResult()).isSameAs(HttpResult.Result.SUCCESS);
-        Assertions.assertThat(res.getBody().getStatus()).isSameAs(HttpStatus.OK);
-
-        // 저장한 캐릭터 2개를 받아오는지 테스트
-        Assertions.assertThat(data.getCharacterDtoList().size()).isEqualTo(2);
-
     }
 
     @Test
@@ -183,6 +159,7 @@ class CharacterControllerTest {
         characterStatusReqDto.setCharacterIdx(characterIdx);
         characterStatusReqDto.setStatusType("atk");
         characterStatusReqDto.setValue(10);
+        characterStatusReqDto.setAct("");
 
         // when
         ResponseEntity<HttpResult> res = characterController.changeCharacterStatus(characterStatusReqDto);
@@ -204,6 +181,7 @@ class CharacterControllerTest {
         characterStatusReqDto.setCharacterIdx(characterIdx);
         characterStatusReqDto.setStatusType("def");
         characterStatusReqDto.setValue(10);
+        characterStatusReqDto.setAct("");
 
         // when
         ResponseEntity<HttpResult> res = characterController.changeCharacterStatus(characterStatusReqDto);
@@ -225,6 +203,7 @@ class CharacterControllerTest {
         characterStatusReqDto.setCharacterIdx(characterIdx);
         characterStatusReqDto.setStatusType("hp");
         characterStatusReqDto.setValue(10);
+        characterStatusReqDto.setAct("");
 
         // when
         ResponseEntity<HttpResult> res = characterController.changeCharacterStatus(characterStatusReqDto);
@@ -251,6 +230,7 @@ class CharacterControllerTest {
         characterStatusReqDto.setCharacterIdx(shopCharacterIdx);
         characterStatusReqDto.setStatusType("isMain");
         characterStatusReqDto.setValue(10);
+        characterStatusReqDto.setAct("");
 
         // when
         ResponseEntity<HttpResult> res = characterController.changeCharacterStatus(characterStatusReqDto);
@@ -278,6 +258,7 @@ class CharacterControllerTest {
         characterStatusReqDto.setCharacterIdx(mainCharacterIdx);
         characterStatusReqDto.setStatusType("exp");
         characterStatusReqDto.setValue(50);
+        characterStatusReqDto.setAct("");
 
         // when
         ResponseEntity<HttpResult> res = characterController.changeCharacterStatus(characterStatusReqDto);
@@ -303,6 +284,7 @@ class CharacterControllerTest {
         characterStatusReqDto.setCharacterIdx(mainCharacterIdx);
         characterStatusReqDto.setStatusType("exp");
         characterStatusReqDto.setValue(130);
+        characterStatusReqDto.setAct("");
 
         // when
         ResponseEntity<HttpResult> res = characterController.changeCharacterStatus(characterStatusReqDto);

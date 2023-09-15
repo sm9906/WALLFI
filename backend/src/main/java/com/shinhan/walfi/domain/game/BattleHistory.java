@@ -23,4 +23,8 @@ public class BattleHistory {
     @JoinColumn(name = "branch_idx")
     private Branch branch;
 
+    public void setBranch(Branch branch) {
+        this.branch = branch;
+        branch.getBattleHistories().add(this);
+    }
 }

@@ -32,7 +32,4 @@ public class UserGameInfo {
     @OneToMany(mappedBy = "userGameInfo")
     private List<GameCharacter> gameCharacters = new ArrayList<>();
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
 }

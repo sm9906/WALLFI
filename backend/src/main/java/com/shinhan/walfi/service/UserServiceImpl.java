@@ -1,10 +1,13 @@
 package com.shinhan.walfi.service;
 
 import com.shinhan.walfi.domain.User;
+import com.shinhan.walfi.domain.game.UserGameInfo;
 import com.shinhan.walfi.dto.UserDto;
+import com.shinhan.walfi.dto.game.UserGameInfoDto;
 import com.shinhan.walfi.exception.UserErrorCode;
 import com.shinhan.walfi.exception.UserException;
 import com.shinhan.walfi.repository.UserRepository;
+import com.shinhan.walfi.repository.game.UserGameInfoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -15,9 +18,10 @@ import java.util.stream.Collectors;
 
 import static com.shinhan.walfi.exception.UserErrorCode.NO_MATCHING_USER;
 
-@Service
-@Transactional
+
 @Slf4j
+@Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService{
 
@@ -35,7 +39,7 @@ public class UserServiceImpl implements UserService{
     /**
      * 로그인 기능
      *
-     * @exception NO_MATCHING_USER - 비밀번호가 틀리거나 존재하지 않는 사용자의 경우 예외 발생
+     * @exception 'NO_MATCHING_USER' - 비밀번호가 틀리거나 존재하지 않는 사용자의 경우 예외 발생
      * @param userId
      * @param password
      * @return
@@ -45,7 +49,7 @@ public class UserServiceImpl implements UserService{
         User findUser = userRepository.login(userId, password);
 
         if (findUser == null) {
-            log.error("틀린 비밀번호이거나 존재하지 않는 회원");
+            log.error("=== 틀린 비밀번호이거나 존재하지 않는 회원 ===");
             throw new UserException(NO_MATCHING_USER);
         }
 
@@ -56,19 +60,18 @@ public class UserServiceImpl implements UserService{
     /**
      * user 정보를 UserDto로 변환하는 기능
      *
-     * @param findUser
+     * @param user
      * @return UserDto
      */
-    private UserDto getUserDto(User findUser) {
+    private UserDto getUserDto(User user) {
         return UserDto.builder()
-                .userId(findUser.getUserId())
-                .email(findUser.getEmail())
-                .birthDate(findUser.getBirthDate())
-                .phoneNumber(findUser.getPhoneNumber())
-                .userMainAccount(findUser.get대표계좌())
+                .userId(user.getUserId())
+                .email(user.getEmail())
+                .birthDate(user.getBirthDate())
+                .phoneNumber(user.getPhoneNumber())
+                .userMainAccount(user.get대표계좌())
                 .build();
     }
-
 
 }
 

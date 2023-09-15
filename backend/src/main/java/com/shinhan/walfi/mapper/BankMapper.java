@@ -38,4 +38,9 @@ public interface BankMapper {
     void testAddData();
 
     TestEntityDTO testLoadData();
+
+    int globalDepositTransferMoneyFromAccount(@Param("accountNumber") String accountNumber,
+                                        @Param("transferMoney") long transferMoney,
+                                              @Param("krwConvertedMoney") long krwConvertedMoney);
+
 }

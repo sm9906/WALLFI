@@ -1,6 +1,7 @@
 package com.shinhan.walfi.service;
 
 import com.shinhan.walfi.dto.UserDto;
+import com.shinhan.walfi.dto.game.UserGameInfoDto;
 
 import java.util.List;
 
