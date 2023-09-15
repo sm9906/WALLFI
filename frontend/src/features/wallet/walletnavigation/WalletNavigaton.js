@@ -14,9 +14,8 @@ const Stack = createNativeStackNavigator();
 const WalletNavigation = () => {
     return (
     <Stack.Navigator initialRouteName='WalletLoading'>
-      <Stack.Screen name="WalletHome" component={ WalletHome}
-      options={{title:'My 월렛', headerBackVisible: false,}}
-      />
+      <Stack.Screen name="WalletHome" component={WalletHome}
+      options={{title:'My 월렛', headerBackVisible: false,}}/>
       <Stack.Screen name="MakeAccount" component={MakeAccount} options={{title:'예/적금'}}/>
       <Stack.Screen name="ExchangeSearch" component={ExchangeSearch} options={{title:'환율'}} />
       <Stack.Screen name="SendWho" component={SendWho} options={{title:''}} />

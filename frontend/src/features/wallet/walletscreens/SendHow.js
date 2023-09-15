@@ -7,7 +7,6 @@ import { minusMoney, exchangeMoney, postSendMoney } from "../walletSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function SendHow({route, navigation}){
-
   const dispatch = useDispatch();
 
   // console.log('얼마나 보낼까요',route)
@@ -15,7 +14,7 @@ export default function SendHow({route, navigation}){
   const outAcc = route.params.outAcc;
   const balance = outAcc.balance; 
   const outAccId = outAcc.accId
-  // 이체 필요한 부분
+  // 이체 필요 부분
   const toAccount = type==='송금'?route.params.account :'';
   const toBank = type==='송금'?route.params.bank||'신한': '';
   // 환전 필요 부분
@@ -42,10 +41,10 @@ export default function SendHow({route, navigation}){
   const sendMoney = () => {
     const data = {
       '이체금액': num_money,
-      '입금계좌번호' : '110001785532', // 스토어에서 대표 계좌 가져와야함.
+      '입금계좌번호' : '110001785532', // 일단 확인용으로 고정..
       '입금계좌통장메모': '보냅니다',
       '입금은행코드': toBank,
-      '출금계좌번호': mainAccount, // 일단 확인  
+      '출금계좌번호': mainAccount,   
       '출금계좌통장메모':'',
       // '통화코드': outAcc.ntnCode
     }
@@ -54,18 +53,6 @@ export default function SendHow({route, navigation}){
     .catch((err) => {
       console.log(err); return 0
     })
-    
-  }
-
-  const sendMemo = async(res) => {
-    if(res.error){
-      console.log('에러 발생')
-    }
-    await dispatch(minusMoney({num_money, outAccId}))
-    
-    const outISO = ISO
-    const formMoney = form_money
-    navigation.navigate('SendMemo', props = {type, toNation, toAccount, toBank, formMoney, outISO})
   }
 
   const sendExchange = async() => {
@@ -75,6 +62,17 @@ export default function SendHow({route, navigation}){
     navigation.navigate('SendMemo', props = {type, toNation, toAccount, toBank, formMoney, outISO})
   }
 
+
+  const sendMemo = async(res) => {
+    if(res.error){
+      console.log('에러 발생') // 여기 에러 발생하면 return 0으로 예외처리 
+    }
+    await dispatch(minusMoney({num_money, outAccId}))
+    
+    const outISO = ISO
+    const formMoney = form_money
+    navigation.navigate('SendMemo', props = {type, toNation, toAccount, toBank, formMoney, outISO, outAcc})
+  }
   
   const addMoney=(value)=>{
     const currMon = money;
@@ -112,7 +110,7 @@ export default function SendHow({route, navigation}){
         <Text style={{...styles.currMoney, color:isOver?'red':'black'}}>{form_money}{ISO||'원'}</Text>
         {type==='환전'&&<Text style={{textAlign:'center', fontSize:RFPercentage(2), color:'grey'}}>{form_exchangedMoney}원</Text>}
         <View style={styles.myAccount}>
-          <Text style={styles.accountTo} >신한 {outAcc.accountnum}   {form_balance}{ISO||'원'}</Text>
+          <Text style={styles.accountTo} >신한 {outAcc.accountnum}   {form_balance}{outAcc.ISO}</Text>
         </View>
       </View>
       {type==="송금"?<ConvPad addMoney={addMoney} />:<VirtualKeyboard addMoney={addMoney}/>}

@@ -5,10 +5,10 @@ import axios from "../../common/http-common";
 // 로그인 버튼 누르면, 로그인 처리,
 export const postLogIn = createAsyncThunk('LOGIN', async(data, { rejectWithValue })=>{
   try{
-    console.log(data)
     const response = await axios.post('user/login',data)
     return response.data.data;
   }catch(err){
+    console.log('회원관리/authSlice.postLogIn',err.response.data)
     return rejectWithValue(err.response.data)
   }
 })
@@ -27,7 +27,6 @@ export const authSlice = createSlice({
   extraReducers: (builder)=>{
     builder
     .addCase(postLogIn.fulfilled, (state, payload) => {
-      console.log(payload)
       state.userId=payload.payload.userId;
       state.mainAccount = payload.payload.userMainAccount
     })

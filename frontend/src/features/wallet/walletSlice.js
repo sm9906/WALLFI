@@ -80,6 +80,7 @@ export const postSendMoney = createAsyncThunk('POST_SENDMONEY', async(data, { re
     const response = await axios.post('bank/localtransfer', data)
     return response
   } catch (err) {
+    console.log('지갑Slice.postSendMoney',err.response)
     return rejectWithValue(err.response);
   }
 })
@@ -108,7 +109,6 @@ export const walletSlice = createSlice({
           break;
         }
       }
-      console.log(exchangedMoney, num_money, outAccId, toNation, toId)
       if(toNation!=='KRW'){
         state.cards[toId].balance += Number(num_money)
         state.cards[outAccId].balance -= Number(exchangedMoney)

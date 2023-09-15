@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { useFocusEffect } from "@react-navigation/native";
 import {
   View,
   Text,
@@ -14,24 +15,27 @@ import { useDispatch, useSelector } from "react-redux";
 import { getExchangeRate, getAccounts } from "../walletSlice";
 
 export default function WalletLoading({navigation}){
-  const dispatch = useDispatch();
   const { userId, mainAccount } = useSelector(state=>state.auth);
-  useEffect(()=>{
-    getData()
-  },[])
+  const dispatch = useDispatch();
 
-  const getData = async () => {
+  useFocusEffect(
+    React.useCallback(()=>{
+      getData()
+    },[])
+  )
+
+  const getData = async() => {
     try {
-      await dispatch(getExchangeRate()).then((res) => console.log('환율 정보 조회 성공'));
-      await dispatch(getAccounts({userId, mainAccount})).then((res) => console.log('계좌 조회 성공'));
-      navigation.navigate('WalletHome')
+      // console.log('?')
+      await dispatch(getExchangeRate());
+      const response = await dispatch(getAccounts({userId, mainAccount}));
+      if(response){
+        navigation.navigate('WalletHome');
+      }
     } catch (err) {
-      console.log(err);
+      console.log('walletscreens/WalletLoading.js',err);
     }
-  };
-
-
-
+  }
   return (
     <View style={{...Background.whiteback, justifyContent:'space-between'}}>
       <View>
@@ -44,7 +48,7 @@ export default function WalletLoading({navigation}){
         </View>
       </View>
       <View style={styles.logoContainer}>
-        <Image style={styles.shinhanLogo} source={ShinhanLogo}/>
+        <Image resizeMode='contain'style={styles.shinhanLogo} source={ShinhanLogo}/>
         <Text>Shinhan Bank</Text>
       </View>
     </View>
@@ -72,10 +76,8 @@ const styles = StyleSheet.create({
     height:'10%',
     justifyContent:'center',
     alignItems:'center'
-
   },
   shinhanLogo:{
-    resizeMode:'contain',
     marginRight:'3%',
     height:SCREEN_HEIGHT*0.02,
     width:SCREEN_WIDTH*0.04
