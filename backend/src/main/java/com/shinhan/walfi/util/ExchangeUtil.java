@@ -1,6 +1,7 @@
 package com.shinhan.walfi.util;
 
 import com.shinhan.walfi.dto.banking.ExchangeDto;
+import com.shinhan.walfi.dto.banking.ExchangeResDto;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -54,7 +55,7 @@ public class ExchangeUtil {
         JSONArray jsonExchangeList = (JSONArray) jsonDataBody.get("환율리스트"); // 환율 리스트 json 객체 뽑아냄
 
         List<ExchangeDto> list = new ArrayList<>(); // json 객체를 Exchange list 객체로 파싱
-        int[] countryIdx = {0,1,2,4,10}; // 5개국에 대해서만 (미국 일본 유럽 호주 중국)
+        int[] countryIdx = {0, 1, 2, 4, 10}; // 5개국에 대해서만 (미국 일본 유럽 호주 중국)
         for (int c = 0; c < countryIdx.length; c++) {
             JSONObject item = (JSONObject) jsonExchangeList.get(countryIdx[c]);
             list.add(this.makeExchangeDto(item)); // json 객체를 ExchangeDto로 파싱
@@ -83,5 +84,16 @@ public class ExchangeUtil {
         list.add(new ExchangeDto(855.32F));
         list.add(new ExchangeDto(178.47F));
         return list;
+    }
+
+    public ExchangeDto getCertainExchangeRate(final String CURRENCY_CODE) throws ParseException {
+        List<ExchangeDto> todayExchange = getTodayExchange();
+
+        ExchangeDto findExchangeDTO = todayExchange.stream()
+                .filter(ExchangeDto -> CURRENCY_CODE.equals(ExchangeDto.get통화코드()))
+                .findFirst().orElse(null);
+//                .orElseThrow(AccountNotFoundException::new);
+
+        return findExchangeDTO;
     }
 }
