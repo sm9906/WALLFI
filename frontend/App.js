@@ -1,6 +1,6 @@
 import React from 'react';
 import './ReactotronConfig';
-import store from './src/store/store'
+import store from './src/common/store'
 import { Provider } from 'react-redux';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -18,7 +18,7 @@ export default function App() {
         <RootStack.Navigator initialRouteName='Auth' >
           <RootStack.Screen name="GoogleMap" component={GoogleMapNavigator} options={{ headerShown: false }} />
           <RootStack.Screen name="Fight" component={FightNavigator} options={{ headerShown: false }} />
-          <RootStack.Screen name="Wallet" component={WalletNavigation} />
+          <RootStack.Screen name="Wallet" component={WalletNavigation} options={{ headerShown: false }} />
           <RootStack.Screen name="Auth" component={AuthNavigation } options={{ headerShown: false }}/>
         </RootStack.Navigator>
       </NavigationContainer>
