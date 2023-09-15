@@ -4,6 +4,7 @@ import com.shinhan.walfi.domain.HttpResult;
 import com.shinhan.walfi.dto.game.BattleRankResDto;
 import com.shinhan.walfi.dto.game.BattleReqDto;
 import com.shinhan.walfi.service.game.BattleService;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,7 @@ public class BattleController {
     private final BattleService battleService;
 
     @PostMapping
+    @ApiOperation(value = "사용자의 배틀 결과를 기록 (이긴 유저의 exp+50 point+50 로직 포함)")
     public ResponseEntity<HttpResult> record(BattleReqDto battleReqDto){
 
         // 기록 및 update
@@ -28,6 +30,7 @@ public class BattleController {
     }
 
     @GetMapping
+    @ApiOperation(value = "임시 지점장의 점유 기간을 기준으로 정렬하여 게시")
     public ResponseEntity<HttpResult> getRank(@RequestParam Long idx){
         // 특정 idx 브랜치의 랭킹 정보를 반환한다.
 
