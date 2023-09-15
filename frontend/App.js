@@ -18,11 +18,11 @@ export default function App() {
       <NavigationContainer>
         {/* <RootStack.Navigator initialRouteName='Auth' > */}
         <RootStack.Navigator >
+          <RootStack.Screen name='Home' component={HomeNavigation} options={{ headerShown: false }} />
           <RootStack.Screen name="GoogleMap" component={GoogleMapNavigator} options={{ headerShown: false }} />
           <RootStack.Screen name="Fight" component={FightNavigator} options={{ headerShown: false }} />
           <RootStack.Screen name="Wallet" component={WalletNavigation} options={{ headerShown: false }} />
           <RootStack.Screen name="Auth" component={AuthNavigation } options={{ headerShown: false }}/>
-          <RootStack.Screen name='Home' component={HomeNavigation} options={{ headerShown: false }} />
         </RootStack.Navigator>
       </NavigationContainer>
     </Provider>

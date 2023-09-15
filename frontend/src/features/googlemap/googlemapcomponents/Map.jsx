@@ -1,12 +1,12 @@
 import { useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
 import images from "../../../common/imgDict";
+import axios from "../../../common/http-common";
 import { useLocation } from "../googlemaphooks/UseMap";
 import { useNavigation } from "@react-navigation/native";
-import { setMaxHpBar } from "../../../actions/loadingActions";
-import { requestPost, requestGet } from "../../../lib/api/Api";
-import { setEnemy, setPlayer } from "../../../actions/animalAction";
+import { setEnemy, setPlayer } from "./../../../actions/animalAction";
 import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
+import { setMaxHpBar, setBankIdx } from "../../../actions/loadingActions";
 import {
   StyleSheet,
   View,
@@ -40,7 +40,7 @@ const Map = () => {
       setRegion(newRegion); // 이거 해야 내위치 지도상에 보임
       const fetchBanks = async () => {
         try {
-          const response = await requestPost(`/branch`, {
+          const response = await axios.post(`/branch`, {
             latitude: myLocation[0],
             longitude: myLocation[1],
           });
@@ -76,8 +76,9 @@ const Map = () => {
   const fetchBankDetail = async (idx) => {
     // 은행 상세정보
     try {
-      const response = await requestGet(`/branch?idx=${idx}`);
+      const response = await axios.get(`/branch?idx=${idx}`);
       const data = response.data;
+      dispatch(setBankIdx(idx));
       setSelectedBankDetails(data.data);
     } catch (error) {
       console.error(
@@ -90,7 +91,7 @@ const Map = () => {
   const playerAnimal = async () => {
     // 내 메인 동물 호출
     try {
-      const response = await requestPost(`/character/getmain`, {
+      const response = await axios.post(`/character/getmain`, {
         userId: "ssafy",
       });
       const data = response.data;
@@ -103,7 +104,7 @@ const Map = () => {
   const todayExchange = async () => {
     // 오늘 환율 호출
     try {
-      const response = await requestGet(`/exchange/info`);
+      const response = await axios.get(`/exchange/info`);
       const data = response.data;
       setexchange(data.data.exchangeDtoList);
     } catch (error) {
@@ -140,8 +141,8 @@ const Map = () => {
     // 모달창에서 배틀로 이동시 동물 정보 리덕스에 저장 (manager...)
     if (selectedBankDetails != null && myAnimal != null) {
       const playerExchange = setExchangeForAnimal(myAnimal.characterType);
-      const enemyExchange = setExchangeForAnimal(selectedBankDetails.animal);
-      
+      const enemyExchange = setExchangeForAnimal(selectedBankDetails.managerAnimalType);
+
       const playerStat = {
         animal: myAnimal?.characterType,
         Level: myAnimal?.level,
@@ -159,12 +160,12 @@ const Map = () => {
         Hp: selectedBankDetails?.managerHp,
         attack: selectedBankDetails?.managerAtk,
         defence: selectedBankDetails?.managerDef,
-        exchange: 1 + enemyExchange / 10,
+        exchange: 1 + enemyExchange / 10, 
       };
       dispatch(setEnemy(enemyStat));
       dispatch(setPlayer(playerStat));
-      dispatch(setMaxHpBar("player", myAnimal?.hp));
-      dispatch(setMaxHpBar("enemy", selectedBankDetails?.managerHp));
+      dispatch(setMaxHpBar("player", playerStat.Hp));
+      dispatch(setMaxHpBar("enemy", enemyStat.Hp));
       const randomNum = Math.floor(Math.random() * 9) + 1; // 배틀 배경 랜덤값 설정
       navigation.navigate("Fight", {
         screen: "MainBattle",
@@ -239,7 +240,9 @@ const Map = () => {
                 LV. {selectedBankDetails?.managerLevel}
               </Text>
               <Text style={styles.modalText}>
-              {selectedBankDetails?.지점주소 ? formatAddress(selectedBankDetails.지점주소) : ''}
+                {selectedBankDetails?.지점주소
+                  ? formatAddress(selectedBankDetails.지점주소)
+                  : ""}
               </Text>
               {/* <Text style={styles.modalText}>
                 {selectedBankDetails?.지점대표전화번호}

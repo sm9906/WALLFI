@@ -7,16 +7,16 @@ import { View, StyleSheet } from "react-native";
 import { ScreenHeight, ScreenWidth } from "./../fightcomponents/ScreenSize";
 
 const GameMain = () => {
-  const playerAnimal = useSelector((state) => state.animalReducer.player);
-  const enemyAnimal = useSelector((state) => state.animalReducer.enemy);
-  const playerCard = useSelector((state) => state.cardReducer.playerSelect);
-  const enemyCard = useSelector((state) => state.cardReducer.enemySelect);
-  const playerHp = useSelector((state) => state.loadingReducer.playerHp.playerNowHp);
-  const enemyHp = useSelector((state) => state.loadingReducer.enemyHp.enemyNowHp);
-  const playerMaxHp = useSelector((state) => state.loadingReducer.playerHp.playerMaxHp);
-  const enemyMaxHp = useSelector((state) => state.loadingReducer.enemyHp.enemyMaxHp);
+  const playerAnimal = useSelector((state) => state.animal.player);
+  const enemyAnimal = useSelector((state) => state.animal.enemy);
+  const playerCard = useSelector((state) => state.card.playerSelect);
+  const enemyCard = useSelector((state) => state.card.enemySelect);
+  const playerHp = useSelector((state) => state.loading.playerHp.playerNowHp);
+  const enemyHp = useSelector((state) => state.loading.enemyHp.enemyNowHp);
+  const playerMaxHp = useSelector((state) => state.loading.playerHp.playerMaxHp);
+  const enemyMaxHp = useSelector((state) => state.loading.enemyHp.enemyMaxHp);
   const battleLoading = useSelector(
-    (state) => state.loadingReducer.battleLoading
+    (state) => state.loading.battleLoading
   );
   return (
     <View style={styles.gameMain}>
