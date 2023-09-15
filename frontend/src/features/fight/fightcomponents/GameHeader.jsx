@@ -14,7 +14,8 @@ const GameHeader = () => {
         {/* <Card cType={"time"} cNumber={0} cStyle={0.25} /> */}
         <Text style={styles.timeText}>{turn+1} 턴</Text>
       </View>
-      <Card cType={"question"} cNumber={0} cStyle={0.4} />
+      <Card cType={"question"} cNumber={0} cStyle={0.4} /> 
+      {/* 클릭시 게임 설명 모달창으로 + 게임 타이머 일시 정지 */}
     </View>
   );
 };

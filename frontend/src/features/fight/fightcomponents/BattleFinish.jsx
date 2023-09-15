@@ -6,6 +6,7 @@ import { ScreenHeight, ScreenWidth } from "./../fightcomponents/ScreenSize";
 import { resetCard } from "../../../actions/cardActions";
 import { resetLoading } from "../../../actions/loadingActions";
 import { resetTurn } from "../../../actions/turnActions";
+import { resetAnimal } from "../../../actions/animalAction";
 
 const BattleFinish = () => {
   const navigation = useNavigation();
@@ -17,6 +18,7 @@ const BattleFinish = () => {
     dispatch(resetCard());
     dispatch(resetLoading());
     dispatch(resetTurn());
+    dispatch(resetAnimal());
   };
 
   const handleGoToMap = () => {

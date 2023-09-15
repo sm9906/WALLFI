@@ -1,4 +1,4 @@
-import { SET_BATTLE_LOADING, SET_GUTS, SET_HP_BAR, RESET_LOADING } from "../actions/loadingActions";
+import { SET_BATTLE_LOADING, SET_GUTS, SET_HP_BAR, SET_MAX_HP_BAR, RESET_LOADING } from "../actions/loadingActions";
 
 const initialState = {
   battleLoading: false,
@@ -6,10 +6,15 @@ const initialState = {
     playerGuts: 0,
     enemyGuts: 0,
   },
-  hp: {
-    playerHp: 1000,
-    enemyHp: 1000
-  }
+  playerHp: {
+    playerMaxHp: 50,
+    playerNowHp: 50
+  },
+  enemyHp: {
+    enemyMaxHp: 50,
+    enemyNowHp: 50
+  },
+
 }
 
 const loadingReducer = (state = initialState, action) => {
@@ -39,17 +44,38 @@ const loadingReducer = (state = initialState, action) => {
       if (action.target === 'player') {
         return {
           ...state,
-          hp: {
-            ...state.hp,
-            playerHp: action.hp
+          playerHp: {
+            ...state.playerHp,
+            playerNowHp: action.hp
           }
         };
       } else if (action.target === 'enemy') {
         return {
           ...state,
-          hp: {
+          enemyHp: {
+            ...state.enemyHp,
+            enemyNowHp: action.hp
+          }
+        };
+      }
+      return state;
+    case SET_MAX_HP_BAR:
+      if (action.target === 'player') {
+        return {
+          ...state,
+          playerHp: {
             ...state.hp,
-            enemyHp: action.hp
+            playerNowHp: action.hp,
+            playerMaxHp: action.hp,
+          },
+        };
+      } else if (action.target === 'enemy') {
+        return {
+          ...state,
+          enemyHp: {
+            ...state.hp,
+            enemyNowHp: action.hp,
+            enemyMaxHp: action.hp,
           }
         };
       }
@@ -61,10 +87,14 @@ const loadingReducer = (state = initialState, action) => {
           playerGuts: 0,
           enemyGuts: 0,
         },
-        hp: {
-          playerHp: 1000,
-          enemyHp: 1000
-        }
+        playerHp: {
+          playerMaxHp: 50,
+          playerNowHp: 50
+        },
+        enemyHp: {
+          enemyMaxHp: 50,
+          enemyNowHp: 50
+        },
       }
     default:
       return state;

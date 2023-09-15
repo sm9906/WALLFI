@@ -9,8 +9,8 @@ import { View, StyleSheet, ImageBackground } from "react-native";
 import { ScreenHeight, ScreenWidth } from "./../fightcomponents/ScreenSize";
 
 const MainBattle = ({ route }) => {
-  const isLoading = useSelector((state) => state.loadingReducer.battleLoading);
-  const endGame = useSelector((state) => state.turnReducer.end);
+  const isLoading = useSelector((state) => state.loadingReducer.battleLoading); // 배틀 연출동안 터치 못하게 할려고
+  const endGame = useSelector((state) => state.turnReducer.end); // 게임 종료되었는지 판단
   const randomNum = route.params?.randomNum || 2;
   return (
     <ImageBackground source={images.background[`bg_0${randomNum}`]} style={styles.bgImg}>

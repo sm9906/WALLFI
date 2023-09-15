@@ -7,14 +7,17 @@ import { View, StyleSheet } from "react-native";
 import { ScreenHeight, ScreenWidth } from "./../fightcomponents/ScreenSize";
 
 const GameMain = () => {
+  const playerAnimal = useSelector((state) => state.animalReducer.player);
+  const enemyAnimal = useSelector((state) => state.animalReducer.enemy);
   const playerCard = useSelector((state) => state.cardReducer.playerSelect);
   const enemyCard = useSelector((state) => state.cardReducer.enemySelect);
-  const playerHp = useSelector((state) => state.loadingReducer.hp.playerHp);
-  const enemyHp = useSelector((state) => state.loadingReducer.hp.enemyHp);
+  const playerHp = useSelector((state) => state.loadingReducer.playerHp.playerNowHp);
+  const enemyHp = useSelector((state) => state.loadingReducer.enemyHp.enemyNowHp);
+  const playerMaxHp = useSelector((state) => state.loadingReducer.playerHp.playerMaxHp);
+  const enemyMaxHp = useSelector((state) => state.loadingReducer.enemyHp.enemyMaxHp);
   const battleLoading = useSelector(
     (state) => state.loadingReducer.battleLoading
   );
-
   return (
     <View style={styles.gameMain}>
       <View style={styles.time}>
@@ -39,12 +42,12 @@ const GameMain = () => {
         </View>
         <View style={styles.AnimalAHp}>
           <View style={styles.MyAnimal}>
-            <Animal aType={"lion"} aPosition={-1} aSize={1} />
-            <HpBar hP={playerHp}></HpBar>
+            <Animal aType={playerAnimal.animal} aPosition={-1} aSize={1} />
+            <HpBar hP={playerHp} maxHp={playerMaxHp}></HpBar>
           </View>
           <View style={styles.EnemyAnimal}>
-            <Animal aType={"panda"} aSize={1} />
-            <HpBar hP={enemyHp}></HpBar>
+            <Animal aType={enemyAnimal.animal} aSize={1} />
+            <HpBar hP={enemyHp} maxHp={enemyMaxHp}></HpBar>
           </View>
         </View>
       </View>

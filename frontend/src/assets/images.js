@@ -2,7 +2,7 @@ import baby_eagle from './animal/baby_eagle.png'
 import baby_lion from './animal/baby_lion.png'
 import baby_panda from './animal/baby_panda.png'
 import baby_quoka from './animal/baby_quoka.png'
-import baby_siba from './animal/baby_siba.png'
+import baby_shiba from './animal/baby_shiba.png'
 import baby_tiger from './animal/baby_tiger.png'
 import bg_01 from './background/bg_01.png'
 import bg_02 from './background/bg_02.png'
@@ -34,12 +34,12 @@ import time from './battle/time.png'
 
 const images = {
     animal : {
-        baby_eagle: baby_eagle,
-        baby_lion: baby_lion,
-        baby_panda: baby_panda,
-        baby_quoka: baby_quoka,
-        baby_siba: baby_siba,
-        baby_tiger: baby_tiger
+        baby_EAGLE: baby_eagle,
+        baby_LION: baby_lion,
+        baby_PANDA: baby_panda,
+        baby_QUOKA: baby_quoka,
+        baby_SHIBA: baby_shiba,
+        baby_TIGER: baby_tiger
     },
     background : {
         bg_01: bg_01,

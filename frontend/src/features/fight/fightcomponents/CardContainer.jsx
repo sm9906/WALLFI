@@ -11,16 +11,15 @@ import { setPlayerSelect, decreaseCard } from "../../../actions/cardActions";
 const cardContainer = () => {
   const dispatch = useDispatch();
 
+  const playerAnimal = useSelector((state) => state.animalReducer.player);
+  const enemyAnimal = useSelector((state) => state.animalReducer.enemy);
   const playerCard = useSelector((state) => state.cardReducer.playerCard);
   const enemyCard = useSelector((state) => state.cardReducer.enemyCard);
-  const playerHp = useSelector((state) => state.loadingReducer.hp.playerHp);
-  const enemyHp = useSelector((state) => state.loadingReducer.hp.enemyHp);
-  const playerGuts = useSelector((state) => state.loadingReducer.hp.playerGuts);
-  const enemyGuts = useSelector((state) => state.loadingReducer.hp.enemyGuts);
+  const playerHp = useSelector((state) => state.loadingReducer.playerHp.playerNowHp);
+  const enemyHp = useSelector((state) => state.loadingReducer.enemyHp.enemyNowHp);
+  const playerGuts = useSelector((state) => state.loadingReducer.guts.playerGuts);
+  const enemyGuts = useSelector((state) => state.loadingReducer.guts.enemyGuts);
   let turn = useSelector((state) => state.turnReducer.turn);
-
-  const playerAnimal = animals[3]; // api 맞춰서 수정할거
-  const enemyAnimal = animals[5]; // 동일
 
   const [doubleClick, setDoubleClick] = useState("");
 

@@ -1,7 +1,10 @@
-import Constants from "expo-constants";
+import { useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
 import { useLocation } from "../googlemaphooks/UseMap";
 import { useNavigation } from "@react-navigation/native";
+import { setEnemy, setPlayer } from "../../../actions/animalAction";
+import { setMaxHpBar } from "../../../actions/loadingActions";
+import { requestPost, requestGet } from "../../../lib/api/Api";
 import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import {
   StyleSheet,
@@ -13,17 +16,19 @@ import {
   Button,
 } from "react-native";
 
-const GOOGLE_API_KEY = Constants.expoConfig.android.config.googleMaps.apiKey;
-
 const Map = () => {
   const [isModalVisible, setModalVisible] = useState(false);
   const myLocation = useLocation(null);
   const [banks, setBanks] = useState(null);
-  const [region, setRegion] = useState(null);
   const [selectedBankDetails, setSelectedBankDetails] = useState(null);
+  const [region, setRegion] = useState(null);
+  const [myAnimal, setmyAnimal] = useState(null);
+  const [exchange, setexchange] = useState(null)
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   useEffect(() => {
+    // 내 좌표 기준 주변 은행
     if (myLocation) {
       const newRegion = {
         latitude: myLocation[0],
@@ -31,43 +36,138 @@ const Map = () => {
         latitudeDelta: 0.01,
         longitudeDelta: 0.01,
       };
-      setRegion(newRegion);
-
-      fetch(
-        `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${myLocation[0]},${myLocation[1]}&radius=1000&type=bank&keyword=신한은행&key=${GOOGLE_API_KEY}`
-      )
-        .then((response) => response.json())
-        .then((data) => {
-          setBanks(data.results);
-        });
+      setRegion(newRegion); // 이거 해야 내위치 지도상에 보임
+      const fetchBanks = async () => {
+        try {
+          const response = await requestPost(`/branch`, {
+            latitude: myLocation[0],
+            longitude: myLocation[1],
+          });
+          const data = response.data;
+          setBanks(data.data);
+        } catch (error) {
+          console.error(
+            "서버에서 은행 정보를 가져오는 중 오류가 발생했습니다.",
+            error
+          );
+        }
+      };
+      fetchBanks();
     }
   }, [myLocation]);
 
   const handleMarkerPress = (bank) => {
-    fetchBankDetails(bank.place_id);
-    setModalVisible(true);
+    fetchDataOnMarkerPress(bank);
   };
 
-  const fetchBankDetails = (placeId) => {
-    fetch(
-      `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&key=${GOOGLE_API_KEY}`
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        setSelectedBankDetails(data.result);
-      });
+  const fetchDataOnMarkerPress = async (bank) => {
+    try {
+      // 지도상에 표시된 은행중 하나 누름
+      await fetchBankDetail(bank.지점번호); // 해당 은행의 상세정보를 서버에서 받아옴
+      await playerAnimal(); // 내 메인 동물 정보 받아옴
+      await todayExchange(); // 환율정보 받아옴
+      setModalVisible(true); // 지점장과 은행정보 모달
+    } catch (error) {
+      console.error("데이터를 가져오는 중 오류가 발생했습니다.", error);
+    }
+  }
+
+  const fetchBankDetail = async (idx) => {
+    // 은행 상세정보
+    try {
+      const response = await requestGet(`/branch?idx=${idx}`);
+      const data = response.data;
+      setSelectedBankDetails(data.data);
+    } catch (error) {
+      console.error(
+        "서버에서 은행 상세 정보를 가져오는 중 오류가 발생했습니다.",
+        error
+      );
+    }
   };
+
+  const playerAnimal = async () => {
+    // 내 메인 동물 호출
+    try {
+      const response = await requestPost(`/character/getmain`, {
+        userId: "ssafy",
+      });
+      const data = response.data;
+      setmyAnimal(data.data.characterDto);
+    } catch (error) {
+      console.error("메인 동물 호출중 오류가 발생했습니다.", error);
+    }
+  };
+  
+  const todayExchange = async () => {
+    // 오늘 환율 호출
+    try {
+      const response = await requestGet(`/exchange/info`);
+      const data = response.data;
+      setexchange(data.data.exchangeDtoList);
+    } catch (error) {
+      console.error("오늘의 환율 호출중 오류가 발생했습니다.", error);
+    }
+  };
+  
+  const ANIMAL_TO_CURRENCY = {
+    "TIGER": "KRW",
+    "EAGLE": "USD",
+    "SHIBA": "JPY",
+    "LION": "EUR",
+    "QUOKA": "AUD",
+    "PANDA": "CNY",
+  };
+  
+  const setExchangeForAnimal = (animalType) => {
+    const currencyCode = ANIMAL_TO_CURRENCY[animalType];
+    const exchangeData = exchange.find(item => item.통화코드 === currencyCode);
+    if (exchangeData) {
+      return exchangeData.전일대비;
+    }
+    return 1;
+  }
 
   const closeModal = () => {
+    // 모달창 닫음
     setModalVisible(false);
   };
 
-  if (!region) return null;
-
   const handleGoToBattle = () => {
-  const randomNum = Math.floor(Math.random() * 9) + 1;
-  navigation.navigate("MainBattle", { randomNum: randomNum });
-  }
+    // 모달창에서 배틀로 이동시 동물 정보 리덕스에 저장 (manager...)
+    if (selectedBankDetails != null && myAnimal != null) {
+      const playerExchange = setExchangeForAnimal(myAnimal.characterType);
+      const enemyExchange = setExchangeForAnimal(selectedBankDetails.animal);
+
+      const playerStat = {
+        animal: myAnimal?.characterType,
+        Level: myAnimal?.level,
+        exp: myAnimal.exp,
+        Hp: myAnimal?.hp,
+        attack: myAnimal?.atk,
+        defence: myAnimal?.def,
+        exchange: playerExchange,
+      };
+      const enemyStat = {
+        animal: "", // 지점장 동물 추가해야함
+        Level: selectedBankDetails?.managerLevel,
+        exp: selectedBankDetails.managerExp,
+        Hp: selectedBankDetails?.managerHp,
+        attack: selectedBankDetails?.managerAtk,
+        defence: selectedBankDetails?.managerDef,
+        exchange: enemyExchange,
+      };
+      dispatch(setEnemy(enemyStat));
+      dispatch(setPlayer(playerStat));
+      dispatch(setMaxHpBar('player', myAnimal?.hp));
+      dispatch(setMaxHpBar('enemy', selectedBankDetails?.managerHp));
+      const randomNum = Math.floor(Math.random() * 9) + 1; // 배틀 배경 랜덤값 설정
+      navigation.navigate("Fight", {
+        screen: "MainBattle",
+        params: { randomNum: randomNum },
+      });
+    }
+  };
 
   return (
     <View style={styles.screen}>
@@ -77,38 +177,29 @@ const Map = () => {
         showsMyLocationButton={true}
         loadingEnabled
         region={region}
-        provider={PROVIDER_GOOGLE}
-
-        // 지도 이동용
-        // onRegionChange={region => {
-        //   setLocation({
-        //     latitude: region.latitude,
-        //     longitude: region.longitude,
-        //   });
-        // }}
-        // onRegionChangeComplete={region => {
-        //   setLocation({
-        //     latitude: region.latitude,
-        //     longitude: region.longitude,
-        //   });
-        // }}
+        provider={PROVIDER_GOOGLE} // 여기까지 전체 구글맵 보여주기용
       >
         {banks &&
-          banks.map((bank, index) => (
-            <Marker
-              key={index}
-              coordinate={{
-                latitude: bank.geometry.location.lat,
-                longitude: bank.geometry.location.lng,
-              }}
-              title={bank.name}
-              description={bank.vicinity}
-              onPress={() => handleMarkerPress(bank)}
-            />
-          ))}
+          banks.map(
+            (
+              bank,
+              index // 은행 지점별 정보
+            ) => (
+              <Marker
+                key={index}
+                coordinate={{
+                  latitude: bank.지점위도,
+                  longitude: bank.지점경도,
+                }}
+                title={bank.지점명}
+                description={bank.지점주소}
+                onPress={() => handleMarkerPress(bank)}
+              />
+            )
+          )}
       </MapView>
       <Modal
-        animationType="slide"
+        animationType="slide" // 모달창
         transparent={true}
         visible={isModalVisible}
         onRequestClose={closeModal}
@@ -123,21 +214,23 @@ const Map = () => {
             onStartShouldSetResponder={() => true}
           >
             <View style={styles.modalIn}>
+              <Text style={styles.modalText}>
+                {selectedBankDetails?.지점명} 지점장
+              </Text>
               <Image
-                // source={require("./../../../assets/images/stone.png")}
+                // source={require("./../../../assets/images/stone.png")} // 지점장 동물 이미지 넣어야함
                 style={styles.modalImage}
               />
-              <Text style={styles.modalText}>{selectedBankDetails?.name}</Text>
               <Text style={styles.modalText}>
-                {selectedBankDetails?.formatted_address}
+                LV. {selectedBankDetails?.managerLevel}
               </Text>
               <Text style={styles.modalText}>
-                {selectedBankDetails?.formatted_phone_number}
+                {selectedBankDetails?.지점주소}
               </Text>
-              <Button
-                title="배틀로 이동"
-                onPress={handleGoToBattle}
-              />
+              <Text style={styles.modalText}>
+                {selectedBankDetails?.지점대표전화번호}
+              </Text>
+              <Button title="배틀로 이동" onPress={handleGoToBattle} />
               <TouchableOpacity onPress={closeModal} style={styles.closeButton}>
                 <Text>닫기</Text>
               </TouchableOpacity>

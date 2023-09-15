@@ -5,14 +5,14 @@ const selectCardMatching = (
   enemyAnimal
 ) => {
 
-  let playerType = playerAnimal.name;
-  let playerAtk = playerAnimal.stats.atk;
-  let playerDef = playerAnimal.stats.def;
+  let playerType = playerAnimal.animal;
+  let playerAtk = playerAnimal.attack;
+  let playerDef = playerAnimal.defence;
   let playerExc = playerAnimal.exchange;
 
-  let enemyType = enemyAnimal.name;
-  let enemyAtk = enemyAnimal.stats.atk;
-  let enemyDef = enemyAnimal.stats.def;
+  let enemyType = enemyAnimal.animal;
+  let enemyAtk = enemyAnimal.attack;
+  let enemyDef = enemyAnimal.defence;
   let enemyExc = enemyAnimal.exchange;
 
   let playerDmg = 0;

@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { StyleSheet, Animated } from "react-native";
 import { ScreenHeight, ScreenWidth } from "./../fightcomponents/ScreenSize";
 
-const HpBar = ({ hP }) => {
+const HpBar = ({ hP, maxHp }) => {
   const hpValue = useRef(new Animated.Value(hP)).current;
 
   useEffect(() => {
@@ -13,10 +13,10 @@ const HpBar = ({ hP }) => {
     }).start();
   }, [hP]);
 
-  const HpHeight = ScreenHeight * 0.18 * hP / 1000;
+  const HpHeight = ScreenHeight * 0.18 * hP / maxHp;
 
   const colorAnimation = hpValue.interpolate({
-    inputRange: [0, 250, 500, 750, 1000],
+    inputRange: [0, maxHp * 0.25, maxHp * 0.5, maxHp * 0.75, maxHp],
     outputRange: [
       "#FF4F1F",
       "#DE9A3A",

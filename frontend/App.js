@@ -15,8 +15,8 @@ export default function App() {
     <Provider store={store}>
       <NavigationContainer>
         <RootStack.Navigator>
-          <RootStack.Screen name="Fight" component={FightNavigator} options={{ headerShown: false }} />
           <RootStack.Screen name="GoogleMap" component={GoogleMapNavigator} options={{ headerShown: false }} />
+          <RootStack.Screen name="Fight" component={FightNavigator} options={{ headerShown: false }} />
           <RootStack.Screen name="Wallet" component={WalletNavigation} />
         </RootStack.Navigator>
       </NavigationContainer>
