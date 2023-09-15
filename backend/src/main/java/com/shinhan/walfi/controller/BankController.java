@@ -26,8 +26,12 @@ public class BankController {
     @PostMapping("/transfer")
     public ResponseEntity<HttpResult> localTransfer(@RequestBody TransferDTO transferDTO) {
 
-//        bankService.localCurrencyTransfer(transferDTO);
-        bankService.globalCurrencyTransfer(transferDTO);
+        String currencyCode = transferDTO.get통화코드();
+
+        if (currencyCode.equals("KRW"))
+            bankService.localCurrencyTransfer(transferDTO);
+        else
+            bankService.globalCurrencyTransfer(transferDTO);
 
         HttpResult res = new HttpResult(OK, SUCCESS, "이체 성공");
         return ResponseEntity.status(200).body(res);
