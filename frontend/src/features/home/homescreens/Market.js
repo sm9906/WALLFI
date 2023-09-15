@@ -14,7 +14,7 @@ import {
 import { globalStyles } from "../homestyles/global.js";
 
 import GameHeader from '../homecomponents/GameHeader.js';
-import market from '../../.././assets/background/market.png'
+import market from '../../.././assets/background/Market.png'
 import backHome from '../../.././assets/game/button/backHome.png';
 import coin from '../../.././assets/game/icon/coin.png'
 import marketEgg from '../../.././assets/game/market/marketEgg.png';

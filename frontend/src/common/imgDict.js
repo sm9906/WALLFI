@@ -1,6 +1,6 @@
 import home from '../assets/background/home.png';
 import collection from '../assets/background/collection.png';
-import market from '../assets/background/market.png';
+import market from '../assets/background/Market.png';
 import mission from '../assets/background/mission.png';
 
 import eagle_basic from '../assets/characters/home/EAGLE_HOME/BABY_EAGLE_NORMAL.png';
