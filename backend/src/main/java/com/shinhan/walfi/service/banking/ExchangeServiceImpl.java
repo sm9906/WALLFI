@@ -88,12 +88,12 @@ public class ExchangeServiceImpl implements ExchangeService {
         }
 
         String krwAccountNum = bankMapper.findSubAccountNumberByCurrencyCode(사용자대표계좌, "KRW");
-        String globalAccountNum = bankMapper.findSubAccountNumberByCurrencyCode(사용자대표계좌, 통화코드);
-
         if (krwAccountNum == null) {
             log.error("=== id: " + userId + "에게는 KRW 계좌가 존재하지 않음");
             throw new TransferException(TransferErrorCode.NOT_FOUND_KRW_ACCOUNT);
         }
+
+        String globalAccountNum = bankMapper.findSubAccountNumberByCurrencyCode(사용자대표계좌, 통화코드);
         if (globalAccountNum == null) {
             log.error("=== id: " + userId + "에게는 " + 통화코드 + " 계좌가 존재하지 않음");
             throw new TransferException(TransferErrorCode.NOT_FOUND_GLOBAL_ACCOUNT);
@@ -110,7 +110,7 @@ public class ExchangeServiceImpl implements ExchangeService {
         bankMapper.withdrawTransferMoneyFromAccount(krwAccountNum, kwrConvertPrice);
         bankMapper.globalDepositTransferMoneyFromAccount(globalAccountNum, 금액, kwrConvertPrice);
 
-        log.info("=== id: " + userId + "의 요처에 따라 " + 금액 + 통화코드 + " 환전 완료 ===" );
+        log.info("=== id: " + userId + "의 요청에 따라 " + 금액 + 통화코드 + " 환전 완료 ===" );
 
     }
 
