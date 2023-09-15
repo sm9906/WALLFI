@@ -1,5 +1,6 @@
 import {combineReducers, configureStore} from '@reduxjs/toolkit';
 import walletReducer from '../features/wallet/walletSlice'
+import homeReducer from '../features/home/homeSlice.js';
 import authReducer from '../features/auth/authSlice';
 import cardReducer from '../reducers/cardReducer';
 import loadingReducer from '../reducers/loadingReducer';
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
   loadingReducer: loadingReducer,
   turnReducer: turnReducer,
   animalReducer: animalReducer,
+  home: homeReducer,
 })
 
 const store = configureStore({
