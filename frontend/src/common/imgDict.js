@@ -65,6 +65,40 @@ import trophyIcon from '../assets/game/icon/trophy.png';
 import color from '../assets/game/market/characterColor.gif';
 import marketEgg from '../assets/game/market/marketEgg.png';
 
+import baby_eagle from '../assets/animal/baby_eagle.png'
+import baby_lion from '../assets/animal/baby_lion.png'
+import baby_panda from '../assets/animal/baby_panda.png'
+import baby_quokka from '../assets/animal/baby_quokka.png'
+import baby_shiba from '../assets/animal/baby_shiba.png'
+import baby_tiger from '../assets/animal/baby_tiger.png'
+import bg_01 from '../assets/background/bg_01.png'
+import bg_02 from '../assets/background/bg_02.png'
+import bg_03 from '../assets/background/bg_03.png'
+import bg_04 from '../assets/background/bg_04.png'
+import bg_05 from '../assets/background/bg_05.png'
+import bg_06 from '../assets/background/bg_06.png'
+import bg_07 from '../assets/background/bg_07.png'
+import bg_08 from '../assets/background/bg_08.png'
+import bg_09 from '../assets/background/bg_09.png'
+import attack_0 from '../assets/battle/attack_0.png'
+import attack_1 from '../assets/battle/attack_1.png'
+import attack_2 from '../assets/battle/attack_2.png'
+import counter_0 from '../assets/battle/counter_0.png'
+import counter_1 from '../assets/battle/counter_1.png'
+import counter_2 from '../assets/battle/counter_2.png'
+import defence_0 from '../assets/battle/defence_0.png'
+import defence_1 from '../assets/battle/defence_1.png'
+import defence_2 from '../assets/battle/defence_2.png'
+import exchange_0 from '../assets/battle/exchange_0.png'
+import exchange_1 from '../assets/battle/exchange_1.png'
+import skill_0 from '../assets/battle/skill_0.png'
+import skill_1 from '../assets/battle/skill_1.png'
+import skill_2 from '../assets/battle/skill_2.png'
+import skill_3 from '../assets/battle/skill_3.png'
+import enemy from '../assets/battle/enemy.png'
+import question from '../assets/battle/question.png'
+import time from '../assets/battle/time.png'
+
 export const images = {
     background: {
         home: home,
@@ -157,5 +191,46 @@ export const images = {
     marketSource: {
         color: color,
         egg: marketEgg
-    }
+    },
+    animal : {
+        baby_EAGLE: baby_eagle,
+        baby_LION: baby_lion,
+        baby_PANDA: baby_panda,
+        baby_QUOKKA: baby_quokka,
+        baby_SHIBA: baby_shiba,
+        baby_TIGER: baby_tiger
+    },
+    background : {
+        bg_01: bg_01,
+        bg_02: bg_02,
+        bg_03: bg_03,
+        bg_04: bg_04,
+        bg_05: bg_05,
+        bg_06: bg_06,
+        bg_07: bg_07,
+        bg_08: bg_08,
+        bg_09: bg_09,
+    },
+    battle : {
+        attack_0: attack_0,
+        attack_1: attack_1,
+        attack_2: attack_2,
+        counter_0: counter_0,
+        counter_1: counter_1,
+        counter_2: counter_2,
+        defence_0: defence_0,
+        defence_1: defence_1,
+        defence_2: defence_2,
+        exchange_0: exchange_0,
+        exchange_1: exchange_1,
+        skill_0: skill_0,
+        skill_1: skill_1,
+        skill_2: skill_2,
+        skill_3: skill_3,
+        enemy_0: enemy,
+        question_0: question,
+        time_0: time,
+    },
 }
+
+export default images;

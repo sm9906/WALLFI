@@ -1,4 +1,4 @@
-import { SET_BATTLE_LOADING, SET_GUTS, SET_HP_BAR, SET_MAX_HP_BAR, RESET_LOADING } from "../actions/loadingActions";
+import { SET_BATTLE_LOADING, SET_GUTS, SET_HP_BAR, SET_MAX_HP_BAR, SET_BANK_IDX, RESET_LOADING } from "../actions/loadingActions";
 
 const initialState = {
   battleLoading: false,
@@ -14,7 +14,7 @@ const initialState = {
     enemyMaxHp: 50,
     enemyNowHp: 50
   },
-
+  bankIdx: ""
 }
 
 const loadingReducer = (state = initialState, action) => {
@@ -80,6 +80,11 @@ const loadingReducer = (state = initialState, action) => {
         };
       }
       return state;
+    case SET_BANK_IDX:
+      return {
+        ...state,
+        bankIdx: action.payload
+      };
     case RESET_LOADING:
       return {
         battleLoading: false,
@@ -95,6 +100,7 @@ const loadingReducer = (state = initialState, action) => {
           enemyMaxHp: 50,
           enemyNowHp: 50
         },
+        bank: ""
       }
     default:
       return state;

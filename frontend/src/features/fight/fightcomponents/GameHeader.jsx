@@ -5,7 +5,7 @@ import { View, StyleSheet, Text } from "react-native";
 import { ScreenHeight, ScreenWidth } from "./../fightcomponents/ScreenSize";
 
 const GameHeader = () => {
-  const turn = useSelector((state) => state.turnReducer.turn);
+  const turn = useSelector((state) => state.turn.turn);
   // const [seconds, setSeconds] = useState(0);
   // const [isActive, setIsActive] = useState(false);
   return (

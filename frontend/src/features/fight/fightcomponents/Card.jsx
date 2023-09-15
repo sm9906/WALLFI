@@ -1,5 +1,5 @@
 import React from "react";
-import images from "../../../assets/images";
+import images from "../../../common/imgDict";
 import { StyleSheet, Image, TouchableOpacity } from "react-native";
 import { ScreenHeight, ScreenWidth } from "./../fightcomponents/ScreenSize";
 

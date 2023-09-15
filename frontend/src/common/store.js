@@ -13,10 +13,10 @@ import thunk from 'redux-thunk';
 const rootReducer = combineReducers({
   wallet:walletReducer,
   auth: authReducer,
-  cardReducer: cardReducer,
-  loadingReducer: loadingReducer,
-  turnReducer: turnReducer,
-  animalReducer: animalReducer,
+  card: cardReducer,
+  loading: loadingReducer,
+  turn: turnReducer,
+  animal: animalReducer,
   home: homeReducer,
 })
 
