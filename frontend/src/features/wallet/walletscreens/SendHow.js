@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { ConvPad } from "../walletcomponents/sendmoney/ConvKeypad";
 import { RFPercentage } from "react-native-responsive-fontsize";
 import VirtualKeyboard from "../walletcomponents/sendmoney/VirtualKeypad";
-import { minusMoney, exchangeMoney, postSendMoney } from "../walletSlice";
+import { minusMoney, exchangeMoney, postSendMoney, postExchangeMoney } from "../walletSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function SendHow({route, navigation}){
@@ -37,7 +37,7 @@ export default function SendHow({route, navigation}){
   const isOver = type==='송금'||toNation==='KRW'? 
       balance < num_money: balance< Number(exchangedMoney) // 잔액을 초과하는가?
 
-  const {mainAccount} = useSelector(state=>state.auth)
+  const {mainAccount, userId} = useSelector(state=>state.auth)
   const sendMoney = () => {
     const data = {
       '이체금액': num_money,
@@ -46,24 +46,44 @@ export default function SendHow({route, navigation}){
       '입금은행코드': toBank,
       '출금계좌번호': mainAccount,   
       '출금계좌통장메모':'',
-      // '통화코드': outAcc.ntnCode
+      '통화코드': outAcc.ntnCode
     }
     dispatch(postSendMoney(data))
-    .then((res)=>{sendMemo(res)})
+    .then((res)=>{senMoneydMemo(res)})
     .catch((err) => {
-      console.log(err); return 0
+      console.log(err);
     })
   }
 
-  const sendExchange = async() => {
+  const sendExchange= () => {
+    const data = {
+      "userId":userId,
+      "금액": toNation==='KRW'?money:Number(exchangedMoney),
+      "사용자대표계좌": mainAccount,
+      "전신환매도환율": exchangeRate,
+      "통화코드":outAcc.ntnCode
+    }
+    dispatch(postExchangeMoney(data))
+    .then((res)=>sendExchangeMemo(res))
+    .catch((err)=>{
+      console.log(err);
+    })
+  }
+
+  const sendExchangeMemo = async(res) => {
+    
+    if(res.error){
+      console.log('에러 발생')
+    }
+
     await dispatch(exchangeMoney({num_money,exchangedMoney,outAccId,toNation}))
     const outISO = toNation==='KRW'? '원' : ISO
     const formMoney = toNation==='KRW'? form_exchangedMoney : form_money
-    navigation.navigate('SendMemo', props = {type, toNation, toAccount, toBank, formMoney, outISO})
+    navigation.navigate('SendMemo', props = {type, toNation, toAccount, toBank, formMoney, outISO, outAcc})
   }
 
 
-  const sendMemo = async(res) => {
+  const senMoneydMemo = async(res) => {
     if(res.error){
       console.log('에러 발생') // 여기 에러 발생하면 return 0으로 예외처리 
     }

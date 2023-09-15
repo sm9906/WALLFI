@@ -77,13 +77,25 @@ export const getAccounts = createAsyncThunk('GET_ACCOUNT', async (data, { reject
 export const postSendMoney = createAsyncThunk('POST_SENDMONEY', async(data, { rejectWithValue }) => {
   try {
     console.log(data);
-    const response = await axios.post('bank/localtransfer', data)
+    const response = await axios.post('bank/transfer', data)
     return response
   } catch (err) {
     console.log('지갑Slice.postSendMoney',err.response)
     return rejectWithValue(err.response);
   }
 })
+
+export const postExchangeMoney = createAsyncThunk('POST_EXCHANGEMONEY', async(data, { rejectWithValue }) => {
+  try {
+    console.log(data);
+    const response = await axios.post('exchange/do', data)
+    return response
+  } catch (err) {
+    console.log('지갑Slice.EXCHANGEMONEY',err.response)
+    return rejectWithValue(err.response);
+  }
+})
+
 
 const initialState = {
   cards:null, // 월렛 들어갈 때 카드 컴포넌트 받아오면서 저장.
