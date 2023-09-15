@@ -18,6 +18,7 @@ import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
@@ -33,6 +34,8 @@ public class ExchangeServiceImpl implements ExchangeService {
     private final UserRepository userRepository;
 
     private final AccountRepository accountRepository;
+
+    List<String> currency = Arrays.asList("USD", "JPY", "EUR", "CNY", "AUD");
 
     @Override
     public ExchangeResDto getTodayExchange() throws ParseException {
@@ -74,7 +77,18 @@ public class ExchangeServiceImpl implements ExchangeService {
      * @param 전신환매도환율
      */
     @Override
-    public void userExchange(String userId, String 사용자대표계좌, String 통화코드, long 금액, float 전신환매도환율) {
+    public void userExchange(String userId, String 사용자대표계좌, String 도착계좌통화코드, long 금액, float 전신환매도환율) {
+
+        // 도착계좌의 통화코드가 원화면 안됨
+        if (도착계좌통화코드.equals("KRW")) {
+            throw new TransferException(TransferErrorCode.NOT_FOR_BUY);
+        }
+
+        if (!currency.contains(도착계좌통화코드)) {
+            log.error("=== " + 도착계좌통화코드 + "는 존재하지 않는 통화 코드입니다 ===");
+            throw new TransferException(TransferErrorCode.NOT_FOUND_CURRENCY);
+        }
+
         User user = userRepository.find(userId);
 
         if (user == null) {
@@ -93,9 +107,9 @@ public class ExchangeServiceImpl implements ExchangeService {
             throw new TransferException(TransferErrorCode.NOT_FOUND_KRW_ACCOUNT);
         }
 
-        String globalAccountNum = bankMapper.findSubAccountNumberByCurrencyCode(사용자대표계좌, 통화코드);
+        String globalAccountNum = bankMapper.findSubAccountNumberByCurrencyCode(사용자대표계좌, 도착계좌통화코드);
         if (globalAccountNum == null) {
-            log.error("=== id: " + userId + "에게는 " + 통화코드 + " 계좌가 존재하지 않음");
+            log.error("=== id: " + userId + "에게는 " + 도착계좌통화코드 + " 계좌가 존재하지 않음");
             throw new TransferException(TransferErrorCode.NOT_FOUND_GLOBAL_ACCOUNT);
         }
 
@@ -110,7 +124,7 @@ public class ExchangeServiceImpl implements ExchangeService {
         bankMapper.withdrawTransferMoneyFromAccount(krwAccountNum, kwrConvertPrice);
         bankMapper.globalDepositTransferMoneyFromAccount(globalAccountNum, 금액, kwrConvertPrice);
 
-        log.info("=== id: " + userId + "의 요청에 따라 " + 금액 + 통화코드 + " 환전 완료 ===" );
+        log.info("=== id: " + userId + "의 요청에 따라 " + 금액 + 도착계좌통화코드 + " 환전 완료 ===" );
 
     }
 
