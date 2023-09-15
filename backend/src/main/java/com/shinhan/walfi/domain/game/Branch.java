@@ -1,5 +1,6 @@
 package com.shinhan.walfi.domain.game;
 
+import com.shinhan.walfi.domain.enums.CharacterType;
 import com.shinhan.walfi.domain.enums.LevelUp;
 import com.shinhan.walfi.dto.game.BranchResDto;
 import lombok.Getter;
@@ -35,6 +36,9 @@ public class Branch {
 
     @Enumerated(EnumType.STRING)
     private LevelUp managerLevel;
+
+    @Enumerated(EnumType.STRING)
+    private CharacterType managerAnimalType;
 
     private int managerExp;
 
@@ -84,7 +88,7 @@ public class Branch {
     }
 
     public BranchResDto entityToDto() {
-        BranchResDto branchResDto = new BranchResDto(branchIdx, branchName, address, branchPhoneNumber, latitude, longitude, managerLevel.getLevel(), managerExp, managerHp, managerAtk, managerDef);
+        BranchResDto branchResDto = new BranchResDto(branchIdx, branchName, address, branchPhoneNumber, latitude, longitude, managerAnimalType.name(), managerLevel.getLevel(), managerExp, managerHp, managerAtk, managerDef);
         return branchResDto;
     }
 }
