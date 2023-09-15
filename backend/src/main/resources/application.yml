@@ -3,7 +3,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/walfi?useSSL=false&useUnicode=true&characterEncoding=UTF-8&characterSetResults=UTF-8&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul&allowMultiQueries=true
     username: ssafy
-    password: ssafy
+    password: pass1234!
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
