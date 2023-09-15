@@ -2,7 +2,8 @@ package com.shinhan.walfi.controller;
 
 import com.shinhan.walfi.domain.HttpResult;
 import com.shinhan.walfi.dto.banking.ExchangeResDto;
-import com.shinhan.walfi.dto.banking.UserExchangeReqDto;
+import com.shinhan.walfi.dto.banking.fromGlobalExchangeReqDto;
+import com.shinhan.walfi.dto.banking.toGlobalExchangeReqDto;
 import com.shinhan.walfi.service.banking.ExchangeService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -35,15 +36,30 @@ public class ExchangeController {
         return ResponseEntity.status(res.getStatus()).body(res);
     }
 
-    @PostMapping("/do")
-    @ApiOperation(value = "원화를 외화로 환전")
-    public ResponseEntity<HttpResult> userExchange(@RequestBody UserExchangeReqDto userExchangeReqDto) {
+    @PostMapping("/toglobal")
+    @ApiOperation(value = "원화 -> 외화로 환전")
+    public ResponseEntity<HttpResult> toGlobalExchange(@RequestBody toGlobalExchangeReqDto toGlobalExchangeReqDto) {
 
-        exchangeService.userExchange(userExchangeReqDto.getUserId(),
-                userExchangeReqDto.get사용자대표계좌(),
-                userExchangeReqDto.get통화코드(),
-                userExchangeReqDto.get금액(),
-                userExchangeReqDto.get전신환매도환율());
+        exchangeService.toGlobalExchange(toGlobalExchangeReqDto.getUserId(),
+                toGlobalExchangeReqDto.get사용자대표계좌(),
+                toGlobalExchangeReqDto.get도착계좌통화코드(),
+                toGlobalExchangeReqDto.get금액(),
+                toGlobalExchangeReqDto.get전신환매도환율());
+
+        HttpResult res = HttpResult.getSuccess();
+
+        return ResponseEntity.status(res.getStatus()).body(res);
+    }
+
+    @PostMapping("/from global")
+    @ApiOperation(value = "외화 ->원화로 환전")
+    public ResponseEntity<HttpResult> fromGlobalExchange(@RequestBody fromGlobalExchangeReqDto fromGlobalExchangeReqDto) {
+
+        exchangeService.fromGlobalExchange(fromGlobalExchangeReqDto.getUserId(),
+                fromGlobalExchangeReqDto.get사용자대표계좌(),
+                fromGlobalExchangeReqDto.get출발계좌통화코드(),
+                fromGlobalExchangeReqDto.get금액(),
+                fromGlobalExchangeReqDto.get전신환매입환율());
 
         HttpResult res = HttpResult.getSuccess();
 
