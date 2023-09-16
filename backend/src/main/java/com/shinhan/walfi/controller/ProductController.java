@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,15 +26,17 @@ public class ProductController {
 
     @PostMapping
     @ApiOperation(value = "정기예금 생성", tags = "상품명 - levelup정기예금, 만기일형식 - 230101, 금리형식 - 0.00")
-    public ResponseEntity<HttpResult> createTimeDeposit(ProductReqDto productReqDto){
+    public ResponseEntity<HttpResult> createTimeDeposit(@RequestBody ProductReqDto productReqDto){
 
         String userId = productReqDto.getUserId();
+        long 입금금액 = productReqDto.get입금금액();
         String 통화코드 = productReqDto.get통화코드();
         String 상품명 = productReqDto.get상품명();
         String 만기일 = productReqDto.get만기일();
-        BigDecimal 금리 = BigDecimal.valueOf(Double.parseDouble(productReqDto.get금리()));
+        BigDecimal 금리 = productReqDto.get금리();
 
-        productService.createTimeDeposit(userId, 통화코드, 상품명, 만기일, 금리);
+        System.out.println("금리 = " + 금리);
+        productService.createTimeDeposit(userId, 통화코드, 상품명, 만기일, 금리, 입금금액);
 
         HttpResult res;
         res = HttpResult.getSuccess();

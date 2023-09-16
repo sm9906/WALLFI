@@ -9,6 +9,7 @@ import com.shinhan.walfi.exception.AccountException;
 import com.shinhan.walfi.exception.UserErrorCode;
 import com.shinhan.walfi.exception.UserException;
 import com.shinhan.walfi.repository.UserRepository;
+import com.shinhan.walfi.util.AccountUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
