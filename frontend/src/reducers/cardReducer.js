@@ -16,6 +16,7 @@ const initialState = {
     defence: 2,
     counter: 2,
     exchange: 1,
+    
     skill: 3,
   },
 

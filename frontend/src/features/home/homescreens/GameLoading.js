@@ -6,7 +6,7 @@ import {
     Image
 } from 'react-native'
 import { useDispatch } from 'react-redux';
-import { getCharacterList, getExchangeInfo, getGameInfo, getMainCharacter } from '../homeSlice';
+import { getCharacterList, getGameInfo, getMainCharacter } from '../homeSlice';
 
 import LoadingImg from '../../../assets/game/loading/LoadingImg.gif'
 import ShinhanLogo from '../../../assets/wallet/ShinhanLogo.png'
@@ -42,7 +42,7 @@ export default function GameLoading({navigation}) {
       </View>
       <View style={{width:'70%'}}>
         <Text style={loadingStyle.titleWAL}>
-            WAL
+            WALLET
         </Text>
         <Text style={loadingStyle.titleFIGHT}>
             FIGHT

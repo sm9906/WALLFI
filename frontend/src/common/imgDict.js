@@ -37,8 +37,8 @@ import eat_eagle from '../assets/characters/eat/eat_1.gif';
 import eat_lion from '../assets/characters/eat/eat_2.gif';
 import eat_panda from '../assets/characters/eat/eat_3.gif';
 import eat_quokka from '../assets/characters/eat/eat_4.gif';
-import eat_siba from '../assets/characters/eat/eat_5.gif';
-import eat_tiger from '../assets/characters/eat/eat_6.gif';
+import eat_siba from '../assets/characters/eat/eat_6.gif';
+import eat_tiger from '../assets/characters/eat/eat_5.gif';
 
 import australia from '../assets/eggs/australia_egg.png';
 import china from '../assets/eggs/china_egg.png';
@@ -101,6 +101,12 @@ import enemy from '../assets/battle/enemy.png'
 import question from '../assets/battle/question.png'
 import time from '../assets/battle/time.png'
 import guts from '../assets/battle/guts.png'
+
+import eat_test1 from '../assets/characters/eat/eat_test1.gif';
+import eat_test6 from '../assets/characters/eat/eat_test6.gif'
+import eat_test2 from '../assets/characters/eat/eat_test2.gif'
+import eat_test5 from '../assets/characters/eat/eat_test5.gif'
+
 
 export const images = {
     Background: {
@@ -167,7 +173,7 @@ export const images = {
         QUOKKA: australia,
         PANDA: china,
         LION: europe,
-        SIBA: japan,
+        SHIBA: japan,
         TIGER: korea,
         EAGLE: usa    
     },

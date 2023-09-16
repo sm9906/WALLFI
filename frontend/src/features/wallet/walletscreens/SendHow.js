@@ -10,6 +10,8 @@ export default function SendHow({route, navigation}){
   const dispatch = useDispatch();
 
   // console.log('얼마나 보낼까요',route)
+  // 이체, 환전 (1. 원화 -> 외화 2. 외화 -> 원화) 가 달라서... 엄청 어지러운 변수 선언..
+  // 고치고 싶음 ㅠ
   const type= route.params.type;
   const outAcc = route.params.outAcc;
   const balance = outAcc.balance; 
@@ -38,6 +40,8 @@ export default function SendHow({route, navigation}){
       balance < num_money: balance< Number(exchangedMoney) // 잔액을 초과하는가?
 
   const {mainAccount, userId} = useSelector(state=>state.auth)
+  
+  // 이체하기. 
   const sendMoney = () => {
     const data = {
       '이체금액': num_money,
@@ -55,22 +59,24 @@ export default function SendHow({route, navigation}){
     })
   }
 
+  // 환전 하기 - 원화 -> 외화 / 외화 -> 원화
   const sendExchange= () => {
     const data = {
       "userId":userId,
       "금액": toNation==='KRW'?Number(money):Number(money),
       "사용자대표계좌": mainAccount,
-      "전신환매도환율": exchangeRate,
     }
     console.log(data)
     if(toNation!=='KRW'){      
       data["도착계좌통화코드"] = toNation
+      data["전신환매도환율"]= exchangeRate
       dispatch(postExchangeKRW(data))
       .then((res)=>sendExchangeMemo(res))
       .catch((err)=>{
         console.log(err);
       })
     }else{
+      data["전신환매입환율"]= exchangeRate
       data["출발계좌통화코드"] = outAcc.ntnCode;
       console.log('ㅎㅇ')
       dispatch(postExchangeFOR(data))
@@ -81,6 +87,7 @@ export default function SendHow({route, navigation}){
     }
   }
 
+  // 환전 - 메모로 보내기
   const sendExchangeMemo = async(res) => {
     
     if(res.error){
@@ -93,7 +100,7 @@ export default function SendHow({route, navigation}){
     navigation.navigate('SendMemo', props = {type, toNation, toAccount, toBank, formMoney, outISO, outAcc})
   }
 
-
+  // 이체 - 메모로 보내기. 
   const senMoneydMemo = async(res) => {
     if(res.error){
       console.log('에러 발생') // 여기 에러 발생하면 return 0으로 예외처리 
@@ -105,6 +112,7 @@ export default function SendHow({route, navigation}){
     navigation.navigate('SendMemo', props = {type, toNation, toAccount, toBank, formMoney, outISO, outAcc})
   }
   
+  // 가상 키 입력받은거 처리하는 부분 
   const addMoney=(value)=>{
     const currMon = money;
     if(typeof(value)==='number'){

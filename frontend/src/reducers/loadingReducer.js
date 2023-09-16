@@ -1,6 +1,7 @@
-import { SET_BATTLE_LOADING, SET_GUTS, SET_HP_BAR, SET_MAX_HP_BAR, SET_BANK_IDX, RESET_LOADING } from "../actions/loadingActions";
+import { SET_TIMEOUT, SET_BATTLE_LOADING, SET_GUTS, SET_HP_BAR, SET_MAX_HP_BAR, SET_BANK_IDX, RESET_LOADING } from "../actions/loadingActions";
 
 const initialState = {
+  isTimeout: false,
   battleLoading: false,
   guts: {
     playerGuts: 0,
@@ -19,6 +20,8 @@ const initialState = {
 
 const loadingReducer = (state = initialState, action) => {
   switch (action.type) {
+    case SET_TIMEOUT:
+      return { ...state, isTimeout: action.payload };
     case SET_BATTLE_LOADING:
       return { ...state, battleLoading: action.payload };
     case SET_GUTS:
@@ -87,6 +90,7 @@ const loadingReducer = (state = initialState, action) => {
       };
     case RESET_LOADING:
       return {
+        isTimeout: false,
         battleLoading: false,
         guts: {
           playerGuts: 0,

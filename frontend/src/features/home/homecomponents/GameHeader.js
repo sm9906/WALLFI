@@ -61,12 +61,11 @@ const TextTransition = (props) => {
     useSelector((state) => state.wallet.exchangeRates)
   );
   const [currentId, setCurrentId] = useState(0);
-  // console.log(exchanges)
-  // console.log(currentId)
+
   useEffect(() => {
     const timeout = setInterval(() => {
       setCurrentId((prev) => (prev + 1) % 5);
-    }, 3000); // 3초마다 텍스트 변경
+    }, 1000); // 3초마다 텍스트 변경
     return () => clearTimeout(timeout);
   }, [currentId]);
 
@@ -80,7 +79,7 @@ const TextTransition = (props) => {
 function GameHeader(props) {
   //   console.log("header");
   const {userGameInfo:gameUser, mainCharacter} = useSelector((state) => state.home);
-  console.log(mainCharacter)
+  console.log(mainCharacter, gameUser)
   return (
     <>
       <View style={styles.header}>
