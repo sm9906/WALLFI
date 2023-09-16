@@ -60,7 +60,6 @@ const GameMain = () => {
   return (
     <View style={styles.gameMain}>
       <View style={styles.time}>
-        {/* 타이머로 대체할거 타는 밧줄 이라던가 */}
         {Array.from({ length: playerGuts }).map((_, index) => (
           <Card key={index} cType={"guts"} cNumber={0} cStyle={0.5} />
         ))}

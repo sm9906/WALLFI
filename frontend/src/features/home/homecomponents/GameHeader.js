@@ -66,7 +66,7 @@ const TextTransition = (props) => {
   useEffect(() => {
     const timeout = setInterval(() => {
       setCurrentId((prev) => (prev + 1) % 5);
-    }, 3000); // 3초마다 텍스트 변경
+    }, 1000); // 3초마다 텍스트 변경
     return () => clearTimeout(timeout);
   }, [currentId]);
 

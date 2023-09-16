@@ -25,6 +25,8 @@ export default function WalletHome({navigation}) {
   const dispatch = useDispatch();
   const {cards} = useSelector(state=>state.wallet);
 
+  
+
   // 홈에 들어올 때 마다 새로고침 하는 게 맞는데 
   // 예적금 때문에 그럴 수 없음..
 

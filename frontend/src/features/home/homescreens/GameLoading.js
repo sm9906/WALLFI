@@ -42,7 +42,7 @@ export default function GameLoading({navigation}) {
       </View>
       <View style={{width:'70%'}}>
         <Text style={loadingStyle.titleWAL}>
-            WAL
+            WALLET
         </Text>
         <Text style={loadingStyle.titleFIGHT}>
             FIGHT
