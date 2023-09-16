@@ -14,9 +14,9 @@ const MainBattle = ({ route }) => {
   const randomNum = route.params?.randomNum || 2;
   return (
     <ImageBackground source={images.background[`bg_0${randomNum}`]} style={styles.bgImg}>
-      {/* { isLoading && (
+      { isLoading && (
       <View style={styles.overlay}/> // 오버레이 설정
-      )} */}
+      )}
       {endGame ? (
         <BattleFinish/>
       ) : (
@@ -38,7 +38,6 @@ const styles = StyleSheet.create({
 
   overlay: {
     ...StyleSheet.absoluteFill,
-    backgroundColor: "rgba(255, 255, 255, 0.7)",
     justifyContent: "center",
     alignItems: "center",
     zIndex: 1000,

@@ -1,11 +1,14 @@
 import { useRef, useState, useEffect, useMemo } from "react";
 import { StyleSheet, Text, View, Image } from "react-native";
-import * as Animatable from "react-native-animatable";
 import { useDispatch, useSelector } from "react-redux";
+
+import { RFPercentage } from "react-native-responsive-fontsize";
+import * as Animatable from "react-native-animatable";
+import { AntDesign } from "@expo/vector-icons";
+
+import ExpBar from "./exp/ExpBar";
 import { images } from "../../../common/imgDict.js";
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from "../homecomponents/ScreenSize.js";
-import { AntDesign } from "@expo/vector-icons";
-import { RFPercentage } from "react-native-responsive-fontsize";
 
 // 추후에 여기 컴포넌트로 분리, style 파일 props로 전달 필요!
 
@@ -58,12 +61,11 @@ const TextTransition = (props) => {
     useSelector((state) => state.wallet.exchangeRates)
   );
   const [currentId, setCurrentId] = useState(0);
-  // console.log(exchanges)
-  // console.log(currentId)
+
   useEffect(() => {
     const timeout = setInterval(() => {
       setCurrentId((prev) => (prev + 1) % 5);
-    }, 3000); // 3초마다 텍스트 변경
+    }, 1000); // 3초마다 텍스트 변경
     return () => clearTimeout(timeout);
   }, [currentId]);
 
@@ -76,8 +78,8 @@ const TextTransition = (props) => {
 
 function GameHeader(props) {
   //   console.log("header");
-  const gameUser = useSelector((state) => state.home.userGameInfo);
-  console.log(gameUser);
+  const {userGameInfo:gameUser, mainCharacter} = useSelector((state) => state.home);
+  console.log(mainCharacter, gameUser)
   return (
     <>
       <View style={styles.header}>
@@ -86,7 +88,7 @@ function GameHeader(props) {
             {/* <View style={{ flex: 1, alignItems: 'center' }}>
                 <Image source={images.defaultCharacter.TIGER.MINT} style={styles.profile}></Image>
             </View> */}
-            <Text style={styles.name}>{gameUser&&gameUser.userId}</Text>
+            <Text style={styles.name}>{gameUser&&gameUser.username}</Text>
           </View>
           <View
             style={{
@@ -95,14 +97,8 @@ function GameHeader(props) {
               alignItems: "center",
             }}
           >
-            <View
-              style={{
-                width: "85%",
-                height: "40%",
-                backgroundColor: "#D9D9D9",
-                borderRadius: 15,
-              }}
-            ></View>
+          <ExpBar ExpStyle={ExpStyle}exp={mainCharacter.exp} level={mainCharacter.level}/>
+            
           </View>
         </View>
         <View style={{ flexDirection: "column", flex: 1 }}>
@@ -136,6 +132,7 @@ function GameHeader(props) {
 }
 
 export default GameHeader;
+
 
 const styles = StyleSheet.create({
   header: {
@@ -205,3 +202,32 @@ const styles = StyleSheet.create({
     borderColor: "#505A75",
   },
 });
+
+const ExpStyle = StyleSheet.create({
+  container:{
+    width:'80%',
+    height: "50%",
+    flexDirection:'row',
+    alignItems:'center',
+    justifyContent:'space-between'
+  },
+  LvTxt:{
+    color:'white',
+    alignContent:'center',
+    fontWeight:'bold',
+    textShadowColor: "#272B49",
+    textShadowRadius: 2,
+    textShadowOffset: { width: 2, height: 2 },
+  },
+  barContainer: {
+      width: "70%",
+      height: "80%",
+      backgroundColor: "#D9D9D9",
+      borderRadius: 15,
+  },
+  exp:{
+    backgroundColor:'#F6B101',
+    borderRadius: 15,
+    height:'100%',
+  }
+})

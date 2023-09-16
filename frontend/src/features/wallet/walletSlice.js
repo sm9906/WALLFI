@@ -27,6 +27,28 @@ const ISO = {
   'AUD': 'AU$' 
 }
 
+export const getDepositDetail = createAsyncThunk('POST_GETDEPOSIT', async(data, {rejectWithValue})=>{
+  try{
+    console.log('data')
+    const response = await axios.post('character/maxcharacter', data);
+    console.log(response)
+  }catch(err){
+    console.log(err)
+    return rejectWithValue(err);
+  }
+})
+
+
+export const makeAccount = createAsyncThunk('POST_MAKEACCOUJNT', async(data, {rejectWithValue})=>{
+  try{
+    const response = await axios.post('product',data);
+    console.log(response)
+  }catch(err){
+    console.log(err)
+    return rejectWithValue(err);
+  }
+})
+
 // 환율 정보 불러오기
 export const getExchangeRate = createAsyncThunk('GET_EXCHANGE_RATE', async(_,{ rejectWithValue })=>{
   try{
@@ -48,7 +70,6 @@ export const getExchangeRate = createAsyncThunk('GET_EXCHANGE_RATE', async(_,{ r
 // 처음 불러온 카드 추가 로직 
 export const getAccounts = createAsyncThunk('GET_ACCOUNT', async (data, { rejectWithValue }) => {
   try {
-    console.log(data)
     const response = await axios.post(`account?userId=${data.userId}&userMainAccount=${data.mainAccount}`,{
     })
     const accountDtoList = response.data.data.accountDtoList;
@@ -85,10 +106,10 @@ export const postSendMoney = createAsyncThunk('POST_SENDMONEY', async(data, { re
   }
 })
 
-export const postExchangeMoney = createAsyncThunk('POST_EXCHANGEMONEY', async(data, { rejectWithValue }) => {
+export const postExchangeKRW = createAsyncThunk('POST_EXCHANGEKRW', async(data, { rejectWithValue }) => {
   try {
     console.log(data);
-    const response = await axios.post('exchange/do', data)
+    const response = await axios.post('exchange/toglobal', data)
     return response
   } catch (err) {
     console.log('지갑Slice.EXCHANGEMONEY',err.response)
@@ -96,6 +117,17 @@ export const postExchangeMoney = createAsyncThunk('POST_EXCHANGEMONEY', async(da
   }
 })
 
+export const postExchangeFOR = createAsyncThunk('POST_EXCHANGEFOR', async(data, { rejectWithValue }) => {
+  try {
+    console.log(data);
+    const response = await axios.post('exchange/fromglobal', data)
+    console.log('???')
+    return response
+  } catch (err) {
+    console.log('지갑Slice.EXCHANGEMONEY',err.response)
+    return rejectWithValue(err.response);
+  }
+})
 
 const initialState = {
   cards:null, // 월렛 들어갈 때 카드 컴포넌트 받아오면서 저장.

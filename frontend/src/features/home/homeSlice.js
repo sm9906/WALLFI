@@ -73,12 +73,83 @@ export const getCharacterList = createAsyncThunk('GET_CHARACTER_LIST', async(use
   }
 })
 
-// 캐릭터 수정하기
+// 캐릭터 수정하기 / 메인 수정 / 스탯 수정 
 export const updateCharacter = createAsyncThunk('UPDATE_CHARACTER', async(data, { rejectWithValue }) => {
   try {
-    await axios.put('character/change/status', data);
+    console.log('홈슬라이스/updateCharacter 데이터 전달 확인 ', data)
+    await axios.put('character/change/status', data)
+    // .then(res=>console.log('해쒕', res));
     return data;
   } catch (e) {
+    console.log('홈슬라이스/updatecharacter 실패',e);
+    return rejectWithValue(e.res);
+  }
+})
+
+// 사용자 포인트 수정
+export const updatePoint = createAsyncThunk('UPDATE_POINT', async(data, { rejectWithValue }) => {
+  try {
+    console.log('홈슬라이스/updatePoint 데이터 전달 확인', data)
+    await axios.post('game/pointup', data)
+    return data;
+  } catch (e) {
+    console.log('홈슬라이스/updatepoint 실패', e);
+    return rejectWithValue(e.res);
+  }
+})
+
+// 캐릭터 색 수정
+export const changeColor = createAsyncThunk('CHANGE_COLOR', async(data, { rejectWithValue }) => {
+  try {
+    console.log('홈슬라이스/changeColor 데이터 전달 확인', data);
+    const res = await axios.put('character/change/color', data);
+    const color = res.data.data.characterDto;
+    const changeCharacterColor = {
+      characterIdx: color.characterIdx,
+      characterType: color.characterType,
+      color: color.color,
+      level: color.level,
+      exp: color.exp,
+      hp: color.hp,
+      atk: color.atk,
+      def: color.def,
+      main: color.main
+    }
+
+    return changeCharacterColor;
+
+  } catch(e) {
+    console.log('홈슬라이스/changeColor 실패', e.res);
+    return rejectWithValue(e.res);
+  }
+})
+
+// 캐릭터 뽑기
+export const getRandomCharacter = createAsyncThunk('GET_RANDOM_CHARACTER', async(userId, { rejectWithValue }) => {
+  try {
+    console.log('홈슬라이스/getRandomCharacter 데이터 전달 확인 ', userId)
+    const res = await axios.post('character/shop', {
+      userId: userId
+    })
+
+    const characterDto = res.data.data.characterDto;
+    console.log('성공', characterDto)
+    const character = {
+      characterIdx: characterDto.characterIdx,
+      characterType: characterDto.characterType,
+      color: characterDto.color,
+      level: characterDto.level,
+      exp: characterDto.exp,
+      hp: characterDto.hp,
+      atk: characterDto.atk,
+      def: characterDto.def,
+      main: characterDto.main
+    }
+
+    return character;
+
+  } catch (e) {
+    console.log('홈슬라이스/getRandomCharacter 실패', e)
     return rejectWithValue(e.res);
   }
 })
@@ -110,9 +181,18 @@ export const homeSlice = createSlice({
     .addCase(getGameInfo.fulfilled, (state, action) => {
       state.userGameInfo = action.payload;
     })
-    .addCase(updateCharacter).fulfilled, (state, action)=>{
-      console.log(action.payload)
-    }
+    .addCase(getRandomCharacter.fulfilled, (state, action) => {
+      console.log('캐릭터 랜덤 뽑기 성공!', action.payload)
+    })
+    .addCase(updateCharacter.fulfilled, (state, action)=>{
+      console.log('캐릭터 변경 성공!', action.payload)
+    })
+    .addCase(updatePoint.fulfilled, (state, action) => {
+      console.log('포인트 변경 성공!', action.payload)
+    })
+    .addCase(changeColor.fulfilled, (state, action) => {
+      console.log('캐릭터 색 변경 성공!', action.payload);
+    })
   }
 })
 

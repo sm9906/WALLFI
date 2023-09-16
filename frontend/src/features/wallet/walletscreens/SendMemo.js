@@ -4,7 +4,7 @@ import { RFPercentage } from "react-native-responsive-fontsize";
 
 import SendCheck from '../../../assets/wallet/SendCheck.png';
 import { ButtonStyle } from "../walletcomponents/CommonStyle";
-import { convStyle } from "../walletcomponents/sendmoney/ConvKeypad";
+import { convStyle } from "../walletcomponents/virtualkeyboard/ConvKeypad";
 import { Background } from "../walletcomponents/CommonStyle";
 
 export default function SendMemo({route,navigation}) {

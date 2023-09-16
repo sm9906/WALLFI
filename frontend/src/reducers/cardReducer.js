@@ -1,4 +1,4 @@
-import { SET_PLAYER_CARD, SET_PLAYER_SELECT, SET_ENEMY_CARD, SET_ENEMY_SELECT, DECREASE_CARD, RESET_CARD } from '../actions/cardActions';
+import { SET_PLAYER_CARD, SET_PLAYER_SELECT, SET_ENEMY_CARD, SET_ENEMY_SELECT, SET_EXCHANGE_CARD, DECREASE_CARD, RESET_CARD } from '../actions/cardActions';
 
 const initialState = {
   playerCard: {
@@ -16,6 +16,7 @@ const initialState = {
     defence: 2,
     counter: 2,
     exchange: 1,
+    
     skill: 3,
   },
 
@@ -32,6 +33,14 @@ const cardReducer = (state = initialState, action) => {
       return { ...state, enemyCard: action.payload };
     case SET_ENEMY_SELECT:
       return { ...state, enemySelect: action.payload };
+      case SET_EXCHANGE_CARD:
+        return {
+          ...state,
+          [action.payload.target + 'Card']: {
+            ...state[action.payload.target + 'Card'],
+            exchange: action.payload.exchangeValue
+          }
+        };
     case DECREASE_CARD:
       let decreasedValue;
       if (action.payload.cardType === 'skill') {

@@ -1,7 +1,7 @@
-import Home from '../assets/background/home.png';
-import Collection from '../assets/background/collection.png';
-import Market from '../assets/background/Market.png';
-import Mission from '../assets/background/mission.png';
+import home from '../assets/background/home.png';
+import collection from '../assets/background/collection.png';
+import market from '../assets/background/Market.png';
+import mission from '../assets/background/mission.png';
 
 import eagle_basic from '../assets/characters/home/EAGLE_HOME/BABY_EAGLE_NORMAL.png';
 import eagle_white from '../assets/characters/home/EAGLE_HOME/BABY_EAGLE_EPIC.png';
@@ -37,8 +37,8 @@ import eat_eagle from '../assets/characters/eat/eat_1.gif';
 import eat_lion from '../assets/characters/eat/eat_2.gif';
 import eat_panda from '../assets/characters/eat/eat_3.gif';
 import eat_quokka from '../assets/characters/eat/eat_4.gif';
-import eat_siba from '../assets/characters/eat/eat_5.gif';
-import eat_tiger from '../assets/characters/eat/eat_6.gif';
+import eat_siba from '../assets/characters/eat/eat_6.gif';
+import eat_tiger from '../assets/characters/eat/eat_5.gif';
 
 import australia from '../assets/eggs/australia_egg.png';
 import china from '../assets/eggs/china_egg.png';
@@ -91,6 +91,8 @@ import defence_1 from '../assets/battle/defence_1.png'
 import defence_2 from '../assets/battle/defence_2.png'
 import exchange_0 from '../assets/battle/exchange_0.png'
 import exchange_1 from '../assets/battle/exchange_1.png'
+import exchange_2 from '../assets/battle/exchange_2.png'
+import exchange_3 from '../assets/battle/exchange_3.png'
 import skill_0 from '../assets/battle/skill_0.png'
 import skill_1 from '../assets/battle/skill_1.png'
 import skill_2 from '../assets/battle/skill_2.png'
@@ -98,13 +100,20 @@ import skill_3 from '../assets/battle/skill_3.png'
 import enemy from '../assets/battle/enemy.png'
 import question from '../assets/battle/question.png'
 import time from '../assets/battle/time.png'
+import guts from '../assets/battle/guts.png'
+
+import eat_test1 from '../assets/characters/eat/eat_test1.gif';
+import eat_test6 from '../assets/characters/eat/eat_test6.gif'
+import eat_test2 from '../assets/characters/eat/eat_test2.gif'
+import eat_test5 from '../assets/characters/eat/eat_test5.gif'
+
 
 export const images = {
     Background: {
-        home: Home,
-        collection: Collection,
-        market: Market,
-        mission: Mission
+        home: home,
+        collection: collection,
+        market: market,
+        mission: mission
     },
 
     defaultCharacter: {
@@ -164,7 +173,7 @@ export const images = {
         QUOKKA: australia,
         PANDA: china,
         LION: europe,
-        SIBA: japan,
+        SHIBA: japan,
         TIGER: korea,
         EAGLE: usa    
     },
@@ -223,6 +232,8 @@ export const images = {
         defence_2: defence_2,
         exchange_0: exchange_0,
         exchange_1: exchange_1,
+        exchange_2: exchange_2,
+        exchange_3: exchange_3,
         skill_0: skill_0,
         skill_1: skill_1,
         skill_2: skill_2,
@@ -230,6 +241,7 @@ export const images = {
         enemy_0: enemy,
         question_0: question,
         time_0: time,
+        guts_0: guts,
     },
 }
 

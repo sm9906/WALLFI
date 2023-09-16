@@ -16,6 +16,8 @@ import { updateCharacter } from '../homeSlice.js';
 import { globalStyles } from "../homestyles/global.js";
 import { images } from '../../../common/imgDict.js';
 import GameHeader from '../homecomponents/GameHeader.js';
+import ExpBar from '../homecomponents/exp/ExpBar.js';
+import { RFPercentage } from 'react-native-responsive-fontsize';
 
 const type = {
     'EAGLE':'독수리',
@@ -41,7 +43,7 @@ export default function Collection({navigation}) {
       id: character.characterIdx,
       name: type[character.characterType],
       imageUrl: images.defaultCharacter[character.characterType][character.color],
-      level: 'Lv.' + character.level,
+      level: character.level,
       exp: character.exp,
       main: character.main
     })
@@ -51,7 +53,7 @@ export default function Collection({navigation}) {
     <TouchableOpacity
       style={{
         backgroundColor: 'rgba(255, 255, 255, 0.7)',
-        flex: 1,
+        flex: 0.5,
         marginHorizontal: '5%',
         marginVertical: '5%',
         borderRadius: 20,
@@ -85,7 +87,7 @@ export default function Collection({navigation}) {
             selectedCharacter={selectedCharacter} 
             setSelectedCharacter={setSelectedCharacter}
             userId = {userId}
-            />
+          />
         </Modal>
         <CollectionHeader navigation={navigation}/>
         <View style={{ flex: 6.5, width: '100%' }}>
@@ -116,6 +118,7 @@ function CollectionHeader(props) {
 }
 
 function DetailPage(props) {
+  console.log(props.selectedCharacter)
   const dispatch = useDispatch();
   const setMain = () => {
     dispatch(updateCharacter({act: '', characterIdx: props.selectedCharacter.id, statusType: 'isMain', userId: props.userId, value: 0}))
@@ -162,15 +165,8 @@ function DetailPage(props) {
             justifyContent: 'center',
             alignItems: 'center'
         }}>
-        <Text style={{ 
-            fontSize: 24, 
-            fontWeight: 'bold', 
-            color: '#FFF5DC',  
-            textShadowColor: '#FF5C00',
-            textShadowRadius: 1,
-            textShadowOffset: { width: 2, height: 2 },
-            elevation: 4, 
-            }}>{props.selectedCharacter.level}</Text>
+          
+        <ExpBar ExpStyle={ExpStyle} exp={props.selectedCharacter.exp} level={props.selectedCharacter.level}/> 
         </View>
     </View>
   )
@@ -188,5 +184,32 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center'
+  }
+})
+
+const ExpStyle = StyleSheet.create({
+  container:{
+    width:'80%',
+    height: "50%",
+    flexDirection:'row',
+    alignItems:'center',
+    justifyContent:'space-evenly'
+  },
+  LvTxt:{
+    color:'#FF5C00',
+    alignContent:'center',
+    fontWeight:'bold',
+    fontSize:RFPercentage(3)
+  },
+  barContainer: {
+      width: "60%",
+      height: "50%",
+      backgroundColor: "#929292",
+      borderRadius:5
+  },
+  exp:{
+    backgroundColor:'#FF5C00',
+    height:'100%',
+    borderRadius:5
   }
 })

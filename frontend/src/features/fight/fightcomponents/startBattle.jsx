@@ -3,12 +3,13 @@ import {
   setBattleLoading,
   setGuts,
   setHpBar,
+  setTimeOut
 } from "../../../actions/loadingActions";
 import {
-  setPlayerSelect,
   setEnemySelect,
+  setPlayerSelect,
   decreaseCard,
-  increaseSkillCard,
+  setPlayerCard,
 } from "../../../actions/cardActions";
 
 const cardTypes = ["skill", "exchange", "defence", "counter", "attack"];
@@ -28,67 +29,50 @@ const getRandomCardType = (enemyCard) => {
   return availableEnemyCards[randomIndex];
 };
 
-// const handleExchange = (
-//   playerSelect,
-//   enemySelect,
-//   playerAnimal,
-//   enemyAnimal,
-//   playerCard,
-//   enemyCard,
-//   dispatch
-// ) => {
-//   if (
-//     playerSelect === "exchange" &&
-//     playerAnimal.exchange === 1 &&
-//     enemySelect === "exchange" &&
-//     enemyAnimal.exchange === 1
-//   ) {
-//     return;
-//   }
-
-//   if (enemySelect === "exchange" && enemyAnimal.exchange === 1) {
-//     dispatch(setPlayerSelect({ type: "", number: "" }));
-//     dispatch(
-//       setEnemySelect({ type: playerSelect, number: playerCard[playerSelect] })
-//     );
-//   } else if (playerSelect === "exchange" && playerAnimal.exchange === 1) {
-//     dispatch(
-//       setPlayerSelect({ type: enemySelect, number: enemyCard[enemySelect] })
-//     );
-//     dispatch(setEnemySelect({ type: "", number: "" }));
-//   }
-// };
-
 const setAnimalGuts = (
   playerGuts,
   enemyGuts,
   playerSelect,
   enemySelect,
   playerAnimal,
-  enemyAnimal,
+  enemyAnimal
 ) => {
   let newPlayerGuts = playerGuts;
   let newEnemyGuts = enemyGuts;
-  if (playerAnimal.name === "호랑이" && playerSelect === "skill") {
+  if (playerAnimal.animal === "TIGER" && playerSelect === "skill") {
     if (enemySelect === "exchange" && enemyAnimal.exchange === 1) {
       newEnemyGuts += 1;
     } else {
       newPlayerGuts += 1;
     }
-  } 
-  if (enemyAnimal.name === "호랑이" && enemySelect === "skill") {
+  }
+  if (enemyAnimal.animal === "TIGER" && enemySelect === "skill") {
     if (playerSelect === "exchange" && playerAnimal.exchange === 1) {
       newPlayerGuts += 1;
     } else {
       newEnemyGuts += 1;
     }
   }
-  return [newPlayerGuts, newEnemyGuts]
+  return [newPlayerGuts, newEnemyGuts];
 };
 
-const setAnimalHp = (playerHp, enemyHp, damageResult, newPlayerGuts, newEnemyGuts) => {
-  let newPlayerHp = Math.max(0, Math.min(1000, playerHp - damageResult.playerTotalDmg));
-  let newEnemyHp = Math.max(0, Math.min(1000, enemyHp - damageResult.enemyTotalDmg));
+const setAnimalHp = (
+  playerHp,
+  enemyHp,
+  playerMaxHp,
+  enemyMaxHp,
+  damageResult,
+  newPlayerGuts,
+  newEnemyGuts
+) => {
+  let newPlayerHp = Math.max(
+    0,
+    Math.min(playerMaxHp, playerHp - damageResult.playerTotalDmg)
+  );
+  let newEnemyHp = Math.max(
+    0,
+    Math.min(enemyMaxHp, enemyHp - damageResult.enemyTotalDmg)
+  );
   if (newPlayerHp <= 0 && newPlayerGuts > 0) {
     newPlayerHp = 1;
     newPlayerGuts -= 1;
@@ -98,10 +82,10 @@ const setAnimalHp = (playerHp, enemyHp, damageResult, newPlayerGuts, newEnemyGut
     newEnemyHp = 1;
     newEnemyGuts -= 1;
   }
-  return [newPlayerHp, newEnemyHp]
-}
+  return [newPlayerHp, newEnemyHp];
+};
 
-const startBattle = (
+const startBattle = async (
   dispatch,
   playerSelect,
   playerCard,
@@ -110,16 +94,20 @@ const startBattle = (
   enemyAnimal,
   playerHp,
   enemyHp,
+  playerMaxHp,
+  enemyMaxHp,
   playerGuts,
   enemyGuts
 ) => {
-  const enemySelect = getRandomCardType(enemyCard);
+  dispatch(setBattleLoading(true)); // 터치 못하게 설정
+  await new Promise((resolve) => setTimeout(resolve, 2000));
 
-  dispatch(setBattleLoading(true));
+  const enemySelect = getRandomCardType(enemyCard); // 적 카드 랜덤으로 선택
+
   dispatch(
-    setEnemySelect({ type: enemySelect, number: enemyCard[enemySelect] })
+    setEnemySelect({ type: enemySelect, number: enemyCard[enemySelect] }) // 적 카드 리덕스에 갱신
   );
-  dispatch(decreaseCard(enemySelect, "enemy"));
+  dispatch(decreaseCard(enemySelect, "enemy")); // 적 덱에서 뽑은카드 제거
 
   const guts = setAnimalGuts(
     playerGuts,
@@ -127,8 +115,8 @@ const startBattle = (
     playerSelect,
     enemySelect,
     playerAnimal,
-    enemyAnimal,
-  )
+    enemyAnimal
+  );
 
   const damageResult = selectCardMatching(
     playerSelect,
@@ -137,17 +125,32 @@ const startBattle = (
     enemyAnimal
   );
 
-  const animalHp = setAnimalHp(playerHp, enemyHp, damageResult, guts[0], guts[1])
+  console.log("적에게 공격하는 이펙트!");
+  await new Promise((resolve) => setTimeout(resolve, 1500)); // 연출을 위한 시간 생성
+
+  const animalHp = setAnimalHp(
+    playerHp,
+    enemyHp,
+    playerMaxHp,
+    enemyMaxHp,
+    damageResult,
+    guts[0],
+    guts[1]
+  );
 
   dispatch(setHpBar("player", animalHp[0]));
   dispatch(setHpBar("enemy", animalHp[1]));
   dispatch(setGuts("player", guts[0]));
   dispatch(setGuts("enemy", guts[1]));
+  await new Promise((resolve) => setTimeout(resolve, 2500)); // 연출을 위한 시간 생성
 
-  // dispatch(setBattleLoading(false));
+  dispatch(setEnemySelect({ type: "enemy", number: 0 }));
+  dispatch(setPlayerSelect({ type: "", number: 0 }));
 
+  dispatch(setTimeOut(false));
+
+  dispatch(setBattleLoading(false)); // 터치 못하게 설정
   return animalHp;
 };
-
 
 export default startBattle;
