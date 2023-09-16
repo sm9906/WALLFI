@@ -19,6 +19,7 @@ import { getMainCharacter, updateCharacter } from '../homeSlice.js';
 import { globalStyles } from '../homestyles/global.js';
 import { images } from '../../../common/imgDict.js';
 import GameHeader from '../homecomponents/GameHeader.js';
+import { RFPercentage } from 'react-native-responsive-fontsize';
 
 
 // 상태바 겹침현상을 없애려면 react-native에서 StatusBar를 import 해줘야함
@@ -107,7 +108,7 @@ function Season() {
     <View style={styles.season}>
       <LinearGradient style={styles.box} colors={['rgba(142, 170, 245, 1)', 'rgba(72, 122, 255, 0.4)', 'transparent']}>
         <Image source={images.gameIcon.trophy} style={styles.trophy} />
-        <Text style={styles.seasonText}>1 시즌</Text>
+        <Text style={styles.seasonText}>여름 시즌</Text>
       </LinearGradient>
     </View>
   )
@@ -207,7 +208,7 @@ function Content(props) {
         <Text style={{
           color: '#3B3B3B',
           fontWeight: 'bold',
-          fontSize: 25,
+          fontSize: RFPercentage(2),
           margin: '5%',
         }}>&lt;{userName}&gt;</Text>
         <Text style={{
@@ -252,7 +253,7 @@ function Bottom(props) {
       </TouchableOpacity>
       <TouchableOpacity style={styles.bottomCenterBtn} onPress={() => props.navigation.navigate('GoogleMap')}>
         <Image source={images.btnSource.battle} style={styles.challengeBtn} />
-        <Text style={styles.btnText}>일일도전</Text>
+        <Text style={styles.btnText}>배틀</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.bottomBtn} onPress={() => { props.navigation.navigate('Market') }}>
         <Image source={images.btnSource.market} style={styles.buttonContent} />
