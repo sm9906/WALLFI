@@ -10,6 +10,8 @@ public interface CharacterService {
 
     CharacterWithUserIdResDto shop(String userId);
 
+    CharacterListResDto shopTen(String userId);
+
     CharacterListResDto searchCharacters(String userId);
 
     CharacterWithUserIdResDto searchMainCharacter(String userId);

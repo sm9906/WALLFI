@@ -194,6 +194,7 @@ public class ExchangeServiceImpl implements ExchangeService {
         }
 
         long kwrConvertPrice = (long) Math.ceil(전신환매입환율 * 금액);
+        System.out.println("kwrConvertPrice = " + kwrConvertPrice);
         bankMapper.globalWithdrawTransferMoneyFromAccount(globalAccountNum, 금액, kwrConvertPrice);
         bankMapper.depositTransferMoneyFromAccount(krwAccountNum, kwrConvertPrice);
 
