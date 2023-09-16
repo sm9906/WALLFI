@@ -61,8 +61,7 @@ const TextTransition = (props) => {
     useSelector((state) => state.wallet.exchangeRates)
   );
   const [currentId, setCurrentId] = useState(0);
-  // console.log(exchanges)
-  // console.log(currentId)
+
   useEffect(() => {
     const timeout = setInterval(() => {
       setCurrentId((prev) => (prev + 1) % 5);
