@@ -41,6 +41,8 @@ public class BankController {
 
         HttpResult res = new HttpResult(OK, SUCCESS, transferType);
         res.setData(transferDTO.get출금계좌번호());
+        res.setUserId("ssafy");
+        res.setAction("이체하기");
 
         return ResponseEntity.status(200).body(res);
     }

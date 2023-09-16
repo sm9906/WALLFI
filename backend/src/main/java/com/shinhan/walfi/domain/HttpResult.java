@@ -1,12 +1,16 @@
 package com.shinhan.walfi.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.http.HttpStatus;
+
 
 @Getter
 @Setter
+@ToString
 @AllArgsConstructor
 public class HttpResult {
 
@@ -17,6 +21,12 @@ public class HttpResult {
     private String message;
 
     private Object data;
+
+    @JsonIgnore
+    private String action;
+
+    @JsonIgnore
+    private String userId;
 
     public HttpResult(HttpStatus status, Result result, String message) {
         this.status = status;
