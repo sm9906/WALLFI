@@ -29,10 +29,10 @@ export default function MakeAccount({ navigation }){
       <View style={{width:'90%',}}>
         <Text style={{fontSize:RFPercentage(3), fontWeight:'bold'}}>적금</Text>
       </View>
-      <TouchableOpacity onPress={()=>navigation.navigate('WalletHome')}>
+      <TouchableOpacity onPress={()=>navigation.navigate('MakeDeposit',{type:'Levelup'})}>
         <Image source={LevelupAccount} style={{width:SCREEN_WIDTH*0.9, height:SCREEN_HEIGHT*0.25, resizeMode:'contain'}}/>
       </TouchableOpacity>
-      <TouchableOpacity onPress={()=>navigation.navigate('WalletHome')}>
+      <TouchableOpacity onPress={()=>navigation.navigate('MakeDeposit')}>
         <Image source={JumpAccount} style={{width:SCREEN_WIDTH*0.9, height:SCREEN_HEIGHT*0.25, resizeMode:'contain'}}/>
       </TouchableOpacity>
       {/* <Image source={BaseballAccount} style={{width:'90%', resizeMode:'contain'}}/> */}

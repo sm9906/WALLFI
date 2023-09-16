@@ -8,12 +8,13 @@ import SendWho from '../walletscreens/SendWho';
 import SendHow from '../walletscreens/SendHow';
 import SendMemo from '../walletscreens/SendMemo';
 import WalletLoading from '../walletscreens/WalletLoading';
+import MakeDeposit from '../walletscreens/MakeDeposit' 
 
 const Stack = createNativeStackNavigator();
 
 const WalletNavigation = () => {
     return (
-    <Stack.Navigator initialRouteName='WalletLoading'>
+    <Stack.Navigator initialRouteName='MakeAccount'>
       <Stack.Screen name="WalletHome" component={WalletHome}
       options={{title:'My 월렛', headerBackVisible: false,}}/>
       <Stack.Screen name="MakeAccount" component={MakeAccount} options={{title:'예/적금'}}/>
@@ -22,6 +23,7 @@ const WalletNavigation = () => {
       <Stack.Screen name="SendHow" component={SendHow} options={{title:''}} />
       <Stack.Screen name="SendMemo" component={SendMemo} options={{ headerShown: false }} />
       <Stack.Screen name="WalletLoading" component={WalletLoading} options={{headerShown: false}}/>
+      <Stack.Screen name="MakeDeposit" component={MakeDeposit} options={{title:''}}/>
     </Stack.Navigator>
     )
 }

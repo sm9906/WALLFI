@@ -88,7 +88,7 @@ function GameHeader(props) {
             {/* <View style={{ flex: 1, alignItems: 'center' }}>
                 <Image source={images.defaultCharacter.TIGER.MINT} style={styles.profile}></Image>
             </View> */}
-            <Text style={styles.name}>{gameUser&&gameUser.userId}</Text>
+            <Text style={styles.name}>{gameUser&&gameUser.username}</Text>
           </View>
           <View
             style={{
