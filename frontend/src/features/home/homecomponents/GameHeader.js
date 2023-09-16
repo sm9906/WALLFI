@@ -1,11 +1,14 @@
 import { useRef, useState, useEffect, useMemo } from "react";
 import { StyleSheet, Text, View, Image } from "react-native";
-import * as Animatable from "react-native-animatable";
 import { useDispatch, useSelector } from "react-redux";
+
+import { RFPercentage } from "react-native-responsive-fontsize";
+import * as Animatable from "react-native-animatable";
+import { AntDesign } from "@expo/vector-icons";
+
+import ExpBar from "./exp/ExpBar";
 import { images } from "../../../common/imgDict.js";
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from "../homecomponents/ScreenSize.js";
-import { AntDesign } from "@expo/vector-icons";
-import { RFPercentage } from "react-native-responsive-fontsize";
 
 // 추후에 여기 컴포넌트로 분리, style 파일 props로 전달 필요!
 
@@ -76,8 +79,8 @@ const TextTransition = (props) => {
 
 function GameHeader(props) {
   //   console.log("header");
-  const gameUser = useSelector((state) => state.home.userGameInfo);
-  console.log(gameUser);
+  const {userGameInfo:gameUser, mainCharacter} = useSelector((state) => state.home);
+  console.log(mainCharacter)
   return (
     <>
       <View style={styles.header}>
@@ -95,14 +98,8 @@ function GameHeader(props) {
               alignItems: "center",
             }}
           >
-            <View
-              style={{
-                width: "85%",
-                height: "40%",
-                backgroundColor: "#D9D9D9",
-                borderRadius: 15,
-              }}
-            ></View>
+          <ExpBar exp={mainCharacter.exp} level={mainCharacter.level}/>
+            
           </View>
         </View>
         <View style={{ flexDirection: "column", flex: 1 }}>

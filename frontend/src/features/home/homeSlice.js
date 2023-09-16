@@ -73,12 +73,15 @@ export const getCharacterList = createAsyncThunk('GET_CHARACTER_LIST', async(use
   }
 })
 
-// 캐릭터 수정하기
+// 캐릭터 수정하기 / 메인 수정 / 스탯 수정 
 export const updateCharacter = createAsyncThunk('UPDATE_CHARACTER', async(data, { rejectWithValue }) => {
   try {
-    await axios.put('character/change/status', data);
+    console.log('홈슬라이스/updateCharacter 데이터 전달 확인 ', data)
+    await axios.put('character/change/status', data)
+    // .then(res=>console.log('해쒕', res));
     return data;
   } catch (e) {
+    console.log('홈슬라이스/updatecharacter 실패',e);
     return rejectWithValue(e.res);
   }
 })
@@ -111,7 +114,7 @@ export const homeSlice = createSlice({
       state.userGameInfo = action.payload;
     })
     .addCase(updateCharacter).fulfilled, (state, action)=>{
-      console.log(action.payload)
+      console.log('변경 성공!',action.payload)
     }
   }
 })

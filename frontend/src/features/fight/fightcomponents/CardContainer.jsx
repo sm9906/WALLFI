@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import startBattle from "./startBattle";
 import Card from "../fightcomponents/Card";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Modal, Text, TouchableOpacity } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { setTurn, setEndGame, setResult } from "../../../actions/turnActions";
 import { ScreenHeight, ScreenWidth } from "./../fightcomponents/ScreenSize";
@@ -16,19 +16,22 @@ const cardContainer = () => {
   const enemyCard = useSelector((state) => state.card.enemyCard);
   const playerHp = useSelector((state) => state.loading.playerHp.playerNowHp);
   const enemyHp = useSelector((state) => state.loading.enemyHp.enemyNowHp);
+  const playerMaxHp = useSelector((state) => state.loading.playerHp.playerMaxHp);
+  const enemyMaxHp = useSelector((state) => state.loading.enemyHp.enemyMaxHp);
   const playerGuts = useSelector((state) => state.loading.guts.playerGuts);
   const enemyGuts = useSelector((state) => state.loading.guts.enemyGuts);
   let turn = useSelector((state) => state.turn.turn);
 
   const [doubleClick, setDoubleClick] = useState("");
+  const [isModalVisible, setModalVisible] = useState(false);
 
   const checkResult = ([playerHp, enemyHp]) => {
     if (playerHp == 0 && enemyHp == 0) {
-      return "draw";
+      return "무승부";
     } else if (playerHp == 0) {
-      return "lose";
+      return "패배";
     } else if (enemyHp == 0) {
-      return "win";
+      return "승리";
     } else {
       return "continue";
     }
@@ -36,15 +39,15 @@ const cardContainer = () => {
 
   const finshResult = ([playerHp, enemyHp]) => {
     if (playerHp > enemyHp) {
-      return "win"
+      return "승리";
     } else if (playerHp < enemyHp) {
-      return "lose"
+      return "패배";
     } else {
-      return "draw"
+      return "무승부";
     }
-  }
+  };
 
-  const handleCardClick = (type, number) => {
+  const handleCardClick = async (type, number) => {
     dispatch(setPlayerSelect({ type, number }));
     if (doubleClick === type) {
       const isSkillAndMax = type === "skill" && playerCard[type] === 3;
@@ -52,7 +55,7 @@ const cardContainer = () => {
 
       if (isSkillAndMax || isNotSkillAndAvailable) {
         dispatch(decreaseCard(type));
-        const animalHp = startBattle(
+        const animalHp = await startBattle(
           dispatch,
           type,
           playerCard,
@@ -61,6 +64,8 @@ const cardContainer = () => {
           enemyAnimal,
           playerHp,
           enemyHp,
+          playerMaxHp,
+          enemyMaxHp,
           playerGuts,
           enemyGuts
         );
@@ -72,6 +77,7 @@ const cardContainer = () => {
             dispatch(setEndGame(true));
             dispatch(setResult(finshResult(animalHp)));
           }
+          setModalVisible(true);
         } else {
           dispatch(setEndGame(true));
           dispatch(setResult(result));
@@ -83,8 +89,24 @@ const cardContainer = () => {
     }
   };
 
+  const closeModal = () => {
+    setModalVisible(false);
+  };
+
   return (
     <View style={styles.cardContainer}>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={isModalVisible}
+        onRequestClose={closeModal}
+      >
+        <TouchableOpacity style={styles.centeredView} onPress={closeModal}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>다음 턴!</Text>
+          </View>
+        </TouchableOpacity>
+      </Modal>
       <Card
         cType={"skill"}
         cNumber={playerCard.skill}
@@ -140,6 +162,24 @@ const styles = StyleSheet.create({
   bgImg: {
     height: ScreenHeight,
     width: ScreenWidth,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.3)",
+  },
+  modalView: {
+    width: ScreenWidth,
+    height: ScreenHeight,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center",
+    fontSize: 30,
+    fontWeight: "bold",
   },
 });
 

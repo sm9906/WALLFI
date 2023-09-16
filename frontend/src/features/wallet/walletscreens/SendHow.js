@@ -1,8 +1,8 @@
 import React, {useEffect, useState, useMemo} from "react";
 import { View, Text, StyleSheet } from 'react-native';
-import { ConvPad } from "../walletcomponents/sendmoney/ConvKeypad";
+import { ConvPad } from "../walletcomponents/virtualkeyboard/ConvKeypad";
 import { RFPercentage } from "react-native-responsive-fontsize";
-import VirtualKeyboard from "../walletcomponents/sendmoney/VirtualKeypad";
+import VirtualKeyboard from "../walletcomponents/virtualkeyboard/VirtualKeypad";
 import { minusMoney, exchangeMoney, postSendMoney, postExchangeMoney } from "../walletSlice";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -107,7 +107,7 @@ export default function SendHow({route, navigation}){
       }else if(value === 'clear'){
         setMoney('0');
       }else if(value==='all'){
-        console.log('전액')
+        setMoney(String(balance));
       }else if(value==='완료'){
         if(type==='송금'){
           !isOver?sendMoney():null

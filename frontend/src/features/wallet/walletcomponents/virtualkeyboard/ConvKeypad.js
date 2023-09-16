@@ -13,7 +13,7 @@ export const ConvPad = React.memo(function ConvPad({addMoney}){
     if(idx==3){
       plus = 1000000;
     }else if(idx==4){
-      // 전액 다 선택
+      plus = 'all';
     }else{
       plus=(idx!==0)?50000*idx:plus;
     }
