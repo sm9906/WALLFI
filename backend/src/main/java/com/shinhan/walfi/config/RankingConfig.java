@@ -17,9 +17,7 @@ public class RankingConfig {
 
     private final BattleMapper battleMapper;
 
-    @EventListener(ApplicationReadyEvent.class)
-
-    @Scheduled(cron = "0 0 9 1 * ?", zone = "Asia/Seoul")
+    @Scheduled(cron = "0 0 9 1 * *", zone = "Asia/Seoul")
     public void updateRanking() {
         log.info("initialize Ranking Time : {}", new Timestamp(System.currentTimeMillis()));
         battleMapper.initializeRanking();

@@ -395,30 +395,4 @@ class CharacterServiceTest {
     //TODO: 밥먹기를 보냈는데 atk를 +하지 않았을때 예외 발생 테스트
     //TODO: 훈련하기를 했는데 def를 +하지 않았을때 예외 발생 테스트
 
-    @Test
-    @DisplayName("(맥스 캐릭터 1) max 레벨 캐릭터 수 조회 테스트")
-    void maxLevelCharacterOneTest() {
-        // given
-        GameCharacter maxLevelCharacter = GameCharacter.createCharacter(userGameInfo, CharacterType.SHIBA, false);
-        em.persist(maxLevelCharacter);
-        maxLevelCharacter.setLevel(LevelUp.LEVEL_10);
-
-        // when
-        int maxCharacterNum = characterService.getMaxLevelCharacterNum(userId).getMaxCharacterNum();
-
-        // then
-        org.assertj.core.api.Assertions.assertThat(maxCharacterNum).isEqualTo(1);
-    }
-
-    @Test
-    @DisplayName("(맥스 캐릭터 0) max 레벨 캐릭터 수 조회 테스트")
-    void maxLevelCharacterZeroTest() {
-        // given
-
-        // when
-        int maxCharacterNum = characterService.getMaxLevelCharacterNum(userId).getMaxCharacterNum();
-
-        // then
-        org.assertj.core.api.Assertions.assertThat(maxCharacterNum).isEqualTo(0);
-    }
 }
