@@ -64,7 +64,7 @@ public class BattleController {
         return ResponseEntity.status(res.getStatus()).body(res);
     }
 
-    @GetMapping("/count")
+    @PostMapping("/count")
     @ApiOperation(value = "유저가 졌을때 배틀 카운트")
     public ResponseEntity<HttpResult> getBattleCount(@RequestParam String userId){
         battleService.getBattleCount(userId);
@@ -72,4 +72,6 @@ public class BattleController {
         HttpResult res = HttpResult.getSuccess();
         return ResponseEntity.status(res.getStatus()).body(res);
     }
+
+
 }
