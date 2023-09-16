@@ -17,7 +17,6 @@ const CardItem = (props) => {
 
   // const flag = require(`../../../../assets/flag`)
   const id = props.data.accId
-  console.log(id)
   return (
     <View style={{...styles.card, backgroundColor:colors[id%5]}}>
       <View style={styles.account}>

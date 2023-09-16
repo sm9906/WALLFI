@@ -1,11 +1,13 @@
-import React, { useState } from "react";
 import startBattle from "./startBattle";
+import { Animated } from "react-native";
 import Card from "../fightcomponents/Card";
-import { View, StyleSheet, Modal, Text, TouchableOpacity } from "react-native";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setTurn, setEndGame, setResult } from "../../../actions/turnActions";
+import { setTimeOut } from "../../../actions/loadingActions";
 import { ScreenHeight, ScreenWidth } from "./../fightcomponents/ScreenSize";
 import { setPlayerSelect, decreaseCard } from "../../../actions/cardActions";
+import { setTurn, openModal, closeModal, setEndGame, setResult } from "../../../actions/turnActions";
+import { View, StyleSheet, Modal, Text, TouchableOpacity } from "react-native";
 
 const cardContainer = () => {
   const dispatch = useDispatch();
@@ -16,14 +18,45 @@ const cardContainer = () => {
   const enemyCard = useSelector((state) => state.card.enemyCard);
   const playerHp = useSelector((state) => state.loading.playerHp.playerNowHp);
   const enemyHp = useSelector((state) => state.loading.enemyHp.enemyNowHp);
-  const playerMaxHp = useSelector((state) => state.loading.playerHp.playerMaxHp);
+  const playerMaxHp = useSelector(
+    (state) => state.loading.playerHp.playerMaxHp
+  );
   const enemyMaxHp = useSelector((state) => state.loading.enemyHp.enemyMaxHp);
   const playerGuts = useSelector((state) => state.loading.guts.playerGuts);
   const enemyGuts = useSelector((state) => state.loading.guts.enemyGuts);
+  const isTimeout = useSelector((state) => state.loading.isTimeout);
   let turn = useSelector((state) => state.turn.turn);
 
   const [doubleClick, setDoubleClick] = useState("");
   const [isModalVisible, setModalVisible] = useState(false);
+  const [modalPosition] = useState(new Animated.Value(-ScreenHeight));
+
+  const cardTypes = ["skill", "exchange", "defence", "counter", "attack"];
+
+  useEffect(() => {
+    if (isTimeout) {
+      dispatch(setTimeOut(true));
+      const randomPlayerCard = getRandomPlayerCardType(playerCard);
+      handleCardClick(randomPlayerCard, playerCard[randomPlayerCard]);
+      dispatch(decreaseCard(randomPlayerCard));
+      handleBattle(randomPlayerCard);
+    }
+  }, [isTimeout]);
+
+  const checkEnemyCardAvailability = (playerCard) => {
+    return cardTypes.filter((key) => {
+      return (
+        (key === "skill" && playerCard[key] === 3) ||
+        (key !== "skill" && playerCard[key] > 0)
+      );
+    });
+  };
+
+  const getRandomPlayerCardType = (playerCard) => {
+    const availablePlayerCards = checkEnemyCardAvailability(playerCard);
+    const randomIndex = Math.floor(Math.random() * availablePlayerCards.length);
+    return availablePlayerCards[randomIndex];
+  };
 
   const checkResult = ([playerHp, enemyHp]) => {
     if (playerHp == 0 && enemyHp == 0) {
@@ -47,6 +80,35 @@ const cardContainer = () => {
     }
   };
 
+  const handleBattle = async (selectedType) => {
+    const animalHp = await startBattle(
+      dispatch,
+      selectedType,
+      playerCard,
+      enemyCard,
+      playerAnimal,
+      enemyAnimal,
+      playerHp,
+      enemyHp,
+      playerMaxHp,
+      enemyMaxHp,
+      playerGuts,
+      enemyGuts
+    );
+    const result = checkResult(animalHp);
+    if (result === "continue") {
+      openModal();
+      turn += 1;
+      if (turn >= 7) {
+        dispatch(setEndGame(true));
+        dispatch(setResult(finshResult(animalHp)));
+      }
+    } else {
+      dispatch(setEndGame(true));
+      dispatch(setResult(result));
+    }
+  };
+
   const handleCardClick = async (type, number) => {
     dispatch(setPlayerSelect({ type, number }));
     if (doubleClick === type) {
@@ -55,33 +117,7 @@ const cardContainer = () => {
 
       if (isSkillAndMax || isNotSkillAndAvailable) {
         dispatch(decreaseCard(type));
-        const animalHp = await startBattle(
-          dispatch,
-          type,
-          playerCard,
-          enemyCard,
-          playerAnimal,
-          enemyAnimal,
-          playerHp,
-          enemyHp,
-          playerMaxHp,
-          enemyMaxHp,
-          playerGuts,
-          enemyGuts
-        );
-        const result = checkResult(animalHp);
-        if (result == "continue") {
-          turn += 1;
-          dispatch(setTurn(turn));
-          if (turn >= 7) {
-            dispatch(setEndGame(true));
-            dispatch(setResult(finshResult(animalHp)));
-          }
-          setModalVisible(true);
-        } else {
-          dispatch(setEndGame(true));
-          dispatch(setResult(result));
-        }
+        handleBattle(type);
       }
       setDoubleClick("");
     } else {
@@ -89,22 +125,38 @@ const cardContainer = () => {
     }
   };
 
+  const openModal = () => {
+    Animated.timing(modalPosition, {
+      toValue: 0,
+      duration: 500,
+      useNativeDriver: false,
+    }).start();
+    setModalVisible(true);
+  };
+
   const closeModal = () => {
-    setModalVisible(false);
+    Animated.timing(modalPosition, {
+      toValue: -ScreenHeight,
+      duration: 500,
+      useNativeDriver: false,
+    }).start(() => {
+      setModalVisible(false);
+      dispatch(setTurn(turn + 1));
+    });
   };
 
   return (
     <View style={styles.cardContainer}>
       <Modal
-        animationType="slide"
+        animationType="none"
         transparent={true}
         visible={isModalVisible}
         onRequestClose={closeModal}
       >
         <TouchableOpacity style={styles.centeredView} onPress={closeModal}>
-          <View style={styles.modalView}>
-            <Text style={styles.modalText}>다음 턴!</Text>
-          </View>
+          <Animated.View style={[styles.modalView, { top: modalPosition }]}>
+            <Text style={styles.modalText}>다음 턴</Text>
+          </Animated.View>
         </TouchableOpacity>
       </Modal>
       <Card
@@ -172,14 +224,15 @@ const styles = StyleSheet.create({
   modalView: {
     width: ScreenWidth,
     height: ScreenHeight,
-    justifyContent: "center",
+    marginBottom: -ScreenHeight * 0.5,
     alignItems: "center",
   },
   modalText: {
     marginBottom: 15,
     textAlign: "center",
-    fontSize: 30,
+    fontSize: 100,
     fontWeight: "bold",
+    color: "#FFD700",
   },
 });
 

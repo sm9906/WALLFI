@@ -4,16 +4,30 @@ import Card from "../fightcomponents/Card";
 import { View, StyleSheet, Text, Animated } from "react-native";
 import { ScreenHeight, ScreenWidth } from "./../fightcomponents/ScreenSize";
 import { setGuide } from "../../../actions/turnActions";
+import { setTimeOut } from "../../../actions/loadingActions";
 
 const GameHeader = () => {
   const dispatch = useDispatch();
   const isLoading = useSelector((state) => state.loading.battleLoading);
+  const isGuide = useSelector((state) => state.turn.guide);
   const turn = useSelector((state) => state.turn.turn);
+  
 
   const [loadingText, setLoadingText] = useState("전투중");
   const loadingStates = ["전투중", "전투중.", "전투중..", "전투중..."];
   const [timer, setTimer] = useState(20);
   const rotateValue = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    setTimer(20)
+  }, [turn])
+  
+
+  useEffect(() => {
+    if (timer === 0) {
+      dispatch(setTimeOut(true));
+    }
+  }, [timer]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -25,7 +39,7 @@ const GameHeader = () => {
     }, 500);
 
     let timerInterval;
-    if (!isLoading) {
+    if (!isLoading && !isGuide) {
       timerInterval = setInterval(() => {
         setTimer((prevTimer) => {
           if (prevTimer > 0) {
@@ -59,7 +73,7 @@ const GameHeader = () => {
       clearInterval(interval);
       clearInterval(timerInterval);
     };
-  }, [isLoading]);
+  }, [isLoading, isGuide]);
 
   const rotate = rotateValue.interpolate({
     inputRange: [0, 0.5, 1],

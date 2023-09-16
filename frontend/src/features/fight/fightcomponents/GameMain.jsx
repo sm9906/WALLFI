@@ -24,7 +24,7 @@ const GameMain = () => {
   const guide = useSelector((state) => state.turn.guide);
   const playerRotateValue = useRef(new Animated.Value(0)).current;
   const enemyRotateValue = useRef(new Animated.Value(0)).current;
-
+  
   useEffect(() => {
     // 플레이어 카드 갱신시 애니메이션
     Animated.timing(playerRotateValue, {
