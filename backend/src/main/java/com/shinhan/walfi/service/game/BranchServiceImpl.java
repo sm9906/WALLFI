@@ -7,8 +7,11 @@ import com.shinhan.walfi.dto.game.BranchListReqDto;
 import com.shinhan.walfi.dto.game.BranchListResDto;
 import com.shinhan.walfi.dto.game.BranchDto;
 import com.shinhan.walfi.dto.game.BranchResDto;
+import com.shinhan.walfi.dto.product.ProductResDto;
 import com.shinhan.walfi.exception.BranchErrorCode;
 import com.shinhan.walfi.exception.BranchException;
+import com.shinhan.walfi.exception.UserErrorCode;
+import com.shinhan.walfi.exception.UserException;
 import com.shinhan.walfi.mapper.BranchMapper;
 import com.shinhan.walfi.repository.UserRepository;
 import com.shinhan.walfi.repository.game.BranchRepository;
@@ -16,6 +19,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.Optional;
 
@@ -72,6 +77,52 @@ public class BranchServiceImpl implements BranchService {
 
         log.info("=== 브랜치 id: " + id + " 조회 ===");
         return branchResDto;
+    }
+
+    /**
+     * 3.7 ~ 4.5
+     * @param userId
+     * @return
+     */
+    @Override
+    public ProductResDto getCharacterBranchNum(String userId) {
+        User user = userRepository.find(userId);
+        if (user == null) {
+            log.error("=== id: " + user.getUserId() + " 틀린 비밀번호이거나 존재하지 않는 회원 ===");
+            throw new UserException(UserErrorCode.NO_MATCHING_USER);
+        }
+
+        int occupiedBranch = branchRepository.countOccupiedBranch(userId);
+
+        if (occupiedBranch == 0) {
+            log.error("=== 해당 사용자는 지점장이 아닙니다 (가입불가) ===");
+            throw new BranchException(BranchErrorCode.NOT_BRANCH_MANAGER);
+        }
+
+        if (occupiedBranch >= 8) {
+            occupiedBranch = 8;
+        }
+
+        double 추가금리 = occupiedBranch * 0.1;
+        double 총금리 = 추가금리 + 3.7;
+
+
+        BigDecimal 변환총금리 = new BigDecimal(총금리);
+        BigDecimal 변환추가금리 = new BigDecimal(추가금리);
+
+
+        // 소수점 두 번째 자리까지 반올림
+        변환총금리 = 변환총금리.setScale(2, RoundingMode.DOWN);
+        변환추가금리 = 변환추가금리.setScale(2, RoundingMode.DOWN);
+
+        return ProductResDto.builder()
+                .상품명("지점장정기예금")
+                .가입기간("12")
+                .기본금리("3.7")
+                .추가금리(String.valueOf(변환추가금리))
+                .총금리(String.valueOf(변환총금리))
+                .build();
+
     }
 
 
