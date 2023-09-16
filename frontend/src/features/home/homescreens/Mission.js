@@ -160,16 +160,13 @@ export default function Mission({ navigation }) {
   //   ],
   // });
 
-  [questInfo, setQuestInfo] = useState({})
+  [questInfo, setQuestInfo] = useState({});
 
   useEffect(() => {
     axios
       .get("http://192.168.9.30:8094/quest?userId=ssafy")
       .then((res) => {
         setQuestInfo(res.data);
-        console.log(questInfo);
-        console.log(questInfo.Monthly);
-        console.log("ebd")
       })
       .catch((error) => {
         console.error("Quest 불러오기 에러 발생: ", error);
@@ -197,7 +194,7 @@ export default function Mission({ navigation }) {
         <MissionHeader navigation={navigation} />
         {/* {questInfo.length == 2 ? console.log("yes") : console.log("no")}r */}
         <MenuBar />
-        <DailyQuest />
+        {/* <DailyQuest /> */}
       </ImageBackground>
       <StatusBar />
     </View>
@@ -252,21 +249,20 @@ function MenuBar() {
         })}
       >
         <Tab.Screen name="일간" children={() => <DailyQuest quest={questInfo.Daily} />} />
-        {/* <Tab.Screen name="주간" children={() => <DailyQuest quest={questInfo.Weekly} />} />
+        <Tab.Screen name="주간" children={() => <DailyQuest quest={questInfo.Weekly} />} />
         <Tab.Screen name="월간" children={() => <DailyQuest quest={questInfo.Monthly} />} />
-        <Tab.Screen name="특별" children={() => <DailyQuest quest={questInfo.Special} />} /> */}
+        <Tab.Screen name="특별" children={() => <DailyQuest quest={questInfo.Specially} />} />
       </Tab.Navigator>
     </View>
   );
 }
 
-function DailyQuest({quest}) {
-
+function DailyQuest({ quest }) {
   // [quest, _] = useState(props.quest);
-  [test, setQuest] = useState(quest);
+  // [test, setQuest] = useState(quest);
 
   function getQuestReward({ idx, status }) {
-    console.log(quest)
+    console.log(quest);
     if (status === 1) {
       axios
         .post("http://192.168.9.30:8094/quest", {
@@ -279,10 +275,10 @@ function DailyQuest({quest}) {
               if (quest.idx === idx) {
                 return { ...quest, status: 2 };
               }
-  
+
               return quest;
             });
-  
+
             return newQuest;
           });
         })
@@ -296,34 +292,33 @@ function DailyQuest({quest}) {
     <View style={{ flex: 7, marginTop: 5 }}>
       <ScrollView>
         <View style={styles.questContainer}>
-
-          {typeof test !== "undefined" && console.log("aa: ", test)}
-          {typeof test !== "undefined" && test.map((quest, idx) => {
-            return (
-              <View key={idx} style={styles.quest}>
-                <View style={styles.questTitleArea}>
-                  <Text style={{ fontSize: 20, fontWeight: "bold" }}>{quest.title + props.test}</Text>
-                </View>
-                <View style={styles.questInfotatusArea}>
-                  <TouchableOpacity
-                    onPress={getQuestReward.bind(this, quest)}
-                    disabled={quest.status == 1 ? false : true}
-                  >
-                    <View
-                      style={[
-                        { width: 60, height: 42 },
-                        { backgroundColor: determineButtonColor(quest.status) },
-                        { alignItems: "center", justifyContent: "center" },
-                        { borderRadius: 10 },
-                      ]}
+          {typeof quest !== "undefined" &&
+            quest.map((quest, idx) => {
+              return (
+                <View key={idx} style={styles.quest}>
+                  <View style={styles.questTitleArea}>
+                    <Text style={{ fontSize: 20, fontWeight: "bold" }}>{quest.title}</Text>
+                  </View>
+                  <View style={styles.questInfotatusArea}>
+                    <TouchableOpacity
+                      onPress={getQuestReward.bind(this, quest)}
+                      disabled={quest.status == 1 ? false : true}
                     >
-                      <Text>{quest.status ? "완료" : quest.count + "/" + quest.total}</Text>
-                    </View>
-                  </TouchableOpacity>
+                      <View
+                        style={[
+                          { width: 60, height: 42 },
+                          { backgroundColor: determineButtonColor(quest.status) },
+                          { alignItems: "center", justifyContent: "center" },
+                          { borderRadius: 10 },
+                        ]}
+                      >
+                        <Text>{quest.status ? "완료" : quest.count + "/" + quest.total}</Text>
+                      </View>
+                    </TouchableOpacity>
+                  </View>
                 </View>
-              </View>
-            );
-          })}
+              );
+            })}
         </View>
       </ScrollView>
     </View>
