@@ -25,7 +25,7 @@ export default function Mission({ navigation }) {
 
   useEffect(() => {
     axios
-      .get("http://192.168.9.30:8094/quest?userId=ssafy")
+      .get("http://j9d101a.p.ssafy.io:8094/quest?userId=ssafy")
       .then((res) => {
         setQuest(res.data);
         console.log("quest: ", quests);
@@ -116,7 +116,7 @@ function DailyQuest({ quest, type }) {
     console.log(quest);
     if (status === 1) {
       axios
-        .post("http://192.168.9.30:8094/quest", {
+        .post("http://j9d101a.p.ssafy.io:8094/quest", {
           questIdx: idx,
           userId: "ssafy",
         })
