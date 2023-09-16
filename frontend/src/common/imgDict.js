@@ -164,7 +164,7 @@ export const images = {
         QUOKKA: australia,
         PANDA: china,
         LION: europe,
-        SIBA: japan,
+        SHIBA: japan,
         TIGER: korea,
         EAGLE: usa    
     },

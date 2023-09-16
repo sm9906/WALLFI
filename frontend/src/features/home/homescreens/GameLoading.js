@@ -5,7 +5,7 @@ import {
     StyleSheet,
 } from 'react-native'
 import { useDispatch } from 'react-redux';
-import { getCharacterList, getExchangeInfo, getGameInfo, getMainCharacter } from '../homeSlice';
+import { getCharacterList, getGameInfo, getMainCharacter } from '../homeSlice';
 
 export default function GameLoading({navigation}) {
 

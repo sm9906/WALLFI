@@ -80,7 +80,7 @@ const TextTransition = (props) => {
 function GameHeader(props) {
   //   console.log("header");
   const {userGameInfo:gameUser, mainCharacter} = useSelector((state) => state.home);
-  console.log(mainCharacter)
+  console.log(mainCharacter, gameUser)
   return (
     <>
       <View style={styles.header}>

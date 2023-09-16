@@ -10,15 +10,20 @@ import {
     Modal,
     Alert,
 } from 'react-native';
-
+import { images } from '../../../common/imgDict.js'
 import { globalStyles } from "../homestyles/global.js";
-
 import GameHeader from '../homecomponents/GameHeader.js';
-import market from '../../.././assets/background/Market.png'
-import backHome from '../../.././assets/game/button/backHome.png';
-import coin from '../../.././assets/game/icon/coin.png'
-import marketEgg from '../../.././assets/game/market/marketEgg.png';
-import characterColor from '../../.././assets/game/market/characterColor.gif';
+import { useDispatch, useSelector } from 'react-redux';
+import { getRandomCharacter, updatePoint } from '../homeSlice.js';
+
+const typeList = {
+    EAGLE: '독수리',
+    LION: '사자',
+    PANDA: '판다',
+    QUOKKA: '쿼카',
+    SHIBA: '시바',
+    TIGER: '호랑이',
+}
 
 export default function Market({navigation}) {
 
@@ -26,10 +31,11 @@ export default function Market({navigation}) {
     const [modalVisible1, setModalVisible1] = useState(false);
     const [modalVisible2, setModalVisible2] = useState(false);
     const [modalVisible3, setModalVisible3] = useState(false);
+    const [selectedCharacter, setSelectedCharacter] = useState('');
     
     return (
         <View style={globalStyles.container}>
-            <ImageBackground source={market} style={[globalStyles.bgImg, { alignItems: 'center' }]}>
+            <ImageBackground source={images.Background.market} style={[globalStyles.bgImg, { alignItems: 'center' }]}>
                 <Modal
                     animationType='fade'
                     transparent={true}
@@ -38,7 +44,11 @@ export default function Market({navigation}) {
                         Alert.alert('Modal has been closed.');
                         setModalVisible1(!modalVisible1);
                 }}>
-                    <OneEgg modalVisible1={modalVisible1} setModalVisible1={setModalVisible1}/>
+                    <OneEgg modalVisible1={modalVisible1} 
+                    setModalVisible1={setModalVisible1} 
+                    selectedCharacter={selectedCharacter}
+                    setSelectedCharacter={setSelectedCharacter}
+                />
                 </Modal>
                 <Modal
                     animationType='fade'
@@ -85,6 +95,8 @@ export default function Market({navigation}) {
                     setModalVisible2={setModalVisible2}
                     modalVisible3={modalVisible3}
                     setModalVisible3={setModalVisible3}
+                    selectedCharacter={selectedCharacter}
+                    setSelectedCharacter={setSelectedCharacter}
                 />
             </ImageBackground>
             <StatusBar />
@@ -97,7 +109,7 @@ function MarketHeader(props) {
     return (
         <View style={{ flex: 1.2, flexDirection: 'row', alignItems: 'center' }}>
             <TouchableOpacity style={[globalStyles.navigationBtn, { backgroundColor: '#FFC700' }]} onPress={() => props.navigation.navigate('GameHome')}>
-                <Image source={backHome} style={globalStyles.btnIcon}/>
+                <Image source={images.btnSource.backHome} style={globalStyles.btnIcon}/>
             </TouchableOpacity>
             <Text style={[globalStyles.navigationText, { color: '#FFC700' }]}>상점</Text>
         </View>
@@ -106,20 +118,51 @@ function MarketHeader(props) {
 
 function RenderContent(props) {
 
+    const userId = useSelector(state=>state.auth.userId);
+    const userInfo = useSelector(state=>state.home.userGameInfo);
+    const dispatch = useDispatch();
+
+    const randomCharacter = async() => {
+        try {
+
+            if (userInfo.point < 1000) {
+                Alert.alert(
+                    '경고',
+                    '포인트가 부족합니다!',
+                    [
+                      {text:'확인', onPress: ()=> {}, style:'default'}
+                    ]
+                  );
+            } else {
+                console.log('들어왔다');
+                dispatch(updatePoint({point: -1000, userId: userId})).then(res => console.log(res))
+                dispatch(getRandomCharacter(userId))
+                .then((response) => {
+                    console.log('랜덤 캐릭터 뽑기 성공', response);
+                    props.setSelectedCharacter(response.payload);
+                    props.setModalVisible1(true);
+                });
+            }
+        } catch (err) {
+            console.log('market', err);
+        }
+    }
+
     if (props.selectedBtn === 1) {
         return (
           <View style={styles.marketContent}>
             <View style={{ flex: 3.5, width: '100%', justifyContent: 'center', alignItems: 'center' }}>
-                <Image source={marketEgg} style={{ resizeMode: 'contain', height: '65%', width: '50%', marginBottom: '10%' }}/>
+                <Image source={images.marketSource.egg} style={{ resizeMode: 'contain', height: '65%', width: '50%', marginBottom: '10%' }}/>
             </View>
             <View style={styles.bottom}>
                 <View style={styles.bottomItems}>
                     <Text style={{ fontSize: 16, fontWeight: 'bold' }}>🥚 X 1</Text>
                     <TouchableOpacity 
                         style={styles.puchaseBtn} 
-                        onPress={() => {props.setModalVisible1(true)}
-                    }>
-                        <Image source={coin} style={styles.coinIcon}/>
+                        onPress={() => {
+                            randomCharacter()
+                    }}>
+                        <Image source={images.gameIcon.coin} style={styles.coinIcon}/>
                         <Text style={styles.coinText}>1,000</Text>
                     </TouchableOpacity>
                 </View>
@@ -127,9 +170,10 @@ function RenderContent(props) {
                     <Text style={{ fontSize: 16, fontWeight: 'bold' }}>🥚 X 10</Text>
                     <TouchableOpacity 
                         style={styles.puchaseBtn}
-                        onPress={() => {props.setModalVisible2(true)}
-                    }>
-                        <Image source={coin} style={styles.coinIcon}/>
+                        onPress={() => {
+                            props.setModalVisible2(true)
+                    }}>
+                        <Image source={images.gameIcon.coin} style={styles.coinIcon}/>
                         <Text style={styles.coinText}>9,000</Text>
                     </TouchableOpacity>
                 </View>
@@ -142,7 +186,7 @@ function RenderContent(props) {
         return (
           <View style={styles.marketContent}>
             <View style={{ flex: 3.5, width: '100%', justifyContent: 'center', alignItems: 'center' }}>
-                <Image source={characterColor} style={{ resizeMode: 'contain', height: '120%', width: '100%', marginBottom: '10%' }}/>
+                <Image source={images.marketSource.color} style={{ resizeMode: 'contain', height: '120%', width: '100%', marginBottom: '10%' }}/>
             </View>
             <View style={styles.bottom}>
                 <View style={[styles.bottomItems, { flex: 0.45 }]}>
@@ -151,7 +195,7 @@ function RenderContent(props) {
                         style={styles.puchaseBtn}
                         onPress={() => {props.setModalVisible3(true)}
                     }>
-                        <Image source={coin} style={styles.coinIcon}/>
+                        <Image source={images.gameIcon.coin} style={styles.coinIcon}/>
                         <Text style={styles.coinText}>3,000</Text>
                     </TouchableOpacity>
                 </View>
@@ -163,6 +207,9 @@ function RenderContent(props) {
 
 function OneEgg(props) {
 
+    console.log('모달들어옴', props.selectedCharacter);
+    const type = props.selectedCharacter.characterType;
+
     return(
         <View style={styles.modalStyle}>
             <View style={styles.modalBox}>
@@ -172,7 +219,10 @@ function OneEgg(props) {
                     backgroundColor: 'white',
                     borderRadius: 15
                 }}>
-
+                    <Image source={images.eggs[type]} style={{
+                        width: '100%',
+                        height: '100%',
+                    }}/>
                 </View>
             </View>
             <Text style={{ 
@@ -180,7 +230,7 @@ function OneEgg(props) {
                 fontSize: 20,
                 fontWeight: 'bold'
             }}>
-                {} 알을 획득했습니다!
+                {typeList[type]}알을 획득했습니다!
             </Text>
             <TouchableOpacity
                 style={styles.okBtn}
