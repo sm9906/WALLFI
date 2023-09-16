@@ -21,180 +21,27 @@ import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../homecomponents/ScreenSize.js";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 
 export default function Mission({ navigation }) {
-  // [questInfo, setQuest] = useState({
-  //   "Daily": [
-  //     {
-  //       idx: 1,
-  //       type: "Daily",
-  //       title: "D이체하기",
-  //       count: 2,
-  //       total: 2,
-  //       status: 2,
-  //     },
-  //     {
-  //       idx: 2,
-  //       type: "Daily",
-  //       title: "D환전조회",
-  //       count: 0,
-  //       total: 1,
-  //       status: 0,
-  //     },
-  //     {
-  //       idx: 3,
-  //       type: "Daily",
-  //       title: "D먹이주기",
-  //       count: 0,
-  //       total: 3,
-  //       status: 2,
-  //     },
-  //     {
-  //       idx: 4,
-  //       type: "Daily",
-  //       title: "D운동하기",
-  //       count: 0,
-  //       total: 3,
-  //       status: 0,
-  //     },
-  //   ],
-  //   "Weekly": [
-  //     {
-  //       idx: 1,
-  //       type: "Daily",
-  //       title: "W이체하기",
-  //       count: 2,
-  //       total: 2,
-  //       status: 2,
-  //     },
-  //     {
-  //       idx: 2,
-  //       type: "Daily",
-  //       title: "W환전조회",
-  //       count: 0,
-  //       total: 1,
-  //       status: 0,
-  //     },
-  //     {
-  //       idx: 3,
-  //       type: "Daily",
-  //       title: "W먹이주기",
-  //       count: 0,
-  //       total: 3,
-  //       status: 2,
-  //     },
-  //     {
-  //       idx: 4,
-  //       type: "Daily",
-  //       title: "W운동하기",
-  //       count: 0,
-  //       total: 3,
-  //       status: 0,
-  //     },
-  //   ],
-  //   "Monthly": [
-  //     {
-  //       idx: 1,
-  //       type: "Daily",
-  //       title: "M이체하기",
-  //       count: 2,
-  //       total: 2,
-  //       status: 2,
-  //     },
-  //     {
-  //       idx: 2,
-  //       type: "Daily",
-  //       title: "M환전조회",
-  //       count: 0,
-  //       total: 1,
-  //       status: 0,
-  //     },
-  //     {
-  //       idx: 3,
-  //       type: "Daily",
-  //       title: "M먹이주기",
-  //       count: 0,
-  //       total: 3,
-  //       status: 2,
-  //     },
-  //     {
-  //       idx: 4,
-  //       type: "Daily",
-  //       title: "M운동하기",
-  //       count: 0,
-  //       total: 3,
-  //       status: 0,
-  //     },
-  //   ],
-  //   "Special": [
-  //     {
-  //       idx: 1,
-  //       type: "Daily",
-  //       title: "S이체하기",
-  //       count: 2,
-  //       total: 2,
-  //       status: 1,
-  //     },
-  //     {
-  //       idx: 2,
-  //       type: "Daily",
-  //       title: "S환전조회",
-  //       count: 0,
-  //       total: 1,
-  //       status: 0,
-  //     },
-  //     {
-  //       idx: 3,
-  //       type: "Daily",
-  //       title: "S먹이주기",
-  //       count: 0,
-  //       total: 3,
-  //       status: 2,
-  //     },
-  //     {
-  //       idx: 4,
-  //       type: "Daily",
-  //       title: "S운동하기",
-  //       count: 0,
-  //       total: 3,
-  //       status: 0,
-  //     },
-  //   ],
-  // });
-
-  [questInfo, setQuestInfo] = useState({});
+  [quests, setQuest] = useState([]);
 
   useEffect(() => {
     axios
       .get("http://192.168.9.30:8094/quest?userId=ssafy")
       .then((res) => {
-        setQuestInfo(res.data);
+        setQuest(res.data);
+        console.log("quest: ", quests);
       })
       .catch((error) => {
         console.error("Quest 불러오기 에러 발생: ", error);
       });
   }, []);
 
-  // useEffect(
-  //   () => {
-  //     const loadData = async () => {
-  //       const response = await axios
-  //       .get("http://192.168.9.30:8094/quest?userId=ssafy");
-  //       await setQuestInfo(response.data);
-  //       console.log(response.data);
-  //       console.log("end");
-  //     };
-  //     loadData();
-  //   },
-  //   [questInfo]
-  // );
-
   return (
     <View style={globalStyles.container}>
       <ImageBackground source={mission} style={[globalStyles.bgImg, { alignItems: "center" }]}>
         <GameHeader />
         <MissionHeader navigation={navigation} />
-        {/* {questInfo.length == 2 ? console.log("yes") : console.log("no")}r */}
-        <MenuBar />
-        {/* <DailyQuest /> */}
+        <MenuBar quests={quests}/>
+        {/* <View style={{ flex: 6.5 }}></View> */}
       </ImageBackground>
       <StatusBar />
     </View>
@@ -233,7 +80,7 @@ function determineButtonColor(status) {
 }
 
 const Tab = createMaterialTopTabNavigator();
-function MenuBar() {
+function MenuBar({quests}) {
   return (
     <View style={{ flex: 7, width: SCREEN_WIDTH }}>
       <Tab.Navigator
@@ -248,18 +95,22 @@ function MenuBar() {
           tabBarStyle: { backgroundColor: "white" },
         })}
       >
-        <Tab.Screen name="일간" children={() => <DailyQuest quest={questInfo.Daily} />} />
-        <Tab.Screen name="주간" children={() => <DailyQuest quest={questInfo.Weekly} />} />
-        <Tab.Screen name="월간" children={() => <DailyQuest quest={questInfo.Monthly} />} />
-        <Tab.Screen name="특별" children={() => <DailyQuest quest={questInfo.Specially} />} />
+        {/* <Tab.Screen name="일간" component={DailyQuest} initialParams={{quest: quests, type: "Daily"}} /> */}
+        <Tab.Screen name="일간" children={() => <DailyQuest quest={quests} type="Daily" />} />
+        <Tab.Screen name="주간" children={() => <DailyQuest quest={quests} type="Weekly"/>} />
+        <Tab.Screen name="월간" children={() => <DailyQuest quest={quests} type="Monthly"/>} />
+        <Tab.Screen name="특별" children={() => <DailyQuest quest={quests} type="Specially"/>} />
       </Tab.Navigator>
     </View>
   );
 }
 
-function DailyQuest({ quest }) {
+function DailyQuest({ quest, type }) {
   // [quest, _] = useState(props.quest);
-  // [test, setQuest] = useState(quest);
+  // [quest, setQuest] = useState(quest);
+  // useEffect(() => {
+  //   console.log("A")
+  // }, [quest])
 
   function getQuestReward({ idx, status }) {
     console.log(quest);
@@ -292,8 +143,8 @@ function DailyQuest({ quest }) {
     <View style={{ flex: 7, marginTop: 5 }}>
       <ScrollView>
         <View style={styles.questContainer}>
-          {typeof quest !== "undefined" &&
-            quest.map((quest, idx) => {
+          {quest.map((quest, idx) => {
+            if (quest.type === type) {
               return (
                 <View key={idx} style={styles.quest}>
                   <View style={styles.questTitleArea}>
@@ -318,7 +169,8 @@ function DailyQuest({ quest }) {
                   </View>
                 </View>
               );
-            })}
+            }
+          })}
         </View>
       </ScrollView>
     </View>
