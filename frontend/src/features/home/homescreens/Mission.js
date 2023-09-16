@@ -20,37 +20,39 @@ import { requestGet } from "../../../common/http-common.js";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../homecomponents/ScreenSize.js";
 
 export default function Mission({ navigation }) {
-  [quests, setQuest] = useState([
-    { count: 0, status: 1, title: "이체하기", total: 2, type: "Daily" },
-    { count: 0, status: 2, title: "환전조회", total: 1, type: "Daily" },
-    { count: 0, status: 1, title: "먹이주기", total: 3, type: "Daily" },
-    { count: 0, status: 0, title: "운동하기", total: 3, type: "Daily" },
-    { count: 0, status: 0, title: "이체하기", total: 2, type: "Daily" },
-    { count: 0, status: 0, title: "환전조회", total: 1, type: "Daily" },
-    { count: 0, status: 0, title: "먹이주기", total: 3, type: "Daily" },
-    { count: 0, status: 0, title: "운동하기", total: 3, type: "Daily" },
-    { count: 0, status: 0, title: "이체하기", total: 2, type: "Daily" },
-    { count: 0, status: 0, title: "환전조회", total: 1, type: "Daily" },
-    { count: 0, status: 0, title: "먹이주기", total: 3, type: "Daily" },
-    { count: 0, status: 0, title: "운동하기", total: 3, type: "Daily" },
-    { count: 0, status: 0, title: "이체하기", total: 2, type: "Daily" },
-    { count: 0, status: 0, title: "환전조회", total: 1, type: "Daily" },
-    { count: 0, status: 0, title: "먹이주기", total: 3, type: "Daily" },
-    { count: 0, status: 0, title: "운동하기", total: 3, type: "Daily" },
-  ]);
+  //   [quests, setQuest] = useState([
+  //     { idx: 1, count: 0, status: 1, title: "이체하기", total: 2, type: "Daily" },
+  //     { idx: 2, count: 0, status: 2, title: "환전조회", total: 1, type: "Daily" },
+  //     { idx: 3, count: 0, status: 1, title: "먹이주기", total: 3, type: "Daily" },
+  //     { count: 0, status: 0, title: "운동하기", total: 3, type: "Daily" },
+  //     { count: 0, status: 0, title: "이체하기", total: 2, type: "Daily" },
+  //     { count: 0, status: 0, title: "환전조회", total: 1, type: "Daily" },
+  //     { count: 0, status: 0, title: "먹이주기", total: 3, type: "Daily" },
+  //     { count: 0, status: 0, title: "운동하기", total: 3, type: "Daily" },
+  //     { count: 0, status: 0, title: "이체하기", total: 2, type: "Daily" },
+  //     { count: 0, status: 0, title: "환전조회", total: 1, type: "Daily" },
+  //     { count: 0, status: 0, title: "먹이주기", total: 3, type: "Daily" },
+  //     { count: 0, status: 0, title: "운동하기", total: 3, type: "Daily" },
+  //     { count: 0, status: 0, title: "이체하기", total: 2, type: "Daily" },
+  //     { count: 0, status: 0, title: "환전조회", total: 1, type: "Daily" },
+  //     { count: 0, status: 0, title: "먹이주기", total: 3, type: "Daily" },
+  //     { count: 0, status: 0, title: "운동하기", total: 3, type: "Daily" },
+  //   ]);
 
-  //   useEffect(() => {
-  //     axios
-  //       .get("http://192.168.9.30:8094/quest?userId=ssafy")
-  //       .then((res) => {
-  //         console.log("res:", res.data);
-  //         setQuest(res.data);
-  //         console.log("quest: ", quests);
-  //       })
-  //       .catch((error) => {
-  //         console.error("Quest 불러오기 에러 발생: ", error);
-  //       });
-  //   }, []);
+  [quests, setQuest] = useState([]);
+
+    useEffect(() => {
+      axios
+        .get("http://192.168.9.30:8094/quest?userId=ssafy")
+        .then((res) => {
+          console.log("res:", res.data);
+          setQuest(res.data);
+          console.log("quest: ", quests);
+        })
+        .catch((error) => {
+          console.error("Quest 불러오기 에러 발생: ", error);
+        });
+    }, []);
 
   return (
     <View style={globalStyles.container}>
@@ -96,9 +98,10 @@ function determineButtonColor(status) {
   return color;
 }
 
-function getQuestReward(status) {
+function getQuestReward({idx, status}) {
   if (status) {
     console.log(status);
+    console.log(idx)
   } else {
     console.log(status);
   }
@@ -117,7 +120,7 @@ function MenuBar(props) {
                 </View>
                 <View style={styles.questStatusArea}>
                   <TouchableOpacity
-                    onPress={getQuestReward.bind(this, quest.status)}
+                    onPress={getQuestReward.bind(this, quest)}
                     disabled={quest.status == 2 ? true : false}
                   >
                     <View
