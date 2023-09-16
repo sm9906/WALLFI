@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setTimeOut } from "../../../actions/loadingActions";
 import { ScreenHeight, ScreenWidth } from "./../fightcomponents/ScreenSize";
 import { setPlayerSelect, decreaseCard } from "../../../actions/cardActions";
-import { setTurn, openModal, closeModal, setEndGame, setResult } from "../../../actions/turnActions";
+import { setTurn, setEndGame, setResult } from "../../../actions/turnActions";
 import { View, StyleSheet, Modal, Text, TouchableOpacity } from "react-native";
 
 const cardContainer = () => {

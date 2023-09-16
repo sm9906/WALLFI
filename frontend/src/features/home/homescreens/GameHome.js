@@ -163,6 +163,7 @@ function Content(props) {
       alertAct()
     }
   }
+  
   const alertAct = () => {
     let message;
     if(nowAct==='밥먹기'){
