@@ -110,4 +110,19 @@ public class CharacterController {
 
         return ResponseEntity.status(res.getStatus()).body(res);
     }
+
+    @PostMapping("/maxcharacter")
+    @ApiOperation(value = "사용자가 보유하고 MAX 레벨 캐릭터 수 반환")
+    public ResponseEntity<HttpResult> getMaxLevelCharacterNum(@RequestBody CharacterReqDto characterReqDto) {
+        String userId = characterReqDto.getUserId();
+
+        MaxCharacterNumResDto maxLevelCharacterNumDto = characterService.getMaxLevelCharacterNum(userId);
+
+        HttpResult res;
+
+        res = HttpResult.getSuccess();
+        res.setData(maxLevelCharacterNumDto);
+
+        return ResponseEntity.status(res.getStatus()).body(res);
+    }
 }

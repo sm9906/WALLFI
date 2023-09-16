@@ -8,6 +8,7 @@ import com.shinhan.walfi.domain.game.UserGameInfo;
 import com.shinhan.walfi.dto.game.CharacterDto;
 import com.shinhan.walfi.dto.game.CharacterListResDto;
 import com.shinhan.walfi.dto.game.CharacterWithUserIdResDto;
+import com.shinhan.walfi.dto.game.MaxCharacterNumResDto;
 import com.shinhan.walfi.exception.CharacterErrorCode;
 import com.shinhan.walfi.exception.CharacterException;
 import com.shinhan.walfi.exception.UserErrorCode;
@@ -49,11 +50,7 @@ public class CharacterServiceImpl implements CharacterService {
     @Transactional
     public CharacterWithUserIdResDto create(String userId) {
         UserGameInfo userGameInfo = userGameInfoRepository.findById(userId);
-
-        if (userGameInfo == null) {
-            log.error("=== 틀린 비밀번호이거나 존재하지 않는 회원 ===");
-            throw new UserException(UserErrorCode.NO_MATCHING_USER);
-        }
+        checkExistUser(userGameInfo);
 
         boolean hasMain = userGameInfo.getGameCharacters().stream()
                 .anyMatch(character -> character.isMain() == true);
@@ -95,11 +92,7 @@ public class CharacterServiceImpl implements CharacterService {
     @Transactional
     public CharacterWithUserIdResDto shop(String userId) {
         UserGameInfo userGameInfo = userGameInfoRepository.findById(userId);
-
-        if (userGameInfo == null) {
-            log.error("=== 틀린 비밀번호이거나 존재하지 않는 회원 ===");
-            throw new UserException(UserErrorCode.NO_MATCHING_USER);
-        }
+        checkExistUser(userGameInfo);
 
         Random random = new Random();
 
@@ -147,11 +140,7 @@ public class CharacterServiceImpl implements CharacterService {
     @Override
     public CharacterListResDto searchCharacters(String userId) {
         UserGameInfo userGameInfo = userGameInfoRepository.findById(userId);
-
-        if (userGameInfo == null) {
-            log.error("=== 틀린 비밀번호이거나 존재하지 않는 회원 ===");
-            throw new UserException(UserErrorCode.NO_MATCHING_USER);
-        }
+        checkExistUser(userGameInfo);
 
         List<GameCharacter> characters = userGameInfo.getGameCharacters();
 
@@ -178,13 +167,10 @@ public class CharacterServiceImpl implements CharacterService {
     @Override
     public CharacterWithUserIdResDto searchMainCharacter(String userId) {
         UserGameInfo userGameInfo = userGameInfoRepository.findById(userId);
-
-        if (userGameInfo == null) {
-            log.error("=== 틀린 비밀번호이거나 존재하지 않는 회원 ===");
-            throw new UserException(UserErrorCode.NO_MATCHING_USER);
-        }
+        checkExistUser(userGameInfo);
 
         GameCharacter mainCharacter = characterRepository.findMainCharacter(userGameInfo);
+        checkMainCharacterExist(userId, mainCharacter.getCharacterIdx(), mainCharacter);
 
         CharacterDto characterDto = getCharacterDto(mainCharacter);
 
@@ -197,6 +183,7 @@ public class CharacterServiceImpl implements CharacterService {
     /**
      *  사용자의 메인 캐릭터 색을 변경하고 캐릭터 정보를 반환
      *
+     * @exception 'NO_MATCHING_USER' - 비밀번호가 틀리거나 존재하지 않는 사용자의 경우 예외 발생
      * @exception 'INFO_NO_MATCH' - 해당 메인 캐릭터가 사용자의 캐릭터가 아닐시 예외 발생
      * @param userId
      * @param mainCharacterIdx
@@ -206,12 +193,10 @@ public class CharacterServiceImpl implements CharacterService {
     @Transactional
     public CharacterWithUserIdResDto changeCharacterColor(String userId, Long mainCharacterIdx) {
         UserGameInfo userGameInfo = userGameInfoRepository.findById(userId);
-        GameCharacter mainCharacter = characterRepository.findMainCharacter(userGameInfo);
+        checkExistUser(userGameInfo);
 
-        if (mainCharacter.getCharacterIdx() != mainCharacterIdx) {
-            log.error("=== ("+ mainCharacterIdx + ") 메인 캐릭터는 사용자("+ userId +")의 캐릭터가 아닙니다 ===");
-            throw new CharacterException(CharacterErrorCode.INFO_NO_MATCH);
-        }
+        GameCharacter mainCharacter = characterRepository.findMainCharacter(userGameInfo);
+        checkMainCharacterExist(userId, mainCharacterIdx, mainCharacter);
 
         // 랜덤으로 색 뽑기 로직
         Random random = new Random();
@@ -243,9 +228,12 @@ public class CharacterServiceImpl implements CharacterService {
         return characterWithUserIdResDto;
     }
 
+
+
     /**
      * 캐릭터의 스텟 변경하는 기능
      *
+     * @exception 'NO_MATCHING_USER' - 비밀번호가 틀리거나 존재하지 않는 사용자의 경우 예외 발생
      * @exception 'INFO_NO_MATCH' - 해당 메인 캐릭터가 사용자의 캐릭터가 아닐시 예외 발생
      * @exception 'HAVE_TO_BE_PLUS' - 능력치를 하락시키려고 할 때 예외 발생
      * @exception 'EAT_HAVE_TO_UPDATE_ATK' - 밥먹기가 atk를 상승시키지 않을 때 예외 발생
@@ -267,12 +255,10 @@ public class CharacterServiceImpl implements CharacterService {
                                                            String act) {
 
         UserGameInfo userGameInfo = userGameInfoRepository.findById(userId);
-        GameCharacter character = characterRepository.findCharacterByIdx(characterIdx);
+        checkExistUser(userGameInfo);
 
-        if (character.getCharacterIdx() != characterIdx) {
-            log.error("=== ("+ characterIdx + ") 메인 캐릭터는 사용자("+ userId +")의 캐릭터가 아닙니다 ===");
-            throw new CharacterException(CharacterErrorCode.INFO_NO_MATCH);
-        }
+        GameCharacter character = characterRepository.findCharacterByIdx(characterIdx);
+        checkMainCharacterExist(userId, characterIdx, character);
 
         if (statusValue < 0) {
             log.error("=== " + statusValue + "가 마이너스 입니다. 하락시킬 수 없습니다 ===");
@@ -343,6 +329,7 @@ public class CharacterServiceImpl implements CharacterService {
         return characterWithUserIdResDto;
     }
 
+
     @Transactional
     public CharacterWithUserIdResDto updateCharacterStatus(String userId,
                                                            Long characterIdx,
@@ -351,6 +338,26 @@ public class CharacterServiceImpl implements CharacterService {
         return updateCharacterStatus(userId, characterIdx, statusType, statusValue, "");
     }
 
+    /**
+     * 맥스 레벨인 캐릭터 수를 반환하는 기능
+     *
+     * @exception 'NO_MATCHING_USER' - 비밀번호가 틀리거나 존재하지 않는 사용자의 경우 예외 발생
+     * @param userId
+     * @return int
+     */
+    @Override
+    public MaxCharacterNumResDto getMaxLevelCharacterNum(String userId) {
+        UserGameInfo userGameInfo = userGameInfoRepository.findById(userId);
+        checkExistUser(userGameInfo);
+
+        int maxLevelCharacterNum = characterRepository.findMaxLevelCharacterNum(userGameInfo);
+
+        MaxCharacterNumResDto maxCharacterNumResDto = MaxCharacterNumResDto.builder()
+                .maxCharacterNum(maxLevelCharacterNum)
+                .build();
+
+        return maxCharacterNumResDto;
+    }
 
     /**
      * GameCharacter를 CharacterDto로 변환하는 기능
@@ -388,4 +395,18 @@ public class CharacterServiceImpl implements CharacterService {
         return characterWithUserIdResDto;
     }
 
+
+    private static void checkExistUser(UserGameInfo userGameInfo) {
+        if (userGameInfo == null) {
+            log.error("=== id: " + userGameInfo.getUserId() + " 틀린 비밀번호이거나 존재하지 않는 회원 ===");
+            throw new UserException(UserErrorCode.NO_MATCHING_USER);
+        }
+    }
+
+    private static void checkMainCharacterExist(String userId, Long mainCharacterIdx, GameCharacter mainCharacter) {
+        if (mainCharacter.getCharacterIdx() != mainCharacterIdx) {
+            log.error("=== ("+ mainCharacterIdx + ") 메인 캐릭터는 사용자("+ userId +")의 캐릭터가 아닙니다 ===");
+            throw new CharacterException(CharacterErrorCode.INFO_NO_MATCH);
+        }
+    }
 }
