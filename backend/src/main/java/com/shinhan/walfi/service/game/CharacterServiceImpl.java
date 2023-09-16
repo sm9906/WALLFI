@@ -21,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -91,13 +92,14 @@ public class CharacterServiceImpl implements CharacterService {
     @Override
     @Transactional
     public CharacterWithUserIdResDto shop(String userId) {
+        // 검증
         UserGameInfo userGameInfo = userGameInfoRepository.findById(userId);
         checkExistUser(userGameInfo);
 
-        Random random = new Random();
-
 
         // 캐릭터 타입 랜덤 생성
+        Random random = new Random();
+
         CharacterType[] characterTypes = CharacterType.values();
         int typesRandomNum = random.nextInt(characterTypes.length);
         CharacterType randomCharacterType = characterTypes[typesRandomNum];
@@ -131,6 +133,56 @@ public class CharacterServiceImpl implements CharacterService {
     }
 
     /**
+     * 캐릭터를 열 개 연속으로 뽑는 기능
+     *
+     * @exception 'NO_MATCHING_USER' - 비밀번호가 틀리거나 존재하지 않는 사용자의 경우 예외 발생
+     * @param userId
+     * @return CharacterListResDto
+     */
+    @Override
+    @Transactional
+    public CharacterListResDto shopTen(String userId) {
+        // 검증
+        UserGameInfo userGameInfo = userGameInfoRepository.findById(userId);
+        checkExistUser(userGameInfo);
+
+        Random random = new Random();
+        List<CharacterDto> characterDtos = new ArrayList<>();
+
+        for (int i = 0; i < 10; i++) {
+            // 캐릭터 타입 랜덤 생성
+            CharacterType[] characterTypes = CharacterType.values();
+            int typesRandomNum = random.nextInt(characterTypes.length);
+            CharacterType randomCharacterType = characterTypes[typesRandomNum];
+
+            // 가지고 있는 게임 캐릭터랑 겹치는지 검증
+            List<GameCharacter> characters = userGameInfo.getGameCharacters();
+            Optional<GameCharacter> matchingCharacter = characters.stream()
+                    .filter(character -> character.getCharacterType().equals(randomCharacterType))
+                    .findFirst();
+
+            if (matchingCharacter.isPresent()) {
+                GameCharacter character = matchingCharacter.get();
+                updateCharacterStatus(userId, character.getCharacterIdx(), "atk", 1, "");
+                updateCharacterStatus(userId, character.getCharacterIdx(), "def", 1, "");
+
+                characterDtos.add(getCharacterDto(character));
+                continue;
+            }
+
+            // 캐릭터 생성
+            Boolean isMain = false;
+            GameCharacter gameCharacter = GameCharacter.createCharacter(userGameInfo, randomCharacterType, isMain);
+
+            // db에 저장
+            characterRepository.save(gameCharacter);
+            characterDtos.add(getCharacterDto(gameCharacter));
+        }
+
+        return getCharacterListResDto(userId, characterDtos);
+    }
+
+    /**
      * 사용자가 가진 전체 캐릭터 조회
      *
      * @exception 'NO_MATCHING_USER' - 비밀번호가 틀리거나 존재하지 않는 사용자의 경우 예외 발생
@@ -148,10 +200,7 @@ public class CharacterServiceImpl implements CharacterService {
                 .map(character -> getCharacterDto(character))
                 .collect(Collectors.toList());
 
-        CharacterListResDto characterListResDto = CharacterListResDto.builder()
-                .characterDtoList(dtoList)
-                .userId(userId)
-                .build();
+        CharacterListResDto characterListResDto = getCharacterListResDto(userId, dtoList);
 
         log.info("=== 사용자: " + userId + "의 캐릭터 전체 조회 ===");
         return characterListResDto;
@@ -388,6 +437,16 @@ public class CharacterServiceImpl implements CharacterService {
                 .build();
         return characterWithUserIdResDto;
     }
+
+    private static CharacterListResDto getCharacterListResDto(String userId, List<CharacterDto> dtoList) {
+        CharacterListResDto characterListResDto = CharacterListResDto.builder()
+                .characterDtoList(dtoList)
+                .userId(userId)
+                .build();
+        return characterListResDto;
+    }
+
+//    private Character
 
 
     private static void checkExistUser(UserGameInfo userGameInfo) {

@@ -7,7 +7,6 @@ import lombok.ToString;
 import java.util.List;
 
 @Getter
-@ToString
 @Builder
 public class CharacterListResDto {
 

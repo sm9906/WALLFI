@@ -32,7 +32,7 @@ public class CharacterController {
     }
 
     @PostMapping("/shop")
-    @ApiOperation(value = "사용자의 계정으로 캐릭터 뽑기")
+    @ApiOperation(value = "사용자의 계정으로 캐릭터 1개 뽑기")
     public ResponseEntity<HttpResult> shopRandomCharacter(@RequestBody CharacterReqDto characterReqDto) {
         String userId = characterReqDto.getUserId();
         CharacterWithUserIdResDto characterWithUserIdResDto = characterService.shop(userId);
@@ -41,6 +41,21 @@ public class CharacterController {
 
         res = HttpResult.getSuccess();
         res.setData(characterWithUserIdResDto);
+
+        return ResponseEntity.status(res.getStatus()).body(res);
+    }
+
+    @PostMapping("/shopten/")
+    @ApiOperation(value = "사용자의 계정으로 캐릭터 10개뽑기")
+    public ResponseEntity<HttpResult> shopRandomTenCharacter(@RequestBody CharacterReqDto characterReqDto) {
+        String userId = characterReqDto.getUserId();
+
+        CharacterListResDto characterListResDto = characterService.shopTen(userId);
+
+        HttpResult res;
+
+        res = HttpResult.getSuccess();
+        res.setData(characterListResDto);
 
         return ResponseEntity.status(res.getStatus()).body(res);
     }
