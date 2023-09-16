@@ -28,10 +28,10 @@ class AccountUtilTest {
 
     String userId = "ssafy";
     String userMainAccount = "1234";
-    String userBasicAccount1 = "1111";
-    String userBasicAccount2 = "2222";
-    String userBasicAccount3 = "3333";
-    String userBasicAccount4 = "4444";
+    String userBasicAccount1 = "110001611111";
+    String userBasicAccount2 = "110001622222";
+    String userBasicAccount3 = "110001633333";
+    String userBasicAccount4 = "110001644444";
 
 
     @BeforeEach
@@ -62,5 +62,24 @@ class AccountUtilTest {
 
         // then
         Assertions.assertThat(accountsNum.size()).isEqualTo(4);
+    }
+
+    @Test
+    @DisplayName("계좌 번호 생성 테스트")
+    void test() {
+        // given
+        String targetAccountNum = String.valueOf(Long.parseLong(userBasicAccount4) + 1);
+
+        List<String> accountsNum = accountRepository.findAccountsWithOnlyAccountNum();
+
+
+        // when
+        AccountUtil accountUtil = new AccountUtil();
+        String accountNum = accountUtil.createAccountNum(accountsNum);
+
+        // then
+        System.out.println("accountNum = " + accountNum);
+        Assertions.assertThat(accountNum).isEqualTo(targetAccountNum);
+
     }
 }
