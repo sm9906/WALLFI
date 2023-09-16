@@ -19,6 +19,17 @@
             status = FALSE;
     </update>
 
+    <select id="getUserDailyQuest" parameterType="String" resultType="com.shinhan.walfi.dao.DailyQuestDao">
+        SELECT q.quest_type  AS `type`,
+               q.quest_title AS `title`,
+               qm.count      AS `count`,
+               q.quest_total AS `total`,
+               qm.status     AS `status`
+        FROM quest_manager qm
+                 LEFT JOIN quest q ON qm.quest_id = q.quest_idx
+        WHERE qm.user_id = #{user_id};
+    </select>
+
     <update id="increaseSpecificPerformedQuest" parameterType="Map">
         UPDATE quest_manager
         SET count = count + 1

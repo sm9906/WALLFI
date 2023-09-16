@@ -14,6 +14,8 @@ public interface QuestMapper {
 
     List<DailyQuestDao> readRandomDailyQuestByLimit(int limit);
 
+    List<DailyQuestDao> getUserDailyQuest(String user_id);
+
     void increaseSpecificPerformedQuest(@Param("user_id") String user_id,
                                         @Param("quest_id") long quest_id);
 

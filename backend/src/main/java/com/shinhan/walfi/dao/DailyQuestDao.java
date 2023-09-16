@@ -8,11 +8,13 @@ import lombok.ToString;
 @ToString
 public class DailyQuestDao {
 
-    private long idx;
-
     private String type;
 
     private String title;
 
-    private String content;
+    private int count;
+
+    private int total;
+
+    private int status;
 }
