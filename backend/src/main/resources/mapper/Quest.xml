@@ -3,6 +3,32 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.shinhan.walfi.mapper.QuestMapper">
 
+    <resultMap id="QuestByTypeResultMap" type="com.shinhan.walfi.dao.QuestTypeDao">
+        <result column="type" property="type"/>
+        <collection property="questList" resultMap="QuestResultMap"/>
+    </resultMap>
+
+    <resultMap id="QuestResultMap" type="com.shinhan.walfi.dao.QuestDao">
+        <result column="idx" property="idx"/>
+        <result column="title" property="title"/>
+        <result column="count" property="count"/>
+        <result column="total" property="total"/>
+        <result column="status" property="status"/>
+    </resultMap>
+
+
+    <select id="getUserDailyQuest" parameterType="String" resultMap="QuestByTypeResultMap">
+        SELECT q.quest_idx   AS `idx`,
+               q.quest_type  AS `type`,
+               q.quest_title AS `title`,
+               qm.count      AS `count`,
+               q.quest_total AS `total`,
+               qm.status     AS `status`
+        FROM quest_manager qm
+                 LEFT JOIN quest q ON qm.quest_id = q.quest_idx
+        WHERE qm.user_id = #{user_id};
+    </select>
+
     <select id="readRandomDailyQuestByLimit" parameterType="int">
         SELECT q.quest_idx   AS `idx`,
                q.quest_type  AS `type`,
@@ -18,18 +44,6 @@
         SET count  = 0,
             status = FALSE;
     </update>
-
-    <select id="getUserDailyQuest" parameterType="String" resultType="com.shinhan.walfi.dao.DailyQuestDao">
-        SELECT q.quest_idx   AS `idx`,
-               q.quest_type  AS `type`,
-               q.quest_title AS `title`,
-               qm.count      AS `count`,
-               q.quest_total AS `total`,
-               qm.status     AS `status`
-        FROM quest_manager qm
-                 LEFT JOIN quest q ON qm.quest_id = q.quest_idx
-        WHERE qm.user_id = #{user_id};
-    </select>
 
     <update id="increaseSpecificPerformedQuest" parameterType="Map">
         UPDATE quest_manager

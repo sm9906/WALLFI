@@ -1,16 +1,16 @@
 package com.shinhan.walfi.dao;
 
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 
 @Getter
+@Setter
 @ToString
-public class DailyQuestDao {
+public class QuestDao {
 
     private long idx;
-    
-    private String type;
 
     private String title;
 

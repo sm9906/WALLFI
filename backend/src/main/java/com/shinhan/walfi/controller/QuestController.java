@@ -1,6 +1,7 @@
 package com.shinhan.walfi.controller;
 
-import com.shinhan.walfi.dao.DailyQuestDao;
+import com.shinhan.walfi.dao.QuestDao;
+import com.shinhan.walfi.dao.QuestTypeDao;
 import com.shinhan.walfi.domain.game.GameCharacter;
 import com.shinhan.walfi.domain.game.UserGameInfo;
 import com.shinhan.walfi.dto.game.QuestRewordDto;
@@ -13,7 +14,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Slf4j
@@ -29,10 +32,16 @@ public class QuestController {
     private final UserGameInfoRepository userGameInfoRepository;
 
     @GetMapping
-    public List<DailyQuestDao> getUserDailyQuest(@RequestParam String userId) {
+    public Map<String, List<QuestDao>> getUserQuest(@RequestParam String userId) {
 
-        List<DailyQuestDao> userDailyQuest = questMapper.getUserDailyQuest(userId);
-        return userDailyQuest;
+        List<QuestTypeDao> userDailyQuest = questMapper.getUserDailyQuest(userId);
+
+        Map<String, List<QuestDao>> hashMap = new HashMap<>();
+        for (QuestTypeDao quest : userDailyQuest) {
+            hashMap.put(quest.getType(), quest.getQuestList());
+        }
+
+        return hashMap;
     }
 
     @PostMapping
