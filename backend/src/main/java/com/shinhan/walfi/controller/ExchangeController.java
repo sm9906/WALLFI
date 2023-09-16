@@ -51,8 +51,8 @@ public class ExchangeController {
         return ResponseEntity.status(res.getStatus()).body(res);
     }
 
-    @PostMapping("/from global")
-    @ApiOperation(value = "외화 ->원화로 환전")
+    @PostMapping("/fromglobal")
+    @ApiOperation(value = "외화 -> 원화로 환전")
     public ResponseEntity<HttpResult> fromGlobalExchange(@RequestBody fromGlobalExchangeReqDto fromGlobalExchangeReqDto) {
 
         exchangeService.fromGlobalExchange(fromGlobalExchangeReqDto.getUserId(),

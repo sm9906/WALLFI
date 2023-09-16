@@ -113,18 +113,18 @@ public class ExchangeServiceImpl implements ExchangeService {
             throw new TransferException(TransferErrorCode.NOT_FOUND_GLOBAL_ACCOUNT);
         }
 
-        long kwrConvertPrice = (long) Math.ceil(전신환매도환율 * 금액);
+        long krwConvertPrice = (long) Math.ceil(전신환매도환율 * 금액);
         Account krwAccount = accountRepository.findAccount(krwAccountNum);
 
-        if (krwAccount.get잔액원화() < kwrConvertPrice) {
+        if (krwAccount.get잔액원화() < krwConvertPrice) {
             log.error("=== id: " + userId + "의 원화 계좌 잔액이 부족합니다");
             throw new TransferException(TransferErrorCode.OVERDRAWN);
         }
 
-        bankMapper.withdrawTransferMoneyFromAccount(krwAccountNum, kwrConvertPrice);
-        bankMapper.globalDepositTransferMoneyFromAccount(globalAccountNum, 금액, kwrConvertPrice);
+        bankMapper.withdrawTransferMoneyFromAccount(krwAccountNum, krwConvertPrice);
+        bankMapper.globalDepositTransferMoneyFromAccount(globalAccountNum, 금액, krwConvertPrice);
 
-        log.info("=== id: " + userId + "의 요청에 따라 " + 금액 + 도착계좌통화코드 + " 환전 완료 ===" );
+        log.info("=== id: " + userId + "의 요청에 따라 " + krwConvertPrice + "KRW -> " + 금액 + 도착계좌통화코드 + " 환전 완료 ===" );
 
     }
 
@@ -137,6 +137,7 @@ public class ExchangeServiceImpl implements ExchangeService {
      * 3. 원화 계좌에서 금액 * 전신환매도환율 만큼 차감
      * 4. 외화 계좌로 금액 만큼 입금
      *
+     * @exception - 'NOT_FOR_SELL' - 출발 계좌 통화 코드가 KRW 일 때 예외 발생
      * @exception 'NO_MATCHING_USER' - 사용자를 찾을 수 없을 때 예외 발생
      * @exception 'NOT_USERS_MAIN_ACCOUNT' - 사용자의 대표 계좌와 일치하지 않을 경우 예외 발생
      * @exception 'NOT_FOUND_KRW_ACCOUNT' - 원화 계좌가 존재하지 않을 때 예외 발생
@@ -151,8 +152,9 @@ public class ExchangeServiceImpl implements ExchangeService {
     @Override
     public void fromGlobalExchange(String userId, String 사용자대표계좌, String 출발계좌통화코드, long 금액, float 전신환매입환율) {
         // 도착계좌의 통화코드가 원화면 안됨
-        if (!출발계좌통화코드.equals("KRW")) {
-            throw new TransferException(TransferErrorCode.NOT_FOR_BUY);
+        if (출발계좌통화코드.equals("KRW")) {
+            log.error("=== 출발 계좌의 통화 코드는 KRW이면 안됩니다 ===");
+            throw new TransferException(TransferErrorCode.NOT_FOR_SELL);
         }
 
         if (!currency.contains(출발계좌통화코드)) {
@@ -195,7 +197,7 @@ public class ExchangeServiceImpl implements ExchangeService {
         bankMapper.globalWithdrawTransferMoneyFromAccount(globalAccountNum, 금액, kwrConvertPrice);
         bankMapper.depositTransferMoneyFromAccount(krwAccountNum, kwrConvertPrice);
 
-        log.info("=== id: " + userId + "의 요청에 따라 " + 금액 + 출발계좌통화코드 + " 환전 완료 ===" );
+        log.info("=== id: " + userId + "의 요청에 따라 " + 금액 + 출발계좌통화코드 + " ->" + kwrConvertPrice + "KRW 환전 완료 ===" );
 
     }
 
