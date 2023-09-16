@@ -123,6 +123,8 @@ public class CharacterController {
 
         res = HttpResult.getSuccess();
         res.setData(characterWithUserIdResDto);
+        res.setAction(act);
+        res.setUserId(userId);
 
         return ResponseEntity.status(res.getStatus()).body(res);
     }

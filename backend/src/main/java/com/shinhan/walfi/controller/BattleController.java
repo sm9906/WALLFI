@@ -27,6 +27,9 @@ public class BattleController {
         battleService.write(battleReqDto);
 
         HttpResult res = HttpResult.getSuccess();
+        res.setAction("배틀하기");
+        res.setUserId(battleReqDto.getUserId());
+
         return ResponseEntity.status(res.getStatus()).body(res);
     }
 

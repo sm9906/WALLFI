@@ -29,13 +29,21 @@ public class BankController {
     public ResponseEntity<HttpResult> localTransfer(@RequestBody TransferDTO transferDTO) {
 
         String currencyCode = transferDTO.get통화코드();
+        String transferType = "";
 
-        if (currencyCode.equals("KRW"))
+        if (currencyCode.equals("KRW")) {
             bankService.localCurrencyTransfer(transferDTO);
-        else
+            transferType = "원화 이체 성공";
+        } else {
             bankService.globalCurrencyTransfer(transferDTO);
+            transferType = "외화 이체 성공";
+        }
 
-        HttpResult res = new HttpResult(OK, SUCCESS, "이체 성공");
+        HttpResult res = new HttpResult(OK, SUCCESS, transferType);
+        res.setData(transferDTO.get출금계좌번호());
+        res.setUserId("ssafy");
+        res.setAction("이체하기");
+
         return ResponseEntity.status(200).body(res);
     }
 }
