@@ -43,4 +43,24 @@ public class ProductController {
 
         return ResponseEntity.status(res.getStatus()).body(res);
     }
+
+    @PostMapping("/toptenaccount")
+    @ApiOperation(value = "toptenaccount 정기예금 생성")
+    public ResponseEntity<HttpResult> createTopTenDeposit(@RequestBody ProductReqDto productReqDto){
+
+        String userId = productReqDto.getUserId();
+        String mainAccountNum = productReqDto.getMainAccountNum();
+        long 입금금액 = productReqDto.get입금금액();
+        String 통화코드 = productReqDto.get통화코드();
+        String 상품명 = productReqDto.get상품명();
+        BigDecimal 금리 = productReqDto.get금리();
+
+        System.out.println("금리 = " + 금리);
+        productService.createLevelUpTimeDeposit(userId, mainAccountNum, 통화코드, 상품명, 금리, 입금금액);
+
+        HttpResult res;
+        res = HttpResult.getSuccess();
+
+        return ResponseEntity.status(res.getStatus()).body(res);
+    }
 }

@@ -40,4 +40,16 @@ public class BattleController {
         res.setData(list);
         return ResponseEntity.status(res.getStatus()).body(res);
     }
+
+    @GetMapping("/allrank")
+    @ApiOperation(value = "전체 지점을 대상으로 임시 지점장의 점유 기간을 기준으로 정렬하여 게시")
+    public ResponseEntity<HttpResult> getAllRank(){
+        // 전체 지점 점유 랭킹 정보를 반환한다.
+
+        List<BattleRankResDto> list = battleService.getAllRank();
+
+        HttpResult res = HttpResult.getSuccess();
+        res.setData(list);
+        return ResponseEntity.status(res.getStatus()).body(res);
+    }
 }

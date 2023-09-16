@@ -135,4 +135,10 @@ public class BattleServiceImpl implements BattleService{
         log.info("=== 지점 조회 ===");
         return rankList;
     }
+
+    @Override
+    public List<BattleRankResDto> getAllRank() {
+        List<BattleRankResDto> rankList = battleMapper.getAllRank();
+        return rankList;
+    }
 }
