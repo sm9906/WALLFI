@@ -21,6 +21,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -152,13 +154,29 @@ public class BattleServiceImpl implements BattleService{
     }
 
     @Override
-    public double getRate(String userId) {
+    public ProductResDto getRate(String userId) {
         int toptenCnt = battleMapper.cntTop(userId);
         if(toptenCnt == 0){
-            return 0;
+            throw new BattleException(BattleErrorCode.NO_TOP_TEN);
         } else{
-            double rate = battleMapper.getRate(userId);
-            return rate;
+            double 총금리 = battleMapper.getRate(userId);
+            double 추가금리 = 0.00;
+
+            BigDecimal 변환추가금리 = new BigDecimal(추가금리);
+            BigDecimal 변환총금리 = new BigDecimal(총금리);
+
+
+            // 소수점 두 번째 자리까지 반올림
+            변환총금리 = 변환총금리.setScale(2, RoundingMode.DOWN);
+            변환추가금리 = 변환추가금리.setScale(2, RoundingMode.DOWN);
+
+            return ProductResDto.builder()
+                    .상품명("월피 랭킹 정기예금")
+                    .기본금리(String.valueOf(변환총금리))
+                    .추가금리(String.valueOf(변환추가금리))
+                    .총금리(String.valueOf(변환총금리))
+                    .가입기간("12")
+                    .build();
         }
     }
 
@@ -182,7 +200,7 @@ public class BattleServiceImpl implements BattleService{
         }
 
         return ProductResDto.builder()
-                .상품명("월피배틀정기예금")
+                .상품명("월피 배틀 정기예금")
                 .기본금리("4.0")
                 .추가금리("0.0")
                 .총금리("4.0")

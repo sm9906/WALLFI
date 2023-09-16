@@ -412,7 +412,7 @@ public class CharacterServiceImpl implements CharacterService {
                 .추가금리(String.valueOf(변환추가금리))
                 .가입기간("12")
                 .기본금리("3.7")
-                .상품명("levelup정기예금")
+                .상품명("LevelUp 정기예금")
                 .build();
 
         return productResDto;

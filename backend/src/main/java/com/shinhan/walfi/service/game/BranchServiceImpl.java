@@ -116,7 +116,7 @@ public class BranchServiceImpl implements BranchService {
         변환추가금리 = 변환추가금리.setScale(2, RoundingMode.DOWN);
 
         return ProductResDto.builder()
-                .상품명("지점장정기예금")
+                .상품명("지점장 정기예금")
                 .가입기간("12")
                 .기본금리("3.7")
                 .추가금리(String.valueOf(변환추가금리))
