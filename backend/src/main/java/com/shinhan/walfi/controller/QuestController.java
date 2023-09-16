@@ -1,5 +1,6 @@
 package com.shinhan.walfi.controller;
 
+import com.shinhan.walfi.dao.DailyQuestDao;
 import com.shinhan.walfi.dao.QuestDao;
 import com.shinhan.walfi.dao.QuestTypeDao;
 import com.shinhan.walfi.domain.game.GameCharacter;
@@ -32,17 +33,24 @@ public class QuestController {
     private final UserGameInfoRepository userGameInfoRepository;
 
     @GetMapping
-    public Map<String, List<QuestDao>> getUserQuest(@RequestParam String userId) {
+    public List<DailyQuestDao> getUserDailyQuest(@RequestParam String userId) {
 
-        List<QuestTypeDao> userDailyQuest = questMapper.getUserDailyQuest(userId);
-
-        Map<String, List<QuestDao>> hashMap = new HashMap<>();
-        for (QuestTypeDao quest : userDailyQuest) {
-            hashMap.put(quest.getType(), quest.getQuestList());
-        }
-
-        return hashMap;
+        List<DailyQuestDao> userDailyQuest = questMapper.getUserDailyQuest(userId);
+        return userDailyQuest;
     }
+
+//    @GetMapping
+//    public Map<String, List<QuestDao>> getUserQuest(@RequestParam String userId) {
+//
+//        List<QuestTypeDao> userDailyQuest = questMapper.getUserDailyQuest(userId);
+//
+//        Map<String, List<QuestDao>> hashMap = new HashMap<>();
+//        for (QuestTypeDao quest : userDailyQuest) {
+//            hashMap.put(quest.getType(), quest.getQuestList());
+//        }
+//
+//        return hashMap;
+//    }
 
     @PostMapping
     @Transactional

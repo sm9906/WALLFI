@@ -1,5 +1,6 @@
 package com.shinhan.walfi.mapper;
 
+import com.shinhan.walfi.dao.DailyQuestDao;
 import com.shinhan.walfi.dao.QuestTypeDao;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -14,7 +15,7 @@ public interface QuestMapper {
 
     List<QuestTypeDao> readRandomDailyQuestByLimit(int limit);
 
-    List<QuestTypeDao> getUserDailyQuest(String user_id);
+    List<DailyQuestDao> getUserDailyQuest(String user_id);
 
     void increaseSpecificPerformedQuest(@Param("user_id") String user_id,
                                         @Param("quest_id") long quest_id);
