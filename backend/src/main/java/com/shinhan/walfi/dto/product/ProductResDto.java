@@ -1,13 +1,11 @@
-package com.shinhan.walfi.dto.game;
+package com.shinhan.walfi.dto.product;
 
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @Builder
-public class MaxCharacterNumResDto {
-
-    private int maxCharacterNum;
+public class ProductResDto {
 
     private String 상품명;
 

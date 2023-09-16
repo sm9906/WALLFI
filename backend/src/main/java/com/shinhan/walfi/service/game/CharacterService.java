@@ -2,7 +2,7 @@ package com.shinhan.walfi.service.game;
 
 import com.shinhan.walfi.dto.game.CharacterListResDto;
 import com.shinhan.walfi.dto.game.CharacterWithUserIdResDto;
-import com.shinhan.walfi.dto.game.MaxCharacterNumResDto;
+import com.shinhan.walfi.dto.product.ProductResDto;
 
 public interface CharacterService {
 
@@ -29,5 +29,5 @@ public interface CharacterService {
                                                     String statusType,
                                                     int statusValue);
 
-    MaxCharacterNumResDto getMaxLevelCharacterNum(String userId);
+    ProductResDto getMaxLevelCharacterNum(String userId);
 }

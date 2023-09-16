@@ -1,10 +1,7 @@
 package com.shinhan.walfi.controller;
 
 import com.shinhan.walfi.domain.HttpResult;
-import com.shinhan.walfi.dto.game.BranchListReqDto;
-import com.shinhan.walfi.dto.game.BranchListResDto;
-import com.shinhan.walfi.dto.game.BranchDto;
-import com.shinhan.walfi.dto.game.BranchResDto;
+import com.shinhan.walfi.dto.game.*;
 import com.shinhan.walfi.service.game.BranchService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +34,17 @@ public class BranchController {
     public ResponseEntity<HttpResult> getBranch(@RequestParam long idx){
 
         BranchResDto branch = branchService.getBranch(idx);
+        HttpResult res;
+        res = HttpResult.getSuccess();
+        res.setData(branch);
+        return ResponseEntity.status(res.getStatus()).body(res);
+    }
+
+    @PostMapping("/getmanagernum")
+    @ApiOperation(value = "유저 아이디를 입력하면 점령한 지점에 따른 금융 상품 정보 반환")
+    public ResponseEntity<HttpResult> getCharacterBranchNum(@RequestBody CharacterReqDto characterReqDto){
+        String userId = characterReqDto.getUserId();
+
         HttpResult res;
         res = HttpResult.getSuccess();
         res.setData(branch);
