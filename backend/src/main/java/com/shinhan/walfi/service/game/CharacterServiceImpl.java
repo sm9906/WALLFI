@@ -260,11 +260,6 @@ public class CharacterServiceImpl implements CharacterService {
         GameCharacter character = characterRepository.findCharacterByIdx(characterIdx);
         checkMainCharacterExist(userId, characterIdx, character);
 
-        if (!statusType.equals("point") && statusValue < 0) {
-            log.error("=== " + statusValue + "가 마이너스 입니다. 하락시킬 수 없습니다 ===");
-            throw new CharacterException(CharacterErrorCode.HAVE_TO_BE_PLUS);
-        }
-
         if (act.equals("밥먹기") && !statusType.equals("atk") && statusValue != 1) {
             log.error("=== 밥먹기로 atk를 상승시켜야 합니다 ===");
             throw new CharacterException(CharacterErrorCode.EAT_HAVE_TO_UPDATE_ATK);
@@ -277,10 +272,6 @@ public class CharacterServiceImpl implements CharacterService {
 
         // atk, def, hp, exp(레벨업 로직), isMain(메인 캐릭터인걸 아니게 바꾸는 로직 포함)
         switch (statusType) {
-            case "point":
-                util.updatePoint(statusValue, userGameInfo);
-                break;
-
             case "atk":
                 int defaultAtk = character.getAtk();
                 character.setAtk(defaultAtk + statusValue);
