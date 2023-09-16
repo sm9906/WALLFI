@@ -92,7 +92,7 @@ public class CharacterController {
     }
 
     @PutMapping("/change/status")
-    @ApiOperation(value = "사용자가 보유하고 있는 캐릭터의 스텟(atk, def, exp, isMain)를 상승/변화 시킴")
+    @ApiOperation(value = "사용자가 보유하고 있는 캐릭터의 스텟(atk, def, exp, isMain, point)를 상승/변화 시킴")
     public ResponseEntity<HttpResult> changeCharacterStatus(@RequestBody CharacterStatusReqDto characterStatusReqDto) {
         String userId = characterStatusReqDto.getUserId();
         Long characterIdx = characterStatusReqDto.getCharacterIdx();
@@ -107,6 +107,21 @@ public class CharacterController {
 
         res = HttpResult.getSuccess();
         res.setData(characterWithUserIdResDto);
+
+        return ResponseEntity.status(res.getStatus()).body(res);
+    }
+
+    @PostMapping("/maxcharacter")
+    @ApiOperation(value = "사용자가 보유하고 MAX 레벨 캐릭터 수 반환")
+    public ResponseEntity<HttpResult> getMaxLevelCharacterNum(@RequestBody CharacterReqDto characterReqDto) {
+        String userId = characterReqDto.getUserId();
+
+        MaxCharacterNumResDto maxLevelCharacterNumDto = characterService.getMaxLevelCharacterNum(userId);
+
+        HttpResult res;
+
+        res = HttpResult.getSuccess();
+        res.setData(maxLevelCharacterNumDto);
 
         return ResponseEntity.status(res.getStatus()).body(res);
     }

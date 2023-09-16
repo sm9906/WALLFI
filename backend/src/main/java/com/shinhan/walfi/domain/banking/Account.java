@@ -1,7 +1,9 @@
 package com.shinhan.walfi.domain.banking;
 
 import com.shinhan.walfi.domain.User;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -13,6 +15,7 @@ import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Account {
 
     @Id
@@ -64,4 +67,66 @@ public class Account {
 
     @OneToMany(mappedBy = "account")
     private List<GlobalAccountTransaction> globalAccountTransactions = new ArrayList<>();
+
+    public static Account createProductAccount(String 계좌번호,
+                              String 상품명,
+                              Date 만기일,
+                              BigDecimal 금리수익률,
+                              String 통화,
+                              User user,
+                              byte 자동해지여부) {
+
+        Account account = new Account();
+        account.구분 = "예적금";
+        account.잔액통화별 = 0;
+        account.평가금액통화별 = 0;
+        account.관리점명 = "영업부";
+        account.통화 = 통화;
+        account.과세 = "일반과세";
+        account.잔액원화 = 0;
+        account.평가금액원화 = 0;
+
+        account.계좌번호 = 계좌번호;
+        account.상품명 = 상품명;
+        account.만기일 = 만기일;
+        account.금리수익률 = 금리수익률;
+        account.자동해지여부 = 자동해지여부;
+
+        Date now = new Date();
+        account.신규일 = now;
+
+        account.user = user;
+        user.getAccounts().add(account);
+
+        return account;
+
+    }
+
+    public static Account createBasicAccount(String 계좌번호,
+                                               String 통화,
+                                               User user) {
+        Account account = new Account();
+        account.구분 = "예적금";
+        account.잔액통화별 = 0;
+        account.평가금액통화별 = 0;
+        account.관리점명 = "영업부";
+        account.통화 = 통화;
+        account.과세 = "일반과세";
+        account.잔액원화 = 0;
+        account.평가금액원화 = 0;
+
+        account.계좌번호 = 계좌번호;
+        account.상품명 = "저축예금";
+        account.금리수익률 = BigDecimal.valueOf(0.00);
+        account.자동해지여부 = 0;
+
+        Date now = new Date();
+        account.신규일 = now;
+
+        account.user = user;
+        user.getAccounts().add(account);
+
+        return account;
+
+    }
 }

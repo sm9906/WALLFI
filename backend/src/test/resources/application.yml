@@ -8,10 +8,14 @@ spring:
     pathmatch:
       matching-strategy: ant_path_matcher
 
+mybatis:
+  type-aliases-package: com.shinhan.walfi.dao
+  mapper-locations: classpath:mapper/*.xml
+
   jpa:
     open-in-view: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
       naming:
         implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
       use-new-id-generator-mappings: false

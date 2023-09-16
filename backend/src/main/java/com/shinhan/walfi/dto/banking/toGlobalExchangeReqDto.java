@@ -5,13 +5,13 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UserExchangeReqDto {
+public class toGlobalExchangeReqDto {
 
     private String userId;
 
     private String 사용자대표계좌;
 
-    private String 통화코드;
+    private String 도착계좌통화코드;
 
     private long 금액;
 

@@ -1,8 +1,9 @@
 package com.shinhan.walfi.domain.game;
 
+import com.shinhan.walfi.domain.banking.BranchCurrency;
 import com.shinhan.walfi.domain.enums.CharacterType;
 import com.shinhan.walfi.domain.enums.LevelUp;
-import com.shinhan.walfi.dto.game.BranchResDto;
+import com.shinhan.walfi.dto.game.BranchDto;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
@@ -58,6 +59,9 @@ public class Branch {
     @OneToMany(mappedBy = "branch")
     private List<BattleHistory> battleHistories = new ArrayList<>();
 
+    @OneToMany(mappedBy = "branch")
+    private List<BranchCurrency> branchCurrencies = new ArrayList<>();
+
     public void setManagerLevel(LevelUp managerLevel) {
         this.managerLevel = managerLevel;
     }
@@ -87,8 +91,8 @@ public class Branch {
         userGameInfo.getBranches().add(this);
     }
 
-    public BranchResDto entityToDto() {
-        BranchResDto branchResDto = new BranchResDto(branchIdx, branchName, address, branchPhoneNumber, latitude, longitude, managerAnimalType.name(), managerLevel.getLevel(), managerExp, managerHp, managerAtk, managerDef);
-        return branchResDto;
+    public BranchDto entityToDto() {
+        BranchDto branchDto = new BranchDto(branchIdx, branchName, address, branchPhoneNumber, latitude, longitude, managerAnimalType.name(), managerLevel.getLevel(), managerExp, managerHp, managerAtk, managerDef);
+        return branchDto;
     }
 }
