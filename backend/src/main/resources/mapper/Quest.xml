@@ -21,10 +21,23 @@
     </update>
 
     <select id="checkIFQuestIsComplete" resultType="boolean">
-        SELECT IF(qm.count > q.quest_total, TRUE, FALSE)
+        SELECT IF(qm.count >= q.quest_total, TRUE, FALSE)
         FROM quest_manager qm
                  LEFT JOIN quest q ON qm.quest_id = q.quest_idx
         WHERE qm.user_id = #{user_id}
           AND qm.quest_id = #{quest_id};
     </select>
+
+    <select id="findUserIdByMainAccount" resultType="String" parameterType="String">
+        SELECT u.user_id
+        FROM `user` u
+        WHERE u.대표계좌 = #{MainAccountNumber};
+    </select>
+
+    <update id="updateQuestStatusTrue">
+        UPDATE quest_manager
+        SET status = TRUE
+        WHERE user_id = #{user_id}
+          AND quest_id = #{quest_id};
+    </update>
 </mapper>

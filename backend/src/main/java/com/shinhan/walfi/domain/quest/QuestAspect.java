@@ -33,14 +33,22 @@ public class QuestAspect {
             pointcut = "execution(* com.shinhan.walfi.controller.BankController.*(..))",
             returning = "result"
     )
-    public void test(JoinPoint joinPoint, ResponseEntity<HttpResult> result) {
+    public void conductTransferQuest(JoinPoint joinPoint, ResponseEntity<HttpResult> result) {
         String methodName = joinPoint.getSignature().getName();
         log.info("Bank Service : {}", methodName);
 
         String message = result.getBody().getMessage();
+        log.info("{}, {}", message, result.getBody().getData());
 
-        switch (message) {
+        String mainAccountNumber = (String) result.getBody().getData();
+        String userId = questMapper.findUserIdByMainAccount(mainAccountNumber);
 
+        questMapper.increaseSpecificPerformedQuest(userId, 1L);
+        boolean isCompleted = questMapper.checkIFQuestIsComplete(userId, 1L);
+
+        if (isCompleted) {
+            log.info("{} completed {} quest", userId, 1L);
+            questMapper.updateQuestStatusTrue(userId, 1L);
         }
     }
 }
