@@ -1,18 +1,25 @@
 package com.shinhan.walfi.service.game;
 
 import com.shinhan.walfi.dao.BranchListDao;
+import com.shinhan.walfi.domain.User;
 import com.shinhan.walfi.domain.game.Branch;
 import com.shinhan.walfi.dto.game.BranchListReqDto;
 import com.shinhan.walfi.dto.game.BranchListResDto;
+import com.shinhan.walfi.dto.game.BranchDto;
 import com.shinhan.walfi.dto.game.BranchResDto;
+import com.shinhan.walfi.exception.BranchErrorCode;
+import com.shinhan.walfi.exception.BranchException;
 import com.shinhan.walfi.mapper.BranchMapper;
+import com.shinhan.walfi.repository.UserRepository;
 import com.shinhan.walfi.repository.game.BranchRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class BranchServiceImpl implements BranchService {
@@ -20,6 +27,8 @@ public class BranchServiceImpl implements BranchService {
     private final BranchMapper branchMapper;
 
     private final BranchRepository branchRepository;
+
+    private final UserRepository userRepository;
 
     @Override
     public List<BranchListResDto> getBranches(BranchListReqDto branchListReqDto) {
@@ -45,11 +54,25 @@ public class BranchServiceImpl implements BranchService {
     @Override
     public BranchResDto getBranch(long id) {
         Optional<Branch> obranch = branchRepository.findById(id);
+
         if(!obranch.isPresent()){
-            // Exception
-            return null;
+            log.error("=== 브랜치 id:" + id + " 정보가 존재하지 않습니다 ===");
+            throw new BranchException(BranchErrorCode.NO_MATCHING_BRANCH);
         }
-        BranchResDto branchResDto = obranch.get().entityToDto();
+
+        User user = userRepository.find(obranch.get().getUserGameInfo().getUserId());
+
+        BranchDto branchDto = obranch.get().entityToDto();
+
+        BranchResDto branchResDto = BranchResDto.builder()
+                .username(user.getName())
+                .userId(user.getUserId())
+                .branchDto(branchDto)
+                .build();
+
+        log.info("=== 브랜치 id: " + id + " 조회 ===");
         return branchResDto;
     }
+
+
 }
