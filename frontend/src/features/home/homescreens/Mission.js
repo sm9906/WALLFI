@@ -20,39 +20,19 @@ import { requestGet } from "../../../common/http-common.js";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../homecomponents/ScreenSize.js";
 
 export default function Mission({ navigation }) {
-  //   [quests, setQuest] = useState([
-  //     { idx: 1, count: 0, status: 1, title: "이체하기", total: 2, type: "Daily" },
-  //     { idx: 2, count: 0, status: 2, title: "환전조회", total: 1, type: "Daily" },
-  //     { idx: 3, count: 0, status: 1, title: "먹이주기", total: 3, type: "Daily" },
-  //     { count: 0, status: 0, title: "운동하기", total: 3, type: "Daily" },
-  //     { count: 0, status: 0, title: "이체하기", total: 2, type: "Daily" },
-  //     { count: 0, status: 0, title: "환전조회", total: 1, type: "Daily" },
-  //     { count: 0, status: 0, title: "먹이주기", total: 3, type: "Daily" },
-  //     { count: 0, status: 0, title: "운동하기", total: 3, type: "Daily" },
-  //     { count: 0, status: 0, title: "이체하기", total: 2, type: "Daily" },
-  //     { count: 0, status: 0, title: "환전조회", total: 1, type: "Daily" },
-  //     { count: 0, status: 0, title: "먹이주기", total: 3, type: "Daily" },
-  //     { count: 0, status: 0, title: "운동하기", total: 3, type: "Daily" },
-  //     { count: 0, status: 0, title: "이체하기", total: 2, type: "Daily" },
-  //     { count: 0, status: 0, title: "환전조회", total: 1, type: "Daily" },
-  //     { count: 0, status: 0, title: "먹이주기", total: 3, type: "Daily" },
-  //     { count: 0, status: 0, title: "운동하기", total: 3, type: "Daily" },
-  //   ]);
-
   [quests, setQuest] = useState([]);
 
-    useEffect(() => {
-      axios
-        .get("http://192.168.9.30:8094/quest?userId=ssafy")
-        .then((res) => {
-          console.log("res:", res.data);
-          setQuest(res.data);
-          console.log("quest: ", quests);
-        })
-        .catch((error) => {
-          console.error("Quest 불러오기 에러 발생: ", error);
-        });
-    }, []);
+  useEffect(() => {
+    axios
+      .get("http://192.168.9.30:8094/quest?userId=ssafy")
+      .then((res) => {
+        setQuest(res.data);
+        console.log("quest: ", quests);
+      })
+      .catch((error) => {
+        console.error("Quest 불러오기 에러 발생: ", error);
+      });
+  }, []);
 
   return (
     <View style={globalStyles.container}>
@@ -98,12 +78,29 @@ function determineButtonColor(status) {
   return color;
 }
 
-function getQuestReward({idx, status}) {
-  if (status) {
-    console.log(status);
-    console.log(idx)
-  } else {
-    console.log(status);
+function getQuestReward({ idx, status }) {
+  if (status === 1) {
+    axios
+      .post("http://192.168.9.30:8094/quest", {
+        questIdx: idx,
+        userId: "ssafy",
+      })
+      .then(() => {
+        setQuest((prevQuest) => {
+          const newQuest = prevQuest.map((quest) => {
+            if (quest.idx === idx) {
+              return { ...quest, status: 2 };
+            }
+
+            return quest;
+          });
+
+          return newQuest;
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 }
 
@@ -121,7 +118,7 @@ function MenuBar(props) {
                 <View style={styles.questStatusArea}>
                   <TouchableOpacity
                     onPress={getQuestReward.bind(this, quest)}
-                    disabled={quest.status == 2 ? true : false}
+                    disabled={quest.status == 1 ? false : true}
                   >
                     <View
                       style={[

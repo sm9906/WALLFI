@@ -44,6 +44,7 @@ public class QuestController {
 
         boolean isCompleted = questMapper.checkQuestIsCompleted(userId, questIdx);
         if (!isCompleted) {
+            log.error("퀘스트가 완료되지 않음");
             return;
         }
 
