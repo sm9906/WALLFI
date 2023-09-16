@@ -43,12 +43,13 @@ public class BranchController {
     @PostMapping("/getmanagernum")
     @ApiOperation(value = "유저 아이디를 입력하면 점령한 지점에 따른 금융 상품 정보 반환")
     public ResponseEntity<HttpResult> getCharacterBranchNum(@RequestBody CharacterReqDto characterReqDto){
-        String userId = characterReqDto.getUserId();
-
-        HttpResult res;
-        res = HttpResult.getSuccess();
-        res.setData(branch);
-        return ResponseEntity.status(res.getStatus()).body(res);
+//        String userId = characterReqDto.getUserId();
+//
+//        HttpResult res;
+//        res = HttpResult.getSuccess();
+//        res.setData(branch);
+//        return ResponseEntity.status(res.getStatus()).body(res);\
+        return null;
     }
 
 }
