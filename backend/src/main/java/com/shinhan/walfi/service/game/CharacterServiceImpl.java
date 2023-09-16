@@ -21,6 +21,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -386,7 +388,7 @@ public class CharacterServiceImpl implements CharacterService {
      *
      * @exception 'NO_MATCHING_USER' - 비밀번호가 틀리거나 존재하지 않는 사용자의 경우 예외 발생
      * @param userId
-     * @return int
+     * @return MaxCharacterNumResDto
      */
     @Override
     public MaxCharacterNumResDto getMaxLevelCharacterNum(String userId) {
@@ -395,7 +397,16 @@ public class CharacterServiceImpl implements CharacterService {
 
         int maxLevelCharacterNum = characterRepository.findMaxLevelCharacterNum(userGameInfo);
 
+        double 금리 = maxLevelCharacterNum * 0.1 + 3.7;
+
+        BigDecimal 변환금리 = new BigDecimal(금리);
+
+        // 소수점 두 번째 자리까지 반올림
+        변환금리 = 변환금리.setScale(2, RoundingMode.DOWN);
+
         MaxCharacterNumResDto maxCharacterNumResDto = MaxCharacterNumResDto.builder()
+                .금리(String.valueOf(변환금리))
+                .상품명("levelup정기예금")
                 .maxCharacterNum(maxLevelCharacterNum)
                 .build();
 

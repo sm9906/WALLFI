@@ -9,4 +9,8 @@ public class MaxCharacterNumResDto {
 
     private int maxCharacterNum;
 
+    private String 금리;
+
+    private String 상품명;
+
 }
