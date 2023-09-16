@@ -10,13 +10,16 @@ import { ScreenHeight, ScreenWidth } from "./../fightcomponents/ScreenSize";
 const GameMain = () => {
   const dispatch = useDispatch();
 
+  const playerSelect = useSelector((state) => state.card.playerSelect);
   const playerAnimal = useSelector((state) => state.animal.player);
   const enemyAnimal = useSelector((state) => state.animal.enemy);
   const playerCard = useSelector((state) => state.card.playerSelect);
   const enemyCard = useSelector((state) => state.card.enemySelect);
   const playerHp = useSelector((state) => state.loading.playerHp.playerNowHp);
   const enemyHp = useSelector((state) => state.loading.enemyHp.enemyNowHp);
-  const playerMaxHp = useSelector((state) => state.loading.playerHp.playerMaxHp);
+  const playerMaxHp = useSelector(
+    (state) => state.loading.playerHp.playerMaxHp
+  );
   const enemyMaxHp = useSelector((state) => state.loading.enemyHp.enemyMaxHp);
   const battleLoading = useSelector((state) => state.loading.battleLoading);
   const playerGuts = useSelector((state) => state.loading.guts.playerGuts);
@@ -24,25 +27,55 @@ const GameMain = () => {
   const guide = useSelector((state) => state.turn.guide);
   const playerRotateValue = useRef(new Animated.Value(0)).current;
   const enemyRotateValue = useRef(new Animated.Value(0)).current;
+  const playerJumpValue = useRef(new Animated.Value(0)).current;
+  const enemyJumpValue = useRef(new Animated.Value(0)).current;
   
   useEffect(() => {
-    // 플레이어 카드 갱신시 애니메이션
-    Animated.timing(playerRotateValue, {
-      toValue: 1,
-      duration: 1000,
-      useNativeDriver: true,
-    }).start(() => {
+    // 플레이어 애니메이션
+    Animated.parallel([
+      Animated.timing(playerRotateValue, {
+        toValue: 1,
+        duration: 1000,
+        useNativeDriver: true,
+      }),
+      Animated.sequence([
+        Animated.timing(playerJumpValue, {
+          toValue: -20, // 점프 높이
+          duration: 300,
+          useNativeDriver: true,
+        }),
+        Animated.timing(playerJumpValue, {
+          toValue: 0, // 원래 위치로 돌아옴
+          duration: 300,
+          useNativeDriver: true,
+        }),
+      ]),
+    ]).start(() => {
       playerRotateValue.setValue(0); // 다시 0 초기화
     });
   }, [playerCard]);
 
   useEffect(() => {
-    // 적 카드 갱신시 애니메이션
-    Animated.timing(enemyRotateValue, {
-      toValue: 1,
-      duration: 1000,
-      useNativeDriver: true,
-    }).start(() => {
+    // 적 애니메이션
+    Animated.parallel([
+      Animated.timing(enemyRotateValue, {
+        toValue: 1,
+        duration: 1000,
+        useNativeDriver: true,
+      }),
+      Animated.sequence([
+        Animated.timing(enemyJumpValue, {
+          toValue: -20, // 점프 높이
+          duration: 300,
+          useNativeDriver: true,
+        }),
+        Animated.timing(enemyJumpValue, {
+          toValue: 0, // 원래 위치로 돌아옴
+          duration: 300,
+          useNativeDriver: true,
+        }),
+      ]),
+    ]).start(() => {
       enemyRotateValue.setValue(0); // 다시 0 초기화
     });
   }, [enemyCard]);
@@ -123,21 +156,28 @@ const GameMain = () => {
         </View>
         <View style={styles.AnimalAHp}>
           <View style={styles.MyAnimal}>
-            <Animal aType={playerAnimal.animal} aPosition={-1} aSize={1} />
+            <Animated.View
+              style={{ transform: [{ translateY: playerJumpValue }] }}
+            >
+              <Animal aType={playerAnimal.animal} aPosition={-1} aSize={1} />
+            </Animated.View>
             <HpBar hP={playerHp} maxHp={playerMaxHp}></HpBar>
           </View>
           <View style={styles.EnemyAnimal}>
-            <Animal aType={enemyAnimal.animal} aSize={1} />
+            <Animated.View
+              style={{ transform: [{ translateY: enemyJumpValue }] }}
+            >
+              <Animal aType={enemyAnimal.animal} aSize={1} />
+            </Animated.View>
             <HpBar hP={enemyHp} maxHp={enemyMaxHp}></HpBar>
           </View>
         </View>
       </View>
-
       <View style={styles.time}>
-  {Array.from({ length: enemyGuts }).map((_, index) => (
-    <Card key={index} cType={"guts"} cNumber={0} cStyle={0.5} />
-  ))}
-</View>
+        {Array.from({ length: enemyGuts }).map((_, index) => (
+          <Card key={index} cType={"guts"} cNumber={0} cStyle={0.5} />
+        ))}
+      </View>
     </View>
   );
 };

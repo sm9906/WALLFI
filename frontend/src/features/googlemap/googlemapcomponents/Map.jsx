@@ -7,7 +7,10 @@ import { useNavigation } from "@react-navigation/native";
 import { setEnemy, setPlayer } from "./../../../actions/animalAction";
 import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import { setMaxHpBar, setBankIdx } from "../../../actions/loadingActions";
-import { ScreenHeight, ScreenWidth } from "./../../fight/fightcomponents/ScreenSize";
+import {
+  ScreenHeight,
+  ScreenWidth,
+} from "./../../fight/fightcomponents/ScreenSize";
 import {
   StyleSheet,
   View,
@@ -79,6 +82,7 @@ const Map = () => {
     try {
       const response = await axios.get(`/branch?idx=${idx}`);
       const data = response.data;
+      
       dispatch(setBankIdx(idx));
       setSelectedBankDetails(data.data);
     } catch (error) {
@@ -157,12 +161,12 @@ const Map = () => {
       };
 
       const enemyStat = {
-        animal: selectedBankDetails.managerAnimalType,
-        Level: selectedBankDetails?.managerLevel,
-        exp: selectedBankDetails.managerExp,
-        Hp: selectedBankDetails?.managerHp,
-        attack: selectedBankDetails?.managerAtk,
-        defence: selectedBankDetails?.managerDef,
+        animal: selectedBankDetails.branchDto.managerAnimalType,
+        Level: selectedBankDetails?.branchDto.managerLevel,
+        exp: selectedBankDetails.branchDto.managerExp,
+        Hp: selectedBankDetails?.branchDto.managerHp,
+        attack: selectedBankDetails?.branchDto.managerAtk,
+        defence: selectedBankDetails?.branchDto.managerDef,
         exchange: 1 + enemyExchange / 10,
       };
       dispatch(setEnemy(enemyStat));
@@ -175,10 +179,6 @@ const Map = () => {
         params: { randomNum: randomNum },
       });
     }
-  };
-
-  const formatAddress = (address) => {
-    return address.replace(/(\d)([가-힣\s])/g, "$1\n$2");
   };
 
   return (
@@ -227,29 +227,28 @@ const Map = () => {
           >
             <View style={styles.modalIn}>
               <Text style={styles.modalText}>
-                {selectedBankDetails?.지점명} 지점장
+                LV. {selectedBankDetails?.branchDto.managerLevel}_
+                {selectedBankDetails?.username}
               </Text>
               {selectedBankDetails && (
                 <Image
                   source={
                     images.animal[
-                      `baby_${selectedBankDetails.managerAnimalType}`
+                      `baby_${selectedBankDetails.branchDto.managerAnimalType}`
                     ]
                   }
                   style={styles.modalImage}
                 />
               )}
               <Text style={styles.modalText}>
-                LV. {selectedBankDetails?.managerLevel}
+                HP : {selectedBankDetails?.branchDto.managerHp}
               </Text>
               <Text style={styles.modalText}>
-                {selectedBankDetails?.지점주소
-                  ? formatAddress(selectedBankDetails.지점주소)
-                  : ""}
+                ATK : {selectedBankDetails?.branchDto.managerAtk}
               </Text>
-              {/* <Text style={styles.modalText}>
-                {selectedBankDetails?.지점대표전화번호}
-              </Text> */}
+              <Text style={styles.modalText}>
+                DEF : {selectedBankDetails?.branchDto.managerDef}
+              </Text>
               <TouchableOpacity
                 onPress={handleGoToBattle}
                 style={styles.battleButton}
@@ -285,7 +284,7 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     width: ScreenWidth * 0.8,
-    height: ScreenHeight * 0.5, 
+    height: ScreenHeight * 0.5,
     backgroundColor: "#2c2c2c",
     padding: 20,
     justifyContent: "center",
@@ -316,7 +315,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   battleButton: {
-    width: ScreenWidth * 0.648, 
+    width: ScreenWidth * 0.648,
     marginTop: 20,
     padding: 10,
     backgroundColor: "#007BFF",
@@ -352,8 +351,8 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   modalImage: {
-    width: ScreenWidth * 0.4, 
-    height: ScreenHeight * 0.22, 
+    width: ScreenWidth * 0.4,
+    height: ScreenHeight * 0.22,
     marginBottom: 20,
   },
 });
