@@ -6,6 +6,7 @@ import com.shinhan.walfi.domain.game.GameCharacter;
 import com.shinhan.walfi.domain.game.UserGameInfo;
 import com.shinhan.walfi.dto.game.BattleRankResDto;
 import com.shinhan.walfi.dto.game.BattleReqDto;
+import com.shinhan.walfi.dto.product.ProductResDto;
 import com.shinhan.walfi.exception.BranchErrorCode;
 import com.shinhan.walfi.exception.BranchException;
 import com.shinhan.walfi.mapper.BattleMapper;
@@ -111,6 +112,12 @@ public class BattleServiceImpl implements BattleService{
 
             log.info("=== 유저: " + battleReqDto.getUserId() + " 의 " + branch.getBranchName() + "지점에서의 전투 기록 ===");
         }
+
+        String userId = battleReqDto.getUserId();
+        UserGameInfo userGameInfo = userGameInfoRepository.findById(userId);
+        int defaultCount = userGameInfo.getBattleCount();
+        userGameInfo.setBattleCount(defaultCount + 1);
+        userGameInfoRepository.save(userGameInfo);
     }
 
     /**
@@ -151,5 +158,14 @@ public class BattleServiceImpl implements BattleService{
             double rate = battleMapper.getRate(userId);
             return rate;
         }
+    }
+
+    @Override
+    @Transactional
+    public void getBattleCount(String userId) {
+        UserGameInfo userGameInfo = userGameInfoRepository.findById(userId);
+        int defaultCount = userGameInfo.getBattleCount();
+        userGameInfo.setBattleCount(defaultCount + 1);
+        userGameInfoRepository.save(userGameInfo);
     }
 }
