@@ -13,6 +13,12 @@
         LIMIT #{limit};
     </select>
 
+    <update id="initializeDailyQuest">
+        UPDATE quest_manager
+        SET count  = 0,
+            status = FALSE;
+    </update>
+
     <update id="increaseSpecificPerformedQuest" parameterType="Map">
         UPDATE quest_manager
         SET count = count + 1

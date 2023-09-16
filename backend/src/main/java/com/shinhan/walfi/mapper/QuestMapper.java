@@ -10,6 +10,8 @@ import java.util.List;
 @Mapper
 public interface QuestMapper {
 
+    void initializeDailyQuest();
+
     List<DailyQuestDao> readRandomDailyQuestByLimit(int limit);
 
     void increaseSpecificPerformedQuest(@Param("user_id") String user_id,
