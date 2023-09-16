@@ -37,4 +37,16 @@
         update topten set rate = 6 where ranking between 2 and 5;
         update topten set rate = 5 where ranking between 6 and 10;
     </insert>
+
+    <select id="cntTop">
+        select count(*) from topten where user_id = #{userId};
+    </select>
+
+    <select id="getRate">
+        select rate from topten where user_id = #{userId}
+    </select>
+
+    <delete id="deleteRanking">
+        delete from topten;
+    </delete>
 </mapper>

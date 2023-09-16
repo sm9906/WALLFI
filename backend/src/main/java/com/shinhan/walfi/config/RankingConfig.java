@@ -22,4 +22,9 @@ public class RankingConfig {
         log.info("initialize Ranking Time : {}", new Timestamp(System.currentTimeMillis()));
         battleMapper.initializeRanking();
     }
+
+    @Scheduled(cron = "0 0 9 15 * *", zone = "Asia/Seoul")
+    public void initRanking() {
+        battleMapper.deleteRanking();
+    }
 }

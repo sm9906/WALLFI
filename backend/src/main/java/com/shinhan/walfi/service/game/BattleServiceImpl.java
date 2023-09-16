@@ -141,4 +141,15 @@ public class BattleServiceImpl implements BattleService{
         List<BattleRankResDto> rankList = battleMapper.getAllRank();
         return rankList;
     }
+
+    @Override
+    public double getRate(String userId) {
+        int toptenCnt = battleMapper.cntTop(userId);
+        if(toptenCnt == 0){
+            return 0;
+        } else{
+            double rate = battleMapper.getRate(userId);
+            return rate;
+        }
+    }
 }
