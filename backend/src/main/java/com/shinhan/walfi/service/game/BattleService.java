@@ -14,7 +14,7 @@ public interface BattleService {
 
     List<BattleRankResDto> getAllRank();
 
-    double getRate(String userId);
+    ProductResDto getRate(String userId);
 
     void getBattleCount(String userId);
 
