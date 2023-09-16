@@ -6,12 +6,12 @@ const selectCardMatching = (
 ) => {
 
   let playerType = playerAnimal.animal;
-  let playerAtk = playerAnimal.attack * 2;
+  let playerAtk = playerAnimal.attack * 4;
   let playerDef = playerAnimal.defence * 2;
   let playerExc = playerAnimal.exchange;
 
   let enemyType = enemyAnimal.animal;
-  let enemyAtk = enemyAnimal.attack * 2;
+  let enemyAtk = enemyAnimal.attack * 4;
   let enemyDef = enemyAnimal.defence * 2;
   let enemyExc = enemyAnimal.exchange;
 
@@ -30,7 +30,8 @@ const selectCardMatching = (
     } else if (playerExc == 1) {
       playerSelect = "counter";
     }
-  } else if (enemySelect == "exchange") {
+  } 
+  if (enemySelect == "exchange") {
     if (enemyExc > 1) {
       enemyAtk *= enemyExc, enemySelect = "attack";
     } else if (enemyExc < 1) {
@@ -45,17 +46,17 @@ const selectCardMatching = (
   if (playerSelect == "skill") {
     if (playerType == "EAGLE") {
       if (enemySelect == "counter" || ((enemyType == "TIGER" || enemyType == "SHIBA") && enemySelect == "skill")) {
-        playerSDmg += playerAnimal.hp * 0.6;
+        playerSDmg += playerAnimal.Hp * 0.6;
       } else {
-        enemySDmg += playerAnimal.hp * 0.4;
-        playerSDmg += playerAnimal.hp * 0.2;
+        enemySDmg += playerAnimal.Hp * 0.4;
+        playerSDmg += playerAnimal.Hp * 0.2;
       }
       playerSelect = "attack"
     } else if (playerType == "PANDA") {
       if (enemySelect == "counter" || ((enemyType == "TIGER" || enemyType == "SHIBA") && enemySelect == "skill")) {
-        enemySDmg += -playerAnimal.hp * 0.1;
+        enemySDmg += -playerAnimal.Hp * 0.1;
       } else {
-        playerSDmg += -playerAnimal.hp * 0.1;
+        playerSDmg += -playerAnimal.Hp * 0.1;
       }
       playerSelect = "defence"
     } else if (playerType == "TIGER") {
@@ -74,17 +75,17 @@ const selectCardMatching = (
   if (enemySelect == "skill") {
     if (enemyType == "EAGLE") {
       if (playerSelect == "counter") {
-        enemySDmg += enemyAnimal.hp * 0.6;
+        enemySDmg += enemyAnimal.Hp * 0.6;
       } else {
-        playerSDmg += enemyAnimal.hp * 0.4;
-        enemySDmg += enemyAnimal.hp * 0.2;
+        playerSDmg += enemyAnimal.Hp * 0.4;
+        enemySDmg += enemyAnimal.Hp * 0.2;
       }
       enemySelect = "attack"
     } else if (enemyType == "PANDA") {
       if (playerSelect == "counter") {
-        playerSDmg += -enemyAnimal.hp * 0.1;
+        playerSDmg += -enemyAnimal.Hp * 0.1;
       } else {
-        enemySDmg += -enemyAnimal.hp * 0.1;
+        enemySDmg += -enemyAnimal.Hp * 0.1;
       }
       enemySelect = "defence"
     } else if (enemyType == "TIGER") {
@@ -159,6 +160,7 @@ const selectCardMatching = (
     enemyDmg *= 1.5
     enemySDmg *= 1.5
   }
+  
   return {
     playerTotalDmg: playerDmg + playerSDmg,
     enemyTotalDmg: enemyDmg + enemySDmg

@@ -10,6 +10,7 @@ const MAX_HP = 50;
 const MIN_HP = 0;
 
 const HpBar = ({ hP, maxHp }) => {
+  
   const [displayedHP, setDisplayedHP] = useState(hP);
   const animatedHPValue = useRef(new Animated.Value(hP)).current;
 

@@ -3,10 +3,13 @@ import {
   setBattleLoading,
   setGuts,
   setHpBar,
+  setTimeOut
 } from "../../../actions/loadingActions";
 import {
   setEnemySelect,
+  setPlayerSelect,
   decreaseCard,
+  setPlayerCard,
 } from "../../../actions/cardActions";
 
 const cardTypes = ["skill", "exchange", "defence", "counter", "attack"];
@@ -32,7 +35,7 @@ const setAnimalGuts = (
   playerSelect,
   enemySelect,
   playerAnimal,
-  enemyAnimal,
+  enemyAnimal
 ) => {
   let newPlayerGuts = playerGuts;
   let newEnemyGuts = enemyGuts;
@@ -42,7 +45,7 @@ const setAnimalGuts = (
     } else {
       newPlayerGuts += 1;
     }
-  } 
+  }
   if (enemyAnimal.animal === "TIGER" && enemySelect === "skill") {
     if (playerSelect === "exchange" && playerAnimal.exchange === 1) {
       newPlayerGuts += 1;
@@ -50,12 +53,26 @@ const setAnimalGuts = (
       newEnemyGuts += 1;
     }
   }
-  return [newPlayerGuts, newEnemyGuts]
+  return [newPlayerGuts, newEnemyGuts];
 };
 
-const setAnimalHp = (playerHp, enemyHp, playerMaxHp, enemyMaxHp, damageResult, newPlayerGuts, newEnemyGuts) => {
-  let newPlayerHp = Math.max(0, Math.min(playerMaxHp, playerHp - damageResult.playerTotalDmg));
-  let newEnemyHp = Math.max(0, Math.min(enemyMaxHp, enemyHp - damageResult.enemyTotalDmg));
+const setAnimalHp = (
+  playerHp,
+  enemyHp,
+  playerMaxHp,
+  enemyMaxHp,
+  damageResult,
+  newPlayerGuts,
+  newEnemyGuts
+) => {
+  let newPlayerHp = Math.max(
+    0,
+    Math.min(playerMaxHp, playerHp - damageResult.playerTotalDmg)
+  );
+  let newEnemyHp = Math.max(
+    0,
+    Math.min(enemyMaxHp, enemyHp - damageResult.enemyTotalDmg)
+  );
   if (newPlayerHp <= 0 && newPlayerGuts > 0) {
     newPlayerHp = 1;
     newPlayerGuts -= 1;
@@ -65,8 +82,8 @@ const setAnimalHp = (playerHp, enemyHp, playerMaxHp, enemyMaxHp, damageResult, n
     newEnemyHp = 1;
     newEnemyGuts -= 1;
   }
-  return [newPlayerHp, newEnemyHp]
-}
+  return [newPlayerHp, newEnemyHp];
+};
 
 const startBattle = async (
   dispatch,
@@ -83,7 +100,7 @@ const startBattle = async (
   enemyGuts
 ) => {
   dispatch(setBattleLoading(true)); // 터치 못하게 설정
-  await new Promise(resolve => setTimeout(resolve, 2000)); 
+  await new Promise((resolve) => setTimeout(resolve, 2000));
 
   const enemySelect = getRandomCardType(enemyCard); // 적 카드 랜덤으로 선택
 
@@ -98,8 +115,8 @@ const startBattle = async (
     playerSelect,
     enemySelect,
     playerAnimal,
-    enemyAnimal,
-  )
+    enemyAnimal
+  );
 
   const damageResult = selectCardMatching(
     playerSelect,
@@ -109,23 +126,31 @@ const startBattle = async (
   );
 
   console.log("적에게 공격하는 이펙트!");
-  await new Promise(resolve => setTimeout(resolve, 1500)); // 연출을 위한 시간 생성
+  await new Promise((resolve) => setTimeout(resolve, 1500)); // 연출을 위한 시간 생성
 
-  const animalHp = setAnimalHp(playerHp, enemyHp, playerMaxHp, enemyMaxHp,damageResult, guts[0], guts[1])
+  const animalHp = setAnimalHp(
+    playerHp,
+    enemyHp,
+    playerMaxHp,
+    enemyMaxHp,
+    damageResult,
+    guts[0],
+    guts[1]
+  );
 
   dispatch(setHpBar("player", animalHp[0]));
   dispatch(setHpBar("enemy", animalHp[1]));
   dispatch(setGuts("player", guts[0]));
   dispatch(setGuts("enemy", guts[1]));
-  await new Promise(resolve => setTimeout(resolve, 2500)); // 연출을 위한 시간 생성
+  await new Promise((resolve) => setTimeout(resolve, 2500)); // 연출을 위한 시간 생성
 
-  dispatch(
-    setEnemySelect({ type: "enemy", number: 0 })
-  );
-  
+  dispatch(setEnemySelect({ type: "enemy", number: 0 }));
+  dispatch(setPlayerSelect({ type: "", number: 0 }));
+
+  dispatch(setTimeOut(false));
+
   dispatch(setBattleLoading(false)); // 터치 못하게 설정
   return animalHp;
 };
-
 
 export default startBattle;
