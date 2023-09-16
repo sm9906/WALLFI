@@ -5,15 +5,11 @@ import com.shinhan.walfi.mapper.QuestMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-
-import javax.servlet.http.HttpServletRequest;
 
 
 @Slf4j
@@ -48,7 +44,7 @@ public class QuestAspect {
 
         if (isCompleted) {
             log.info("{} completed {} quest", userId, 1L);
-            questMapper.updateQuestStatusTrue(userId, 1L);
+            questMapper.updateQuestStatus(userId, 1L, 1);
         }
     }
 }
