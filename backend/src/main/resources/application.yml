@@ -1,24 +1,35 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/walfi?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    url: jdbc:mysql://localhost:3306/walfi?useSSL=false&useUnicode=true&characterEncoding=UTF-8&characterSetResults=UTF-8&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul&allowMultiQueries=true
     username: ssafy
     password: ssafy
-
-
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
   jpa:
     open-in-view: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
       naming:
-        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
       use-new-id-generator-mappings: false
     show-sql: true
     properties:
       hibernate.format_sql: true
       dialect: org.hibernate.dialect.MySQL8InnoDBDialect
 
+mybatis:
+  type-aliases-package: com.shinhan.walfi.dao
+  mapper-locations: classpath:mapper/*.xml
 
 logging:
   level:
     org.hibernate.SQL: debug
+server:
+  servlet:
+    encoding:
+      force-response: true
+      force-request: true
+      force: true
+  port: 8094
