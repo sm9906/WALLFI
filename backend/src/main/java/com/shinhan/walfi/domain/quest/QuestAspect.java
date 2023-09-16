@@ -77,7 +77,7 @@ public class QuestAspect {
                 increaseUserPerformedQuest(userId, 1);
                 break;
             case "배틀하기":
-                increaseUserPerformedQuest(userId, 7);
+                increaseUserPerformedQuest(userId, 6);
                 break;
         }
     }
