@@ -21,20 +21,36 @@ public class QuestAspect {
 
     private final QuestMapper questMapper;
 
+    /**
+     * 유저 퀘스트 수행 횟수를 증가한 뒤,
+     * 퀘스트를 완료했는지 판단
+     *
+     * @param userId
+     * @param questId
+     */
     private void increaseUserPerformedQuest(String userId, long questId) {
 
         questMapper.increaseSpecificPerformedQuest(userId, questId);
         boolean isCompleted = questMapper.checkIFQuestIsComplete(userId, questId);
 
         if (isCompleted) {
-            log.info("{} completed {} quest", userId, 1L);
-            questMapper.updateQuestStatus(userId, 1L, 1);
+            log.info("{} completed {} quest", userId, questId);
+            questMapper.updateQuestStatus(userId, questId, 1);
         }
     }
 
+    /**
+     * 게임 서비스 혹은, 금융 서비스가 정상적으로 완료됐으면,
+     * 그 Service Method 끝난 뒤에, 이 Method가 작동
+     * 각 서비스마다 연관된 퀘스트 Idx를 찾음
+     * 
+     * @param joinPoint
+     * @param result
+     */
     @AfterReturning(
             pointcut = "execution(* com.shinhan.walfi.controller.BankController.*(..)) || " +
-                    "execution(* com.shinhan.walfi.controller.CharacterController.*(..)) ",
+                    "execution(* com.shinhan.walfi.controller.CharacterController.*(..)) || " +
+                    "execution(* com.shinhan.walfi.controller.BattleController.record(*))",
             returning = "result"
     )
     public void conductTransferQuest(JoinPoint joinPoint, ResponseEntity<HttpResult> result) {
@@ -59,6 +75,9 @@ public class QuestAspect {
                 break;
             case "이체하기":
                 increaseUserPerformedQuest(userId, 1);
+                break;
+            case "배틀하기":
+                increaseUserPerformedQuest(userId, 7);
                 break;
         }
     }
