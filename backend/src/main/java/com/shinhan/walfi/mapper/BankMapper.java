@@ -43,4 +43,8 @@ public interface BankMapper {
                                         @Param("transferMoney") long transferMoney,
                                               @Param("krwConvertedMoney") long krwConvertedMoney);
 
+    int globalWithdrawTransferMoneyFromAccount(@Param("accountNumber") String accountNumber,
+                                              @Param("transferMoney") long transferMoney,
+                                              @Param("krwConvertedMoney") long krwConvertedMoney);
+
 }

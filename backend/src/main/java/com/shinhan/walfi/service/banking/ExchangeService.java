@@ -7,6 +7,9 @@ public interface ExchangeService {
 
     ExchangeResDto getTodayExchange() throws ParseException;
 
-    void userExchange(String userId, String 사용자대표계좌, String 통화코드, long 금액, float 전신환매도환율);
+    void toGlobalExchange(String userId, String 사용자대표계좌, String 도착계좌통화코드, long 금액, float 전신환매도환율);
+
+    void fromGlobalExchange(String userId, String 사용자대표계좌, String 출발계좌통화코드, long 금액, float 전신환매입환율);
+
 
 }
