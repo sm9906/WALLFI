@@ -16,4 +16,10 @@ public interface BattleMapper {
     List<BattleRankResDto> getAllRank();
 
     void initializeRanking();
+
+    int cntTop(String userId);
+
+    double getRate(String userId);
+
+    void deleteRanking();
 }

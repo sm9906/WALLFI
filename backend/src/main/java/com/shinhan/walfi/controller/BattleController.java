@@ -52,4 +52,14 @@ public class BattleController {
         res.setData(list);
         return ResponseEntity.status(res.getStatus()).body(res);
     }
+
+    @GetMapping("/topten")
+    @ApiOperation(value = "입력한 아이디의 유저가 탑텐 유저가 맞다면 적용되는 금리를 아니면 0을 반환")
+    public ResponseEntity<HttpResult> getToptenRate(@RequestParam String userId){
+       double rate = battleService.getRate(userId);
+
+        HttpResult res = HttpResult.getSuccess();
+        res.setData(rate);
+        return ResponseEntity.status(res.getStatus()).body(res);
+    }
 }

@@ -12,4 +12,6 @@ public interface BattleService {
     List<BattleRankResDto> getRank(Long idx);
 
     List<BattleRankResDto> getAllRank();
+
+    double getRate(String userId);
 }
