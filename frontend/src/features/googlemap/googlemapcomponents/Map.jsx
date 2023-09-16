@@ -7,6 +7,7 @@ import { useNavigation } from "@react-navigation/native";
 import { setEnemy, setPlayer } from "./../../../actions/animalAction";
 import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import { setMaxHpBar, setBankIdx } from "../../../actions/loadingActions";
+import { ScreenHeight, ScreenWidth } from "./../../fight/fightcomponents/ScreenSize";
 import {
   StyleSheet,
   View,
@@ -141,7 +142,9 @@ const Map = () => {
     // 모달창에서 배틀로 이동시 동물 정보 리덕스에 저장 (manager...)
     if (selectedBankDetails != null && myAnimal != null) {
       const playerExchange = setExchangeForAnimal(myAnimal.characterType);
-      const enemyExchange = setExchangeForAnimal(selectedBankDetails.managerAnimalType);
+      const enemyExchange = setExchangeForAnimal(
+        selectedBankDetails.managerAnimalType
+      );
 
       const playerStat = {
         animal: myAnimal?.characterType,
@@ -160,7 +163,7 @@ const Map = () => {
         Hp: selectedBankDetails?.managerHp,
         attack: selectedBankDetails?.managerAtk,
         defence: selectedBankDetails?.managerDef,
-        exchange: 1 + enemyExchange / 10, 
+        exchange: 1 + enemyExchange / 10,
       };
       dispatch(setEnemy(enemyStat));
       dispatch(setPlayer(playerStat));
@@ -247,7 +250,12 @@ const Map = () => {
               {/* <Text style={styles.modalText}>
                 {selectedBankDetails?.지점대표전화번호}
               </Text> */}
-              <Button title="배틀로 이동" onPress={handleGoToBattle} />
+              <TouchableOpacity
+                onPress={handleGoToBattle}
+                style={styles.battleButton}
+              >
+                <Text>배틀로 이동</Text>
+              </TouchableOpacity>
               <TouchableOpacity onPress={closeModal} style={styles.closeButton}>
                 <Text>닫기</Text>
               </TouchableOpacity>
@@ -276,8 +284,8 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0,0,0,0.7)",
   },
   modalContent: {
-    width: "80%",
-    height: "50%",
+    width: ScreenWidth * 0.8,
+    height: ScreenHeight * 0.5, 
     backgroundColor: "#2c2c2c",
     padding: 20,
     justifyContent: "center",
@@ -285,22 +293,48 @@ const styles = StyleSheet.create({
     borderColor: "#ffd700",
     borderWidth: 4,
     borderRadius: 15,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
     // backgroundColor: "yellow"
   },
   modalIn: {
-    width: "90%",
-    height: "90%",
-    justifyContent: "space-between",
+    width: ScreenWidth * 0.72,
+    height: ScreenHeight * 0.45,
     alignItems: "center",
     // backgroundColor: "green"
   },
   modalText: {
     color: "#ffd700",
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: "bold",
-    marginBottom: 2,
+    marginBottom: 10,
+  },
+  battleButton: {
+    width: ScreenWidth * 0.648, 
+    marginTop: 20,
+    padding: 10,
+    backgroundColor: "#007BFF",
+    borderColor: "#2c2c2c",
+    borderWidth: 2,
+    borderRadius: 5,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   closeButton: {
+    width: ScreenWidth * 0.648,
     marginTop: 20,
     padding: 10,
     backgroundColor: "#ffd700",
@@ -308,11 +342,18 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 5,
     alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   modalImage: {
-    width: "40%",
-    height: "40%",
+    width: ScreenWidth * 0.4, 
+    height: ScreenHeight * 0.22, 
     marginBottom: 20,
-    // backgroundColor: "red"
   },
 });

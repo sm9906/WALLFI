@@ -14,7 +14,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/native';
 
-import { updateCharacter, getMainCharacter } from '../homeSlice.js';
+import { getMainCharacter, updateCharacter } from '../homeSlice.js';
 
 import { globalStyles } from '../homestyles/global.js';
 import { images } from '../../../common/imgDict.js';
@@ -24,13 +24,28 @@ import GameHeader from '../homecomponents/GameHeader.js';
 // 상태바 겹침현상을 없애려면 react-native에서 StatusBar를 import 해줘야함
 
 export default function GameHome({ navigation }) {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch(); 
+  // const [mainCharacter, setMainCharacter] = useState(''); 
+  React.useEffect(() =>
+    navigation.addListener('beforeRemove', (e) => {
+      if(e.data.action.type==='GO_BACK'){
+        e.preventDefault();
+        Alert.alert('','지갑으로 돌아가시겠습니까?',[{
+          text:'머무르기',
+          onPress: () => {}
+        },
+        {text:'지갑으로', onPress:()=>navigation.navigate('Wallet')}
+    ])
+      }
+    }),[navigation]
+  );
+
 
   const [modalVisible, setModalVisible] = useState(false);
   const userId = useSelector(state=>state.auth.userId);
   
   useFocusEffect(()=>{
-    dispatch(getMainCharacter(userId))
+    dispatch(getMainCharacter(userId));
   })
 //   console.log(images.background.home)
   return (
@@ -71,11 +86,12 @@ export default function GameHome({ navigation }) {
             <View style={{ flex: 1 }}></View>
           </View>
         </Modal>
-        <GameHeader />
+        <GameHeader/>
         <Season />
         <Content navigation={navigation}
           modalVisible={modalVisible}
           setModalVisible={setModalVisible}
+          userId={userId}
         />
         <Bottom navigation={navigation} />
       </ImageBackground>
@@ -97,52 +113,73 @@ function Season() {
   )
 }
 
+const action = {
+  '밥먹기':'밥 먹는 중...',
+  '훈련하기':'훈련 중...',
+  'rest':'휴식 중...'
+}
+
+const ACT_TIME = 5000;
+
 function Content(props) {
-
+  const mainCharacter = useSelector(state=>state.home.mainCharacter)
   const dispatch = useDispatch();
-
-  const userInfo = useSelector(state => state.home.userGameInfo);
-  const mainCharacter = useSelector(state => state.home.mainCharacter);
-
-  // 메인캐릭터, 칭호
-  const [imageUrl, setImageUrl] = useState('');
-  const [userName, setUserName] = useState('');
+  const {status:userName} = useSelector(state => state.home.userGameInfo);
+  // 메인캐릭터, 칭호;
   const [nowAct, setNowAct] = useState();
-  let img;  
-  const timeText = '1';
+  const timeText = action[nowAct]
 
+  const type = mainCharacter.characterType;
+  const color = mainCharacter.color;
+  const imageUrl = images.defaultCharacter[type][color];
   // 훈련
-
-  useEffect(() => {
-    if (userInfo) {
-      const userStatus = userInfo.status;
-      const type = mainCharacter.characterType;
-      const color = mainCharacter.color;
-      const image = images.defaultCharacter[type][color];
-      img = image;
-
-      setUserName(userStatus);
-      setImageUrl(image);
-    }
-  })
 
   useEffect(()=>{
     if(nowAct){
-      setInterval(()=>{
+      setTimeout(()=>{
         setNowAct(nowAct==='rest'?null:'rest')
-      },5000)
-      console.log(nowAct)
+      },ACT_TIME)
+      console.log('게임홈 143, 동물이 현재 하고 있는일 확인',nowAct)
     }else{
-      clearInterval()
+      console.log('게임홈 146, 종료 확인 끝')
     }
   },[nowAct])
 
-  const changeAct = (props) => {
+
+  // 행동 중 
+
+  const changeAct = async(action) => {
     if(!nowAct){
-      setNowAct(props)
+      dispatch(updateCharacter({
+        act: action,
+        characterIdx: mainCharacter.characterIdx,
+        statusType: action==='밥먹기'?"atk":"def",
+        userId: props.userId,
+        value: 1
+        }))
+      setNowAct(action)
     }else{
-      console.log(nowAct)
+      alertAct()
     }
+  }
+  const alertAct = () => {
+    let message;
+    if(nowAct==='밥먹기'){
+      message='밥 먹는 중입니다';
+    }else if(nowAct==='훈련하기'){
+      message='훈련 중입니다';
+    }else{
+      message=`훈련이나 밥먹기가 완료된 후 ${ACT_TIME/(1000)}초 동안은 쉬어야 합니다`;
+    }
+                                         
+    Alert.alert(
+      '경고',
+      message,
+      [
+        {text:'확인', onPress: ()=> {}, style:'default'}
+      ]
+    );
+    return;
   }
 
   return (
@@ -154,19 +191,19 @@ function Content(props) {
           <Image source={images.btnSource.collection} style={styles.buttonContent} />
           <Text style={styles.btnText}>동물도감</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={()=>changeAct('eating')}>
+        <TouchableOpacity style={styles.button} onPress={()=>changeAct('밥먹기')}>
           <Image source={images.btnSource.eat} style={styles.buttonContent} />
           <Text style={styles.btnText}>밥 주기</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={()=>changeAct('training')}>
+        <TouchableOpacity style={styles.button} onPress={()=>changeAct('훈련하기')}>
           <Image source={images.btnSource.training} style={styles.buttonContent} />
           <Text style={styles.btnText}>훈련</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.main}>
-        {/* <Image source={imageUrl}
+        <Image source={imageUrl}
           style={{ width: '100%', height: '50%', resizeMode: 'contain' }}
-        /> */}
+        />
         <Text style={{
           color: '#3B3B3B',
           fontWeight: 'bold',
@@ -196,6 +233,7 @@ function Content(props) {
           <Text style={styles.btnText}>미션</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate('Mission')}>
+
           <Image source={images.btnSource.map} style={styles.buttonContent} />
           <Text style={styles.btnText}>지도</Text>
         </TouchableOpacity>
@@ -208,7 +246,7 @@ function Bottom(props) {
 
   return (
     <View style={styles.bottom}>
-      <TouchableOpacity style={styles.bottomBtn} onPress={() => props.navigation.navigate('Mission')}>
+      <TouchableOpacity style={styles.bottomBtn} onPress={() => props.navigation.navigate('Wallet')}>
         <Image source={images.btnSource.wallet} style={styles.buttonContent} />
         <Text style={styles.btnText}>지갑으로</Text>
       </TouchableOpacity>
@@ -250,7 +288,7 @@ const styles = StyleSheet.create({
     height: '50%',
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#E3B75A',
+    color: 'white',
     textShadowColor: '#0046FF',
     textShadowOffset: { width: 1, height: 1 },
     textShadowRadius: 2,

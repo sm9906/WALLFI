@@ -1,9 +1,9 @@
 import React, {useEffect, useState, useMemo} from "react";
 import { View, Text, StyleSheet } from 'react-native';
-import { ConvPad } from "../walletcomponents/sendmoney/ConvKeypad";
+import { ConvPad } from "../walletcomponents/virtualkeyboard/ConvKeypad";
 import { RFPercentage } from "react-native-responsive-fontsize";
-import VirtualKeyboard from "../walletcomponents/sendmoney/VirtualKeypad";
-import { minusMoney, exchangeMoney, postSendMoney, postExchangeMoney } from "../walletSlice";
+import VirtualKeyboard from "../walletcomponents/virtualkeyboard/VirtualKeypad";
+import { minusMoney, exchangeMoney, postSendMoney, postExchangeKRW, postExchangeFOR } from "../walletSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function SendHow({route, navigation}){
@@ -58,17 +58,27 @@ export default function SendHow({route, navigation}){
   const sendExchange= () => {
     const data = {
       "userId":userId,
-      "금액": toNation==='KRW'?Number(exchangedMoney):money,
+      "금액": toNation==='KRW'?Number(money):Number(money),
       "사용자대표계좌": mainAccount,
       "전신환매도환율": exchangeRate,
-      "통화코드": toNation
     }
     console.log(data)
-    dispatch(postExchangeMoney(data))
-    .then((res)=>sendExchangeMemo(res))
-    .catch((err)=>{
-      console.log(err);
-    })
+    if(toNation!=='KRW'){      
+      data["도착계좌통화코드"] = toNation
+      dispatch(postExchangeKRW(data))
+      .then((res)=>sendExchangeMemo(res))
+      .catch((err)=>{
+        console.log(err);
+      })
+    }else{
+      data["출발계좌통화코드"] = outAcc.ntnCode;
+      console.log('ㅎㅇ')
+      dispatch(postExchangeFOR(data))
+      .then((res)=>sendExchangeMemo(res))
+      .catch((err)=>{
+        console.log(err)
+      })
+    }
   }
 
   const sendExchangeMemo = async(res) => {
@@ -107,7 +117,7 @@ export default function SendHow({route, navigation}){
       }else if(value === 'clear'){
         setMoney('0');
       }else if(value==='all'){
-        console.log('전액')
+        setMoney(String(balance));
       }else if(value==='완료'){
         if(type==='송금'){
           !isOver?sendMoney():null
