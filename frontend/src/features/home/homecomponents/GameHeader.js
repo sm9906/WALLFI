@@ -98,7 +98,7 @@ function GameHeader(props) {
               alignItems: "center",
             }}
           >
-          <ExpBar exp={mainCharacter.exp} level={mainCharacter.level}/>
+          <ExpBar ExpStyle={ExpStyle}exp={mainCharacter.exp} level={mainCharacter.level}/>
             
           </View>
         </View>
@@ -133,6 +133,7 @@ function GameHeader(props) {
 }
 
 export default GameHeader;
+
 
 const styles = StyleSheet.create({
   header: {
@@ -202,3 +203,32 @@ const styles = StyleSheet.create({
     borderColor: "#505A75",
   },
 });
+
+const ExpStyle = StyleSheet.create({
+  container:{
+    width:'80%',
+    height: "50%",
+    flexDirection:'row',
+    alignItems:'center',
+    justifyContent:'space-between'
+  },
+  LvTxt:{
+    color:'white',
+    alignContent:'center',
+    fontWeight:'bold',
+    textShadowColor: "#272B49",
+    textShadowRadius: 2,
+    textShadowOffset: { width: 2, height: 2 },
+  },
+  barContainer: {
+      width: "70%",
+      height: "80%",
+      backgroundColor: "#D9D9D9",
+      borderRadius: 15,
+  },
+  exp:{
+    backgroundColor:'#F6B101',
+    borderRadius: 15,
+    height:'100%',
+  }
+})
