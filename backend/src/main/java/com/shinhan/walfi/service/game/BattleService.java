@@ -10,4 +10,6 @@ public interface BattleService {
     void write(BattleReqDto battleReqDto);
 
     List<BattleRankResDto> getRank(Long idx);
+
+    List<BattleRankResDto> getAllRank();
 }

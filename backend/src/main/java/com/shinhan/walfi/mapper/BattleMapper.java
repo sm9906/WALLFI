@@ -12,4 +12,8 @@ public interface BattleMapper {
     void write(BattleDao dao);
 
     List<BattleRankResDto> getRank(Long idx);
+
+    List<BattleRankResDto> getAllRank();
+
+    void initializeRanking();
 }
