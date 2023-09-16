@@ -8,40 +8,75 @@ import {
  } from "react-native";
 import { RFPercentage } from "react-native-responsive-fontsize";
 import SelectDropdown from "react-native-select-dropdown";
-
+import axios from "../../../common/http-common";
 import { Background, ButtonStyle } from "../walletcomponents/CommonStyle";
 
 import { SCREEN_HEIGHT } from "./WalletHome";
-
+import { useSelector } from "react-redux";
+import { useFocusEffect } from "@react-navigation/native";
 
 const Deposit = {
   'Levelup':{
-    '기본금리': 3.7,
-    '추가금리': 0.1,
     'message': '최고 레벨 캐릭터 수 +',
-    '가입기간': 12,
 }}
 
 const selNations = ['KRW','USD','JPY','EUR','CNY','AUD'];
 
+const ISO = {
+  'KRW': '원',
+  'USD': '$',
+  'EUR': '€',
+  'JPY': '¥',
+  'CNY': '¥',
+  'AUD': 'AU$' 
+}
+
 export default function MakeDetail({route,navigation}){
-  console.log(route.params.type) // LevelUp
+  
+  useFocusEffect(()=>{
+    const date = new Date().toDateString();
+    console.log(date)
+  })
+  const {userId, mainAccount} = useSelector(state=> state.auth)
+  const [ntnCode, setNtnCode] = useState('KRW');
+
   const type = route.params.type;
-  const money = '100,000원'
+  const detail = route.params.data;
+
+  const [money, setMoney] = useState('0');  
+  const total = Number(money) * Number(detail.가입기간)
+  const show = Number(money).toLocaleString('en-US')
+  const [canmakeIt, setCanMakeIT] = useState(true);
+
+  const onPress = () => {
+    const data={
+      mainAccountNum: mainAccount,
+      userId:userId,
+      금리:detail.총금리,
+      만기일: '2023',
+      상품명: detail.상품명,
+      입금금액: Number(money),
+      통화코드: ntnCode,
+    }
+    console.log(data)
+    const response = axios.post('product/create', data)
+    .then(res=>navigation.navigate('WalletHome'));
+  }
   return(
     <View style={{...Background.background, padding:'10%', justifyContent:'none'}}>
       <View style={styles.titleContent}>
-        <Text style={styles.nowRate}>{`현재 적용 금리 ${Deposit[type]['기본금리']}%`}</Text>
-        <Text style={styles.rateBg}>{`연 ${Deposit[type]['기본금리']}%`}</Text>
-        <Text style={styles.rateBg}>{`${Deposit[type]['message']} ${Deposit[type]['추가금리']}%`}</Text>
+        <Text style={styles.nowRate}>{`현재 적용 금리 ${detail.총금리}%`}</Text>
+        <Text style={styles.rateBg}>{`연 ${detail.기본금리}%`}</Text>
+        <Text style={styles.rateBg}>{`${Deposit[type]['message']} ${detail.추가금리}%`}</Text>
       </View>
       <View style={styles.middleContainer}>
-        <Text style={{ alignSelf: 'flex-end', marginBottom:'5%', fontWeight:'bold'}}>{`가입기간 ${Deposit[type]['가입기간']}개월`}</Text>
+        <Text style={{ alignSelf: 'flex-end', marginBottom:'5%', fontWeight:'bold'}}>{`가입기간 ${detail.가입기간}개월`}</Text>
         <View style={styles.inputContainer}>
           <SelectDropdown
             data={selNations}
             onSelect={(selectedItem, index)=>{
               console.log(selectedItem, index)
+              setNtnCode(selectedItem)
             }}
             buttonTextAfterSelection={(selectedItem, index)=>{
               return selectedItem
@@ -50,13 +85,15 @@ export default function MakeDetail({route,navigation}){
             buttonStyle={styles.nationSel}
             dropdownIconPosition={'left'}
           />
-          <TextInput placeholder="금액 입력" style={styles.txtInput}/>
+          <TextInput keyboardType="number-pad" placeholder="금액 입력" style={styles.txtInput} value={show} onChangeText={i => setMoney(i.replace(/,/g,''))}/>
         </View>
         <View style={{width:'100%'}}>
+          <Text style={styles.rateCalc}>만기 예상 원금</Text>
+          <Text style={{...styles.rateCalc, marginBottom:'3%'}}>{(total).toLocaleString('en-US')} {ISO[ntnCode]}</Text>
           <Text style={styles.rateCalc}>만기 시 받는 이자 </Text>
-          <Text style={{...styles.rateCalc, marginBottom:'15%'}}>{money}</Text>
+          <Text style={{...styles.rateCalc, marginBottom:'15%'}} >{(Math.floor(detail.총금리 * Number(money)/100)).toLocaleString('eu-US')} {ISO[ntnCode]}</Text>
         </View>
-        <TouchableOpacity style={ButtonStyle.button}>
+        <TouchableOpacity style={{...ButtonStyle.button, backgroundColor:money==='0'?'grey':'#293694'}} onPress={onPress} disabled={money === "0"}>
           <Text style={{...ButtonStyle.btnFont, fontSize:RFPercentage(2.5)}}>가입</Text>
         </TouchableOpacity>
       </View> 
@@ -120,7 +157,7 @@ const styles = StyleSheet.create({
   },
   rateCalc:{
     fontWeight:'bold',
-    fontSize:RFPercentage(3.5),
+    fontSize:RFPercentage(3),
   },
 
 })

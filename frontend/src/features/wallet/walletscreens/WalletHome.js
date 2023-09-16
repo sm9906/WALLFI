@@ -23,31 +23,29 @@ export const SCREEN_HEIGHT= Dimensions.get("window").height;
 
 export default function WalletHome({navigation}) {
   const dispatch = useDispatch();
-  const {cards} = useSelector(state=>state.wallet);
-
-  
-
+  const {userId, mainAccount} = useSelector(state=>state.auth)
+  // const {cards} = useSelector(state=>state.wallet);
   // 홈에 들어올 때 마다 새로고침 하는 게 맞는데 
   // 예적금 때문에 그럴 수 없음..
 
-  // const [cards, setCards] = useState();
-  // useFocusEffect(
-  //   React.useCallback(()=>{
-  //     getData()
-  //   },[])
-  // )
+  const [cards, setCards] = useState();
+  useFocusEffect(
+    React.useCallback(()=>{
+      getData()
+    },[])
+  )
 
-  // const getData = async() => {
-  //   try {
-  //     // console.log('?')
-  //     await dispatch(getExchangeRate());
-  //     const response = await dispatch(getAccounts({userId, mainAccount}));
-  //     // console.log('계좌 조회 성공',response.payload); 
-  //     setCards(response.payload)
-  //   } catch (err) {
-  //     console.log('walletscreens/WalletLoading.js',err);
-  //   }
-  // }
+  const getData = async() => {
+    try {
+      // console.log('?')
+      await dispatch(getExchangeRate());
+      const response = await dispatch(getAccounts({userId, mainAccount}));
+      // console.log('계좌 조회 성공',response.payload); 
+      setCards(response.payload)
+    } catch (err) {
+      console.log('walletscreens/WalletLoading.js',err);
+    }
+  }
   
   return (
     <>

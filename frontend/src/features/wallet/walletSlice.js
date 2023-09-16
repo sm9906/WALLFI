@@ -27,6 +27,17 @@ const ISO = {
   'AUD': 'AU$' 
 }
 
+export const getDepositDetail = createAsyncThunk('POST_GETDEPOSIT', async(data, {rejectWithValue})=>{
+  try{
+    console.log('data')
+    const response = await axios.post('character/maxcharacter', data);
+    console.log(response)
+  }catch(err){
+    console.log(err)
+    return rejectWithValue(err);
+  }
+})
+
 
 export const makeAccount = createAsyncThunk('POST_MAKEACCOUJNT', async(data, {rejectWithValue})=>{
   try{
