@@ -4,6 +4,11 @@ import java.math.BigDecimal;
 
 public interface ProductService {
 
-     void createTimeDeposit(String userId, String 통화코드, String 상품명, String 만기일, BigDecimal 금리, long 입금금액);
+     void createLevelUpTimeDeposit(String userId,
+                            String mainAccountNum,
+                            String 통화코드,
+                            String 상품명,
+                            BigDecimal 금리,
+                            long 입금금액);
 
 }

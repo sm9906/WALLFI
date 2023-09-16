@@ -11,6 +11,8 @@ public class ProductReqDto {
 
     private String userId;
 
+    private String mainAccountNum;
+
     private Long 입금금액;
 
     private String 통화코드;
@@ -23,8 +25,8 @@ public class ProductReqDto {
 
     @JsonSetter("금리")
     public void set금리(String 금리) {
-        BigDecimal b1 = new BigDecimal(금리);
-        this.금리 = b1;
+        BigDecimal 변환금리 = new BigDecimal(금리);
+        this.금리 = 변환금리;
     }
 
 }

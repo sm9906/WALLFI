@@ -86,8 +86,8 @@ public class Account {
         account.관리점명 = "영업부";
         account.통화 = 통화;
         account.과세 = "일반과세";
-        account.잔액원화 = 0;
-        account.평가금액원화 = 0;
+        account.잔액원화 = 입금금액;
+        account.평가금액원화 = 입금금액;
 
         account.상품명 = 상품명;
         account.만기일 = 만기일;
