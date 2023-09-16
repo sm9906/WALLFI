@@ -3,6 +3,7 @@ package com.shinhan.walfi.controller;
 import com.shinhan.walfi.domain.HttpResult;
 import com.shinhan.walfi.dto.game.BattleRankResDto;
 import com.shinhan.walfi.dto.game.BattleReqDto;
+import com.shinhan.walfi.dto.product.ProductResDto;
 import com.shinhan.walfi.service.game.BattleService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -60,6 +61,15 @@ public class BattleController {
 
         HttpResult res = HttpResult.getSuccess();
         res.setData(rate);
+        return ResponseEntity.status(res.getStatus()).body(res);
+    }
+
+    @GetMapping("/count")
+    @ApiOperation(value = "유저가 졌을때 배틀 카운트")
+    public ResponseEntity<HttpResult> getBattleCount(@RequestParam String userId){
+        battleService.getBattleCount(userId);
+
+        HttpResult res = HttpResult.getSuccess();
         return ResponseEntity.status(res.getStatus()).body(res);
     }
 }
