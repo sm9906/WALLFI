@@ -279,13 +279,13 @@ public class CharacterServiceImpl implements CharacterService {
             throw new CharacterException(CharacterErrorCode.HAVE_TO_BE_PLUS);
         }
 
-        if (act.equals("밥먹기") && !statusType.equals("atk")) {
-            log.error("=== 밥먹기로 atk 상승 시키지 않았습니다 ===");
+        if (act.equals("밥먹기") && !statusType.equals("atk") && statusValue != 1) {
+            log.error("=== 밥먹기로 atk를 상승시켜야 합니다 ===");
             throw new CharacterException(CharacterErrorCode.EAT_HAVE_TO_UPDATE_ATK);
         }
 
-        if (act.equals("훈련하기") && !statusType.equals("def")) {
-            log.error("=== 훈련하기로 def를 상승 시키지 않았습니다 ===");
+        if (act.equals("훈련하기") && !statusType.equals("def") && statusValue != 1) {
+            log.error("=== 훈련하기로 def를 상승시켜야 합니다 ===");
             throw new CharacterException(CharacterErrorCode.TRAINING_HAVE_TO_UPDATE_DEF);
         }
 
