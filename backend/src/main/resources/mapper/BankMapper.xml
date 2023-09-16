@@ -80,8 +80,8 @@
 
     <select id="globalWithdrawTransferMoneyFromAccount" resultType="int" parameterType="Map">
         UPDATE account
-        SET `잔액(통화별)`     = `잔액(통화별)` + #{transferMoney},
-            `평가금액(통화별)` = `평가금액(통화별)` + #{transferMoney},
+        SET `잔액(통화별)`     = `잔액(통화별)` - #{transferMoney},
+            `평가금액(통화별)` = `평가금액(통화별)` - #{transferMoney},
             `잔액(원화)`       = @result := `잔액(원화)` - #{krwConvertedMoney},
             `평가금액(원화)`   = `평가금액(원화)` - #{krwConvertedMoney}
         WHERE `계좌번호` = #{accountNumber};
