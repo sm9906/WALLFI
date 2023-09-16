@@ -3,8 +3,8 @@ package com.shinhan.walfi.service.banking;
 import com.shinhan.walfi.domain.User;
 import com.shinhan.walfi.domain.banking.Account;
 import com.shinhan.walfi.dto.banking.ExchangeDto;
-import com.shinhan.walfi.exception.UserErrorCode;
-import com.shinhan.walfi.exception.UserException;
+import com.shinhan.walfi.exception.*;
+import com.shinhan.walfi.mapper.BankMapper;
 import com.shinhan.walfi.repository.UserRepository;
 import com.shinhan.walfi.repository.banking.AccountRepository;
 import com.shinhan.walfi.util.AccountUtil;
@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -36,19 +37,25 @@ public class ProductServiceImpl implements ProductService{
 
     private final AccountUtil accountUtil;
 
+    private final BankMapper bankMapper;
 
     /**
      * 정기적금 상품 가입
      *
      * @exception 'NO_MATCHING_USER' - 비밀번호가 틀리거나 존재하지 않는 사용자의 경우 예외 발생
+     * @exception 'CANNOT_FIND_ACCOUNT' - 세부 계좌를 찾을 수 없는 경우 예외 발생
      * @param userId
      * @param 통화코드
      * @param 상품명
-     * @param 만기일
      * @param 금리
      */
     @Override
-    public void createTimeDeposit(String userId, String 통화코드, String 상품명, String 만기일, BigDecimal 금리, long 입금금액) {
+    public void createLevelUpTimeDeposit(String userId,
+                                  String mainAccountNum,
+                                  String 통화코드,
+                                  String 상품명,
+                                  BigDecimal 금리,
+                                  long 입금금액) {
 
         User user = userRepository.find(userId);
         if (user == null) {
@@ -57,12 +64,22 @@ public class ProductServiceImpl implements ProductService{
         }
 
         // 만기일 계산
-        Date 변환된만기일;
-        try {
-            변환된만기일 = dateConversionUtil.convertStringToDate(만기일);
-        } catch (ParseException e) {
-            log.error("=== 만기일 변환시 에러 발생 ===");
-            throw new RuntimeException(e);
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.YEAR, 1);
+        Date 만기일 = calendar.getTime();
+
+        String targetAccountNum = accountRepository.find저축예금AccountNum(mainAccountNum, 통화코드);
+
+        if (targetAccountNum == null) {
+            throw new AccountException(AccountErrorCode.CANNOT_FIND_ACCOUNT);
+        }
+
+        // 잔액 확인 후 부족하면 예외 발생
+        Account targetAccount = accountRepository.findAccount(targetAccountNum);
+
+        if (targetAccount.get잔액통화별() < 입금금액) {
+            log.error("=== id: " + userId + "의 계좌 잔액이 부족합니다");
+            throw new TransferException(TransferErrorCode.OVERDRAWN);
         }
 
         List<String> accounts = accountRepository.findAccountsWithOnlyAccountNum();
@@ -71,7 +88,9 @@ public class ProductServiceImpl implements ProductService{
         // 상품 만들기
         Account productAccount = null;
         if (통화코드.equals("KRW")) {
-            productAccount = Account.createKrwProductAccount(accountNum, 상품명, 변환된만기일, 금리, 통화코드, user, 입금금액);
+            productAccount = Account.createKrwProductAccount(accountNum, 상품명, 만기일, 금리, 통화코드, user, 입금금액);
+            // 사용자가 가진 통화계좌에서 출금
+            bankMapper.withdrawTransferMoneyFromAccount(targetAccountNum, 입금금액);
         } else {
             long 원화환산금액 = 0;
             List<ExchangeDto> todayExchanges;
@@ -88,9 +107,15 @@ public class ProductServiceImpl implements ProductService{
                 }
             }
 
-            productAccount = Account.createGlobalProductAccount(accountNum, 상품명, 변환된만기일, 금리, 통화코드, user, 입금금액, 원화환산금액);
+            productAccount = Account.createGlobalProductAccount(accountNum, 상품명, 만기일, 금리, 통화코드, user, 입금금액, 원화환산금액);
+            // 사용자가 가진 통화계좌에서 출금
+            bankMapper.globalWithdrawTransferMoneyFromAccount(targetAccountNum, 입금금액, 원화환산금액);
+
         }
         accountRepository.save(productAccount);
+
+
+
 
         log.info("=== " + 상품명 + " " + 통화코드 + " " + " 생성 ===");
 

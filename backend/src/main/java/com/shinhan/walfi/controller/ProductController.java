@@ -24,19 +24,19 @@ public class ProductController {
 
     private final ProductService productService;
 
-    @PostMapping
-    @ApiOperation(value = "정기예금 생성", tags = "상품명 - levelup정기예금, 만기일형식 - 230101, 금리형식 - 0.00")
+    @PostMapping("/levelupaccount")
+    @ApiOperation(value = "levelup 정기예금 생성")
     public ResponseEntity<HttpResult> createTimeDeposit(@RequestBody ProductReqDto productReqDto){
 
         String userId = productReqDto.getUserId();
+        String mainAccountNum = productReqDto.getMainAccountNum();
         long 입금금액 = productReqDto.get입금금액();
         String 통화코드 = productReqDto.get통화코드();
         String 상품명 = productReqDto.get상품명();
-        String 만기일 = productReqDto.get만기일();
         BigDecimal 금리 = productReqDto.get금리();
 
         System.out.println("금리 = " + 금리);
-        productService.createTimeDeposit(userId, 통화코드, 상품명, 만기일, 금리, 입금금액);
+        productService.createLevelUpTimeDeposit(userId, mainAccountNum, 통화코드, 상품명, 금리, 입금금액);
 
         HttpResult res;
         res = HttpResult.getSuccess();
