@@ -7,6 +7,8 @@ import com.shinhan.walfi.domain.game.UserGameInfo;
 import com.shinhan.walfi.dto.game.BattleRankResDto;
 import com.shinhan.walfi.dto.game.BattleReqDto;
 import com.shinhan.walfi.dto.product.ProductResDto;
+import com.shinhan.walfi.exception.BattleErrorCode;
+import com.shinhan.walfi.exception.BattleException;
 import com.shinhan.walfi.exception.BranchErrorCode;
 import com.shinhan.walfi.exception.BranchException;
 import com.shinhan.walfi.mapper.BattleMapper;
@@ -167,5 +169,24 @@ public class BattleServiceImpl implements BattleService{
         int defaultCount = userGameInfo.getBattleCount();
         userGameInfo.setBattleCount(defaultCount + 1);
         userGameInfoRepository.save(userGameInfo);
+    }
+
+    @Override
+    public ProductResDto getUserBattleHistoryCount(String userId) {
+        UserGameInfo userGameInfo = userGameInfoRepository.findById(userId);
+
+        int battleCount = userGameInfo.getBattleCount();
+
+        if (battleCount <= 50) {
+            throw new BattleException(BattleErrorCode.NOT_ENOUGH_BATTLE);
+        }
+
+        return ProductResDto.builder()
+                .상품명("월피배틀정기예금")
+                .기본금리("4.0")
+                .추가금리("0.0")
+                .총금리("4.0")
+                .가입기간("12")
+                .build();
     }
 }

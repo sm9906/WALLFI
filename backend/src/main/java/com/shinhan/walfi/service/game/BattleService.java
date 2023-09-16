@@ -17,4 +17,6 @@ public interface BattleService {
     double getRate(String userId);
 
     void getBattleCount(String userId);
+
+    ProductResDto getUserBattleHistoryCount(String userId);
 }
