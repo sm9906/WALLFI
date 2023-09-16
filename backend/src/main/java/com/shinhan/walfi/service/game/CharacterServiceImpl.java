@@ -397,15 +397,22 @@ public class CharacterServiceImpl implements CharacterService {
 
         int maxLevelCharacterNum = characterRepository.findMaxLevelCharacterNum(userGameInfo);
 
-        double 금리 = maxLevelCharacterNum * 0.1 + 3.7;
+        double 추가금리 = maxLevelCharacterNum * 0.1;
+        double 총금리 = 추가금리 + 3.7;
 
-        BigDecimal 변환금리 = new BigDecimal(금리);
+        BigDecimal 변환총금리 = new BigDecimal(총금리);
+        BigDecimal 변환추가금리 = new BigDecimal(추가금리);
+
 
         // 소수점 두 번째 자리까지 반올림
-        변환금리 = 변환금리.setScale(2, RoundingMode.DOWN);
+        변환총금리 = 변환총금리.setScale(2, RoundingMode.DOWN);
+        변환추가금리 = 변환추가금리.setScale(2, RoundingMode.DOWN);
 
         MaxCharacterNumResDto maxCharacterNumResDto = MaxCharacterNumResDto.builder()
-                .금리(String.valueOf(변환금리))
+                .총금리(String.valueOf(변환총금리))
+                .추가금리(String.valueOf(변환추가금리))
+                .가입기간("12")
+                .기본금리("3.7")
                 .상품명("levelup정기예금")
                 .maxCharacterNum(maxLevelCharacterNum)
                 .build();
