@@ -73,5 +73,15 @@ public class BattleController {
         return ResponseEntity.status(res.getStatus()).body(res);
     }
 
+    @PostMapping("/getbattlecount")
+    @ApiOperation(value = "유저가 배틀을 몇 번 수행했는지 확인")
+    public ResponseEntity<HttpResult> getUserBattleHistoryCount(@RequestParam String userId){
+        ProductResDto productResDto = battleService.getUserBattleHistoryCount(userId);
+
+        HttpResult res = HttpResult.getSuccess();
+        res.setData(productResDto);
+        return ResponseEntity.status(res.getStatus()).body(res);
+    }
+
 
 }
