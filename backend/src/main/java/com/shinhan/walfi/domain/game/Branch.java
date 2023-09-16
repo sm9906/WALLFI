@@ -1,5 +1,6 @@
 package com.shinhan.walfi.domain.game;
 
+import com.shinhan.walfi.domain.banking.BranchCurrency;
 import com.shinhan.walfi.domain.enums.CharacterType;
 import com.shinhan.walfi.domain.enums.LevelUp;
 import com.shinhan.walfi.dto.game.BranchResDto;
@@ -57,6 +58,9 @@ public class Branch {
 
     @OneToMany(mappedBy = "branch")
     private List<BattleHistory> battleHistories = new ArrayList<>();
+
+    @OneToMany(mappedBy = "branch")
+    private List<BranchCurrency> branchCurrencies = new ArrayList<>();
 
     public void setManagerLevel(LevelUp managerLevel) {
         this.managerLevel = managerLevel;

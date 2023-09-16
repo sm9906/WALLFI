@@ -1,8 +1,10 @@
 package com.shinhan.walfi.repository.game;
 
+import com.shinhan.walfi.domain.enums.LevelUp;
 import com.shinhan.walfi.domain.game.GameCharacter;
 import com.shinhan.walfi.domain.game.UserGameInfo;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.ILoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -33,6 +35,18 @@ public class CharacterRepository {
                 .getSingleResult();
 
         return result;
+    }
+
+    public int findMaxLevelCharacterNum(UserGameInfo userGameInfo) {
+        LevelUp maxLevel = LevelUp.LEVEL_10;
+        Long maxLevelCharacterNum = em.createQuery("select count(*) from GameCharacter g " +
+                        "where g.userGameInfo=:userGameInfo " +
+                        "and g.level=:maxLevel", Long.class)
+                .setParameter("userGameInfo", userGameInfo)
+                .setParameter("maxLevel", maxLevel)
+                .getSingleResult();
+
+        return maxLevelCharacterNum.intValue();
     }
 
 }
