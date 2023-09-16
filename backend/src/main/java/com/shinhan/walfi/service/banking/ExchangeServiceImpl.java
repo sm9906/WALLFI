@@ -79,6 +79,9 @@ public class ExchangeServiceImpl implements ExchangeService {
     @Override
     public void toGlobalExchange(String userId, String 사용자대표계좌, String 도착계좌통화코드, long 금액, float 전신환매도환율) {
 
+
+        // TODO: 저축예금에서만 빠져나가도록 해야함
+
         // 도착계좌의 통화코드가 원화면 안됨
         if (도착계좌통화코드.equals("KRW")) {
             throw new TransferException(TransferErrorCode.NOT_FOR_BUY);
