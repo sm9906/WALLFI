@@ -90,10 +90,36 @@ export const updateCharacter = createAsyncThunk('UPDATE_CHARACTER', async(data, 
 export const updatePoint = createAsyncThunk('UPDATE_POINT', async(data, { rejectWithValue }) => {
   try {
     console.log('홈슬라이스/updatePoint 데이터 전달 확인', data)
-    await axios.put('game/pointup', data).then(res => console.log('포인트', res));
+    await axios.post('game/pointup', data)
     return data;
   } catch (e) {
     console.log('홈슬라이스/updatepoint 실패', e);
+    return rejectWithValue(e.res);
+  }
+})
+
+// 캐릭터 색 수정
+export const changeColor = createAsyncThunk('CHANGE_COLOR', async(data, { rejectWithValue }) => {
+  try {
+    console.log('홈슬라이스/changeColor 데이터 전달 확인', data);
+    const res = await axios.put('character/change/color', data);
+    const color = res.data.data.characterDto;
+    const changeCharacterColor = {
+      characterIdx: color.characterIdx,
+      characterType: color.characterType,
+      color: color.color,
+      level: color.level,
+      exp: color.exp,
+      hp: color.hp,
+      atk: color.atk,
+      def: color.def,
+      main: color.main
+    }
+
+    return changeCharacterColor;
+
+  } catch(e) {
+    console.log('홈슬라이스/changeColor 실패', e.res);
     return rejectWithValue(e.res);
   }
 })
@@ -134,7 +160,6 @@ const initialState = {
   mainCharacter: null,
   characters: null,
   userGameInfo: null,
-  randomCharacter: null,
 }
 
 
@@ -157,13 +182,16 @@ export const homeSlice = createSlice({
       state.userGameInfo = action.payload;
     })
     .addCase(getRandomCharacter.fulfilled, (state, action) => {
-      state.randomCharacter = action.payload;
+      console.log('캐릭터 랜덤 뽑기 성공!', action.payload)
     })
     .addCase(updateCharacter.fulfilled, (state, action)=>{
-      console.log('캐릭터 변경 성공', action.payload)
+      console.log('캐릭터 변경 성공!', action.payload)
     })
     .addCase(updatePoint.fulfilled, (state, action) => {
       console.log('포인트 변경 성공!', action.payload)
+    })
+    .addCase(changeColor.fulfilled, (state, action) => {
+      console.log('캐릭터 색 변경 성공!', action.payload);
     })
   }
 })

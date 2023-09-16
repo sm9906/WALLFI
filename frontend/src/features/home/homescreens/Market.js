@@ -14,7 +14,7 @@ import { images } from '../../../common/imgDict.js'
 import { globalStyles } from "../homestyles/global.js";
 import GameHeader from '../homecomponents/GameHeader.js';
 import { useDispatch, useSelector } from 'react-redux';
-import { getRandomCharacter, updatePoint } from '../homeSlice.js';
+import { changeColor, getRandomCharacter, updatePoint } from '../homeSlice.js';
 
 const typeList = {
     EAGLE: '독수리',
@@ -32,6 +32,7 @@ export default function Market({navigation}) {
     const [modalVisible2, setModalVisible2] = useState(false);
     const [modalVisible3, setModalVisible3] = useState(false);
     const [selectedCharacter, setSelectedCharacter] = useState('');
+    const [selectedColor, setSelectedColor] = useState('');
     
     return (
         <View style={globalStyles.container}>
@@ -68,7 +69,12 @@ export default function Market({navigation}) {
                         Alert.alert('Modal has been closed.');
                         setModalVisible3(!modalVisible3);
                 }}>
-                    <Color modalVisible3={modalVisible3} setModalVisible3={setModalVisible3}/>
+                    <Color 
+                        modalVisible3={modalVisible3} 
+                        setModalVisible3={setModalVisible3}
+                        selectedColor={selectedColor}
+                        setSelectedColor={setSelectedColor}
+                    />
                 </Modal>
                 <GameHeader />
                 <MarketHeader navigation={navigation}/>
@@ -97,6 +103,8 @@ export default function Market({navigation}) {
                     setModalVisible3={setModalVisible3}
                     selectedCharacter={selectedCharacter}
                     setSelectedCharacter={setSelectedCharacter}
+                    selectedColor={selectedColor}
+                    setSelectedColor={setSelectedColor}
                 />
             </ImageBackground>
             <StatusBar />
@@ -119,6 +127,7 @@ function MarketHeader(props) {
 function RenderContent(props) {
 
     const userId = useSelector(state=>state.auth.userId);
+    const mainCharacter = useSelector(state=>state.home.mainCharacter);
     const userInfo = useSelector(state=>state.home.userGameInfo);
     const dispatch = useDispatch();
 
@@ -132,19 +141,46 @@ function RenderContent(props) {
                     [
                       {text:'확인', onPress: ()=> {}, style:'default'}
                     ]
-                  );
+                );
             } else {
-                console.log('들어왔다');
+                console.log('알 1개 뽑기 들어왔다');
                 dispatch(updatePoint({point: -1000, userId: userId})).then(res => console.log(res))
                 dispatch(getRandomCharacter(userId))
                 .then((response) => {
-                    console.log('랜덤 캐릭터 뽑기 성공', response);
+                    console.log('랜덤 캐릭터 1개 뽑기 성공', response);
                     props.setSelectedCharacter(response.payload);
                     props.setModalVisible1(true);
                 });
             }
         } catch (err) {
-            console.log('market', err);
+            console.log('randomCharacter', err);
+        }
+    }
+
+    const randomColor = async () => {
+        try {
+
+            if (userInfo.point < 3000) {
+                Alert.alert(
+                    '경고',
+                    '포인트가 부족합니다!',
+                    [
+                      {text:'확인', onPress: ()=> {}, style:'default'}
+                    ]
+                );
+            } else {
+                console.log('색 바꾸기 들어왔다');
+                dispatch(updatePoint({point: -3000, userId: userId})).then(res => console.log(res))
+                dispatch(changeColor({mainCharacterIdx: mainCharacter.characterIdx, userId: userId}))
+                .then((response) => {
+                    console.log('랜덤 색 뽑기 성공', response);
+                    props.setSelectedColor(response.payload);
+                    props.setModalVisible3(true);
+                });
+            }
+
+        } catch (err) {
+            console.log('color', err)
         }
     }
 
@@ -159,9 +195,7 @@ function RenderContent(props) {
                     <Text style={{ fontSize: 16, fontWeight: 'bold' }}>🥚 X 1</Text>
                     <TouchableOpacity 
                         style={styles.puchaseBtn} 
-                        onPress={() => {
-                            randomCharacter()
-                    }}>
+                        onPress={() => {randomCharacter()}}>
                         <Image source={images.gameIcon.coin} style={styles.coinIcon}/>
                         <Text style={styles.coinText}>1,000</Text>
                     </TouchableOpacity>
@@ -193,7 +227,7 @@ function RenderContent(props) {
                     <Text style={{ fontSize: 16, fontWeight: 'bold' }}>🎨 X 1</Text>
                     <TouchableOpacity 
                         style={styles.puchaseBtn}
-                        onPress={() => {props.setModalVisible3(true)}
+                        onPress={() => {randomColor()}
                     }>
                         <Image source={images.gameIcon.coin} style={styles.coinIcon}/>
                         <Text style={styles.coinText}>3,000</Text>
@@ -320,6 +354,16 @@ function TenEgg(props) {
 }
 
 function Color(props) {
+    console.log('색뽑기 모달창 들어왔다', props.selectedColor);
+    const type = props.selectedColor.characterType;
+    const color = props.selectedColor.color;
+
+    const colorList = {
+        MINT: '민트',
+        WHITE: '하얀',
+        BASIC: '기본',
+        LEGEND: '레전드'
+    }
 
     return(
         <View style={styles.modalStyle}>
@@ -330,7 +374,9 @@ function Color(props) {
                     backgroundColor: 'white',
                     borderRadius: 15
                 }}>
-
+                    <Image source={images.defaultCharacter[type][color]} 
+                        style={{ width: '100%', height: '100%' }}
+                    />
                 </View>
             </View>
             <Text style={{ 
@@ -338,7 +384,7 @@ function Color(props) {
                 fontSize: 20,
                 fontWeight: 'bold'
             }}>
-                {}색이 적용되었습니다!
+                {colorList[color]}색이 적용되었습니다!
             </Text>
             <TouchableOpacity
                 style={styles.okBtn}
