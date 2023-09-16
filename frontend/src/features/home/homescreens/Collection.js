@@ -53,7 +53,7 @@ export default function Collection({navigation}) {
     <TouchableOpacity
       style={{
         backgroundColor: 'rgba(255, 255, 255, 0.7)',
-        flex: 1,
+        flex: 0.5,
         marginHorizontal: '5%',
         marginVertical: '5%',
         borderRadius: 20,
@@ -87,7 +87,7 @@ export default function Collection({navigation}) {
             selectedCharacter={selectedCharacter} 
             setSelectedCharacter={setSelectedCharacter}
             userId = {userId}
-            />
+          />
         </Modal>
         <CollectionHeader navigation={navigation}/>
         <View style={{ flex: 6.5, width: '100%' }}>
