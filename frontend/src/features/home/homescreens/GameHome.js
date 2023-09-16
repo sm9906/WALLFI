@@ -20,13 +20,14 @@ import { globalStyles } from '../homestyles/global.js';
 import { images } from '../../../common/imgDict.js';
 import GameHeader from '../homecomponents/GameHeader.js';
 import { RFPercentage } from 'react-native-responsive-fontsize';
-
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../homecomponents/ScreenSize.js';
 
 // 상태바 겹침현상을 없애려면 react-native에서 StatusBar를 import 해줘야함
 
 export default function GameHome({ navigation }) {
   const dispatch = useDispatch(); 
-  // const [mainCharacter, setMainCharacter] = useState(''); 
+  // const [mainCharacter, setMainCharacter] = useState('');
+  // 이거 뒤로가기 버튼? 훅으로 따로 뺄거임  
   React.useEffect(() =>
     navigation.addListener('beforeRemove', (e) => {
       if(e.data.action.type==='GO_BACK'){
@@ -202,9 +203,10 @@ function Content(props) {
         </TouchableOpacity>
       </View>
       <View style={styles.main}>
-        <Image source={imageUrl}
+        {nowAct!=='밥먹기'&&nowAct!=='훈련하기'&&<Image source={imageUrl}
           style={{ width: '100%', height: '50%', resizeMode: 'contain' }}
-        />
+        />}
+        {nowAct==='밥먹기'&&<Image source={images.eatCharacter[type]} style={actStyles.eating}/>}
         <Text style={{
           color: '#3B3B3B',
           fontWeight: 'bold',
@@ -263,6 +265,18 @@ function Bottom(props) {
   )
 }
 
+const actStyles = StyleSheet.create({
+  eating:{
+    resizeMode: 'contain',
+    // width:SCREEN_WIDTH*0.8,
+    // height:SCREEN_HEIGHT*0.6,
+    marginLeft:'8%',
+    width: SCREEN_WIDTH*0.9,
+    height: '50%',
+    // backgroundColor:'red',
+    // marginBottom: SCREEN_HEIGHT*0.01
+  }
+})
 
 const styles = StyleSheet.create({
   season: {

@@ -43,6 +43,12 @@ const BattleFinish = () => {
   return (
     <View style={styles.battleFinish}>
       <Text style={styles.battleResult}>{battleResult}</Text>
+      {battleResult === "승리" && (
+      <View style={styles.rewardContainer}>
+        <Text style={styles.rewardText}>exp +50</Text>
+        <Text style={styles.rewardText}>point +50</Text>
+      </View>
+    )}
       <TouchableOpacity style={styles.button} onPress={handleGoToMap}>
         <Text style={styles.buttonText}>홈으로 이동</Text>
         {/* 나중에 이미지로 대체 */}
@@ -82,6 +88,20 @@ const styles = StyleSheet.create({
     color: "#1a1a1a",
     fontWeight: "bold",
     fontSize: 18,
+  },
+  rewardContainer: {
+    marginTop: 20,
+    marginBottom: 20,
+    alignItems: "center",
+  },
+  rewardText: {
+    color: "#ffd700",
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 10,
+    textShadowColor: "rgba(0, 0, 0, 0.75)",
+    textShadowOffset: { width: -1, height: 1 },
+    textShadowRadius: 10,
   },
 });
 
