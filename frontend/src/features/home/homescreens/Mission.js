@@ -22,7 +22,7 @@ import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../homecomponents/ScreenSize.js";
 export default function Mission({ navigation }) {
   [quests, setQuest] = useState([
     { count: 0, status: 1, title: "이체하기", total: 2, type: "Daily" },
-    { count: 0, status: 1, title: "환전조회", total: 1, type: "Daily" },
+    { count: 0, status: 2, title: "환전조회", total: 1, type: "Daily" },
     { count: 0, status: 1, title: "먹이주기", total: 3, type: "Daily" },
     { count: 0, status: 0, title: "운동하기", total: 3, type: "Daily" },
     { count: 0, status: 0, title: "이체하기", total: 2, type: "Daily" },
@@ -79,8 +79,24 @@ function MissionHeader(props) {
   );
 }
 
+function determineButtonColor(status) {
+  let color;
+  switch (status) {
+    case 0:
+      color = "#FFE8BA";
+      break;
+    case 1:
+      color = "#E5FFD4";
+      break;
+    case 2:
+      color = "#ced4da";
+      break;
+  }
+
+  return color;
+}
+
 function getQuestReward(status) {
-  
   if (status) {
     console.log(status);
   } else {
@@ -100,14 +116,14 @@ function MenuBar(props) {
                   <Text style={{ fontSize: 20, fontWeight: "bold" }}>{quest.title}</Text>
                 </View>
                 <View style={styles.questStatusArea}>
-                  {/* <Text>{quest.status}</Text> */}
-                  {/* <Button title={quest.status ? "완료" : "진행중"} onPress={getQuestReward.bind(this, quest.status)}/>  */}
-
-                  <TouchableOpacity onPress={getQuestReward.bind(this, quest.status)}>
+                  <TouchableOpacity
+                    onPress={getQuestReward.bind(this, quest.status)}
+                    disabled={quest.status == 2 ? true : false}
+                  >
                     <View
                       style={[
                         { width: 60, height: 42 },
-                        { backgroundColor: quest.status ? "#E5FFD4" : "#FFE8BA" },
+                        { backgroundColor: determineButtonColor(quest.status) },
                         { alignItems: "center", justifyContent: "center" },
                         { borderRadius: 10 },
                       ]}
