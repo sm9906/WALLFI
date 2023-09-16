@@ -1,6 +1,7 @@
 package com.shinhan.walfi.service.banking;
 
 import com.shinhan.walfi.domain.User;
+import com.shinhan.walfi.domain.banking.Account;
 import com.shinhan.walfi.dto.banking.ExchangeDto;
 import com.shinhan.walfi.dto.banking.ExchangeResDto;
 import com.shinhan.walfi.exception.TransferErrorCode;
@@ -12,15 +13,17 @@ import com.shinhan.walfi.repository.UserRepository;
 import com.shinhan.walfi.repository.banking.AccountRepository;
 import com.shinhan.walfi.util.ExchangeUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Slf4j
 @Service
-@RequiredArgsConstructor
 @Transactional
+@RequiredArgsConstructor
 public class ExchangeServiceImpl implements ExchangeService {
 
     private final ExchangeUtil util;
@@ -28,6 +31,8 @@ public class ExchangeServiceImpl implements ExchangeService {
     private final BankMapper bankMapper;
 
     private final UserRepository userRepository;
+
+    private final AccountRepository accountRepository;
 
     @Override
     public ExchangeResDto getTodayExchange() throws ParseException {
@@ -61,6 +66,7 @@ public class ExchangeServiceImpl implements ExchangeService {
      * @exception 'NOT_USERS_MAIN_ACCOUNT' - 사용자의 대표 계좌와 일치하지 않을 경우 예외 발생
      * @exception 'NOT_FOUND_KRW_ACCOUNT' - 원화 계좌가 존재하지 않을 때 예외 발생
      * @exception 'NOT_FOUND_GLOBAL_ACCOUNT' - 외화 계좌가 존재하지 않을 때 예외 발생
+     * @exception 'OVERDRAWN' - 원화 계좌 잔액 부족
      * @param userId
      * @param 사용자대표계좌
      * @param 통화코드
@@ -72,27 +78,39 @@ public class ExchangeServiceImpl implements ExchangeService {
         User user = userRepository.find(userId);
 
         if (user == null) {
+            log.error("=== 틀린 비밀번호이거나 존재하지 않는 회원 ===");
             throw new UserException(UserErrorCode.NO_MATCHING_USER);
         }
 
         if (!user.get대표계좌().equals(사용자대표계좌)) {
+            log.error("=== 대표계좌: " + 사용자대표계좌 + "는 id: " + userId + "의 계좌가 아님 ===");
             throw new TransferException(TransferErrorCode.NOT_USERS_MAIN_ACCOUNT);
         }
 
-        String krwAccount = bankMapper.findSubAccountNumberByCurrencyCode(사용자대표계좌, "KRW");
-        String globalAccount = bankMapper.findSubAccountNumberByCurrencyCode(사용자대표계좌, 통화코드);
+        String krwAccountNum = bankMapper.findSubAccountNumberByCurrencyCode(사용자대표계좌, "KRW");
+        String globalAccountNum = bankMapper.findSubAccountNumberByCurrencyCode(사용자대표계좌, 통화코드);
 
-        if (krwAccount == null) {
+        if (krwAccountNum == null) {
+            log.error("=== id: " + userId + "에게는 KRW 계좌가 존재하지 않음");
             throw new TransferException(TransferErrorCode.NOT_FOUND_KRW_ACCOUNT);
         }
-        if (globalAccount == null) {
+        if (globalAccountNum == null) {
+            log.error("=== id: " + userId + "에게는 " + 통화코드 + " 계좌가 존재하지 않음");
             throw new TransferException(TransferErrorCode.NOT_FOUND_GLOBAL_ACCOUNT);
         }
 
         long kwrConvertPrice = (long) Math.ceil(전신환매도환율 * 금액);
+        Account krwAccount = accountRepository.findAccount(krwAccountNum);
 
-        bankMapper.withdrawTransferMoneyFromAccount(krwAccount, kwrConvertPrice);
-        bankMapper.depositTransferMoneyFromAccount(globalAccount, 금액);
+        if (krwAccount.get잔액원화() < kwrConvertPrice) {
+            log.error("=== id: " + userId + "의 원화 계좌 잔액이 부족합니다");
+            throw new TransferException(TransferErrorCode.OVERDRAWN);
+        }
+
+        bankMapper.withdrawTransferMoneyFromAccount(krwAccountNum, kwrConvertPrice);
+        bankMapper.globalDepositTransferMoneyFromAccount(globalAccountNum, 금액, kwrConvertPrice);
+
+        log.info("=== id: " + userId + "의 요처에 따라 " + 금액 + 통화코드 + " 환전 완료 ===" );
 
     }
 

@@ -3,6 +3,7 @@ package com.shinhan.walfi.controller;
 import com.shinhan.walfi.domain.HttpResult;
 import com.shinhan.walfi.dto.transfer.TransferDTO;
 import com.shinhan.walfi.service.banking.BankService;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,7 @@ public class BankController {
     private final BankService bankService;
 
     @PostMapping("/transfer")
+    @ApiOperation(value = "계좌 간 송금")
     public ResponseEntity<HttpResult> localTransfer(@RequestBody TransferDTO transferDTO) {
 
         String currencyCode = transferDTO.get통화코드();
