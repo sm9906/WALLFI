@@ -1,5 +1,6 @@
 package com.shinhan.walfi.service.game;
 
+import com.shinhan.walfi.domain.User;
 import com.shinhan.walfi.domain.game.UserGameInfo;
 import com.shinhan.walfi.dto.game.UserGameInfoDto;
 import com.shinhan.walfi.exception.UserException;
@@ -31,10 +32,13 @@ class UserGameInfoServiceImplTest {
 
     @BeforeEach
     void before() {
+        User user = new User();
+        user.setUserId(userId);
+        em.persist(user);
+
         UserGameInfo userGameInfo = new UserGameInfo();
         userGameInfo.setUserId(userId);
         userGameInfo.setPoint(defaultPoint);
-
         em.persist(userGameInfo);
     }
 

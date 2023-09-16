@@ -3,33 +3,44 @@ package com.shinhan.walfi.controller;
 import com.shinhan.walfi.domain.HttpResult;
 import com.shinhan.walfi.dto.banking.AccountReqDto;
 import com.shinhan.walfi.dto.banking.AccountResDto;
+import com.shinhan.walfi.dto.banking.ProductReqDto;
 import com.shinhan.walfi.service.banking.AccountService;
+import com.shinhan.walfi.service.banking.ProductService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
+import java.util.SimpleTimeZone;
+
 @RestController
-@RequestMapping("/product")
 @RequiredArgsConstructor
+@RequestMapping("/product")
 public class ProductController {
 
-    private final AccountService accountService;
+    private final ProductService productService;
 
-    @PostMapping
+    @PostMapping("/create")
     @ApiOperation(value = "정기예금 생성")
-    public ResponseEntity<HttpResult> createTimeDeposit( ){
+    public ResponseEntity<HttpResult> createTimeDeposit(@RequestBody ProductReqDto productReqDto){
 
-//        AccountResDto accountResDto = accountService.getAccounts(accountReqDto.getUserId(), accountReqDto.getUserMainAccount());
-//
-//        HttpResult res;
-//
-//        res = HttpResult.getSuccess();
-//        res.setData(accountResDto);
-//
-//        return ResponseEntity.status(res.getStatus()).body(res);
-        return null;
+        String userId = productReqDto.getUserId();
+        String mainAccountNum = productReqDto.getMainAccountNum();
+        long 입금금액 = productReqDto.get입금금액();
+        String 통화코드 = productReqDto.get통화코드();
+        String 상품명 = productReqDto.get상품명();
+        BigDecimal 금리 = productReqDto.get금리();
+
+        System.out.println("금리 = " + 금리);
+        productService.createLevelUpTimeDeposit(userId, mainAccountNum, 통화코드, 상품명, 금리, 입금금액);
+
+        HttpResult res;
+        res = HttpResult.getSuccess();
+
+        return ResponseEntity.status(res.getStatus()).body(res);
     }
 }

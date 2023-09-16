@@ -57,13 +57,13 @@ public class ExchangeServiceImpl implements ExchangeService {
     }
 
     /**
-     * 원화 -> 외화로의 환전
-     *
-     * < 로직 >
-     * 1. 사용자 원화 계좌 조회
-     * 2. 사용자 통화코드 계좌 조회
-     * 3. 원화 계좌에서 금액 * 전신환매도환율 만큼 차감
-     * 4. 외화 계좌로 금액 만큼 입금
+     * 원화 -> 외화로의 환전 <p>
+     * <p>
+     * < 로직 > <p>
+     * 1. 사용자 원화 계좌 조회 <p>
+     * 2. 사용자 통화코드 계좌 조회 <p>
+     * 3. 원화 계좌에서 금액 * 전신환매도환율 만큼 차감 <p>
+     * 4. 외화 계좌로 금액 만큼 입금 <p>
      *
      * @exception 'NO_MATCHING_USER' - 사용자를 찾을 수 없을 때 예외 발생
      * @exception 'NOT_USERS_MAIN_ACCOUNT' - 사용자의 대표 계좌와 일치하지 않을 경우 예외 발생
@@ -78,6 +78,9 @@ public class ExchangeServiceImpl implements ExchangeService {
      */
     @Override
     public void toGlobalExchange(String userId, String 사용자대표계좌, String 도착계좌통화코드, long 금액, float 전신환매도환율) {
+
+
+        // TODO: 저축예금에서만 빠져나가도록 해야함
 
         // 도착계좌의 통화코드가 원화면 안됨
         if (도착계좌통화코드.equals("KRW")) {
@@ -129,13 +132,13 @@ public class ExchangeServiceImpl implements ExchangeService {
     }
 
     /**
-     * 외화 -> 원화로의 환전
-     *
-     * < 로직 >
-     * 1. 사용자 원화 계좌 조회
-     * 2. 사용자 통화코드 계좌 조회
-     * 3. 원화 계좌에서 금액 * 전신환매도환율 만큼 차감
-     * 4. 외화 계좌로 금액 만큼 입금
+     * 외화 -> 원화로의 환전 <p>
+     * <p>
+     * < 로직 > <p>
+     * 1. 사용자 원화 계좌 조회 <p>
+     * 2. 사용자 통화코드 계좌 조회 <p>
+     * 3. 원화 계좌에서 금액 * 전신환매도환율 만큼 입금 <p>
+     * 4. 외화 계좌로 금액 만큼 차감 <p>
      *
      * @exception - 'NOT_FOR_SELL' - 출발 계좌 통화 코드가 KRW 일 때 예외 발생
      * @exception 'NO_MATCHING_USER' - 사용자를 찾을 수 없을 때 예외 발생
@@ -194,6 +197,7 @@ public class ExchangeServiceImpl implements ExchangeService {
         }
 
         long kwrConvertPrice = (long) Math.ceil(전신환매입환율 * 금액);
+        System.out.println("kwrConvertPrice = " + kwrConvertPrice);
         bankMapper.globalWithdrawTransferMoneyFromAccount(globalAccountNum, 금액, kwrConvertPrice);
         bankMapper.depositTransferMoneyFromAccount(krwAccountNum, kwrConvertPrice);
 

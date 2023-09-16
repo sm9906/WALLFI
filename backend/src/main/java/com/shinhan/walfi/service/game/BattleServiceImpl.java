@@ -6,6 +6,9 @@ import com.shinhan.walfi.domain.game.GameCharacter;
 import com.shinhan.walfi.domain.game.UserGameInfo;
 import com.shinhan.walfi.dto.game.BattleRankResDto;
 import com.shinhan.walfi.dto.game.BattleReqDto;
+import com.shinhan.walfi.dto.product.ProductResDto;
+import com.shinhan.walfi.exception.BattleErrorCode;
+import com.shinhan.walfi.exception.BattleException;
 import com.shinhan.walfi.exception.BranchErrorCode;
 import com.shinhan.walfi.exception.BranchException;
 import com.shinhan.walfi.mapper.BattleMapper;
@@ -111,6 +114,12 @@ public class BattleServiceImpl implements BattleService{
 
             log.info("=== 유저: " + battleReqDto.getUserId() + " 의 " + branch.getBranchName() + "지점에서의 전투 기록 ===");
         }
+
+        String userId = battleReqDto.getUserId();
+        UserGameInfo userGameInfo = userGameInfoRepository.findById(userId);
+        int defaultCount = userGameInfo.getBattleCount();
+        userGameInfo.setBattleCount(defaultCount + 1);
+        userGameInfoRepository.save(userGameInfo);
     }
 
     /**
@@ -134,5 +143,50 @@ public class BattleServiceImpl implements BattleService{
 
         log.info("=== 지점 조회 ===");
         return rankList;
+    }
+
+    @Override
+    public List<BattleRankResDto> getAllRank() {
+        List<BattleRankResDto> rankList = battleMapper.getAllRank();
+        return rankList;
+    }
+
+    @Override
+    public double getRate(String userId) {
+        int toptenCnt = battleMapper.cntTop(userId);
+        if(toptenCnt == 0){
+            return 0;
+        } else{
+            double rate = battleMapper.getRate(userId);
+            return rate;
+        }
+    }
+
+    @Override
+    @Transactional
+    public void getBattleCount(String userId) {
+        UserGameInfo userGameInfo = userGameInfoRepository.findById(userId);
+        int defaultCount = userGameInfo.getBattleCount();
+        userGameInfo.setBattleCount(defaultCount + 1);
+        userGameInfoRepository.save(userGameInfo);
+    }
+
+    @Override
+    public ProductResDto getUserBattleHistoryCount(String userId) {
+        UserGameInfo userGameInfo = userGameInfoRepository.findById(userId);
+
+        int battleCount = userGameInfo.getBattleCount();
+
+        if (battleCount <= 50) {
+            throw new BattleException(BattleErrorCode.NOT_ENOUGH_BATTLE);
+        }
+
+        return ProductResDto.builder()
+                .상품명("월피배틀정기예금")
+                .기본금리("4.0")
+                .추가금리("0.0")
+                .총금리("4.0")
+                .가입기간("12")
+                .build();
     }
 }

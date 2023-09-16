@@ -3,7 +3,6 @@ package com.shinhan.walfi.dto.banking;
 import lombok.Builder;
 import lombok.Getter;
 
-import javax.persistence.Column;
 import javax.persistence.Id;
 import java.math.BigDecimal;
 import java.util.Date;

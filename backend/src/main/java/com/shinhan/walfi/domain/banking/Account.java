@@ -2,6 +2,7 @@ package com.shinhan.walfi.domain.banking;
 
 import com.shinhan.walfi.domain.User;
 import lombok.AccessLevel;
+import lombok.Generated;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -37,7 +38,7 @@ public class Account {
 
     private String 관리점명;
 
-    @Column(name = "`금리(수익률)`")
+    @Column(name = "`금리(수익률)`", precision = 4, scale = 2)
     private BigDecimal 금리수익률;
 
     private String 통화;
@@ -68,29 +69,33 @@ public class Account {
     @OneToMany(mappedBy = "account")
     private List<GlobalAccountTransaction> globalAccountTransactions = new ArrayList<>();
 
-    public static Account createProductAccount(String 계좌번호,
+    public static Account createKrwProductAccount(
+                              String 계좌번호,
                               String 상품명,
                               Date 만기일,
                               BigDecimal 금리수익률,
                               String 통화,
                               User user,
-                              byte 자동해지여부) {
+                              long 입금금액) {
 
         Account account = new Account();
+
+        account.계좌번호 = 계좌번호;
+
         account.구분 = "예적금";
-        account.잔액통화별 = 0;
-        account.평가금액통화별 = 0;
         account.관리점명 = "영업부";
         account.통화 = 통화;
         account.과세 = "일반과세";
-        account.잔액원화 = 0;
-        account.평가금액원화 = 0;
+        account.잔액원화 = 입금금액;
+        account.평가금액원화 = 입금금액;
 
-        account.계좌번호 = 계좌번호;
         account.상품명 = 상품명;
         account.만기일 = 만기일;
         account.금리수익률 = 금리수익률;
-        account.자동해지여부 = 자동해지여부;
+        account.자동해지여부 = 0;
+
+        account.잔액통화별 = 입금금액;
+        account.평가금액통화별 = 입금금액;
 
         Date now = new Date();
         account.신규일 = now;
@@ -102,10 +107,51 @@ public class Account {
 
     }
 
-    public static Account createBasicAccount(String 계좌번호,
-                                               String 통화,
-                                               User user) {
+    public static Account createGlobalProductAccount(
+            String 계좌번호,
+            String 상품명,
+            Date 만기일,
+            BigDecimal 금리수익률,
+            String 통화,
+            User user,
+            long 입금금액,
+            long 원화환산금액) {
+
         Account account = new Account();
+
+        account.계좌번호 = 계좌번호;
+
+        account.구분 = "예적금";
+        account.관리점명 = "영업부";
+        account.통화 = 통화;
+        account.과세 = "일반과세";
+
+
+        account.상품명 = 상품명;
+        account.만기일 = 만기일;
+        account.금리수익률 = 금리수익률;
+        account.자동해지여부 = 0;
+
+        account.잔액통화별 = 입금금액;
+        account.평가금액통화별 = 입금금액;
+        account.잔액원화 = 원화환산금액;
+        account.평가금액원화 = 원화환산금액;
+
+        Date now = new Date();
+        account.신규일 = now;
+
+        account.user = user;
+        user.getAccounts().add(account);
+
+        return account;
+
+    }
+
+    public static Account createBasicAccount(String 계좌번호, String 통화, User user) {
+        Account account = new Account();
+
+        account.계좌번호 = 계좌번호;
+
         account.구분 = "예적금";
         account.잔액통화별 = 0;
         account.평가금액통화별 = 0;
@@ -115,7 +161,6 @@ public class Account {
         account.잔액원화 = 0;
         account.평가금액원화 = 0;
 
-        account.계좌번호 = 계좌번호;
         account.상품명 = "저축예금";
         account.금리수익률 = BigDecimal.valueOf(0.00);
         account.자동해지여부 = 0;

@@ -11,4 +11,5 @@ public interface BranchRepository extends JpaRepository<Branch, Long> {
 
     @Query(value ="select branch_name from branch where user_id = ?1 order by start_time limit 1;", nativeQuery = true)
     String getOldestStart(String userId);
+
 }

@@ -19,4 +19,34 @@
         where branch_idx = #{idx}
         order by sum_occupy_time desc;
     </select>
+
+    <select id="getAllRank" resultMap="battleRank">
+        select distinct user_id, sum(occupy_time) over (partition by user_id) sum_occupy_time
+        from battle_history
+        order by sum_occupy_time desc
+        limit 10;
+    </select>
+
+    <insert id="initializeRanking">
+        delete from topten;
+        insert into topten (user_id, ranking) select user_id,  rank() over(order by sum(occupy_time) desc) ranking
+        from battle_history
+        group by user_id;
+
+        update topten set rate = 10 where ranking = 1;
+        update topten set rate = 6 where ranking between 2 and 5;
+        update topten set rate = 5 where ranking between 6 and 10;
+    </insert>
+
+    <select id="cntTop">
+        select count(*) from topten where user_id = #{userId};
+    </select>
+
+    <select id="getRate">
+        select rate from topten where user_id = #{userId}
+    </select>
+
+    <delete id="deleteRanking">
+        delete from topten;
+    </delete>
 </mapper>

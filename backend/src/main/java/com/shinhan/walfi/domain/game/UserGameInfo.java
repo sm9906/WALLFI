@@ -22,6 +22,8 @@ public class UserGameInfo {
 
     private String status;
 
+    private int battleCount;
+
     @OneToOne(fetch = LAZY)
     @JoinColumn(name = "user_id")
     private User user;
@@ -31,5 +33,6 @@ public class UserGameInfo {
 
     @OneToMany(mappedBy = "userGameInfo")
     private List<GameCharacter> gameCharacters = new ArrayList<>();
+
 
 }

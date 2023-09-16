@@ -9,6 +9,8 @@ public class UserGameInfoDto {
 
     private String userId;
 
+    private String username;
+
     private int point;
 
     private String status;

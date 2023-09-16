@@ -1,8 +1,10 @@
 package com.shinhan.walfi.service.game;
 
+import com.shinhan.walfi.domain.User;
 import com.shinhan.walfi.domain.game.UserGameInfo;
 import com.shinhan.walfi.dto.game.UserGameInfoDto;
 import com.shinhan.walfi.exception.UserException;
+import com.shinhan.walfi.repository.UserRepository;
 import com.shinhan.walfi.repository.game.UserGameInfoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +21,8 @@ public class UserGameInfoServiceImpl implements UserGameInfoService{
 
     private final UserGameInfoRepository userGameInfoRepository;
 
+    private final UserRepository userRepository;
+
     /**
      * 유저의 게임 포인트, 게임 내 타이틀을 반환하는 기능
      *
@@ -31,12 +35,14 @@ public class UserGameInfoServiceImpl implements UserGameInfoService{
 
         UserGameInfo findUserGameInfo = userGameInfoRepository.findById(userId);
 
-        if (findUserGameInfo == null) {
+        User user = userRepository.find(userId);
+
+        if (findUserGameInfo == null || user == null) {
             log.error("=== 틀린 비밀번호이거나 존재하지 않는 회원 ===");
             throw new UserException(NO_MATCHING_USER);
         }
 
-        return getUserGameInfoDto(findUserGameInfo);
+        return  getUserGameInfoDto(findUserGameInfo, user.getName());
 
     }
 
@@ -80,6 +86,15 @@ public class UserGameInfoServiceImpl implements UserGameInfoService{
                 .userId(userGameInfo.getUserId())
                 .point(userGameInfo.getPoint())
                 .status(userGameInfo.getStatus())
+                .build();
+    }
+
+    private UserGameInfoDto getUserGameInfoDto(UserGameInfo userGameInfo, String username) {
+        return UserGameInfoDto.builder()
+                .userId(userGameInfo.getUserId())
+                .point(userGameInfo.getPoint())
+                .status(userGameInfo.getStatus())
+                .username(username)
                 .build();
     }
 

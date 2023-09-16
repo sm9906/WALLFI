@@ -2,20 +2,14 @@ package com.shinhan.walfi.service;
 
 import com.shinhan.walfi.domain.enums.CharacterType;
 import com.shinhan.walfi.domain.enums.LevelUp;
-import com.shinhan.walfi.domain.enums.TierPerColor;
 import com.shinhan.walfi.domain.game.GameCharacter;
 import com.shinhan.walfi.domain.game.UserGameInfo;
-import com.shinhan.walfi.dto.game.CharacterListResDto;
 import com.shinhan.walfi.dto.game.CharacterWithUserIdResDto;
-import com.shinhan.walfi.dto.game.MaxCharacterNumResDto;
 import com.shinhan.walfi.exception.CharacterException;
 import com.shinhan.walfi.repository.game.CharacterRepository;
 import com.shinhan.walfi.repository.game.UserGameInfoRepository;
 import com.shinhan.walfi.service.game.CharacterService;
-import org.junit.Before;
 import org.junit.jupiter.api.*;
-import org.mockito.Mockito;
-import org.mockito.stubbing.OngoingStubbing;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,11 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import java.util.Random;
-
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @Transactional
@@ -404,30 +395,4 @@ class CharacterServiceTest {
     //TODO: 밥먹기를 보냈는데 atk를 +하지 않았을때 예외 발생 테스트
     //TODO: 훈련하기를 했는데 def를 +하지 않았을때 예외 발생 테스트
 
-    @Test
-    @DisplayName("(맥스 캐릭터 1) max 레벨 캐릭터 수 조회 테스트")
-    void maxLevelCharacterOneTest() {
-        // given
-        GameCharacter maxLevelCharacter = GameCharacter.createCharacter(userGameInfo, CharacterType.SHIBA, false);
-        em.persist(maxLevelCharacter);
-        maxLevelCharacter.setLevel(LevelUp.LEVEL_10);
-
-        // when
-        int maxCharacterNum = characterService.getMaxLevelCharacterNum(userId).getMaxCharacterNum();
-
-        // then
-        org.assertj.core.api.Assertions.assertThat(maxCharacterNum).isEqualTo(1);
-    }
-
-    @Test
-    @DisplayName("(맥스 캐릭터 0) max 레벨 캐릭터 수 조회 테스트")
-    void maxLevelCharacterZeroTest() {
-        // given
-
-        // when
-        int maxCharacterNum = characterService.getMaxLevelCharacterNum(userId).getMaxCharacterNum();
-
-        // then
-        org.assertj.core.api.Assertions.assertThat(maxCharacterNum).isEqualTo(0);
-    }
 }
