@@ -92,7 +92,7 @@ public class CharacterController {
     }
 
     @PutMapping("/change/status")
-    @ApiOperation(value = "사용자가 보유하고 있는 캐릭터의 스텟(atk, def, exp, isMain)를 상승/변화 시킴")
+    @ApiOperation(value = "사용자가 보유하고 있는 캐릭터의 스텟(atk, def, exp, isMain, point)를 상승/변화 시킴")
     public ResponseEntity<HttpResult> changeCharacterStatus(@RequestBody CharacterStatusReqDto characterStatusReqDto) {
         String userId = characterStatusReqDto.getUserId();
         Long characterIdx = characterStatusReqDto.getCharacterIdx();
