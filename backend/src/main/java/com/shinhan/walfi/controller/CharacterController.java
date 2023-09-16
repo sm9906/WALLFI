@@ -3,6 +3,7 @@ package com.shinhan.walfi.controller;
 import com.shinhan.walfi.domain.HttpResult;
 
 import com.shinhan.walfi.dto.game.*;
+import com.shinhan.walfi.dto.product.ProductResDto;
 import com.shinhan.walfi.service.game.CharacterService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -131,7 +132,7 @@ public class CharacterController {
     public ResponseEntity<HttpResult> getMaxLevelCharacterNum(@RequestBody CharacterReqDto characterReqDto) {
         String userId = characterReqDto.getUserId();
 
-        MaxCharacterNumResDto maxLevelCharacterNumDto = characterService.getMaxLevelCharacterNum(userId);
+        ProductResDto maxLevelCharacterNumDto = characterService.getMaxLevelCharacterNum(userId);
 
         HttpResult res;
 

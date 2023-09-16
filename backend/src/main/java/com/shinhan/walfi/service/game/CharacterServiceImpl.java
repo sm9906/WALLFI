@@ -1,14 +1,13 @@
 package com.shinhan.walfi.service.game;
 
 import com.shinhan.walfi.domain.enums.CharacterType;
-import com.shinhan.walfi.domain.enums.LevelUp;
 import com.shinhan.walfi.domain.enums.TierPerColor;
 import com.shinhan.walfi.domain.game.GameCharacter;
 import com.shinhan.walfi.domain.game.UserGameInfo;
 import com.shinhan.walfi.dto.game.CharacterDto;
 import com.shinhan.walfi.dto.game.CharacterListResDto;
 import com.shinhan.walfi.dto.game.CharacterWithUserIdResDto;
-import com.shinhan.walfi.dto.game.MaxCharacterNumResDto;
+import com.shinhan.walfi.dto.product.ProductResDto;
 import com.shinhan.walfi.exception.CharacterErrorCode;
 import com.shinhan.walfi.exception.CharacterException;
 import com.shinhan.walfi.exception.UserErrorCode;
@@ -391,7 +390,7 @@ public class CharacterServiceImpl implements CharacterService {
      * @return MaxCharacterNumResDto
      */
     @Override
-    public MaxCharacterNumResDto getMaxLevelCharacterNum(String userId) {
+    public ProductResDto getMaxLevelCharacterNum(String userId) {
         UserGameInfo userGameInfo = userGameInfoRepository.findById(userId);
         checkExistUser(userGameInfo);
 
@@ -408,16 +407,15 @@ public class CharacterServiceImpl implements CharacterService {
         변환총금리 = 변환총금리.setScale(2, RoundingMode.DOWN);
         변환추가금리 = 변환추가금리.setScale(2, RoundingMode.DOWN);
 
-        MaxCharacterNumResDto maxCharacterNumResDto = MaxCharacterNumResDto.builder()
+        ProductResDto productResDto = ProductResDto.builder()
                 .총금리(String.valueOf(변환총금리))
                 .추가금리(String.valueOf(변환추가금리))
                 .가입기간("12")
                 .기본금리("3.7")
                 .상품명("levelup정기예금")
-                .maxCharacterNum(maxLevelCharacterNum)
                 .build();
 
-        return maxCharacterNumResDto;
+        return productResDto;
     }
 
     /**
