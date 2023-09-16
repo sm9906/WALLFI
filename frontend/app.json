@@ -21,10 +21,16 @@
       "adaptiveIcon": {
         "foregroundImage": "./src/assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
+      },
+      "permissions": ["ACCESS_BACKGROUND_LOCATION"],
+      "package": "com.패키지명.패키지명",
+      "config": {
+        "googleMaps": { "apiKey": "AIzaSyBEmWSXbZV3mg-KQ15Y2zovXv_qS87FTmE" }
       }
     },
     "web": {
       "favicon": "./src/assets/favicon.png"
-    }
+    },
+    "permissions": ["ACCESS_COARSE_LOCATION", "ACCESS_FINE_LOCATION"]
   }
 }

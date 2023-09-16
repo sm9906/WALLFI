@@ -3,11 +3,10 @@ import { View, Text, StyleSheet } from 'react-native';
 import { ConvPad } from "../walletcomponents/sendmoney/ConvKeypad";
 import { RFPercentage } from "react-native-responsive-fontsize";
 import VirtualKeyboard from "../walletcomponents/sendmoney/VirtualKeypad";
-import { minusMoney, exchangeMoney, postSendMoney } from "../walletSlice";
+import { minusMoney, exchangeMoney, postSendMoney, postExchangeMoney } from "../walletSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function SendHow({route, navigation}){
-
   const dispatch = useDispatch();
 
   // console.log('얼마나 보낼까요',route)
@@ -15,7 +14,7 @@ export default function SendHow({route, navigation}){
   const outAcc = route.params.outAcc;
   const balance = outAcc.balance; 
   const outAccId = outAcc.accId
-  // 이체 필요한 부분
+  // 이체 필요 부분
   const toAccount = type==='송금'?route.params.account :'';
   const toBank = type==='송금'?route.params.bank||'신한': '';
   // 환전 필요 부분
@@ -38,43 +37,63 @@ export default function SendHow({route, navigation}){
   const isOver = type==='송금'||toNation==='KRW'? 
       balance < num_money: balance< Number(exchangedMoney) // 잔액을 초과하는가?
 
-  const {mainAccount} = useSelector(state=>state.auth)
+  const {mainAccount, userId} = useSelector(state=>state.auth)
   const sendMoney = () => {
     const data = {
       '이체금액': num_money,
-      '입금계좌번호' : '110001785532', // 스토어에서 대표 계좌 가져와야함.
+      '입금계좌번호' : '110001785532', // 일단 확인용으로 고정..
       '입금계좌통장메모': '보냅니다',
       '입금은행코드': toBank,
-      '출금계좌번호': mainAccount, // 일단 확인  
+      '출금계좌번호': mainAccount,   
       '출금계좌통장메모':'',
-      // '통화코드': outAcc.ntnCode
+      '통화코드': outAcc.ntnCode
     }
     dispatch(postSendMoney(data))
-    .then((res)=>{sendMemo(res)})
+    .then((res)=>{senMoneydMemo(res)})
     .catch((err) => {
-      console.log(err); return 0
+      console.log(err);
     })
-    
   }
 
-  const sendMemo = async(res) => {
+  const sendExchange= () => {
+    const data = {
+      "userId":userId,
+      "금액": toNation==='KRW'?Number(exchangedMoney):money,
+      "사용자대표계좌": mainAccount,
+      "전신환매도환율": exchangeRate,
+      "통화코드": toNation
+    }
+    console.log(data)
+    dispatch(postExchangeMoney(data))
+    .then((res)=>sendExchangeMemo(res))
+    .catch((err)=>{
+      console.log(err);
+    })
+  }
+
+  const sendExchangeMemo = async(res) => {
+    
     if(res.error){
       console.log('에러 발생')
+    }
+
+    await dispatch(exchangeMoney({num_money,exchangedMoney,outAccId,toNation}))
+    const outISO = toNation==='KRW'? '원' : ISO
+    const formMoney = toNation==='KRW'? form_exchangedMoney : form_money
+    navigation.navigate('SendMemo', props = {type, toNation, toAccount, toBank, formMoney, outISO, outAcc})
+  }
+
+
+  const senMoneydMemo = async(res) => {
+    if(res.error){
+      console.log('에러 발생') // 여기 에러 발생하면 return 0으로 예외처리 
     }
     await dispatch(minusMoney({num_money, outAccId}))
     
     const outISO = ISO
     const formMoney = form_money
-    navigation.navigate('SendMemo', props = {type, toNation, toAccount, toBank, formMoney, outISO})
+    navigation.navigate('SendMemo', props = {type, toNation, toAccount, toBank, formMoney, outISO, outAcc})
   }
-
-  const sendExchange = async() => {
-    await dispatch(exchangeMoney({num_money,exchangedMoney,outAccId,toNation}))
-    const outISO = toNation==='KRW'? '원' : ISO
-    const formMoney = toNation==='KRW'? form_exchangedMoney : form_money
-    navigation.navigate('SendMemo', props = {type, toNation, toAccount, toBank, formMoney, outISO})
-  }
-
   
   const addMoney=(value)=>{
     const currMon = money;
@@ -112,7 +131,7 @@ export default function SendHow({route, navigation}){
         <Text style={{...styles.currMoney, color:isOver?'red':'black'}}>{form_money}{ISO||'원'}</Text>
         {type==='환전'&&<Text style={{textAlign:'center', fontSize:RFPercentage(2), color:'grey'}}>{form_exchangedMoney}원</Text>}
         <View style={styles.myAccount}>
-          <Text style={styles.accountTo} >신한 {outAcc.accountnum}   {form_balance}{ISO||'원'}</Text>
+          <Text style={styles.accountTo} >신한 {outAcc.accountnum}   {form_balance}{outAcc.ISO}</Text>
         </View>
       </View>
       {type==="송금"?<ConvPad addMoney={addMoney} />:<VirtualKeyboard addMoney={addMoney}/>}

@@ -1,25 +1,55 @@
-import { StyleSheet,
+import React, {useState} from 'react';
+import { 
+  StyleSheet,
   Dimensions,
   Text, View, Image, 
   TouchableOpacity,
   ScrollView
- } from 'react-native';
+} from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { RFPercentage } from 'react-native-responsive-fontsize';
+import { useFocusEffect } from '@react-navigation/native';
+
 import CardItem from '../walletcomponents/walletcards/WalletCard';
 import GoFight from '../walletcomponents/GoFight';
 import {Background} from '../walletcomponents/CommonStyle';
 import ShinhanLogo from '../../../assets/wallet/ShinhanLogo.png';
 import Exchange from '../../../assets/wallet/Exchange.png'
+import { getAccounts, getExchangeRate } from '../walletSlice';
 
-import { useSelector } from 'react-redux';
-import { RFPercentage } from 'react-native-responsive-fontsize';
 
 export const SCREEN_WIDTH = Dimensions.get("window").width;
 export const SCREEN_HEIGHT= Dimensions.get("window").height;
 
 export default function WalletHome({navigation}) {
-  const {cards} = useSelector(state=>state.wallet)
+  const dispatch = useDispatch();
+  const {cards} = useSelector(state=>state.wallet);
+
+  // 홈에 들어올 때 마다 새로고침 하는 게 맞는데 
+  // 예적금 때문에 그럴 수 없음..
+
+  // const [cards, setCards] = useState();
+  // useFocusEffect(
+  //   React.useCallback(()=>{
+  //     getData()
+  //   },[])
+  // )
+
+  // const getData = async() => {
+  //   try {
+  //     // console.log('?')
+  //     await dispatch(getExchangeRate());
+  //     const response = await dispatch(getAccounts({userId, mainAccount}));
+  //     // console.log('계좌 조회 성공',response.payload); 
+  //     setCards(response.payload)
+  //   } catch (err) {
+  //     console.log('walletscreens/WalletLoading.js',err);
+  //   }
+  // }
+  
   return (
-    <View style={Background.background}>
+    <>
+    {cards&&<View style={Background.background}>
       <View style={{height:SCREEN_HEIGHT*0.25}}>
         <ScrollView pagingEnabled showsHorizontalScrollIndicator={false} horizontal={true} style={{marginHorizontal:SCREEN_WIDTH*0.05}}>
           {cards&&cards.map((card, index)=>{
@@ -40,7 +70,8 @@ export default function WalletHome({navigation}) {
         </TouchableOpacity>
       </View>
       <GoFight />
-    </View>
+    </View>}
+    </>
   );
 }
 

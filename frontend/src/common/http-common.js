@@ -9,4 +9,43 @@ const axios = baseAxios.create({
   },
 });
 
+export const requestGet = async (url, params) => {
+  try {
+    const data = await axios.get(url, { params });
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const requestPost = async (url, body, headers) => {
+  try {
+    const data = await axios.post(url, body, { headers });
+    return data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+export const requestPut = async (url, body, headers) => {
+  try {
+    const data = await axios.put(url, body, { headers });
+    return data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+export const requestDel = async (url) => {
+  try {
+    const data = await axios.delete(url);
+    return data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
 export default axios;
