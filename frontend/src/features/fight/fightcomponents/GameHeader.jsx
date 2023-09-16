@@ -9,6 +9,7 @@ import { setTimeOut } from "../../../actions/loadingActions";
 const GameHeader = () => {
   const dispatch = useDispatch();
   const isLoading = useSelector((state) => state.loading.battleLoading);
+  const isGuide = useSelector((state) => state.turn.guide);
   const turn = useSelector((state) => state.turn.turn);
   
 
@@ -38,7 +39,7 @@ const GameHeader = () => {
     }, 500);
 
     let timerInterval;
-    if (!isLoading) {
+    if (!isLoading && !isGuide) {
       timerInterval = setInterval(() => {
         setTimer((prevTimer) => {
           if (prevTimer > 0) {
@@ -72,7 +73,7 @@ const GameHeader = () => {
       clearInterval(interval);
       clearInterval(timerInterval);
     };
-  }, [isLoading]);
+  }, [isLoading, isGuide]);
 
   const rotate = rotateValue.interpolate({
     inputRange: [0, 0.5, 1],

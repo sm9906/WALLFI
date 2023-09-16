@@ -7,6 +7,7 @@ import { useNavigation } from "@react-navigation/native";
 import { setEnemy, setPlayer } from "./../../../actions/animalAction";
 import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import { setMaxHpBar, setBankIdx } from "../../../actions/loadingActions";
+import { ScreenHeight, ScreenWidth } from "./../../fight/fightcomponents/ScreenSize";
 import {
   StyleSheet,
   View,
@@ -78,7 +79,6 @@ const Map = () => {
     try {
       const response = await axios.get(`/branch?idx=${idx}`);
       const data = response.data;
-      console.log(data);
       dispatch(setBankIdx(idx));
       setSelectedBankDetails(data.data);
     } catch (error) {
@@ -284,8 +284,8 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0,0,0,0.7)",
   },
   modalContent: {
-    width: "80%",
-    height: "50%",
+    width: ScreenWidth * 0.8,
+    height: ScreenHeight * 0.5, 
     backgroundColor: "#2c2c2c",
     padding: 20,
     justifyContent: "center",
@@ -304,8 +304,8 @@ const styles = StyleSheet.create({
     // backgroundColor: "yellow"
   },
   modalIn: {
-    width: "90%",
-    height: "90%",
+    width: ScreenWidth * 0.72,
+    height: ScreenHeight * 0.45,
     alignItems: "center",
     // backgroundColor: "green"
   },
@@ -316,7 +316,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   battleButton: {
-    width: "90%",
+    width: ScreenWidth * 0.648, 
     marginTop: 20,
     padding: 10,
     backgroundColor: "#007BFF",
@@ -334,7 +334,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   closeButton: {
-    width: "90%",
+    width: ScreenWidth * 0.648,
     marginTop: 20,
     padding: 10,
     backgroundColor: "#ffd700",
@@ -352,8 +352,8 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   modalImage: {
-    width: "50%",
-    height: "50%",
+    width: ScreenWidth * 0.4, 
+    height: ScreenHeight * 0.22, 
     marginBottom: 20,
   },
 });

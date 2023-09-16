@@ -6,12 +6,12 @@ const selectCardMatching = (
 ) => {
 
   let playerType = playerAnimal.animal;
-  let playerAtk = playerAnimal.attack * 4;
+  let playerAtk = playerAnimal.attack * 2;
   let playerDef = playerAnimal.defence * 2;
   let playerExc = playerAnimal.exchange;
 
   let enemyType = enemyAnimal.animal;
-  let enemyAtk = enemyAnimal.attack * 4;
+  let enemyAtk = enemyAnimal.attack * 2;
   let enemyDef = enemyAnimal.defence * 2;
   let enemyExc = enemyAnimal.exchange;
 

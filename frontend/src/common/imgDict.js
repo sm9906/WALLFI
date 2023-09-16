@@ -1,7 +1,7 @@
-import Home from '../assets/background/home.png';
-import Collection from '../assets/background/collection.png';
-import Market from '../assets/background/Market.png';
-import Mission from '../assets/background/mission.png';
+import home from '../assets/background/home.png';
+import collection from '../assets/background/collection.png';
+import market from '../assets/background/Market.png';
+import mission from '../assets/background/mission.png';
 
 import eagle_basic from '../assets/characters/home/EAGLE_HOME/BABY_EAGLE_NORMAL.png';
 import eagle_white from '../assets/characters/home/EAGLE_HOME/BABY_EAGLE_EPIC.png';
@@ -91,6 +91,8 @@ import defence_1 from '../assets/battle/defence_1.png'
 import defence_2 from '../assets/battle/defence_2.png'
 import exchange_0 from '../assets/battle/exchange_0.png'
 import exchange_1 from '../assets/battle/exchange_1.png'
+import exchange_2 from '../assets/battle/exchange_2.png'
+import exchange_3 from '../assets/battle/exchange_3.png'
 import skill_0 from '../assets/battle/skill_0.png'
 import skill_1 from '../assets/battle/skill_1.png'
 import skill_2 from '../assets/battle/skill_2.png'
@@ -98,13 +100,14 @@ import skill_3 from '../assets/battle/skill_3.png'
 import enemy from '../assets/battle/enemy.png'
 import question from '../assets/battle/question.png'
 import time from '../assets/battle/time.png'
+import guts from '../assets/battle/guts.png'
 
 export const images = {
     Background: {
-        home: Home,
-        collection: Collection,
-        market: Market,
-        mission: Mission
+        home: home,
+        collection: collection,
+        market: market,
+        mission: mission
     },
 
     defaultCharacter: {
@@ -223,6 +226,8 @@ export const images = {
         defence_2: defence_2,
         exchange_0: exchange_0,
         exchange_1: exchange_1,
+        exchange_2: exchange_2,
+        exchange_3: exchange_3,
         skill_0: skill_0,
         skill_1: skill_1,
         skill_2: skill_2,
@@ -230,6 +235,7 @@ export const images = {
         enemy_0: enemy,
         question_0: question,
         time_0: time,
+        guts_0: guts,
     },
 }
 
