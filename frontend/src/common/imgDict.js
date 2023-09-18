@@ -46,6 +46,7 @@ import europe from '../assets/eggs/europe_egg.png';
 import japan from '../assets/eggs/japan_egg.png';
 import korea from '../assets/eggs/korea_egg.png';
 import usa from '../assets/eggs/usa_egg.png';
+import molly from '../assets/eggs/molly_egg.png';
 
 import backHomeBtn from '../assets/game/button/backHome.png';
 import collectionBtn from '../assets/game/button/collection.png';
@@ -114,46 +115,50 @@ export const images = {
     },
 
     defaultCharacter: {
+        MOLLY: {
+            BASIC: baby_molly,
+        },
+
         EAGLE: {
             BASIC: eagle_basic,
             WHITE: eagle_white,
             MINT: eagle_mint,
-            LEGEND: eagle_legend
+            LED: eagle_legend
         },
     
         LION: {
             BASIC: lion_basic,
             WHITE: lion_white,
             MINT: lion_mint,
-            LEGEND: lion_legend
+            LED: lion_legend
         },
     
         PANDA: {
             BASIC: panda_basic,
             WHITE: panda_white,
             MINT: panda_mint,
-            LEGEND: panda_legend
+            LED: panda_legend
         },
     
         QUOKKA: {
             BASIC: quokka_basic,
             WHITE: quokka_white,
             MINT: quokka_mint,
-            LEGEND: quokka_legend
+            LED: quokka_legend
         },
     
         SHIBA: {
             BASIC: siba_basic,
             WHITE: siba_white,
             MINT: siba_mint,
-            LEGEND: siba_legend
+            LED: siba_legend
         },
     
         TIGER: {
             BASIC: tiger_basic,
             WHITE: tiger_white,
             MINT: tiger_mint,
-            LEGEND: tiger_legend
+            LED: tiger_legend
         }
     },
 
@@ -172,7 +177,8 @@ export const images = {
         LION: europe,
         SHIBA: japan,
         TIGER: korea,
-        EAGLE: usa    
+        EAGLE: usa,
+        MOLLY: molly, 
     },
 
     btnSource: {

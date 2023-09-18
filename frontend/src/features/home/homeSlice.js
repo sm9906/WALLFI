@@ -124,7 +124,7 @@ export const changeColor = createAsyncThunk('CHANGE_COLOR', async(data, { reject
   }
 })
 
-// 캐릭터 뽑기
+// 캐릭터 1개 뽑기
 export const getRandomCharacter = createAsyncThunk('GET_RANDOM_CHARACTER', async(userId, { rejectWithValue }) => {
   try {
     console.log('홈슬라이스/getRandomCharacter 데이터 전달 확인 ', userId)
@@ -150,6 +150,40 @@ export const getRandomCharacter = createAsyncThunk('GET_RANDOM_CHARACTER', async
 
   } catch (e) {
     console.log('홈슬라이스/getRandomCharacter 실패', e)
+    return rejectWithValue(e.res);
+  }
+})
+
+// 캐릭터 10개 뽑기
+export const getRandomTenCharacter = createAsyncThunk('GET_RANDOM_TEN_CHARACTER', async(userId, { rejectWithValue }) => {
+  try {
+    console.log('홈슬라이스/getRandomTenCharacter 데이터 전달 확인 ', userId)
+    const res = await axios.post('character/shopten/', {
+      userId: userId
+    })
+
+    const characterDtoList = res.data.data.characterDtoList;
+    console.log('성공', characterDtoList)
+    const characters = characterDtoList.map((a) => {
+      const character = {
+        characterIdx: a.characterIdx,
+        characterType: a.characterType,
+        color: a.color,
+        level: a.level,
+        exp: a.exp,
+        hp: a.hp,
+        atk: a.atk,
+        def: a.def,
+        main: a.main
+      }
+
+      return character;
+    })
+
+    return characters;
+
+  } catch (e) {
+    console.log('홈슬라이스/getRandomTenCharacter 실패', e)
     return rejectWithValue(e.res);
   }
 })
@@ -183,6 +217,9 @@ export const homeSlice = createSlice({
     })
     .addCase(getRandomCharacter.fulfilled, (state, action) => {
       console.log('캐릭터 랜덤 뽑기 성공!', action.payload)
+    })
+    .addCase(getRandomTenCharacter.fulfilled, (state, action) => {
+      console.log('캐릭터 10개 뽑기 성공!', action.payload)
     })
     .addCase(updateCharacter.fulfilled, (state, action)=>{
       console.log('캐릭터 변경 성공!', action.payload)

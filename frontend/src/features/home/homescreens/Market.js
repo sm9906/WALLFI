@@ -14,7 +14,7 @@ import { images } from '../../../common/imgDict.js'
 import { globalStyles } from "../homestyles/global.js";
 import GameHeader from '../homecomponents/GameHeader.js';
 import { useDispatch, useSelector } from 'react-redux';
-import { changeColor, getRandomCharacter, updatePoint } from '../homeSlice.js';
+import { changeColor, getRandomCharacter, getRandomTenCharacter, updatePoint } from '../homeSlice.js';
 
 const typeList = {
     EAGLE: '독수리',
@@ -32,6 +32,7 @@ export default function Market({navigation}) {
     const [modalVisible2, setModalVisible2] = useState(false);
     const [modalVisible3, setModalVisible3] = useState(false);
     const [selectedCharacter, setSelectedCharacter] = useState('');
+    const [tenCharacterList, setTenCharacterList] = useState([]);
     const [selectedColor, setSelectedColor] = useState('');
     
     return (
@@ -59,7 +60,12 @@ export default function Market({navigation}) {
                         Alert.alert('Modal has been closed.');
                         setModalVisible2(!modalVisible2);
                 }}>
-                    <TenEgg modalVisible2={modalVisible2} setModalVisible2={setModalVisible2}/>
+                    <TenEgg 
+                        modalVisible2={modalVisible2} 
+                        setModalVisible2={setModalVisible2}
+                        tenCharacterList={tenCharacterList}
+                        setTenCharacterList={setTenCharacterList}
+                    />
                 </Modal>
                 <Modal
                     animationType='fade'
@@ -103,6 +109,8 @@ export default function Market({navigation}) {
                     setModalVisible3={setModalVisible3}
                     selectedCharacter={selectedCharacter}
                     setSelectedCharacter={setSelectedCharacter}
+                    tenCharacterList={tenCharacterList}
+                    setTenCharacterList={setTenCharacterList}
                     selectedColor={selectedColor}
                     setSelectedColor={setSelectedColor}
                 />
@@ -157,10 +165,36 @@ function RenderContent(props) {
         }
     }
 
+    const randomTenCharacter = async() => {
+        try {
+
+            if (userInfo.point < 9000) {
+                Alert.alert(
+                    '경고',
+                    '포인트가 부족합니다!',
+                    [
+                      {text:'확인', onPress: ()=> {}, style:'default'}
+                    ]
+                );
+            } else {
+                console.log('알 10개 뽑기 들어왔다');
+                dispatch(updatePoint({point: -9000, userId: userId})).then(res => console.log(res))
+                dispatch(getRandomTenCharacter(userId))
+                .then((response) => {
+                    console.log('랜덤 캐릭터 10개 뽑기 성공', response);
+                    props.setTenCharacterList(response.payload);
+                    props.setModalVisible2(true);
+                });
+            }
+        } catch (err) {
+            console.log('randomCharacter', err);
+        }
+    }
+
     const randomColor = async () => {
         try {
 
-            if (userInfo.point < 3000) {
+            if (userInfo.point < 500) {
                 Alert.alert(
                     '경고',
                     '포인트가 부족합니다!',
@@ -170,7 +204,7 @@ function RenderContent(props) {
                 );
             } else {
                 console.log('색 바꾸기 들어왔다');
-                dispatch(updatePoint({point: -3000, userId: userId})).then(res => console.log(res))
+                dispatch(updatePoint({point: -500, userId: userId})).then(res => console.log(res))
                 dispatch(changeColor({mainCharacterIdx: mainCharacter.characterIdx, userId: userId}))
                 .then((response) => {
                     console.log('랜덤 색 뽑기 성공', response);
@@ -204,9 +238,7 @@ function RenderContent(props) {
                     <Text style={{ fontSize: 16, fontWeight: 'bold' }}>🥚 X 10</Text>
                     <TouchableOpacity 
                         style={styles.puchaseBtn}
-                        onPress={() => {
-                            props.setModalVisible2(true)
-                    }}>
+                        onPress={() => {randomTenCharacter()}}>
                         <Image source={images.gameIcon.coin} style={styles.coinIcon}/>
                         <Text style={styles.coinText}>9,000</Text>
                     </TouchableOpacity>
@@ -230,7 +262,7 @@ function RenderContent(props) {
                         onPress={() => {randomColor()}
                     }>
                         <Image source={images.gameIcon.coin} style={styles.coinIcon}/>
-                        <Text style={styles.coinText}>3,000</Text>
+                        <Text style={styles.coinText}>500</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -277,20 +309,82 @@ function OneEgg(props) {
 }
 
 function TenEgg(props) {
+
+    console.log('모달들어옴');
     
-    const images = [
-        { id: 1, imageUrl: require('../../.././assets/eggs/australia_egg.png')},
-        { id: 2, imageUrl: require('../../.././assets/eggs/australia_egg.png')},
-        { id: 3, imageUrl: require('../../.././assets/eggs/australia_egg.png')},
-        { id: 4, imageUrl: require('../../.././assets/eggs/australia_egg.png')},
-        { id: 5, imageUrl: require('../../.././assets/eggs/australia_egg.png')},
-        { id: 6, imageUrl: require('../../.././assets/eggs/australia_egg.png')},
-        { id: 7, imageUrl: require('../../.././assets/eggs/australia_egg.png')},
-        { id: 8, imageUrl: require('../../.././assets/eggs/australia_egg.png')},
-        { id: 9, imageUrl: require('../../.././assets/eggs/australia_egg.png')},
-        { id: 10, imageUrl: require('../../.././assets/eggs/australia_egg.png')},
-        { id: 11, imageUrl: null},
-        { id: 12, imageUrl: null},
+    const characters = [
+        { 
+            id: 1, 
+            imageUrl: images.eggs[props.tenCharacterList[0].characterType], 
+            atk: props.tenCharacterList[0].atk,
+            def: props.tenCharacterList[0].def,
+        },
+        { 
+            id: 2, 
+            imageUrl: images.eggs[props.tenCharacterList[1].characterType], 
+            atk: props.tenCharacterList[1].atk,
+            def: props.tenCharacterList[1].def,
+        },
+        { 
+            id: 3, 
+            imageUrl: images.eggs[props.tenCharacterList[2].characterType], 
+            atk: props.tenCharacterList[2].atk,
+            def: props.tenCharacterList[2].def,
+        },
+        { 
+            id: 4, 
+            imageUrl: images.eggs[props.tenCharacterList[3].characterType], 
+            atk: props.tenCharacterList[3].atk,
+            def: props.tenCharacterList[3].def,
+        },
+        { 
+            id: 5, 
+            imageUrl: images.eggs[props.tenCharacterList[4].characterType], 
+            atk: props.tenCharacterList[4].atk,
+            def: props.tenCharacterList[4].def,
+        },
+        { 
+            id: 6, 
+            imageUrl: images.eggs[props.tenCharacterList[5].characterType], 
+            atk: props.tenCharacterList[5].atk,
+            def: props.tenCharacterList[5].def,
+        },
+        { 
+            id: 7, 
+            imageUrl: images.eggs[props.tenCharacterList[6].characterType], 
+            atk: props.tenCharacterList[6].atk,
+            def: props.tenCharacterList[6].def,
+        },
+        { 
+            id: 8, 
+            imageUrl: images.eggs[props.tenCharacterList[7].characterType], 
+            atk: props.tenCharacterList[7].atk,
+            def: props.tenCharacterList[7].def,
+        },
+        { 
+            id: 9, 
+            imageUrl: images.eggs[props.tenCharacterList[8].characterType], 
+            atk: props.tenCharacterList[8].atk,
+            def: props.tenCharacterList[8].def,
+        },
+        { 
+            id: 10, 
+            imageUrl: images.eggs[props.tenCharacterList[9].characterType], 
+            atk: props.tenCharacterList[9].atk,
+            def: props.tenCharacterList[9].def,
+        },
+        { 
+            id: 11, 
+            imageUrl: null, 
+            atk: null,
+            def: null,
+        },
+        { 
+            id: 12, 
+            imageUrl: null, 
+            atk: null,
+            def: null,
+        },
     ];
 
     const arr = [
@@ -323,13 +417,21 @@ function TenEgg(props) {
                                     backgroundColor: 'white', 
                                     alignItems: 'center',
                                     marginHorizontal: '2%',
-                                    borderRadius: 10
+                                    borderRadius: 10,
                                 }}>
-                                    <Image source={images[item - 1].imageUrl} style={{
-                                        width: '100%',
-                                        height: '100%',
+                                    <Image source={characters[item - 1].imageUrl} style={{
+                                        flex: 1,
+                                        width: '50%',
                                         resizeMode: 'contain'
                                     }} />
+                                    <View style={{ flex: 0.5, flexDirection: 'row' }}>
+                                        {
+                                            characters[item - 1].atk ? <Text style={{ fontSize: 14 }}> atk +1 </Text> : null
+                                        }
+                                        {
+                                            characters[item - 1].def ? <Text style={{ fontSize: 14 }}> def +1 </Text> : null
+                                        }
+                                    </View>
                                 </View>
                         ))}
                     </View>
