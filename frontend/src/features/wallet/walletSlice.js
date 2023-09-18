@@ -27,6 +27,28 @@ const ISO = {
   'AUD': 'AU$' 
 }
 
+export const getDepositDetail = createAsyncThunk('POST_GETDEPOSIT', async(data, {rejectWithValue})=>{
+  try{
+    console.log('data')
+    const response = await axios.post('character/maxcharacter', data);
+    console.log(response)
+  }catch(err){
+    console.log(err)
+    return rejectWithValue(err);
+  }
+})
+
+
+export const makeAccount = createAsyncThunk('POST_MAKEACCOUJNT', async(data, {rejectWithValue})=>{
+  try{
+    const response = await axios.post('product',data);
+    console.log(response)
+  }catch(err){
+    console.log(err)
+    return rejectWithValue(err);
+  }
+})
+
 // 환율 정보 불러오기
 export const getExchangeRate = createAsyncThunk('GET_EXCHANGE_RATE', async(_,{ rejectWithValue })=>{
   try{

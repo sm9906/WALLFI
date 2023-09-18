@@ -166,7 +166,7 @@ function DetailPage(props) {
             alignItems: 'center'
         }}>
           
-        <ExpBar ExpStyle={ExpStyle} exp={props.selectedCharacter.exp} level={props.selectedCharacter.level}/>
+        <ExpBar ExpStyle={ExpStyle} exp={props.selectedCharacter.exp} level={props.selectedCharacter.level}/> 
         </View>
     </View>
   )

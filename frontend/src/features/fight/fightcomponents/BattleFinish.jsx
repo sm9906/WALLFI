@@ -15,12 +15,12 @@ const BattleFinish = () => {
   const battleResult = useSelector((state) => state.turn.res);
   const bankIdx = useSelector((state) => state.loading.bankIdx);
   const dispatch = useDispatch();
-
+  const userId = useSelector((state)=>state.auth.userId)
   const resultToServer = async () => {
     // 결과값 서버로 전송
     try {
-      await axios.post(`/battle?branchIdx=${bankIdx}&userId=ssafy`, {
-        userId: "ssafy",
+      await axios.post(`/battle?branchIdx=${bankIdx}&userId=${userId}`, {
+        userId: userId,
       });
     } catch (error) {
       console.error("배틀 결과 전송중 오류가 발생했습니다.", error);
