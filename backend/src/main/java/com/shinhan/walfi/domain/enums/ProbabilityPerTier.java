@@ -5,10 +5,10 @@ import lombok.Getter;
 @Getter
 public enum ProbabilityPerTier {
 
-    NORMAL(2),
+    NORMAL(10),
     EPIC(5),
-    UNIQUE(92.999),
-    LEGENDARY(0.001);
+    UNIQUE(84.9),
+    LEGENDARY(0.1);
 
     final double percent;
 
