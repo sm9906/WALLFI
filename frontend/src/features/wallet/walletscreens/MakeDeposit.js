@@ -17,11 +17,20 @@ import { useFocusEffect } from "@react-navigation/native";
 
 const Deposit = {
   'Levelup':{
-    'message': '최고 레벨 캐릭터 수 +',
-}}
+    'message': '최고 레벨 캐릭터 수 +', 
+  },
+  'Top10':{
+    'message': '랭킹 + '
+  },
+  'Battle':{
+    'message': ''
+  },
+  'Land':{
+    'message':''
+  }
+}
 
-const selNations = ['KRW','USD','JPY','EUR','CNY','AUD'];
-
+// 여기 따로 export 시켰어야 하는데..
 const ISO = {
   'KRW': '원',
   'USD': '$',
@@ -32,21 +41,21 @@ const ISO = {
 }
 
 export default function MakeDetail({route,navigation}){
-  
   useFocusEffect(()=>{
     const date = new Date().toDateString();
     console.log(date)
   })
   const {userId, mainAccount} = useSelector(state=> state.auth)
   const [ntnCode, setNtnCode] = useState('KRW');
+  const [money, setMoney] = useState('0');  
 
   const type = route.params.type;
   const detail = route.params.data;
 
-  const [money, setMoney] = useState('0');  
+  const selNations = type==='Top10'?['KRW']:['KRW','USD','JPY','EUR','CNY','AUD'];
+
   const total = Number(money) * Number(detail.가입기간)
   const show = Number(money).toLocaleString('en-US')
-  const [canmakeIt, setCanMakeIT] = useState(true);
 
   const onPress = () => {
     const data={
@@ -62,6 +71,7 @@ export default function MakeDetail({route,navigation}){
     const response = axios.post('product/create', data)
     .then(res=>navigation.navigate('WalletHome'));
   }
+
   return(
     <View style={{...Background.background, padding:'10%', justifyContent:'none'}}>
       <View style={styles.titleContent}>
