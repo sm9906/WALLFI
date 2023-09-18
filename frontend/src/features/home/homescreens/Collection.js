@@ -118,7 +118,6 @@ function CollectionHeader(props) {
 }
 
 function DetailPage(props) {
-  console.log(props.selectedCharacter)
   const dispatch = useDispatch();
   const setMain = () => {
     dispatch(updateCharacter({act: '', characterIdx: props.selectedCharacter.id, statusType: 'isMain', userId: props.userId, value: 0}))
@@ -166,7 +165,7 @@ function DetailPage(props) {
             alignItems: 'center'
         }}>
           
-        <ExpBar ExpStyle={ExpStyle} exp={props.selectedCharacter.exp} level={props.selectedCharacter.level}/>
+        <ExpBar ExpStyle={ExpStyle} exp={props.selectedCharacter.exp} level={props.selectedCharacter.level}/> 
         </View>
     </View>
   )

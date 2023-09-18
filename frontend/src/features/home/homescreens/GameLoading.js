@@ -5,7 +5,7 @@ import {
     StyleSheet,
     Image
 } from 'react-native'
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getCharacterList, getGameInfo, getMainCharacter } from '../homeSlice';
 
 import LoadingImg from '../../../assets/game/loading/LoadingImg.gif'
@@ -16,8 +16,7 @@ import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../homecomponents/ScreenSize';
 
 export default function GameLoading({navigation}) {
 
-    const userId = 'ssafy'
-
+    const userId = useSelector(state=>state.auth.userId);
     const dispatch = useDispatch();
     useEffect(() => {
         getData();

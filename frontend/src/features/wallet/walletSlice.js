@@ -27,6 +27,17 @@ const ISO = {
   'AUD': 'AU$' 
 }
 
+
+
+export const makeAccount = createAsyncThunk('POST_MAKEACCOUJNT', async(data, {rejectWithValue})=>{
+  try{
+    const response = await axios.post('product',data);
+  }catch(err){
+    console.log(err)
+    return rejectWithValue(err);
+  }
+})
+
 // 환율 정보 불러오기
 export const getExchangeRate = createAsyncThunk('GET_EXCHANGE_RATE', async(_,{ rejectWithValue })=>{
   try{
@@ -75,7 +86,6 @@ export const getAccounts = createAsyncThunk('GET_ACCOUNT', async (data, { reject
 // export const postExchange = createAsyncThunk('POST_EXCHANGE', async())
 export const postSendMoney = createAsyncThunk('POST_SENDMONEY', async(data, { rejectWithValue }) => {
   try {
-    console.log('이체',data);
     const response = await axios.post('bank/transfer', data)
     return response
   } catch (err) {
@@ -86,7 +96,6 @@ export const postSendMoney = createAsyncThunk('POST_SENDMONEY', async(data, { re
 
 export const postExchangeKRW = createAsyncThunk('POST_EXCHANGEKRW', async(data, { rejectWithValue }) => {
   try {
-    console.log(data);
     const response = await axios.post('exchange/toglobal', data)
     return response
   } catch (err) {
@@ -97,9 +106,7 @@ export const postExchangeKRW = createAsyncThunk('POST_EXCHANGEKRW', async(data, 
 
 export const postExchangeFOR = createAsyncThunk('POST_EXCHANGEFOR', async(data, { rejectWithValue }) => {
   try {
-    console.log(data);
     const response = await axios.post('exchange/fromglobal', data)
-    console.log('???')
     return response
   } catch (err) {
     console.log('지갑Slice.EXCHANGEMONEY',err.response)
