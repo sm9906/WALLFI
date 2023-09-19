@@ -26,7 +26,7 @@ const type = {
     'PANDA':'판다',
     'QUOKKA':'쿼카',
     'SHIBA':'시바',
-    'LION':'호랑이',
+    'TIGER':'호랑이',
     'MOLLY': '몰리',
 }
 

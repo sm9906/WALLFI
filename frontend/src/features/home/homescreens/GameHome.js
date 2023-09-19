@@ -234,8 +234,8 @@ function Content(props) {
         </TouchableOpacity>
         <TouchableOpacity style={styles.button}>
 
-          <Image source={images.btnSource.closet} style={styles.buttonContent} />
-          <Text style={styles.btnText}>옷장</Text>
+          <Image source={images.btnSource.sunglasses} style={styles.buttonContent} />
+          <Text style={styles.btnText}>꾸미기</Text>
         </TouchableOpacity>
       </View>
     </View>

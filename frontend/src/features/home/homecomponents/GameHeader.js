@@ -8,7 +8,7 @@ import { AntDesign } from "@expo/vector-icons";
 
 import ExpBar from "./exp/ExpBar";
 import { images } from "../../../common/imgDict.js";
-import { SCREEN_WIDTH, SCREEN_HEIGHT } from "../homecomponents/ScreenSize.js";
+import { SCREEN_WIDTH, SCREEN_HEIGHT } from "../../../common/ScreenSize.js";
 
 // 추후에 여기 컴포넌트로 분리, style 파일 props로 전달 필요!
 
