@@ -20,7 +20,7 @@
                    END AS `count`
         FROM account a
         WHERE `대표계좌` = #{mainWithdrawalAccountNumber}
-          AND  `상품명` = `저축예금`;
+          AND  `상품명` = '저축예금';
     </select>
 
     <select id="findSubAccountNumberByCurrencyCode" resultType="String" parameterType="String">
@@ -28,7 +28,7 @@
         FROM account a
         WHERE `대표계좌` = #{mainWithdrawalAccountNumber}
           AND `통화` = #{currencyCode}
-          AND  `상품명` = `저축예금`;
+          AND  `상품명` = '저축예금';
     </select>
 
     <select id="checkSufficientMoneyForTransfer" resultType="boolean" parameterType="Map">
