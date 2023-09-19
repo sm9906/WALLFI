@@ -1,14 +1,13 @@
-import { useRef, useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { StyleSheet, Text, View, Image } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 import { RFPercentage } from "react-native-responsive-fontsize";
-import * as Animatable from "react-native-animatable";
 import { AntDesign } from "@expo/vector-icons";
 
 import ExpBar from "./exp/ExpBar";
 import { images } from "../../../common/imgDict.js";
-import { SCREEN_WIDTH, SCREEN_HEIGHT } from "../../../common/ScreenSize.js";
+import { SCREEN_WIDTH } from "../../../common/ScreenSize.js";
 
 // 추후에 여기 컴포넌트로 분리, style 파일 props로 전달 필요!
 
@@ -84,9 +83,6 @@ function GameHeader(props) {
       <View style={styles.header}>
         <View style={{ flexDirection: "column", flex: 1 }}>
           <View style={styles.headerItem}>
-            {/* <View style={{ flex: 1, alignItems: 'center' }}>
-                <Image source={images.defaultCharacter.TIGER.MINT} style={styles.profile}></Image>
-            </View> */}
             <Text style={styles.name}>{gameUser&&gameUser.username}</Text>
           </View>
           <View
@@ -146,16 +142,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  // profile: {
-  //     width: '65%',
-  //     height: '85%',
-  //     backgroundColor: '#0F6828',
-  //     borderRadius: 20,
-  //     borderColor: '#5C4800',
-  //     borderWidth: 2,
-  //     resizeMode: 'contain',
-  //     marginTop: '10%',
-  // },
   name: {
     flex: 1.5,
     fontWeight: "bold",

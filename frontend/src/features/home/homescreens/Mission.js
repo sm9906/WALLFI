@@ -4,7 +4,6 @@ import {
   StyleSheet,
   Text,
   View,
-  Image,
   ImageBackground,
   TouchableOpacity,
   ScrollView
@@ -13,10 +12,10 @@ import { globalStyles } from "../homestyles/global.js";
 import PageHeader from "../homecomponents/PageHeader.js";
 
 import GameHeader from "../homecomponents/GameHeader.js";
-import mission from "../../.././assets/background/mission.png";
+import { images } from '../../../common/imgDict.js'
 import axios from "axios";
 import { requestGet } from "../../../common/http-common.js";
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../homecomponents/ScreenSize.js";
+import { SCREEN_WIDTH } from "../../../common/ScreenSize.js";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 
 export default function Mission({ navigation }) {
@@ -36,7 +35,7 @@ export default function Mission({ navigation }) {
 
   return (
     <View style={globalStyles.container}>
-      <ImageBackground source={mission} style={[globalStyles.bgImg, { alignItems: "center" }]}>
+      <ImageBackground source={images.Background.mission} style={[globalStyles.bgImg, { alignItems: "center" }]}>
         <GameHeader />
         <PageHeader navigation={navigation} color={'#76009F'} title={'미션'}/>
         <MenuBar quests={quests}/>

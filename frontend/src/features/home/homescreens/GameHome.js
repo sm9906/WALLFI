@@ -20,7 +20,7 @@ import { globalStyles } from '../homestyles/global.js';
 import { images } from '../../../common/imgDict.js';
 import GameHeader from '../homecomponents/GameHeader.js';
 import { RFPercentage } from 'react-native-responsive-fontsize';
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../homecomponents/ScreenSize.js';
+import { SCREEN_WIDTH } from '../../../common/ScreenSize.js';
 
 // 상태바 겹침현상을 없애려면 react-native에서 StatusBar를 import 해줘야함
 
@@ -106,7 +106,7 @@ function Season() {
 
   return (
     <View style={styles.season}>
-      <LinearGradient style={styles.box} colors={['rgba(142, 170, 245, 1)', 'rgba(72, 122, 255, 0.4)', 'transparent']}>
+      <LinearGradient style={styles.box} colors={['rgba(142, 170, 245, 1)', 'rgba(72, 122, 255, 0.5)', 'transparent']}>
         <Image source={images.gameIcon.trophy} style={styles.trophy} />
         <Text style={styles.seasonText}>여름 시즌</Text>
       </LinearGradient>
@@ -265,13 +265,9 @@ function Bottom(props) {
 const actStyles = StyleSheet.create({
   eating:{
     resizeMode: 'contain',
-    // width:SCREEN_WIDTH*0.8,
-    // height:SCREEN_HEIGHT*0.6,
     marginLeft:'8%',
     width: SCREEN_WIDTH*0.9,
     height: '50%',
-    // backgroundColor:'red',
-    // marginBottom: SCREEN_HEIGHT*0.01
   }
 })
 

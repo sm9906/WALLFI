@@ -12,7 +12,7 @@ import LoadingImg from '../../../assets/game/loading/LoadingImg.gif'
 import ShinhanLogo from '../../../assets/wallet/ShinhanLogo.png'
 
 import { RFPercentage } from 'react-native-responsive-fontsize';
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../homecomponents/ScreenSize';
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../../common/ScreenSize.js';
 
 export default function GameLoading({navigation}) {
 
