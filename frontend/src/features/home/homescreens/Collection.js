@@ -58,7 +58,7 @@ export default function Collection({navigation}) {
         setSelectedCharacter({...item});
       }}>
       <View style={{ flex: 1, alignItems: 'center' }}>
-        <Image source={item.imageUrl} style={{ resizeMode: 'contain', width: '100%', height: '100%' }}/>    
+        <Image source={item.imageUrl} style={styles.gridItemStyle}/>    
       </View>
     </TouchableOpacity>
   )
@@ -159,6 +159,11 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     aspectRatio: 1,
     overflow: 'hidden',
+  },
+  gridItemStyle: { 
+    resizeMode: 'contain', 
+    width: '100%', 
+    height: '100%' 
   },
   modalBox: { 
     flex: 1, 
