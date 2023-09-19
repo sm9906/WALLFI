@@ -115,9 +115,15 @@ function DetailPage(props) {
         </View>
         <View style={styles.modalItems}>
             <Image source={props.selectedCharacter.imageUrl} style={{ flex: 5, resizeMode: 'contain', overflow: 'hidden' }}/>
-            <TouchableOpacity style={styles.mainCharacterBtn} onPress={()=>{ setMain(); props.setModalVisible(false);}}>
-                <Text style={{ fontSize: 15, fontWeight: 'bold', color: 'white' }}>대표동물</Text>
-            </TouchableOpacity>
+            {
+              props.selectedCharacter.main 
+                ? <TouchableOpacity style={styles.mainCharacterBtn}>
+                    <Text style={{ fontSize: 15, fontWeight: 'bold', color: 'white' }}>현재 대표동물</Text>
+                  </TouchableOpacity>
+                : <TouchableOpacity style={styles.mainCharacterBtn} onPress={()=>{ setMain(); props.setModalVisible(false);}}>
+                    <Text style={{ fontSize: 15, fontWeight: 'bold', color: 'white' }}>대표동물</Text>
+                  </TouchableOpacity>
+            }
         </View>
         <View style={styles.modalBottom}>        
         <ExpBar ExpStyle={ExpStyle} exp={props.selectedCharacter.exp} level={props.selectedCharacter.level}/> 

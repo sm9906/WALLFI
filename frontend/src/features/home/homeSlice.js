@@ -234,7 +234,9 @@ export const homeSlice = createSlice({
       characters.map(character => {
         if (character.characterIdx == id) {
           state.mainCharacter = character;
-          return;
+          character.main = true;
+        } else {
+          character.main = false;
         }
       })
       console.log('캐릭터 업데이트 성공!')
