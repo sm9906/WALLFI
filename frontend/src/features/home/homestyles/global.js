@@ -1,9 +1,8 @@
 import { StyleSheet } from "react-native";
-import { SCREEN_WIDTH, SCREEN_HEIGHT } from "../homecomponents/ScreenSize.js";
+import { SCREEN_WIDTH } from "../homecomponents/ScreenSize.js";
 
 export const globalStyles = StyleSheet.create({
   container: {
-    // width: SCREEN_WIDTH,
     flex: 1,
   },
   bgImg: {

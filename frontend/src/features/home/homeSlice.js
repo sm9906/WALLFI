@@ -8,8 +8,11 @@ export const getGameInfo = createAsyncThunk('GET_GAME_INFO', async(userId, { rej
     const res = await axios.post('game/getinfo', {
       userId: userId,
     })
+
     return res.data.data;
+
   } catch(e) {
+    console.error('홈슬라이스/getGameInfo 실패', e);
     return rejectWithValue(e.res);
   }
 })
@@ -20,7 +23,7 @@ export const getMainCharacter = createAsyncThunk('GET_MAIN_CHARACTER', async(use
     const res = await axios.post('character/getmain', {
       userId: userId,
     })
-    
+
     const characterDto = res.data.data.characterDto;
     const data = {
       characterIdx: characterDto.characterIdx,
@@ -37,6 +40,7 @@ export const getMainCharacter = createAsyncThunk('GET_MAIN_CHARACTER', async(use
     return data;
 
   } catch (e) {
+    console.error('홈슬라이스/getMainCharacter 실패', e);
     return rejectWithValue(e.res);
   }
 });
@@ -69,6 +73,7 @@ export const getCharacterList = createAsyncThunk('GET_CHARACTER_LIST', async(use
     return characters;
 
   } catch (e) {
+    console.error('홈슬라이스/getCharacterList 실패', e);
     return rejectWithValue(e.res);
   }
 })
@@ -76,12 +81,11 @@ export const getCharacterList = createAsyncThunk('GET_CHARACTER_LIST', async(use
 // 캐릭터 수정하기 / 메인 수정 / 스탯 수정 
 export const updateCharacter = createAsyncThunk('UPDATE_CHARACTER', async(data, { rejectWithValue }) => {
   try {
-    console.log('홈슬라이스/updateCharacter 데이터 전달 확인 ', data)
     await axios.put('character/change/status', data)
-    // .then(res=>console.log('해쒕', res));
     return data;
+
   } catch (e) {
-    console.log('홈슬라이스/updatecharacter 실패',e);
+    console.error('홈슬라이스/updatecharacter 실패',e);
     return rejectWithValue(e.res);
   }
 })
@@ -89,11 +93,11 @@ export const updateCharacter = createAsyncThunk('UPDATE_CHARACTER', async(data, 
 // 사용자 포인트 수정
 export const updatePoint = createAsyncThunk('UPDATE_POINT', async(data, { rejectWithValue }) => {
   try {
-    console.log('홈슬라이스/updatePoint 데이터 전달 확인', data)
     await axios.post('game/pointup', data)
     return data;
+
   } catch (e) {
-    console.log('홈슬라이스/updatepoint 실패', e);
+    console.error('홈슬라이스/updatepoint 실패', e);
     return rejectWithValue(e.res);
   }
 })
@@ -101,7 +105,6 @@ export const updatePoint = createAsyncThunk('UPDATE_POINT', async(data, { reject
 // 캐릭터 색 수정
 export const changeColor = createAsyncThunk('CHANGE_COLOR', async(data, { rejectWithValue }) => {
   try {
-    console.log('홈슬라이스/changeColor 데이터 전달 확인', data);
     const res = await axios.put('character/change/color', data);
     const color = res.data.data.characterDto;
     const changeCharacterColor = {
@@ -119,7 +122,7 @@ export const changeColor = createAsyncThunk('CHANGE_COLOR', async(data, { reject
     return changeCharacterColor;
 
   } catch(e) {
-    console.log('홈슬라이스/changeColor 실패', e.res);
+    console.error('홈슬라이스/changeColor 실패', e);
     return rejectWithValue(e.res);
   }
 })
@@ -127,13 +130,11 @@ export const changeColor = createAsyncThunk('CHANGE_COLOR', async(data, { reject
 // 캐릭터 1개 뽑기
 export const getRandomCharacter = createAsyncThunk('GET_RANDOM_CHARACTER', async(userId, { rejectWithValue }) => {
   try {
-    console.log('홈슬라이스/getRandomCharacter 데이터 전달 확인 ', userId)
     const res = await axios.post('character/shop', {
       userId: userId
     })
 
     const characterDto = res.data.data.characterDto;
-    console.log('성공', characterDto)
     const character = {
       characterIdx: characterDto.characterIdx,
       characterType: characterDto.characterType,
@@ -149,7 +150,7 @@ export const getRandomCharacter = createAsyncThunk('GET_RANDOM_CHARACTER', async
     return character;
 
   } catch (e) {
-    console.log('홈슬라이스/getRandomCharacter 실패', e)
+    console.error('홈슬라이스/getRandomCharacter 실패', e)
     return rejectWithValue(e.res);
   }
 })
@@ -157,13 +158,11 @@ export const getRandomCharacter = createAsyncThunk('GET_RANDOM_CHARACTER', async
 // 캐릭터 10개 뽑기
 export const getRandomTenCharacter = createAsyncThunk('GET_RANDOM_TEN_CHARACTER', async(userId, { rejectWithValue }) => {
   try {
-    console.log('홈슬라이스/getRandomTenCharacter 데이터 전달 확인 ', userId)
     const res = await axios.post('character/shopten/', {
       userId: userId
     })
 
     const characterDtoList = res.data.data.characterDtoList;
-    console.log('성공', characterDtoList)
     const characters = characterDtoList.map((a) => {
       const character = {
         characterIdx: a.characterIdx,
@@ -178,12 +177,13 @@ export const getRandomTenCharacter = createAsyncThunk('GET_RANDOM_TEN_CHARACTER'
       }
 
       return character;
+
     })
 
     return characters;
 
   } catch (e) {
-    console.log('홈슬라이스/getRandomTenCharacter 실패', e)
+    console.error('홈슬라이스/getRandomTenCharacter 실패', e)
     return rejectWithValue(e.res);
   }
 })
@@ -206,29 +206,58 @@ export const homeSlice = createSlice({
   extraReducers: (builder) => {
     builder
     .addCase(getMainCharacter.fulfilled, (state, action) => {
-      console.log(action.payload);
       state.mainCharacter = action.payload;
+      console.log('메인 캐릭터 가져오기 성공!');
     })
     .addCase(getCharacterList.fulfilled, (state, action) => {
       state.characters = action.payload;
+      console.log('캐릭터 리스트 가져오기 성공!');
     })
     .addCase(getGameInfo.fulfilled, (state, action) => {
       state.userGameInfo = action.payload;
+      console.log('게임 유저 정보 가져오기 성공!');
     })
     .addCase(getRandomCharacter.fulfilled, (state, action) => {
-      console.log('캐릭터 랜덤 뽑기 성공!', action.payload)
+      console.log('캐릭터 랜덤 뽑기 성공!')
     })
     .addCase(getRandomTenCharacter.fulfilled, (state, action) => {
-      console.log('캐릭터 10개 뽑기 성공!', action.payload)
+      console.log('캐릭터 10개 뽑기 성공!')
     })
     .addCase(updateCharacter.fulfilled, (state, action)=>{
-      console.log('캐릭터 변경 성공!', action.payload)
+      // 메인으로 설정한 캐릭터의 Idx 가져오기
+      const id = action.payload.characterIdx;
+
+      // 사용자의 캐릭터 중 해당 Idx의 캐릭터 가져오기
+      const characters = [...state.characters];
+
+      // characterIdx가 id와 같으면 해당 캐릭터를 메인캐릭터로 상태 변경
+      characters.map(character => {
+        if (character.characterIdx == id) {
+          state.mainCharacter = character;
+          return;
+        }
+      })
+      console.log('캐릭터 업데이트 성공!')
     })
     .addCase(updatePoint.fulfilled, (state, action) => {
-      console.log('포인트 변경 성공!', action.payload)
+
+      // 상점에서 포인트를 사용했을 때 음수값으로 포인트를 입력하기 때문에 그대로 + 해주면됨
+      state.userGameInfo.point += action.payload.point;
+      console.log('포인트 변경 성공!');
     })
     .addCase(changeColor.fulfilled, (state, action) => {
-      console.log('캐릭터 색 변경 성공!', action.payload);
+
+      // 캐릭터 색 변경대상 Idx값 가져오기
+      const id = action.payload.characterIdx;
+
+      // id값과 같은 characterIdx값을 갖고있는 객체의 색 상태값 변경
+      state.characters.forEach(character => {
+        if (character.characterIdx == id) {
+          character.color = action.payload.color;
+          return;
+        }
+      })
+      console.log('캐릭터 색 변경 성공!');
     })
   }
 })
