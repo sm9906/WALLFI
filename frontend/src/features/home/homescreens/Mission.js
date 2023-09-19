@@ -7,14 +7,13 @@ import {
   Image,
   ImageBackground,
   TouchableOpacity,
-  ScrollView,
-  Button,
+  ScrollView
 } from "react-native";
 import { globalStyles } from "../homestyles/global.js";
+import PageHeader from "../homecomponents/PageHeader.js";
 
 import GameHeader from "../homecomponents/GameHeader.js";
 import mission from "../../.././assets/background/mission.png";
-import backHome from "../../.././assets/game/button/backHome.png";
 import axios from "axios";
 import { requestGet } from "../../../common/http-common.js";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../homecomponents/ScreenSize.js";
@@ -39,25 +38,11 @@ export default function Mission({ navigation }) {
     <View style={globalStyles.container}>
       <ImageBackground source={mission} style={[globalStyles.bgImg, { alignItems: "center" }]}>
         <GameHeader />
-        <MissionHeader navigation={navigation} />
+        <PageHeader navigation={navigation} color={'#76009F'} title={'미션'}/>
         <MenuBar quests={quests}/>
         {/* <View style={{ flex: 6.5 }}></View> */}
       </ImageBackground>
       <StatusBar />
-    </View>
-  );
-}
-
-function MissionHeader(props) {
-  return (
-    <View style={{ flex: 1.2, flexDirection: "row", alignItems: "center" }}>
-      <TouchableOpacity
-        style={[globalStyles.navigationBtn, { backgroundColor: "#76009F" }]}
-        onPress={() => props.navigation.navigate("GameHome")}
-      >
-        <Image source={backHome} style={globalStyles.btnIcon} />
-      </TouchableOpacity>
-      <Text style={[globalStyles.navigationText, { color: "#76009F" }]}>미션</Text>
     </View>
   );
 }
