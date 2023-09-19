@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import {
   StatusBar,
@@ -80,7 +80,7 @@ export default function GameHome({ navigation }) {
               <View style={{ flex: 4, alignItems: 'flex-start', marginStart: '5%' }}>
                 <Text style={{ fontSize: 12, marginBottom: '3%' }}>{'서버 점검 10분전에 데이터 보호를 위해 미리 게임을\n종료하시기 바랍니다.'}</Text>
                 <Text style={{ fontSize: 12 }}>
-                  {'코인 용사님들의 더 풍부한 모험을 위해 새로운 컨텐츠를\n추가하였습니다. 해당 업데이트 내용은 아래와 같이\n참고하시기 바랍니다. 항상 코인 용사님들이 새로운 모험을\n'}
+                  {'코인 용사님들의 더 풍부한 모험을 위해 새로운 컨텐츠를\n추가하였습니다. 해당 업데이트 내용은 아래와 같이\n참고하시기 바랍니다. 항상 코인 용사님들이 새로운 모험을\n즐길 수 있도록 최선을 다하겠습니다.'}
                 </Text>
               </View>
             </View>
@@ -232,10 +232,10 @@ function Content(props) {
           <Image source={images.btnSource.mission} style={styles.buttonContent} />
           <Text style={styles.btnText}>미션</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate('Mission')}>
+        <TouchableOpacity style={styles.button}>
 
-          <Image source={images.btnSource.map} style={styles.buttonContent} />
-          <Text style={styles.btnText}>지도</Text>
+          <Image source={images.btnSource.closet} style={styles.buttonContent} />
+          <Text style={styles.btnText}>옷장</Text>
         </TouchableOpacity>
       </View>
     </View>

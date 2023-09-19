@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
     StatusBar,
     StyleSheet,
@@ -25,7 +25,8 @@ const type = {
     'PANDA':'판다',
     'QUOKKA':'쿼카',
     'SHIBA':'시바',
-    'LION':'호랑이'
+    'LION':'호랑이',
+    'MOLLY': '몰리',
 }
 
 
@@ -51,15 +52,7 @@ export default function Collection({navigation}) {
 
   const Item = ({item}) => (
     <TouchableOpacity
-      style={{
-        backgroundColor: 'rgba(255, 255, 255, 0.7)',
-        flex: 0.5,
-        marginHorizontal: '5%',
-        marginVertical: '5%',
-        borderRadius: 20,
-        aspectRatio: 1,
-        overflow: 'hidden',
-      }}
+      style={styles.gridStyle}
       onPress={() => {
         setModalVisible(true);
         setSelectedCharacter({...item});
@@ -124,47 +117,21 @@ function DetailPage(props) {
   }
   return (
     <View style={styles.modalStyle}>
-        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
-            <View style={{ flex: 6, alignItems: 'center', marginStart: '10%' }}>
+        <View style={styles.modalBox}>
+            <View style={styles.modalContent}>
                 <Text style={{ fontSize: 25, fontWeight: 'bold' }}>{props.selectedCharacter.name}</Text>
             </View>
             <TouchableOpacity onPress={() => props.setModalVisible(false)} style={{ flex: 1 }}>
                 <Image source={images.btnSource.modalClose} style={{ resizeMode: 'contain', width: '70%' }} />
             </TouchableOpacity>
         </View>
-        <View style={{ 
-            flex: 5, 
-            width: '100%', 
-            backgroundColor: '#FFF7DB', 
-            borderBottomColor: '#000000', 
-            borderBottomWidth: 3,
-            justifyContent: 'center',
-            alignItems: 'center'
-        }}>
+        <View style={styles.modalItems}>
             <Image source={props.selectedCharacter.imageUrl} style={{ flex: 5, resizeMode: 'contain', overflow: 'hidden' }}/>
-            <TouchableOpacity style={{
-                flex: 1,
-                width: '30%',
-                backgroundColor: '#DD4F00',
-                justifyContent: 'center',
-                alignItems: 'center',
-                marginVertical: '5%',
-                borderRadius: 15,
-                borderWidth: 2,
-                borderColor: '#BE4400'
-            }} onPress={()=>{setMain()}}>
+            <TouchableOpacity style={styles.mainCharacterBtn} onPress={()=>{setMain()}}>
                 <Text style={{ fontSize: 15, fontWeight: 'bold', color: 'white' }}>대표동물</Text>
             </TouchableOpacity>
         </View>
-        <View style={{ 
-            flex: 2, 
-            width: '100%', 
-            backgroundColor: '#FFF2BA', 
-            marginBottom: '10%',
-            justifyContent: 'center',
-            alignItems: 'center'
-        }}>
-          
+        <View style={styles.modalBottom}>        
         <ExpBar ExpStyle={ExpStyle} exp={props.selectedCharacter.exp} level={props.selectedCharacter.level}/> 
         </View>
     </View>
@@ -181,6 +148,53 @@ const styles = StyleSheet.create({
     marginTop: '45%',
     marginBottom: '10%',
     borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  gridStyle: {
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    flex: 0.5,
+    marginHorizontal: '5%',
+    marginVertical: '5%',
+    borderRadius: 20,
+    aspectRatio: 1,
+    overflow: 'hidden',
+  },
+  modalBox: { 
+    flex: 1, 
+    flexDirection: 'row', 
+    alignItems: 'center' 
+  },
+  modalContent: { 
+    flex: 6, 
+    alignItems: 'center', 
+    marginStart: '10%' 
+  },
+  modalItems: { 
+    flex: 5, 
+    width: '100%', 
+    backgroundColor: '#FFF7DB', 
+    borderBottomColor: '#000000', 
+    borderBottomWidth: 3,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  mainCharacterBtn: {
+    flex: 1,
+    width: '30%',
+    backgroundColor: '#DD4F00',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginVertical: '5%',
+    borderRadius: 15,
+    borderWidth: 2,
+    borderColor: '#BE4400'
+  },
+  modalBottom: { 
+    flex: 2, 
+    width: '100%', 
+    backgroundColor: '#FFF2BA', 
+    marginBottom: '10%',
     justifyContent: 'center',
     alignItems: 'center'
   }
