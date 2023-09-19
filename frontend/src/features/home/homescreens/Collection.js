@@ -18,6 +18,7 @@ import { images } from '../../../common/imgDict.js';
 import GameHeader from '../homecomponents/GameHeader.js';
 import ExpBar from '../homecomponents/exp/ExpBar.js';
 import { RFPercentage } from 'react-native-responsive-fontsize';
+import PageHeader from '../homecomponents/PageHeader.js';
 
 const type = {
     'EAGLE':'독수리',
@@ -82,7 +83,7 @@ export default function Collection({navigation}) {
             userId = {userId}
           />
         </Modal>
-        <CollectionHeader navigation={navigation}/>
+        <PageHeader navigation={navigation} color={'#DD4F00'} title={'동물도감'}/>
         <View style={{ flex: 6.5, width: '100%' }}>
         <FlatList 
             data={characters}
@@ -95,19 +96,6 @@ export default function Collection({navigation}) {
       <StatusBar />
     </View>
   )
-}
-
-// 여기 컴포넌트로 분리 필요 
-function CollectionHeader(props) {
-    return (
-        <View style={{ flex: 1.2, flexDirection: 'row', alignItems: 'center' }}>
-            <TouchableOpacity style={[globalStyles.navigationBtn, { backgroundColor: '#DD4F00' }]} 
-                onPress={() => props.navigation.navigate('GameHome')}>
-                <Image source={images.btnSource.backHome} style={globalStyles.btnIcon}/>
-            </TouchableOpacity>
-            <Text style={[globalStyles.navigationText, { color: '#DD4F00' }]}>동물도감</Text>
-        </View>
-    );
 }
 
 function DetailPage(props) {
@@ -127,7 +115,7 @@ function DetailPage(props) {
         </View>
         <View style={styles.modalItems}>
             <Image source={props.selectedCharacter.imageUrl} style={{ flex: 5, resizeMode: 'contain', overflow: 'hidden' }}/>
-            <TouchableOpacity style={styles.mainCharacterBtn} onPress={()=>{setMain()}}>
+            <TouchableOpacity style={styles.mainCharacterBtn} onPress={()=>{ setMain(); props.setModalVisible(false);}}>
                 <Text style={{ fontSize: 15, fontWeight: 'bold', color: 'white' }}>대표동물</Text>
             </TouchableOpacity>
         </View>

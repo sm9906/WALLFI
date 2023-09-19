@@ -14,12 +14,8 @@ import { images } from "../../../common/imgDict.js";
 import { globalStyles } from "../homestyles/global.js";
 import GameHeader from "../homecomponents/GameHeader.js";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  changeColor,
-  getRandomCharacter,
-  getRandomTenCharacter,
-  updatePoint,
-} from "../homeSlice.js";
+import { changeColor, getRandomCharacter, getRandomTenCharacter, updatePoint } from "../homeSlice.js";
+import PageHeader from '../homecomponents/PageHeader.js';
 
 const typeList = {
   EAGLE: "독수리",
@@ -95,7 +91,7 @@ export default function Market({ navigation }) {
           />
         </Modal>
         <GameHeader />
-        <MarketHeader navigation={navigation} />
+        <PageHeader navigation={navigation} color={'#FFC700'} title={'상점'} />
         <View style={styles.buttonBox}>
           <TouchableOpacity
             onPress={() => setSelectedBtn(1)}
@@ -134,25 +130,6 @@ export default function Market({ navigation }) {
         />
       </ImageBackground>
       <StatusBar />
-    </View>
-  );
-}
-
-function MarketHeader(props) {
-  return (
-    <View style={{ flex: 1.2, flexDirection: "row", alignItems: "center" }}>
-      <TouchableOpacity
-        style={[globalStyles.navigationBtn, { backgroundColor: "#FFC700" }]}
-        onPress={() => props.navigation.navigate("GameHome")}
-      >
-        <Image
-          source={images.btnSource.backHome}
-          style={globalStyles.btnIcon}
-        />
-      </TouchableOpacity>
-      <Text style={[globalStyles.navigationText, { color: "#FFC700" }]}>
-        상점
-      </Text>
     </View>
   );
 }
