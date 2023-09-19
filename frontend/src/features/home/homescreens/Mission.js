@@ -1,22 +1,15 @@
-import React, { useEffect, useState } from "react";
-import {
-  StatusBar,
-  StyleSheet,
-  Text,
-  View,
-  ImageBackground,
-  TouchableOpacity,
-  ScrollView
-} from "react-native";
-import { globalStyles } from "../homestyles/global.js";
-import PageHeader from "../homecomponents/PageHeader.js";
+import React, { useEffect, useState } from 'react';
+import { StatusBar, StyleSheet, Text, View, ImageBackground, TouchableOpacity, ScrollView } from 'react-native';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import axios from 'axios';
 
-import GameHeader from "../homecomponents/GameHeader.js";
+import { requestGet } from '../../../common/http-common.js';
 import { images } from '../../../common/imgDict.js'
-import axios from "axios";
-import { requestGet } from "../../../common/http-common.js";
-import { SCREEN_WIDTH } from "../../../common/ScreenSize.js";
-import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import { globalStyles } from '../homestyles/global.js';
+import { SCREEN_WIDTH } from '../../../common/ScreenSize.js';
+
+import GameHeader from '../homecomponents/GameHeader.js';
+import PageHeader from '../homecomponents/PageHeader.js';
 
 export default function Mission({ navigation }) {
   [quests, setQuest] = useState([]);

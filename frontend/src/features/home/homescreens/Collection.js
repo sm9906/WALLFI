@@ -1,42 +1,32 @@
 import React, { useState } from 'react';
-import {
-    StatusBar,
-    StyleSheet,
-    Text,
-    View,
-    Image,
-    ImageBackground,
-    TouchableOpacity,
-    FlatList,
-    Modal,
-    Alert
-} from 'react-native';
+import { StatusBar, StyleSheet, Text, View, Image, ImageBackground, TouchableOpacity, FlatList, Modal, Alert } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
+import { RFPercentage } from 'react-native-responsive-fontsize';
+
 import { updateCharacter } from '../homeSlice.js';
 import { globalStyles } from "../homestyles/global.js";
 import { images } from '../../../common/imgDict.js';
+
 import GameHeader from '../homecomponents/GameHeader.js';
 import ExpBar from '../homecomponents/exp/ExpBar.js';
-import { RFPercentage } from 'react-native-responsive-fontsize';
 import PageHeader from '../homecomponents/PageHeader.js';
 
 const type = {
-    'EAGLE':'독수리',
-    'LION':'사자',
-    'PANDA':'판다',
-    'QUOKKA':'쿼카',
-    'SHIBA':'시바',
-    'TIGER':'호랑이',
-    'MOLLY': '몰리',
+    EAGLE: '독수리',
+    LION: '사자',
+    PANDA: '판다',
+    QUOKKA: '쿼카',
+    SHIBA: '시바',
+    TIGER: '호랑이',
+    MOLLY: '몰리',
 }
-
 
 export default function Collection({navigation}) {
 
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedCharacter, setSelectedCharacter] = useState(null);
 
-  // 유저의 캐릭터 목록을 조회 
+  // 유저의 캐릭터 목록 조회
   const userId = useSelector(state=>state.auth.userId)
   const characterList = useSelector(state => state.home.characters);
   const characters = []

@@ -1,18 +1,15 @@
 import React, { useEffect } from 'react';
-import {
-    View,
-    Text,
-    StyleSheet,
-    Image
-} from 'react-native'
+import { View, Text, StyleSheet, Image } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux';
+import { RFPercentage } from 'react-native-responsive-fontsize';
+
 import { getCharacterList, getGameInfo, getMainCharacter } from '../homeSlice';
+
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../../common/ScreenSize.js';
 
 import LoadingImg from '../../../assets/game/loading/LoadingImg.gif'
 import ShinhanLogo from '../../../assets/wallet/ShinhanLogo.png'
 
-import { RFPercentage } from 'react-native-responsive-fontsize';
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../../common/ScreenSize.js';
 
 export default function GameLoading({navigation}) {
 

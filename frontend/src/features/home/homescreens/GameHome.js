@@ -1,26 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { LinearGradient } from 'expo-linear-gradient';
-import {
-  StatusBar,
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  ImageBackground,
-  TouchableOpacity,
-  Modal,
-  Alert
-} from 'react-native';
+import { StatusBar, StyleSheet, Text, View, Image, ImageBackground, TouchableOpacity, Modal, Alert } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
+import { RFPercentage } from 'react-native-responsive-fontsize';
 import { useFocusEffect } from '@react-navigation/native';
+import { LinearGradient } from 'expo-linear-gradient';
 
 import { getMainCharacter, updateCharacter } from '../homeSlice.js';
-
 import { globalStyles } from '../homestyles/global.js';
 import { images } from '../../../common/imgDict.js';
-import GameHeader from '../homecomponents/GameHeader.js';
-import { RFPercentage } from 'react-native-responsive-fontsize';
 import { SCREEN_WIDTH } from '../../../common/ScreenSize.js';
+
+import GameHeader from '../homecomponents/GameHeader.js';
 
 // 상태바 겹침현상을 없애려면 react-native에서 StatusBar를 import 해줘야함
 

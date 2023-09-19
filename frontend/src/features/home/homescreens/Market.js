@@ -1,20 +1,12 @@
-import React, { useState } from "react";
-import {
-  StatusBar,
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  ImageBackground,
-  TouchableOpacity,
-  Modal,
-  Alert,
-} from "react-native";
-import { images } from "../../../common/imgDict.js";
-import { globalStyles } from "../homestyles/global.js";
-import GameHeader from "../homecomponents/GameHeader.js";
-import { useDispatch, useSelector } from "react-redux";
-import { changeColor, getRandomCharacter, getRandomTenCharacter, updatePoint } from "../homeSlice.js";
+import React, { useState } from 'react';
+import { StatusBar, StyleSheet, Text, View, Image, ImageBackground, TouchableOpacity, Modal, Alert } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { changeColor, getRandomCharacter, getRandomTenCharacter, updatePoint } from '../homeSlice.js';
+import { globalStyles } from '../homestyles/global.js';
+import { images } from '../../../common/imgDict.js';
+
+import GameHeader from '../homecomponents/GameHeader.js';
 import PageHeader from '../homecomponents/PageHeader.js';
 
 const typeList = {

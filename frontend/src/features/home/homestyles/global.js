@@ -1,5 +1,5 @@
-import { StyleSheet } from "react-native";
-import { SCREEN_WIDTH } from "../homecomponents/ScreenSize.js";
+import { StyleSheet } from 'react-native';
+import { SCREEN_WIDTH } from '../homecomponents/ScreenSize.js';
 
 export const globalStyles = StyleSheet.create({
   container: {
