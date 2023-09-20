@@ -8,8 +8,8 @@ import {
   ImageBackground, 
   TouchableOpacity, 
   Modal, 
-  Alert } 
-from 'react-native';
+  Alert
+} from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { 

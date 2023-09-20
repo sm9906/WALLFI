@@ -4,8 +4,7 @@ import {
   Text, 
   ImageBackground, 
   StyleSheet,
-  TouchableOpacity,
-  TextInput
+  TouchableOpacity
 } from 'react-native';
 
 import { globalStyles } from '../homestyles/global.js';
@@ -15,6 +14,10 @@ import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../homecomponents/ScreenSize.js';
 
 import GameHeader from '../homecomponents/GameHeader';
 import PageHeader from '../homecomponents/PageHeader.js';
+
+import Purchase from './ItemExchange/Purchase.js';
+import Sale from './ItemExchange/Sale.js';
+import History from './ItemExchange/History.js';
 
 export default function ItemExchange({ navigation }) {
   const [selectedBtn, setSelectedBtn] = useState(0);
@@ -38,15 +41,20 @@ export default function ItemExchange({ navigation }) {
 // 구매 / 판매 / 거래내역 버튼그룹
 function ButtonGroup(props) {
 
+  // 현재 누른 버튼에 대한 배경 색 스타일 코드
+  const backgroundColor = (num) => {
+    return props.selectedBtn === num ? '#0065FE' : '#599CFF';
+  }
+
   return (
     <View style={btnGroup.btnContainer}>
-      <TouchableOpacity style={[btnGroup.btnStyle, {backgroundColor: props.selectedBtn === 0 ? '#0065FE' : '#599CFF'}]} onPress={() => props.setSelectedBtn(0)}>
+      <TouchableOpacity style={[btnGroup.btnStyle, {backgroundColor: backgroundColor(0)}]} onPress={() => props.setSelectedBtn(0)}>
         <Text style={btnGroup.btnText}>구매</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={[btnGroup.btnStyle, {backgroundColor: props.selectedBtn === 1 ? '#0065FE' : '#599CFF'}]} onPress={() => props.setSelectedBtn(1)}>
+      <TouchableOpacity style={[btnGroup.btnStyle, {backgroundColor: backgroundColor(1)}]} onPress={() => props.setSelectedBtn(1)}>
         <Text style={btnGroup.btnText}>판매</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={[btnGroup.btnStyle, {backgroundColor: props.selectedBtn === 2 ? '#0065FE' : '#599CFF'}]} onPress={() => props.setSelectedBtn(2)}>
+      <TouchableOpacity style={[btnGroup.btnStyle, {backgroundColor: backgroundColor(2)}]} onPress={() => props.setSelectedBtn(2)}>
         <Text style={btnGroup.btnText}>거래내역</Text>
       </TouchableOpacity>
     </View>
@@ -58,46 +66,6 @@ function Content(props) {
 
   return (
     props.selectedBtn == 0 ? <Purchase /> : props.selectedBtn == 1 ? <Sale /> : <History />
-  )
-}
-
-// 구매 버튼
-function Purchase() {
-
-  return (
-    <View style={{ flex: 7, alignItems: 'center' }}>
-      <Search />
-      <View style={{ flex: 6 }}><Text>아이템목록 들어와야함</Text></View>
-    </View>
-  )
-}
-
-// 검색창
-function Search() {
-
-  return (
-    <View style={search.searchContainer}>
-      <View style={search.searchBox}>
-        <TextInput style={{ marginHorizontal: '5%', marginVertical: '3%' }} placeholder='검색어를 입력해 주세요'/>
-      </View>
-      <TouchableOpacity style={search.searchBtn}><Text>검색</Text></TouchableOpacity>
-    </View>
-  )
-}
-
-// 판매 버튼
-function Sale() {
-
-  return (
-    <Text style={{ flex: 7 }}>판매</Text>
-  )
-}
-
-// 거래내역 버튼
-function History() {
-
-  return (
-    <Text style={{ flex: 7 }}>거래내역</Text>
   )
 }
 
@@ -131,34 +99,5 @@ const btnGroup= StyleSheet.create({
     fontSize: 15,
     fontWeight: 'bold',
     color: 'white'
-  }
-})
-
-const search = StyleSheet.create({
-  searchContainer: { 
-    flex: 1, 
-    width: '80%', 
-    flexDirection: 'row', 
-    alignItems: 'center', 
-    justifyContent: 'center' 
-  },
-  searchBox: { 
-    flex: 4, 
-    height: '50%', 
-    backgroundColor: '#D9EFFF',
-    marginHorizontal: '2%',
-    borderRadius: 5,
-    borderWidth: 1,
-    borderColor: 'black'
-  },
-  searchBtn: { 
-    flex: 1, 
-    height: '50%', 
-    backgroundColor: '#D9EFFF',
-    borderRadius: 5,
-    borderWidth: 1,
-    borderColor: 'black',
-    alignItems: 'center', 
-    justifyContent: 'center' 
   }
 })
