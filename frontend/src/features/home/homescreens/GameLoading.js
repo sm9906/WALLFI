@@ -55,7 +55,7 @@ export default function GameLoading({navigation}) {
       </View>
       <View style={loadingStyle.logoContainer}>
         <Image resizeMode='contain'style={loadingStyle.shinhanLogo} source={ShinhanLogo}/>
-        <Text style={loadingStyle.shinhanTXT}>Shinhan Bank</Text>
+        <Text style={loadingStyle.shinhanTXT}>SSAFY</Text>
       </View>
 
     </View>

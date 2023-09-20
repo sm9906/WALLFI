@@ -3,15 +3,12 @@ import { View, Text, StyleSheet } from 'react-native';
 import { ConvPad } from "../walletcomponents/virtualkeyboard/ConvKeypad";
 import { RFPercentage } from "react-native-responsive-fontsize";
 import VirtualKeyboard from "../walletcomponents/virtualkeyboard/VirtualKeypad";
-import { minusMoney, exchangeMoney, postSendMoney, postExchangeKRW, postExchangeFOR } from "../walletSlice";
+import { postSendMoney, postExchangeKRW, postExchangeFOR } from "../walletSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function SendHow({route, navigation}){
   const dispatch = useDispatch();
 
-  // console.log('얼마나 보낼까요',route)
-  // 이체, 환전 (1. 원화 -> 외화 2. 외화 -> 원화) 가 달라서... 엄청 어지러운 변수 선언..
-  // 고치고 싶음 ㅠ
   const type= route.params.type;
   const outAcc = route.params.outAcc;
   const balance = outAcc.balance; 
@@ -42,7 +39,7 @@ export default function SendHow({route, navigation}){
 
   const {mainAccount, userId} = useSelector(state=>state.auth)
   
-  // 이체하기. 
+  // 송금하기. 
   const sendMoney = () => {
     const data = {
       '이체금액': num_money,
@@ -67,7 +64,6 @@ export default function SendHow({route, navigation}){
       "금액": toNation==='KRW'?Number(money):Number(money),
       "사용자대표계좌": mainAccount,
     }
-    console.log(data)
     if(toNation!=='KRW'){      
       data["도착계좌통화코드"] = toNation
       data["전신환매도환율"]= exchangeRate
@@ -77,9 +73,8 @@ export default function SendHow({route, navigation}){
         console.log(err);
       })
     }else{
-      data["전신환매입환율"]= exchangeRate
+      data["전신환매입환율"] = exchangeRate
       data["출발계좌통화코드"] = outAcc.ntnCode;
-      console.log('ㅎㅇ')
       dispatch(postExchangeFOR(data))
       .then((res)=>sendExchangeMemo(res))
       .catch((err)=>{
@@ -90,12 +85,9 @@ export default function SendHow({route, navigation}){
 
   // 환전 - 메모로 보내기
   const sendExchangeMemo = async(res) => {
-    
     if(res.error){
       console.log('에러 발생')
     }
-
-    await dispatch(exchangeMoney({num_money,exchangedMoney,outAccId,toNation}))
     const outISO = toNation==='KRW'? '원' : ISO
     const formMoney = toNation==='KRW'? form_exchangedMoney : form_money
     navigation.navigate('SendMemo', props = {type, toNation, toAccount, toBank, formMoney, outISO, outAcc})
@@ -106,8 +98,6 @@ export default function SendHow({route, navigation}){
     if(res.error){
       console.log('에러 발생') // 여기 에러 발생하면 return 0으로 예외처리 
     }
-    await dispatch(minusMoney({num_money, outAccId}))
-    
     const outISO = ISO
     const formMoney = form_money
     navigation.navigate('SendMemo', props = {type, toNation, toAccount, toBank, formMoney, outISO, outAcc})

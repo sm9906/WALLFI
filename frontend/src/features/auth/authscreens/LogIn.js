@@ -11,6 +11,8 @@ import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../wallet/walletcomponents/Scree
 import { RFPercentage } from "react-native-responsive-fontsize";
 import { postLogIn } from "../authSlice";
 import { useSelector, useDispatch } from "react-redux";
+import AuthButton from "../authcomponents/AuthButton";
+import Sensor from './TouchIdtest';
 
 export default function LogIn({navigation}){
 
@@ -26,38 +28,47 @@ export default function LogIn({navigation}){
     )
   }
   return(
-    <View style={styles.background}>
-      
-      <View style={styles.txtContainer}>
-        <Text style={styles.txtSize}>아이디</Text>
+    <View style={AuthStyle.background}>
+      <Sensor />
+      {/* <View>
+        <Text style={AuthStyle.header}>WALLET FIGHT</Text>
+      </View>
+      <View style={{...AuthStyle.txtContainer, marginTop:SCREEN_HEIGHT*0.06}}>
+        <Text style={AuthStyle.txtSize}>아이디</Text>
         <TextInput 
               autoCapitalize="none"
               keyboardShouldPersistTaps="handled" 
               placeholder="  아이디"
               onChangeText={text => setID(text)}
-              style={styles.inputBox}
+              style={AuthStyle.inputBox}
         />
       </View>
-      <View style={styles.txtContainer}>
-        <Text style={styles.txtSize}>비밀번호</Text>
+      <View style={AuthStyle.txtContainer}>
+        <Text style={AuthStyle.txtSize}>비밀번호</Text>
         <TextInput  
               autoCapitalize="none"
               keyboardShouldPersistTaps="handled" 
               placeholder="  비밀번호"
               secureTextEntry={true}
               onChangeText={text => setPassword(text)}
-              style={styles.inputBox}
+              style={AuthStyle.inputBox}
         />
       </View>
-      
-      <TouchableOpacity style={ButtonStyle.button} onPress={onPress}>
-        <Text style={ButtonStyle.btnFont}>로그인</Text>
-      </TouchableOpacity>
+      <AuthButton onPress={onPress} btnTxt='로그인'/>
+      <View style={AuthStyle.goSignupTxt}>
+        <Text>아직 계정이 없으신가요? </Text>
+        <TouchableOpacity onPress={()=>navigation.navigate('SignUp')}><Text style={AuthStyle.goSignup}>회원가입</Text></TouchableOpacity>
+      </View> */}
     </View>
   )
 }
 
-const styles = StyleSheet.create({  
+export const AuthStyle = StyleSheet.create({  
+  header:{
+    fontSize:RFPercentage(5),
+    fontWeight:'bold',
+    color:'#293694'
+  },
   background:{
     height:SCREEN_HEIGHT,
     width:SCREEN_WIDTH,
@@ -80,6 +91,14 @@ const styles = StyleSheet.create({
   },
   txtSize:{
     fontSize:RFPercentage(2)
+  },
+  goSignupTxt:{
+    flexDirection:'row',
+    marginTop: SCREEN_HEIGHT*0.1,
+  },
+  goSignup:{
+    color:'#293694',
+    fontSize:RFPercentage(1.5)
   }
 
 })

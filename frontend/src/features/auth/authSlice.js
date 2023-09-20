@@ -3,13 +3,23 @@ import { CardInfo } from "../wallet/walletcomponents/walletcards/CardInfo";
 import axios from "../../common/http-common";
 
 // 로그인 버튼 누르면, 로그인 처리,
-export const postLogIn = createAsyncThunk('LOGIN', async(data, { rejectWithValue })=>{
+export const postLogIn = createAsyncThunk('POST_LOGIN', async(data, { rejectWithValue })=>{
   try{
     const response = await axios.post('user/login',data)
     return response.data.data;
   }catch(err){
     console.log('회원관리/authSlice.postLogIn',err.response.data)
     return rejectWithValue(err.response.data)
+  }
+})
+
+export const postSignUp = createAsyncThunk('POST_SIGNUP', async(data, {rejectWithValue})=>{
+  try{
+    const response = await axios.post('user/signup',data)
+    return response.data.data
+  }catch(err){
+    console.log('회원가입/autSlice.POST_SIGNUP', err.response.data)
+    return rejectWithValue(err.response.data);
   }
 })
 

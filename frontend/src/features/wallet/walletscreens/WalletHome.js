@@ -40,7 +40,6 @@ export default function WalletHome({navigation}) {
       // console.log('?')
       await dispatch(getExchangeRate());
       const response = await dispatch(getAccounts({userId, mainAccount}));
-      // console.log('계좌 조회 성공',response.payload); 
       setCards(response.payload)
     } catch (err) {
       console.log('walletscreens/WalletLoading.js',err);

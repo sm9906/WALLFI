@@ -8,7 +8,7 @@ import {
 } from 'react-native'; 
 import { RFPercentage } from "react-native-responsive-fontsize";
 
-import ShinhanLogo from '../../../assets/wallet/ShinhanLogo.png'
+import SSAFY from '../../../assets/wallet/SSAFY.png'
 import { Background } from "../walletcomponents/CommonStyle";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "./WalletHome";
 import { useDispatch, useSelector } from "react-redux";
@@ -48,8 +48,8 @@ export default function WalletLoading({navigation}){
         </View>
       </View>
       <View style={styles.logoContainer}>
-        <Image resizeMode='contain'style={styles.shinhanLogo} source={ShinhanLogo}/>
-        <Text>Shinhan Bank</Text>
+        <Image resizeMode='contain'style={styles.shinhanLogo} source={SSAFY}/>
+        <Text>SSAFY</Text>
       </View>
     </View>
   )

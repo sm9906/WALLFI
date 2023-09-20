@@ -14,6 +14,7 @@ import { Background, ButtonStyle } from "../walletcomponents/CommonStyle";
 import { SCREEN_HEIGHT } from "./WalletHome";
 import { useSelector } from "react-redux";
 import { useFocusEffect } from "@react-navigation/native";
+import {ISO} from '../walletcomponents/CommonStyle'
 
 const Deposit = {
   'Levelup':{
@@ -31,14 +32,6 @@ const Deposit = {
 }
 
 // 여기 따로 export 시켰어야 하는데..
-const ISO = {
-  'KRW': '원',
-  'USD': '$',
-  'EUR': '€',
-  'JPY': '¥',
-  'CNY': '¥',
-  'AUD': 'AU$' 
-}
 
 export default function MakeDetail({route,navigation}){
   useFocusEffect(()=>{
