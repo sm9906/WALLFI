@@ -207,31 +207,19 @@ export const homeSlice = createSlice({
     builder
     .addCase(getMainCharacter.fulfilled, (state, action) => {
       state.mainCharacter = action.payload;
-      console.log('메인 캐릭터 가져오기 성공!');
     })
     .addCase(getCharacterList.fulfilled, (state, action) => {
       state.characters = action.payload;
-      console.log('캐릭터 리스트 가져오기 성공!');
     })
     .addCase(getGameInfo.fulfilled, (state, action) => {
       state.userGameInfo = action.payload;
-      console.log('게임 유저 정보 가져오기 성공!');
-    })
-    .addCase(getRandomCharacter.fulfilled, (state, action) => {
-      console.log('캐릭터 랜덤 뽑기 성공!')
-    })
-    .addCase(getRandomTenCharacter.fulfilled, (state, action) => {
-      console.log('캐릭터 10개 뽑기 성공!')
     })
     .addCase(updateCharacter.fulfilled, (state, action)=>{
       // 메인으로 설정한 캐릭터의 Idx 가져오기
       const id = action.payload.characterIdx;
 
-      // 사용자의 캐릭터 중 해당 Idx의 캐릭터 가져오기
-      const characters = [...state.characters];
-
       // characterIdx가 id와 같으면 해당 캐릭터를 메인캐릭터로 상태 변경
-      characters.map(character => {
+      state.characters.map(character => {
         if (character.characterIdx == id) {
           state.mainCharacter = character;
           character.main = true;
@@ -239,13 +227,11 @@ export const homeSlice = createSlice({
           character.main = false;
         }
       })
-      console.log('캐릭터 업데이트 성공!')
     })
     .addCase(updatePoint.fulfilled, (state, action) => {
 
       // 상점에서 포인트를 사용했을 때 음수값으로 포인트를 입력하기 때문에 그대로 + 해주면됨
       state.userGameInfo.point += action.payload.point;
-      console.log('포인트 변경 성공!');
     })
     .addCase(changeColor.fulfilled, (state, action) => {
 
@@ -259,7 +245,6 @@ export const homeSlice = createSlice({
           return;
         }
       })
-      console.log('캐릭터 색 변경 성공!');
     })
   }
 })

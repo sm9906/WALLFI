@@ -67,7 +67,7 @@ function determineButtonColor(status) {
 const Tab = createMaterialTopTabNavigator();
 function MenuBar({quests}) {
   return (
-    <View style={{ flex: 7, width: SCREEN_WIDTH }}>
+    <View style={{ flex: 6.5, width: SCREEN_WIDTH }}>
       <Tab.Navigator
         // tabBarOptions={{
         //   labelStyle: { fontSize: 12 },
@@ -125,7 +125,7 @@ function DailyQuest({ quest, type }) {
   }
 
   return (
-    <View style={{ flex: 7, marginTop: 5 }}>
+    <View style={{ flex: 6.5, marginTop: 5 }}>
       <ScrollView>
         <View style={styles.questContainer}>
           {quest.map((quest, idx) => {

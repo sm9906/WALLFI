@@ -2,6 +2,7 @@ import home from "../assets/background/home.png";
 import collection from "../assets/background/collection.png";
 import market from "../assets/background/Market.png";
 import mission from "../assets/background/mission.png";
+import itemExchange from "../assets/background/itemExchange.png";
 
 import molly_basic from "../assets/characters/default/baby_duderge.png";
 
@@ -113,6 +114,7 @@ export const images = {
     collection: collection,
     market: market,
     mission: mission,
+    itemExchange: itemExchange,
   },
 
   defaultCharacter: {
