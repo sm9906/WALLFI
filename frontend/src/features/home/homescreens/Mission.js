@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { StatusBar, StyleSheet, Text, View, ImageBackground, TouchableOpacity, ScrollView } from 'react-native';
+import { 
+  StatusBar, 
+  StyleSheet, 
+  Text, 
+  View, 
+  ImageBackground, 
+  TouchableOpacity, 
+  ScrollView 
+} from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import axios from 'axios';
 

@@ -1,13 +1,18 @@
-import { useState, useEffect } from "react";
-import { StyleSheet, Text, View, Image } from "react-native";
-import { useSelector } from "react-redux";
+import React, { useState, useEffect } from 'react';
+import { 
+  StyleSheet, 
+  Text, 
+  View, 
+  Image 
+} from 'react-native';
+import { useSelector } from 'react-redux';
+import { RFPercentage } from 'react-native-responsive-fontsize';
+import { AntDesign } from '@expo/vector-icons';
 
-import { RFPercentage } from "react-native-responsive-fontsize";
-import { AntDesign } from "@expo/vector-icons";
+import { images } from '../../../common/imgDict.js';
+import { SCREEN_WIDTH } from '../../../common/ScreenSize.js';
 
-import ExpBar from "./exp/ExpBar";
-import { images } from "../../../common/imgDict.js";
-import { SCREEN_WIDTH } from "../../../common/ScreenSize.js";
+import ExpBar from './exp/ExpBar';
 
 // 추후에 여기 컴포넌트로 분리, style 파일 props로 전달 필요!
 

@@ -1,5 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { StatusBar, StyleSheet, Text, View, Image, ImageBackground, TouchableOpacity, Modal, Alert } from 'react-native';
+import { 
+  StatusBar, 
+  StyleSheet, 
+  Text, 
+  View, 
+  Image, 
+  ImageBackground, 
+  TouchableOpacity, 
+  Modal, 
+  Alert 
+} from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { RFPercentage } from 'react-native-responsive-fontsize';
 import { useFocusEffect } from '@react-navigation/native';
@@ -16,7 +26,6 @@ import GameHeader from '../homecomponents/GameHeader.js';
 
 export default function GameHome({ navigation }) {
   const dispatch = useDispatch(); 
-  // const [mainCharacter, setMainCharacter] = useState('');
   // 이거 뒤로가기 버튼? 훅으로 따로 뺄거임  
   React.useEffect(() =>
     navigation.addListener('beforeRemove', (e) => {

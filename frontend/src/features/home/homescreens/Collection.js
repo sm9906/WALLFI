@@ -1,5 +1,16 @@
 import React, { useState } from 'react';
-import { StatusBar, StyleSheet, Text, View, Image, ImageBackground, TouchableOpacity, FlatList, Modal, Alert } from 'react-native';
+import { 
+  StatusBar, 
+  StyleSheet, 
+  Text, 
+  View, 
+  Image, 
+  ImageBackground, 
+  TouchableOpacity, 
+  FlatList, 
+  Modal, 
+  Alert 
+} from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { RFPercentage } from 'react-native-responsive-fontsize';
 

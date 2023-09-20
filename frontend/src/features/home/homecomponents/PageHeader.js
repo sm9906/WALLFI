@@ -1,7 +1,13 @@
-import React from "react";
-import { Text, View, Image, TouchableOpacity } from 'react-native';
+import React from 'react';
+import { 
+  Text, 
+  View, 
+  Image, 
+  TouchableOpacity 
+} from 'react-native';
+
 import { images } from '../../../common/imgDict.js'
-import { globalStyles } from "../homestyles/global.js";
+import { globalStyles } from '../homestyles/global.js';
 
 export default function PageHeader(props) {
   return (

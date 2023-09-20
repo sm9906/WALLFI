@@ -1,8 +1,23 @@
 import React, { useState } from 'react';
-import { StatusBar, StyleSheet, Text, View, Image, ImageBackground, TouchableOpacity, Modal, Alert } from 'react-native';
+import { 
+  StatusBar, 
+  StyleSheet, 
+  Text, 
+  View, 
+  Image, 
+  ImageBackground, 
+  TouchableOpacity, 
+  Modal, 
+  Alert } 
+from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { changeColor, getRandomCharacter, getRandomTenCharacter, updatePoint } from '../homeSlice.js';
+import { 
+  changeColor, 
+  getRandomCharacter, 
+  getRandomTenCharacter, 
+  updatePoint } 
+from '../homeSlice.js';
 import { globalStyles } from '../homestyles/global.js';
 import { images } from '../../../common/imgDict.js';
 
@@ -24,22 +39,23 @@ export default function Market({ navigation }) {
   const [modalVisible1, setModalVisible1] = useState(false);
   const [modalVisible2, setModalVisible2] = useState(false);
   const [modalVisible3, setModalVisible3] = useState(false);
-  const [selectedCharacter, setSelectedCharacter] = useState("");
+  const [selectedCharacter, setSelectedCharacter] = useState('');
   const [tenCharacterList, setTenCharacterList] = useState([]);
-  const [selectedColor, setSelectedColor] = useState("");
+  const [selectedColor, setSelectedColor] = useState('');
 
   return (
     <View style={globalStyles.container}>
       <ImageBackground
         source={images.Background.market}
-        style={[globalStyles.bgImg, { alignItems: "center" }]}
+        style={[globalStyles.bgImg, { alignItems: 'center' }]}
       >
+        {/* 모달 코드 */}
         <Modal
-          animationType="fade"
+          animationType='fade'
           transparent={true}
           visible={modalVisible1}
           onRequestClose={() => {
-            Alert.alert("Modal has been closed.");
+            Alert.alert('Modal has been closed.');
             setModalVisible1(!modalVisible1);
           }}
         >
@@ -104,6 +120,7 @@ export default function Market({ navigation }) {
             <Text style={styles.btnText}>🎨 동물 색상 뽑기</Text>
           </TouchableOpacity>
         </View>
+        {/* 컨텐츠 렌더링 */}
         <RenderContent
           selectedBtn={selectedBtn}
           setSelectedBtn={setSelectedBtn}
@@ -126,12 +143,14 @@ export default function Market({ navigation }) {
   );
 }
 
+// 컨텐츠 렌더링 함수
 function RenderContent(props) {
   const userId = useSelector((state) => state.auth.userId);
   const mainCharacter = useSelector((state) => state.home.mainCharacter);
   const userInfo = useSelector((state) => state.home.userGameInfo);
   const dispatch = useDispatch();
 
+  // 알 1개 뽑기
   const randomCharacter = async () => {
     try {
       if (userInfo.point < 1000) {
@@ -154,6 +173,7 @@ function RenderContent(props) {
     }
   };
 
+  // 알 10개 뽑기 함수
   const randomTenCharacter = async () => {
     try {
       if (userInfo.point < 9000) {
@@ -176,6 +196,7 @@ function RenderContent(props) {
     }
   };
 
+  // 색상 뽑기 함수
   const randomColor = async () => {
     try {
       if (userInfo.point < 500) {
@@ -203,6 +224,7 @@ function RenderContent(props) {
     }
   };
 
+  // 동물 알 뽑기 버튼을 눌렀을 때
   if (props.selectedBtn === 1) {
     return (
       <View style={styles.marketContent}>
@@ -254,6 +276,7 @@ function RenderContent(props) {
     );
   }
 
+  // 동물 색상 뽑기 버튼을 눌렀을 때
   if (props.selectedBtn === 2) {
     return (
       <View style={styles.marketContent}>
@@ -294,6 +317,7 @@ function RenderContent(props) {
   }
 }
 
+// 동물 알 1개 뽑기 모달
 function OneEgg(props) {
   console.log("모달들어옴", props.selectedCharacter);
   const type = props.selectedCharacter.characterType;
@@ -339,83 +363,23 @@ function OneEgg(props) {
   );
 }
 
+// 동물 알 10개 뽑기 모달
 function TenEgg(props) {
   console.log("모달들어옴");
 
-  const characters = [
-    {
-      id: 1,
-      imageUrl: images.eggs[props.tenCharacterList[0].characterType],
-      atk: props.tenCharacterList[0].atk,
-      def: props.tenCharacterList[0].def,
-    },
-    {
-      id: 2,
-      imageUrl: images.eggs[props.tenCharacterList[1].characterType],
-      atk: props.tenCharacterList[1].atk,
-      def: props.tenCharacterList[1].def,
-    },
-    {
-      id: 3,
-      imageUrl: images.eggs[props.tenCharacterList[2].characterType],
-      atk: props.tenCharacterList[2].atk,
-      def: props.tenCharacterList[2].def,
-    },
-    {
-      id: 4,
-      imageUrl: images.eggs[props.tenCharacterList[3].characterType],
-      atk: props.tenCharacterList[3].atk,
-      def: props.tenCharacterList[3].def,
-    },
-    {
-      id: 5,
-      imageUrl: images.eggs[props.tenCharacterList[4].characterType],
-      atk: props.tenCharacterList[4].atk,
-      def: props.tenCharacterList[4].def,
-    },
-    {
-      id: 6,
-      imageUrl: images.eggs[props.tenCharacterList[5].characterType],
-      atk: props.tenCharacterList[5].atk,
-      def: props.tenCharacterList[5].def,
-    },
-    {
-      id: 7,
-      imageUrl: images.eggs[props.tenCharacterList[6].characterType],
-      atk: props.tenCharacterList[6].atk,
-      def: props.tenCharacterList[6].def,
-    },
-    {
-      id: 8,
-      imageUrl: images.eggs[props.tenCharacterList[7].characterType],
-      atk: props.tenCharacterList[7].atk,
-      def: props.tenCharacterList[7].def,
-    },
-    {
-      id: 9,
-      imageUrl: images.eggs[props.tenCharacterList[8].characterType],
-      atk: props.tenCharacterList[8].atk,
-      def: props.tenCharacterList[8].def,
-    },
-    {
-      id: 10,
-      imageUrl: images.eggs[props.tenCharacterList[9].characterType],
-      atk: props.tenCharacterList[9].atk,
-      def: props.tenCharacterList[9].def,
-    },
-    {
-      id: 11,
-      imageUrl: null,
-      atk: null,
-      def: null,
-    },
-    {
-      id: 12,
-      imageUrl: null,
-      atk: null,
-      def: null,
-    },
-  ];
+  const characters = [];
+  props.tenCharacterList.map((c, i) => {
+    characters.push({
+      id: i,
+      imageUrl: images.eggs[c.characterType],
+      atk: c.atk,
+      def: c.def
+    })
+  })
+
+  characters.push({ id: 11, imageUrl: null, atk: null, def: null }, 
+    { id: 11, imageUrl: null, atk: null, def: null })
+  // 12개로 맞추지 않아서 에러뜸 -> 임의로 2개를 null로 넣어줘야 에러가 안뜬다..
 
   const arr = [
     [1, 2, 3],
@@ -496,6 +460,7 @@ function TenEgg(props) {
   );
 }
 
+// 색상 뽑기 모달
 function Color(props) {
   console.log("색뽑기 모달창 들어왔다", props.selectedColor);
   const type = props.selectedColor.characterType;
