@@ -27,9 +27,9 @@ export default function ItemExchange({ navigation }) {
         <ImageBackground source={images.Background.itemExchange} style={globalStyles.bgImg}>
             <GameHeader />
             <PageHeader navigation={navigation} color={'#091044'} title={'거래소'}/>
-            <View style={{ flex: 6.5, alignItems: 'center' }}>
+            <ButtonGroup selectedBtn={selectedBtn} setSelectedBtn={setSelectedBtn} />
+            <View style={{ flex: 6, alignItems: 'center' }}>
               <View style={styles.contentBox}>
-                <ButtonGroup selectedBtn={selectedBtn} setSelectedBtn={setSelectedBtn} />
                 <Content selectedBtn={selectedBtn} />
               </View>
             </View>
@@ -43,7 +43,7 @@ function ButtonGroup(props) {
 
   // 현재 누른 버튼에 대한 배경 색 스타일 코드
   const backgroundColor = (num) => {
-    return props.selectedBtn === num ? '#0065FE' : '#599CFF';
+    return props.selectedBtn === num ? '#091044' : null;
   }
 
   return (
@@ -73,27 +73,30 @@ const styles = StyleSheet.create({
   contentBox: {
     width: '90%',
     height: '95%',
-    backgroundColor: 'rgba(46, 45, 113, 0.79)',
-    borderRadius: 20,
+    backgroundColor: 'rgba(46, 45, 113, 0.9)',
+    borderRadius: 10,
     alignItems: 'center'
   }
 })
 
 const btnGroup= StyleSheet.create({
   btnContainer: { 
-    flex: 1, 
-    flexDirection: 'row', 
+    flex: 0.5,
+    width: '90%',
+    flexDirection: 'row',
+    alignSelf: 'center',
     justifyContent: 'center', 
     alignItems: 'center',
-    marginTop: '5%'
+    backgroundColor: 'rgba(46, 45, 113, 0.9)',
+    borderRadius: 10,
+    marginBottom: '5%'
   },
   btnStyle: {
-    flex: 0.25,
-    height: '50%',
-    backgroundColor: '#599CFF',
-    marginHorizontal: '1%',
+    flex: 1,
+    height: '100%',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    borderRadius: 10
   },
   btnText: {
     fontSize: 15,

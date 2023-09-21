@@ -8,8 +8,7 @@ import {
   ImageBackground, 
   TouchableOpacity, 
   FlatList, 
-  Modal, 
-  Alert 
+  Modal
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { RFPercentage } from 'react-native-responsive-fontsize';
@@ -73,10 +72,7 @@ export default function Collection({navigation}) {
           animationType='fade'
           transparent={true}
           visible={modalVisible}
-          onRequestClose={() => {
-            Alert.alert('Modal has been closed.');
-            setModalVisible(!modalVisible);
-            }}>
+        >
           <DetailPage modalVisible={modalVisible} 
             setModalVisible={setModalVisible} 
             selectedCharacter={selectedCharacter} 
@@ -105,7 +101,7 @@ function DetailPage(props) {
     dispatch(updateCharacter({act: '', characterIdx: props.selectedCharacter.id, statusType: 'isMain', userId: props.userId, value: 0}))
   }
   return (
-    <View style={styles.modalStyle}>
+    <View style={[globalStyles.modalStyle, { backgroundColor: '#FBA728' }]}>
         <View style={styles.modalBox}>
             <View style={styles.modalContent}>
                 <Text style={{ fontSize: 25, fontWeight: 'bold' }}>{props.selectedCharacter.name}</Text>
@@ -134,18 +130,6 @@ function DetailPage(props) {
 }
 
 const styles = StyleSheet.create({
-  modalStyle: {
-    flex: 1,
-    flexDirection: 'column',
-    width: '90%',
-    backgroundColor: '#FBA728',
-    marginHorizontal: '5%',
-    marginTop: '45%',
-    marginBottom: '10%',
-    borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
   gridStyle: {
     backgroundColor: 'rgba(255, 255, 255, 0.7)',
     flex: 0.5,

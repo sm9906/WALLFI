@@ -54,10 +54,6 @@ export default function Market({ navigation }) {
           animationType='fade'
           transparent={true}
           visible={modalVisible1}
-          onRequestClose={() => {
-            Alert.alert('Modal has been closed.');
-            setModalVisible1(!modalVisible1);
-          }}
         >
           <OneEgg
             modalVisible1={modalVisible1}
@@ -323,7 +319,7 @@ function OneEgg(props) {
   const type = props.selectedCharacter.characterType;
 
   return (
-    <View style={styles.modalStyle}>
+    <View style={[globalStyles.modalStyle, { backgroundColor: '#FFFDD2' }]}>
       <View style={styles.modalBox}>
         <View
           style={{
@@ -446,7 +442,7 @@ function TenEgg(props) {
   };
 
   return (
-    <View style={styles.modalStyle}>
+    <View style={[globalStyles.modalStyle, { backgroundColor: '#FFFDD2' }]}>
       <View style={styles.modalBox}>
         <GridWithImages />
       </View>
@@ -474,7 +470,7 @@ function Color(props) {
   };
 
   return (
-    <View style={styles.modalStyle}>
+    <View style={[globalStyles.modalStyle, { backgroundColor: '#FFFDD2' }]}>
       <View style={styles.modalBox}>
         <View
           style={{
@@ -585,16 +581,6 @@ const styles = StyleSheet.create({
     textShadowColor: "white",
     textShadowOffset: { width: 1, height: 1 },
     textShadowRadius: 1,
-  },
-  modalStyle: {
-    flex: 1,
-    width: "90%",
-    backgroundColor: "rgba(255, 253, 210, 0.94)",
-    marginHorizontal: "5%",
-    marginVertical: "30%",
-    borderRadius: 20,
-    justifyContent: "center",
-    alignItems: "center",
   },
   modalBox: {
     flex: 5,

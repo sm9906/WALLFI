@@ -30,4 +30,15 @@ export const globalStyles = StyleSheet.create({
     height: "45%",
     marginStart: "5%",
   },
+  modalStyle: {
+    flex: 1,
+    flexDirection: 'column',
+    width: '90%',
+    marginHorizontal: '5%',
+    marginTop: '45%',
+    marginBottom: '10%',
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
 });
