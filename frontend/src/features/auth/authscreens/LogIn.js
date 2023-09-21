@@ -20,6 +20,8 @@ export default function LogIn({navigation}){
 
   const [ID, setID] = useState('');
   const [password, setPassword] = useState('');
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  console.log('여기여기',isAuthenticated)
   
   const onPress = async()=>{
     await dispatch(postLogIn({userId:ID, password})).unwrap()
@@ -27,10 +29,12 @@ export default function LogIn({navigation}){
         navigation.navigate('Wallet')
     )
   }
+
+
   return(
     <View style={AuthStyle.background}>
-      <Sensor />
-      {/* <View>
+      {!isAuthenticated&&<Sensor setIsAuthenticated={setIsAuthenticated}/>}
+      <View>
         <Text style={AuthStyle.header}>WALLET FIGHT</Text>
       </View>
       <View style={{...AuthStyle.txtContainer, marginTop:SCREEN_HEIGHT*0.06}}>
@@ -54,11 +58,12 @@ export default function LogIn({navigation}){
               style={AuthStyle.inputBox}
         />
       </View>
+      <TouchableOpacity onPress={()=>{}}><Text style={AuthStyle.goSignup}>간편 로그인 등록하기</Text></TouchableOpacity>
       <AuthButton onPress={onPress} btnTxt='로그인'/>
       <View style={AuthStyle.goSignupTxt}>
         <Text>아직 계정이 없으신가요? </Text>
         <TouchableOpacity onPress={()=>navigation.navigate('SignUp')}><Text style={AuthStyle.goSignup}>회원가입</Text></TouchableOpacity>
-      </View> */}
+      </View>
     </View>
   )
 }

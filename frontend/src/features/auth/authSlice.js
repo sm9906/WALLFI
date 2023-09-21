@@ -27,6 +27,7 @@ export const postSignUp = createAsyncThunk('POST_SIGNUP', async(data, {rejectWit
 const initialState = {
   userId:'',
   mainAccount:'',
+  isLoading: false
 }
 
 export const authSlice = createSlice({
@@ -40,7 +41,11 @@ export const authSlice = createSlice({
       state.userId = action.payload.userId;
       state.mainAccount = action.payload.userMainAccount;
     })
-    .addCase(postLogIn.rejected, (state, action) => {
+    .addCase(postSignUp.pending, (state) => {
+      state.isLoading = true;
+    })
+    .addCase(postSignUp.fulfilled, (state) => {
+      state.isLoading = false;
     })
   }
 })
