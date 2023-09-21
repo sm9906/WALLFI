@@ -34,7 +34,7 @@ function Sensor(){
       console.log(err)
     try{
       const res =
-      console.log(err);
+      console.log(err); 
     }
   }
   return(
