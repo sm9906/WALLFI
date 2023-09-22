@@ -68,6 +68,8 @@ import handshake from '../assets/game/button/handshake.png'
 
 import coinIcon from "../assets/game/icon/coin.png";
 import trophyIcon from "../assets/game/icon/trophy.png";
+import musiconIcon from "../assets/game/icon/musicon.png";
+import musicoffIcon from "../assets/game/icon/musicoff.png";
 
 import color from "../assets/game/market/characterColor.gif";
 import marketEgg from "../assets/game/market/marketEgg.png";
@@ -206,6 +208,8 @@ export const images = {
   gameIcon: {
     coin: coinIcon,
     trophy: trophyIcon,
+    musicon: musiconIcon,
+    musicoff: musicoffIcon
   },
 
   marketSource: {

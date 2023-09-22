@@ -10,7 +10,7 @@ import { RFPercentage } from 'react-native-responsive-fontsize';
 import { AntDesign } from '@expo/vector-icons';
 
 import { images } from '../../../common/imgDict.js';
-import { SCREEN_WIDTH } from '../../../common/ScreenSize.js';
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../../common/ScreenSize.js';
 
 import ExpBar from './exp/ExpBar';
 
@@ -136,7 +136,7 @@ export default GameHeader;
 
 const styles = StyleSheet.create({
   header: {
-    flex: 1,
+    height: SCREEN_HEIGHT*0.135,
     width: SCREEN_WIDTH,
     flexDirection: "row",
     backgroundColor: "rgba(41, 54, 148, 0.8)",

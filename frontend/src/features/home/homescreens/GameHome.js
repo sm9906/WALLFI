@@ -17,7 +17,10 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { getMainCharacter, updateCharacter } from '../homeSlice.js';
 import { globalStyles } from '../homestyles/global.js';
 import { images } from '../../../common/imgDict.js';
-import { SCREEN_WIDTH } from '../../../common/ScreenSize.js';
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../../common/ScreenSize.js';
+
+import { Audio } from 'expo-av';
+import { DJMing } from '../homeSlice.js';
 
 import GameHeader from '../homecomponents/GameHeader.js';
 
@@ -26,7 +29,7 @@ import GameHeader from '../homecomponents/GameHeader.js';
 export default function GameHome({ navigation }) {
   const dispatch = useDispatch(); 
   // 이거 뒤로가기 버튼? 훅으로 따로 뺄거임  
-  React.useEffect(() =>
+  useEffect(() =>
     navigation.addListener('beforeRemove', (e) => {
       if(e.data.action.type==='GO_BACK'){
         e.preventDefault();
@@ -49,6 +52,7 @@ export default function GameHome({ navigation }) {
     <View style={globalStyles.container}>
       <ImageBackground source={images.Background.home} style={globalStyles.bgImg}>
         <GameHeader/>
+        <Music/>
         <Season />
         <Content navigation={navigation}
           userId={userId}
@@ -60,6 +64,50 @@ export default function GameHome({ navigation }) {
     </View>
   )
 }
+
+
+const Music = React.memo(()=>{
+  const dispatch = useDispatch();
+  const [on, setON]= useState(true);
+  const music = useSelector(state=>state.home.music);
+  
+  on?music.playAsync():music.pauseAsync();
+
+
+  useEffect(()=>{
+    DJselect();
+  },[]);
+  
+  const DJselect = async() => {
+    if(!music){
+      const {sound} = await Audio.Sound.createAsync(
+        require('../../../assets/music/GameHome.mp3')
+      );
+      await dispatch(DJMing(sound));
+    }
+  }
+
+  return(        
+    <View>
+      {music&&<TouchableOpacity onPress={()=>{
+        setON(!on)}}>
+        <Image source={on?images.gameIcon.musicon:images.gameIcon.musicoff} style={musicStyles.music}/>
+      </TouchableOpacity>
+      }
+    </View>
+  )
+})
+
+
+const musicStyles = StyleSheet.create({
+  music: {
+    resizeMode:'contain',
+    marginLeft: SCREEN_WIDTH * 0.03,
+    height: SCREEN_HEIGHT * 0.07,
+    width: SCREEN_WIDTH * 0.07,
+    position: "absolute",
+  },
+});
 
 function Season() {
 

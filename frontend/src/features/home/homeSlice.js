@@ -194,6 +194,8 @@ const initialState = {
   mainCharacter: null,
   characters: null,
   userGameInfo: null,
+  music: null,
+
 }
 
 
@@ -201,7 +203,10 @@ export const homeSlice = createSlice({
   name: 'home',
   initialState,
   reducers:{
-
+    DJMing:(state, action)=>{
+      state.music = action.payload
+      console.log(state.music)
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -249,5 +254,5 @@ export const homeSlice = createSlice({
   }
 })
 
-export const {  } = homeSlice.actions
+export const { DJMing } = homeSlice.actions
 export default homeSlice.reducer
