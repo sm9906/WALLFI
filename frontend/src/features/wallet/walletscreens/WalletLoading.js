@@ -6,13 +6,15 @@ import {
   StyleSheet,
   Image
 } from 'react-native'; 
-import { RFPercentage } from "react-native-responsive-fontsize";
+
+import { useDispatch, useSelector } from "react-redux";
+import { getExchangeRate, getAccounts } from "../walletSlice";
+
 
 import SSAFY from '../../../assets/wallet/SSAFY.png'
 import { Background } from "../walletcomponents/CommonStyle";
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from "./WalletHome";
-import { useDispatch, useSelector } from "react-redux";
-import { getExchangeRate, getAccounts } from "../walletSlice";
+import { RFPercentage } from "react-native-responsive-fontsize";
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../walletcomponents/ScreenSize";
 
 export default function WalletLoading({navigation}){
   const { userId, mainAccount } = useSelector(state=>state.auth);
@@ -20,6 +22,7 @@ export default function WalletLoading({navigation}){
 
   useFocusEffect(
     React.useCallback(()=>{
+      console.log('ㅎㅇㅎㅇ')
       getData()
     },[])
   )
@@ -48,7 +51,7 @@ export default function WalletLoading({navigation}){
         </View>
       </View>
       <View style={styles.logoContainer}>
-        <Image resizeMode='contain'style={styles.shinhanLogo} source={SSAFY}/>
+        <Image style={styles.shinhanLogo} source={SSAFY}/>
         <Text>SSAFY</Text>
       </View>
     </View>
@@ -80,7 +83,8 @@ const styles = StyleSheet.create({
   shinhanLogo:{
     marginRight:'3%',
     height:SCREEN_HEIGHT*0.02,
-    width:SCREEN_WIDTH*0.04
+    width: SCREEN_WIDTH*0.04,
+    resizeMode:'contain'
   }
 })
 

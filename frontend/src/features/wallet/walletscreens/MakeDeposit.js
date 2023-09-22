@@ -11,7 +11,7 @@ import SelectDropdown from "react-native-select-dropdown";
 import axios from "../../../common/http-common";
 import { Background, ButtonStyle } from "../walletcomponents/CommonStyle";
 
-import { SCREEN_HEIGHT } from "./WalletHome";
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../walletcomponents/CommonStyle";
 import { useSelector } from "react-redux";
 import { useFocusEffect } from "@react-navigation/native";
 import {ISO} from '../walletcomponents/CommonStyle'

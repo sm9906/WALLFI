@@ -21,8 +21,7 @@ export default function LogIn({navigation}){
   const [ID, setID] = useState('');
   const [password, setPassword] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  console.log('여기여기',isAuthenticated)
-  
+
   const onPress = async()=>{
     await dispatch(postLogIn({userId:ID, password})).unwrap()
     .then(()=>
@@ -34,7 +33,7 @@ export default function LogIn({navigation}){
   return(
     <View style={AuthStyle.background}>
       {!isAuthenticated&&<Sensor setIsAuthenticated={setIsAuthenticated}/>}
-      <View>
+      <View> 
         <Text style={AuthStyle.header}>WALLET FIGHT</Text>
       </View>
       <View style={{...AuthStyle.txtContainer, marginTop:SCREEN_HEIGHT*0.06}}>
@@ -55,10 +54,10 @@ export default function LogIn({navigation}){
               placeholder="  비밀번호"
               secureTextEntry={true}
               onChangeText={text => setPassword(text)}
-              style={AuthStyle.inputBox}
+              style={AuthStyle.inputBox}R
         />
       </View>
-      <TouchableOpacity onPress={()=>{}}><Text style={AuthStyle.goSignup}>간편 로그인 등록하기</Text></TouchableOpacity>
+      {/* <TouchableOpacity onPress={()=>{}}><Text style={AuthStyle.goSignup}>간편 로그인 등록하기</Text></TouchableOpacity> */}
       <AuthButton onPress={onPress} btnTxt='로그인'/>
       <View style={AuthStyle.goSignupTxt}>
         <Text>아직 계정이 없으신가요? </Text>
@@ -100,6 +99,7 @@ export const AuthStyle = StyleSheet.create({
   goSignupTxt:{
     flexDirection:'row',
     marginTop: SCREEN_HEIGHT*0.1,
+    alignItems:'center'
   },
   goSignup:{
     color:'#293694',

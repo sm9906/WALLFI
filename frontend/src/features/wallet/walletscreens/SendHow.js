@@ -1,10 +1,14 @@
 import React, {useEffect, useState, useMemo} from "react";
-import { View, Text, StyleSheet } from 'react-native';
-import { ConvPad } from "../walletcomponents/virtualkeyboard/ConvKeypad";
-import { RFPercentage } from "react-native-responsive-fontsize";
-import VirtualKeyboard from "../walletcomponents/virtualkeyboard/VirtualKeypad";
-import { postSendMoney, postExchangeKRW, postExchangeFOR } from "../walletSlice";
 import { useDispatch, useSelector } from "react-redux";
+import ChangeForm from "../walletcomponents/ChangeForm";
+
+import { View, Text, StyleSheet } from 'react-native';
+import { RFPercentage } from "react-native-responsive-fontsize";
+import ConvPad from "../walletcomponents/virtualkeyboard/ConvKeypad";
+import VirtualKeyboard from "../walletcomponents/virtualkeyboard/VirtualKeypad";
+
+import { postSendMoney, postExchangeKRW, postExchangeFOR } from "../walletSlice";
+
 
 export default function SendHow({route, navigation}){
   const dispatch = useDispatch();
@@ -12,7 +16,6 @@ export default function SendHow({route, navigation}){
   const type= route.params.type;
   const outAcc = route.params.outAcc;
   const balance = outAcc.balance; 
-  const outAccId = outAcc.accId
   // 이체 필요 부분
   const toAccount = type==='송금'?route.params.account :'';
   const toBank = type==='송금'?route.params.bank||'신한': '';
@@ -22,16 +25,15 @@ export default function SendHow({route, navigation}){
   const ISO = type==='환전'?route.params.ISO:outAcc.ISO;
   
 
-  const form_balance = Number(balance).toLocaleString('es-US'); // 잔액을 돈 형식 정규화
-
+  const form_balance = ChangeForm(balance); // 잔액을 돈 형식 정규화
   // 입력 금액 
   const [money, setMoney] = useState(0); // 입력 금액 (문자)
   const num_money=Number(money); // 입력 금액 -> 숫자
-  const form_money=Number(money).toLocaleString('es-US'); // 돈 형식으로 정규화
+  const form_money = ChangeForm(money);
 
   // 원화로 계산한 외화
   const exchangedMoney = ((Number(exchangeRate)*num_money)/(ISO==='¥'?100:1)).toFixed(0) // 환전 시 매매율 * 입력 금액해서 원화 표기 
-  const form_exchangedMoney = Number(exchangedMoney).toLocaleString('es-US');
+  const form_exchangedMoney = ChangeForm(exchangedMoney)
 
   // 잔액 확인
   const isOver = type==='송금'||toNation==='KRW'? 

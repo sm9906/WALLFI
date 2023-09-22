@@ -16,10 +16,8 @@ import {Background} from '../walletcomponents/CommonStyle';
 import ShinhanLogo from '../../../assets/wallet/ShinhanLogo.png';
 import Exchange from '../../../assets/wallet/Exchange.png'
 import { getAccounts, getExchangeRate } from '../walletSlice';
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../walletcomponents/ScreenSize";
 
-
-export const SCREEN_WIDTH = Dimensions.get("window").width;
-export const SCREEN_HEIGHT= Dimensions.get("window").height;
 
 export default function WalletHome({navigation}) {
   const dispatch = useDispatch();

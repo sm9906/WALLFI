@@ -5,7 +5,7 @@ import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 import { AntDesign } from '@expo/vector-icons';
 import Promotion from '../../../assets/wallet/Promotion.png'
 import { Background } from '../walletcomponents/CommonStyle';
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from './WalletHome';
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../walletcomponents/ScreenSize";
 import GoFight from '../walletcomponents/GoFight';
 import { useSelector } from 'react-redux';
 
