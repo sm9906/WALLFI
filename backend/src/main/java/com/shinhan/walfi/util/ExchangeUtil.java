@@ -1,15 +1,13 @@
 package com.shinhan.walfi.util;
 
+import com.shinhan.walfi.domain.banking.ExchangeHistory;
 import com.shinhan.walfi.dto.banking.ExchangeDto;
-import com.shinhan.walfi.dto.banking.ExchangeResDto;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -28,7 +26,7 @@ public class ExchangeUtil {
 
     private final RestTemplate restTemplate = new RestTemplate();
 
-    public List<ExchangeDto> getTodayExchange() throws ParseException { //오늘의 환율정보 리스트 반환
+    public List<ExchangeHistory> getTodayExchange() throws ParseException { //오늘의 환율정보 리스트 반환
         StringBuilder url = new StringBuilder(baseUrl);
         url.append(apikey);
         url.append("&searchdate=");
@@ -41,14 +39,15 @@ public class ExchangeUtil {
         HttpEntity<String> response = restTemplate.getForEntity(url.toString(), String.class);
 
         String responseBody = response.getBody(); // response를 파싱하여 환율 정보만 추출
+        log.debug(responseBody);
         JSONParser parser = new JSONParser();
         JSONArray jsonExchangeList = (JSONArray) parser.parse(responseBody);
 
-        List<ExchangeDto> list = new ArrayList<>(); // json 객체를 Exchange list 객체로 파싱
-        int[] countryIdx = {1,6,8,12,22}; // 5개국에 대해서만 (호주 중국 유럽 일본 미국 )
+        List<ExchangeHistory> list = new ArrayList<>(); // json 객체를 Exchange list 객체로 파싱
+        int[] countryIdx = {1,6,8,12,22}; // 5개국에 대해서만 (호주 중국 유럽 일본 미국 ) // Todo : 순서 상관?
         for (int c = 0; c < countryIdx.length; c++) {
             JSONObject item = (JSONObject) jsonExchangeList.get(countryIdx[c]);
-            list.add(this.makeExchangeDto(item)); // json 객체를 ExchangeDto로 파싱
+            list.add(this.makeExchangEntity(now, item)); // json 객체를 ExchangeDto로 파싱
             if(c == 3){
                 list.get(3).set통화코드(list.get(3).get통화코드().substring(0,3));
             }
@@ -56,8 +55,9 @@ public class ExchangeUtil {
         return list;
     }
 
-    private ExchangeDto makeExchangeDto(JSONObject item) { // json 객체를 ExchangeDto로 파싱
-        ExchangeDto dto = ExchangeDto.builder().
+    private ExchangeHistory makeExchangEntity(Date now, JSONObject item) { // json 객체를 ExchangeDto로 파싱
+        ExchangeHistory dto = ExchangeHistory.builder().
+                고시일자(now).
                 통화명((String) item.get("cur_nm")).
                 매매기준환율(Float.parseFloat(((String) item.get("deal_bas_r")).replaceAll(",",""))).
                 통화코드((String) item.get("cur_unit")).
@@ -67,20 +67,10 @@ public class ExchangeUtil {
         return dto;
     }
 
-    public List<ExchangeDto> getYesterdayExchange() {
-        List<ExchangeDto> list = new ArrayList<>();
-        list.add(new ExchangeDto(1286.5F));
-        list.add(new ExchangeDto(902.05F));
-        list.add(new ExchangeDto(1411.3F));
-        list.add(new ExchangeDto(855.32F));
-        list.add(new ExchangeDto(178.47F));
-        return list;
-    }
+    public ExchangeHistory getCertainExchangeRate(final String CURRENCY_CODE) throws ParseException {
+        List<ExchangeHistory> todayExchange = getTodayExchange();
 
-    public ExchangeDto getCertainExchangeRate(final String CURRENCY_CODE) throws ParseException {
-        List<ExchangeDto> todayExchange = getTodayExchange();
-
-        ExchangeDto findExchangeDTO = todayExchange.stream()
+        ExchangeHistory findExchangeDTO = todayExchange.stream()
                 .filter(ExchangeDto -> CURRENCY_CODE.equals(ExchangeDto.get통화코드()))
                 .findFirst().orElse(null);
 //                .orElseThrow(AccountNotFoundException::new);
