@@ -20,7 +20,7 @@ import { images } from '../../../common/imgDict.js';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../../common/ScreenSize.js';
 
 import { Audio } from 'expo-av';
-import { DJMing } from '../homeSlice.js';
+import { DJMing, PlayMusic, StopMusic } from '../homeSlice.js';
 
 import GameHeader from '../homecomponents/GameHeader.js';
 
@@ -71,8 +71,9 @@ const Music = React.memo(()=>{
   const [on, setON]= useState(true);
   const music = useSelector(state=>state.home.music);
   
-  on?music.playAsync():music.pauseAsync();
-
+  if(music){
+    on?dispatch(PlayMusic()):dispatch(StopMusic());
+  }
 
   useEffect(()=>{
     DJselect();
