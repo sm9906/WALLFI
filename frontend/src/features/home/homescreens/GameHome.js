@@ -181,7 +181,7 @@ function Content(props) {
       </View>
       <View style={styles.sideBar}>
         <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate('ItemExchange')}>
-          <Image source={images.btnSource.notice} style={styles.buttonContent} />
+          <Image source={images.btnSource.handshake} style={styles.buttonContent} />
           <Text style={styles.btnText}>거래소</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate('Mission')}>

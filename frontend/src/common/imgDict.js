@@ -63,6 +63,8 @@ import noticeBtn from "../assets/game/button/notice.png";
 import trainingBtn from "../assets/game/button/training.png";
 import walletBtn from "../assets/game/button/wallet.png";
 import sunglassesBtn from '../assets/game/button/sunglasses.png';
+import auction from '../assets/game/button/auction.png';
+import handshake from '../assets/game/button/handshake.png'
 
 import coinIcon from "../assets/game/icon/coin.png";
 import trophyIcon from "../assets/game/icon/trophy.png";
@@ -197,6 +199,8 @@ export const images = {
     training: trainingBtn,
     wallet: walletBtn,
     sunglasses: sunglassesBtn,
+    auction : auction,
+    handshake : handshake
   },
 
   gameIcon: {

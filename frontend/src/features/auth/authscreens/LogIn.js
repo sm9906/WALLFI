@@ -26,7 +26,7 @@ export default function LogIn({navigation}){
     await dispatch(postLogIn({userId:ID, password})).unwrap()
     .then(()=>
         navigation.navigate('Wallet')
-    )
+    ).catch(err=>console.log(err))
   }
 
 
@@ -75,7 +75,7 @@ export const AuthStyle = StyleSheet.create({
   },
   background:{
     height:SCREEN_HEIGHT,
-    width:SCREEN_WIDTH,
+    width:SCREEN_WIDTH, 
     alignItems:'center',
     justifyContent:'center',
     backgroundColor:'white'
