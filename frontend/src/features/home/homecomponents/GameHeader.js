@@ -81,7 +81,6 @@ const TextTransition = (props) => {
 };
 
 function GameHeader(props) {
-  //   console.log("header");
   const {userGameInfo:gameUser, mainCharacter} = useSelector((state) => state.home);
   return (
     <>

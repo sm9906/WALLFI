@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import images from "../../../common/imgDict";
 import GameMain from "../fightcomponents/GameMain";
@@ -12,6 +12,7 @@ const MainBattle = ({ route }) => {
   const isLoading = useSelector((state) => state.loading.battleLoading); // 배틀 연출동안 터치 못하게 할려고
   const endGame = useSelector((state) => state.turn.end); // 게임 종료되었는지 판단
   const randomNum = route.params?.randomNum || 2;
+
   return (
     <ImageBackground source={images.background[`bg_0${randomNum}`]} style={styles.bgImg}>
       { isLoading && (

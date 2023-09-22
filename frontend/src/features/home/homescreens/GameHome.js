@@ -70,10 +70,6 @@ const Music = React.memo(()=>{
   const dispatch = useDispatch();
   const [on, setON]= useState(true);
   const music = useSelector(state=>state.home.music);
-  
-  if(music){
-    on?dispatch(PlayMusic()):dispatch(StopMusic());
-  }
 
   useEffect(()=>{
     DJselect();
@@ -87,11 +83,16 @@ const Music = React.memo(()=>{
       await dispatch(DJMing(sound));
     }
   }
+  
+  useEffect(() => {
+    if (music) {
+      on ? dispatch(PlayMusic()) : dispatch(StopMusic());
+    }
+  }, [on, music]);
 
   return(        
     <View>
-      {music&&<TouchableOpacity onPress={()=>{
-        setON(!on)}}>
+      {music&&<TouchableOpacity onPress={()=>{setON(!on)}}>
         <Image source={on?images.gameIcon.musicon:images.gameIcon.musicoff} style={musicStyles.music}/>
       </TouchableOpacity>
       }
