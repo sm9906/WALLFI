@@ -139,7 +139,10 @@ export default function SendHow({route, navigation}){
           <Text style={{...styles.accountTo,marginBottom:'5%' }}>{toBank} {toAccount} {toNation}</Text>
           <Text style={styles.infoText}>얼마를 {type==='송금'?'보낼':'바꿀'}까요?</Text>
         </View>
-        <Text style={{...styles.currMoney, color:isOver?'red':'black'}}>{form_money}{ISO||'원'}</Text>
+        <View>
+          <Text style={{...styles.currMoney, color:isOver?'red':'black'}}>{form_money}{ISO||'원'}</Text>
+          <Text style={styles.warnTxt}>{isOver&&'잔액 부족!'}</Text>
+        </View>
         {type==='환전'&&<Text style={{textAlign:'center', fontSize:RFPercentage(2), color:'grey'}}>{form_exchangedMoney}원</Text>}
         <View style={styles.myAccount}>
           <Text style={styles.accountTo} >신한 {outAcc.accountnum}   {form_balance}{outAcc.ISO}</Text>
@@ -179,6 +182,10 @@ const styles = StyleSheet.create({
   currMoney:{
     textAlign:'center',
     fontSize:RFPercentage(3)
-  }
+  },
+  warnTxt:{
+    color:'#FF6666',
+    textAlign:'center',
+  },
 
 })

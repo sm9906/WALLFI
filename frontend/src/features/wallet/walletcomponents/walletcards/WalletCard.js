@@ -28,7 +28,7 @@ const CardItem = (props) => {
         <Text style={{...styles.cardinfo, fontSize:RFPercentage(2)}}>   {data.ntnCode}   {data.cardType==='저축예금'?data.accountnum:data.cardType}</Text>
       </View> 
       <View style={styles.balance}>
-        <Text style={styles.cardinfo}>{ChangeForm(data.balance)}</Text>
+        <Text style={styles.cardinfo}>{ChangeForm(data.balance)} {data.ISO}</Text>
         {props.data.cardType==='저축예금'&&(<View style={styles.buttons}>
           <TouchableOpacity onPress={()=>navigation.navigate('SendWho', {type:'송금', data})} style={styles.button}>
             <Text style={styles.txtSize}>송금하기</Text>

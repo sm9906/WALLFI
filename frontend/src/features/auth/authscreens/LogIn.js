@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useRef} from "react";
 import {
   View,
   TextInput,
@@ -18,21 +18,20 @@ export default function LogIn({navigation}){
 
   const dispatch = useDispatch();
 
-  const [ID, setID] = useState('');
-  const [password, setPassword] = useState('');
+  const ID = useRef('');
+  const password = useRef('');
+  const [isWrong, setIsWrong] = useState(false)
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-
   const onPress = async()=>{
-    await dispatch(postLogIn({userId:ID, password})).unwrap()
+    await dispatch(postLogIn({userId:ID.current, password:password.current})).unwrap()
     .then(()=>
         navigation.navigate('Wallet')
-    ).catch(err=>console.log(err))
+    ).catch((err)=>setIsWrong(true))
   }
-
 
   return(
     <View style={AuthStyle.background}>
-      {!isAuthenticated&&<Sensor setIsAuthenticated={setIsAuthenticated}/>}
+      {/* {!isAuthenticated&&<Sensor setIsAuthenticated={setIsAuthenticated}/>} */}
       <View> 
         <Text style={AuthStyle.header}>WALLET FIGHT</Text>
       </View>
@@ -42,20 +41,24 @@ export default function LogIn({navigation}){
               autoCapitalize="none"
               keyboardShouldPersistTaps="handled" 
               placeholder="  아이디"
-              onChangeText={text => setID(text)}
+              onChangeText={text => ID.current=text}
               style={AuthStyle.inputBox}
         />
       </View>
-      <View style={AuthStyle.txtContainer}>
+      <View style={{...AuthStyle.txtContainer, marginBottom:SCREEN_HEIGHT*0.08}}>
         <Text style={AuthStyle.txtSize}>비밀번호</Text>
         <TextInput  
               autoCapitalize="none"
               keyboardShouldPersistTaps="handled" 
               placeholder="  비밀번호"
               secureTextEntry={true}
-              onChangeText={text => setPassword(text)}
-              style={AuthStyle.inputBox}R
+              onChangeText={text => {
+                password.current = text
+                isWrong?setIsWrong(false):null
+              }}
+              style={{...AuthStyle.inputBox, borderColor:isWrong?'#FF6666':'grey'}}
         />
+        {isWrong&&<Text style={{color:'#FF6666'}}>아이디나 비밀번호를 확인하세요</Text>}
       </View>
       {/* <TouchableOpacity onPress={()=>{}}><Text style={AuthStyle.goSignup}>간편 로그인 등록하기</Text></TouchableOpacity> */}
       <AuthButton onPress={onPress} btnTxt='로그인'/>
@@ -103,7 +106,6 @@ export const AuthStyle = StyleSheet.create({
   },
   goSignup:{
     color:'#293694',
-    fontSize:RFPercentage(1.5)
   }
 
 })

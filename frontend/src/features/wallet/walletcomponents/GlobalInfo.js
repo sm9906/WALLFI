@@ -4,5 +4,5 @@ export const ISO = {
   'EUR': '€',
   'JPY': '¥',
   'CNY': '¥',
-  'AUD': 'AU$' 
+  'AUD': '$' 
 }

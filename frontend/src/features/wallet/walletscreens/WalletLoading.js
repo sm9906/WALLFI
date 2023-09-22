@@ -22,7 +22,6 @@ export default function WalletLoading({navigation}){
 
   useFocusEffect(
     React.useCallback(()=>{
-      console.log('ㅎㅇㅎㅇ')
       getData()
     },[])
   )
