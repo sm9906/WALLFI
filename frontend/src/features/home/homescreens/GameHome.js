@@ -1,32 +1,30 @@
 import React, { useEffect, useState } from 'react';
-import { LinearGradient } from 'expo-linear-gradient';
-import {
-  StatusBar,
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  ImageBackground,
+import { 
+  StatusBar, 
+  StyleSheet, 
+  Text, 
+  View, 
+  Image, 
+  ImageBackground, 
   TouchableOpacity,
-  Modal,
-  Alert
+  Alert 
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
+import { RFPercentage } from 'react-native-responsive-fontsize';
 import { useFocusEffect } from '@react-navigation/native';
+import { LinearGradient } from 'expo-linear-gradient';
 
 import { getMainCharacter, updateCharacter } from '../homeSlice.js';
-
 import { globalStyles } from '../homestyles/global.js';
 import { images } from '../../../common/imgDict.js';
+import { SCREEN_WIDTH } from '../../../common/ScreenSize.js';
+
 import GameHeader from '../homecomponents/GameHeader.js';
-import { RFPercentage } from 'react-native-responsive-fontsize';
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../homecomponents/ScreenSize.js';
 
 // 상태바 겹침현상을 없애려면 react-native에서 StatusBar를 import 해줘야함
 
 export default function GameHome({ navigation }) {
   const dispatch = useDispatch(); 
-  // const [mainCharacter, setMainCharacter] = useState('');
   // 이거 뒤로가기 버튼? 훅으로 따로 뺄거임  
   React.useEffect(() =>
     navigation.addListener('beforeRemove', (e) => {
@@ -42,8 +40,6 @@ export default function GameHome({ navigation }) {
     }),[navigation]
   );
 
-
-  const [modalVisible, setModalVisible] = useState(false);
   const userId = useSelector(state=>state.auth.userId);
   
   useFocusEffect(()=>{
@@ -52,46 +48,9 @@ export default function GameHome({ navigation }) {
   return (
     <View style={globalStyles.container}>
       <ImageBackground source={images.Background.home} style={globalStyles.bgImg}>
-        <Modal
-          animationType='fade'
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => {
-            Alert.alert('Modal has been closed.');
-            setModalVisible(!modalVisible);
-          }}
-        >
-          <View style={styles.modalBackground}>
-            <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.modalCloseBtn}>
-              <Image source={images.btnSource.modalClose} style={{ resizeMode: 'contain', width: '10%', height: '50%' }} />
-            </TouchableOpacity>
-            <View style={{
-              flex: 10.5,
-              width: '100%',
-              backgroundColor: '#FFF5EA',
-            }}>
-              <Text style={{ flex: 1, marginTop: '5%', fontSize: 35, alignSelf: 'center', color: '#293694', fontWeight: 'bold' }}>&lt;공지&gt;</Text>
-              <View style={{ flex: 1, alignItems: 'flex-start', marginStart: '5%', marginTop: '7%' }}>
-                <Text style={{ fontSize: 22, fontWeight: 'bold' }}>서버 점검 및 업데이트 공지</Text>
-              </View>
-              <View style={{ flex: 1.5, alignItems: 'flex-start', marginStart: '5%' }}>
-                <Text style={{ fontSize: 16, color: 'red', marginBottom: '3%' }}>{'점검 시간: 9월 18일 11:00 ~ 13:00\n대상 서버: 전체 서버'}</Text>
-              </View>
-              <View style={{ flex: 4, alignItems: 'flex-start', marginStart: '5%' }}>
-                <Text style={{ fontSize: 12, marginBottom: '3%' }}>{'서버 점검 10분전에 데이터 보호를 위해 미리 게임을\n종료하시기 바랍니다.'}</Text>
-                <Text style={{ fontSize: 12 }}>
-                  {'코인 용사님들의 더 풍부한 모험을 위해 새로운 컨텐츠를\n추가하였습니다. 해당 업데이트 내용은 아래와 같이\n참고하시기 바랍니다. 항상 코인 용사님들이 새로운 모험을\n즐길 수 있도록 최선을 다하겠습니다.'}
-                </Text>
-              </View>
-            </View>
-            <View style={{ flex: 1 }}></View>
-          </View>
-        </Modal>
         <GameHeader/>
         <Season />
         <Content navigation={navigation}
-          modalVisible={modalVisible}
-          setModalVisible={setModalVisible}
           userId={userId}
         />
         <Bottom navigation={navigation} />
@@ -106,7 +65,7 @@ function Season() {
 
   return (
     <View style={styles.season}>
-      <LinearGradient style={styles.box} colors={['rgba(142, 170, 245, 1)', 'rgba(72, 122, 255, 0.4)', 'transparent']}>
+      <LinearGradient style={styles.box} colors={['rgba(142, 170, 245, 1)', 'rgba(72, 122, 255, 0.5)', 'transparent']}>
         <Image source={images.gameIcon.trophy} style={styles.trophy} />
         <Text style={styles.seasonText}>여름 시즌</Text>
       </LinearGradient>
@@ -221,12 +180,9 @@ function Content(props) {
         }}>{timeText}</Text>
       </View>
       <View style={styles.sideBar}>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => props.setModalVisible(true)}
-        >
+        <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate('ItemExchange')}>
           <Image source={images.btnSource.notice} style={styles.buttonContent} />
-          <Text style={styles.btnText}>공지</Text>
+          <Text style={styles.btnText}>거래소</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate('Mission')}>
           <Image source={images.btnSource.mission} style={styles.buttonContent} />
@@ -234,8 +190,8 @@ function Content(props) {
         </TouchableOpacity>
         <TouchableOpacity style={styles.button}>
 
-          <Image source={images.btnSource.closet} style={styles.buttonContent} />
-          <Text style={styles.btnText}>옷장</Text>
+          <Image source={images.btnSource.sunglasses} style={styles.buttonContent} />
+          <Text style={styles.btnText}>꾸미기</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -265,13 +221,9 @@ function Bottom(props) {
 const actStyles = StyleSheet.create({
   eating:{
     resizeMode: 'contain',
-    // width:SCREEN_WIDTH*0.8,
-    // height:SCREEN_HEIGHT*0.6,
     marginLeft:'8%',
     width: SCREEN_WIDTH*0.9,
     height: '50%',
-    // backgroundColor:'red',
-    // marginBottom: SCREEN_HEIGHT*0.01
   }
 })
 
