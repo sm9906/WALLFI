@@ -525,11 +525,12 @@ function Color(props) {
             height: "80%",
             backgroundColor: "white",
             borderRadius: 15,
+            justifyContent: "center",
           }}
         >
           <Image
             source={images.defaultCharacter[type][color]}
-            style={{ width: "100%", height: "100%" }}
+            style={{ width: "70%", height: "70%", resizeMode:"contain", marginLeft:"15%" }}
           />
         </View>
       </View>

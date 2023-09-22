@@ -2,6 +2,8 @@ import home from "../assets/background/home.png";
 import collection from "../assets/background/collection.png";
 import market from "../assets/background/Market.png";
 import mission from "../assets/background/mission.png";
+import accessory from "../assets/background/accessory.png"
+import deco from "../assets/background/deco.png";
 
 import molly_basic from "../assets/characters/default/baby_duderge.png";
 
@@ -107,12 +109,18 @@ import question from "../assets/battle/question.png";
 import time from "../assets/battle/time.png";
 import guts from "../assets/battle/guts.png";
 
+import crown_cap from "../assets/accessory/crown_cap.png";
+import ruby_necklace from "../assets/accessory/ruby_necklace.png";
+import ssafy_cap from "../assets/accessory/ssafy_cap.png";
+
 export const images = {
   Background: {
     home: home,
     collection: collection,
     market: market,
     mission: mission,
+    accessory: accessory,
+    deco: deco
   },
 
   defaultCharacter: {
@@ -249,6 +257,11 @@ export const images = {
     time_0: time,
     guts_0: guts,
   },
+  accessory: {
+    crown_cap: crown_cap,
+    ruby_necklace: ruby_necklace,
+    ssafy_cap: ssafy_cap,
+  }
 };
 
 export default images;

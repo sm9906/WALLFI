@@ -14,7 +14,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/native';
 
-import { getMainCharacter, updateCharacter } from '../homeSlice.js';
+import { getMainCharacter, updateCharacter, getAnimalDeco } from '../homeSlice.js';
 
 import { globalStyles } from '../homestyles/global.js';
 import { images } from '../../../common/imgDict.js';
@@ -25,28 +25,28 @@ import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../homecomponents/ScreenSize.js';
 // 상태바 겹침현상을 없애려면 react-native에서 StatusBar를 import 해줘야함
 
 export default function GameHome({ navigation }) {
-  const dispatch = useDispatch(); 
+  const dispatch = useDispatch();
   // const [mainCharacter, setMainCharacter] = useState('');
   // 이거 뒤로가기 버튼? 훅으로 따로 뺄거임  
   React.useEffect(() =>
     navigation.addListener('beforeRemove', (e) => {
-      if(e.data.action.type==='GO_BACK'){
+      if (e.data.action.type === 'GO_BACK') {
         e.preventDefault();
-        Alert.alert('','지갑으로 돌아가시겠습니까?',[{
-          text:'머무르기',
-          onPress: () => {}
+        Alert.alert('', '지갑으로 돌아가시겠습니까?', [{
+          text: '머무르기',
+          onPress: () => { }
         },
-        {text:'지갑으로', onPress:()=>navigation.navigate('Wallet')}
-    ])
+        { text: '지갑으로', onPress: () => navigation.navigate('Wallet') }
+        ])
       }
-    }),[navigation]
+    }), [navigation]
   );
 
 
   const [modalVisible, setModalVisible] = useState(false);
-  const userId = useSelector(state=>state.auth.userId);
-  
-  useFocusEffect(()=>{
+  const userId = useSelector(state => state.auth.userId);
+
+  useFocusEffect(() => {
     dispatch(getMainCharacter(userId));
   })
   return (
@@ -87,7 +87,7 @@ export default function GameHome({ navigation }) {
             <View style={{ flex: 1 }}></View>
           </View>
         </Modal>
-        <GameHeader/>
+        <GameHeader />
         <Season />
         <Content navigation={navigation}
           modalVisible={modalVisible}
@@ -115,17 +115,19 @@ function Season() {
 }
 
 const action = {
-  '밥먹기':'밥 먹는 중...',
-  '훈련하기':'훈련 중...',
-  'rest':'휴식 중...'
+  '밥먹기': '밥 먹는 중...',
+  '훈련하기': '훈련 중...',
+  'rest': '휴식 중...'
 }
 
 const ACT_TIME = 5000;
 
 function Content(props) {
-  const mainCharacter = useSelector(state=>state.home.mainCharacter)
+  const mainCharacter = useSelector(state => state.home.mainCharacter)
   const dispatch = useDispatch();
-  const {status:userName} = useSelector(state => state.home.userGameInfo);
+  const { status: userName } = useSelector(state => state.home.userGameInfo);
+  const userId = useSelector(state => state.auth.userId);
+
   // 메인캐릭터, 칭호;
   const [nowAct, setNowAct] = useState();
   const timeText = action[nowAct]
@@ -135,46 +137,46 @@ function Content(props) {
   const imageUrl = images.defaultCharacter[type][color];
   // 훈련
 
-  useEffect(()=>{
-    if(nowAct){
-      setTimeout(()=>{
-        setNowAct(nowAct==='rest'?null:'rest')
-      },ACT_TIME)
+  useEffect(() => {
+    if (nowAct) {
+      setTimeout(() => {
+        setNowAct(nowAct === 'rest' ? null : 'rest')
+      }, ACT_TIME)
     }
-  },[nowAct])
+  }, [nowAct])
 
 
   // 행동 중 
 
-  const changeAct = async(action) => {
-    if(!nowAct){
+  const changeAct = async (action) => {
+    if (!nowAct) {
       dispatch(updateCharacter({
         act: action,
         characterIdx: mainCharacter.characterIdx,
-        statusType: action==='밥먹기'?"atk":"def",
+        statusType: action === '밥먹기' ? "atk" : "def",
         userId: props.userId,
         value: 1
-        }))
+      }))
       setNowAct(action)
-    }else{
+    } else {
       alertAct()
     }
   }
   const alertAct = () => {
     let message;
-    if(nowAct==='밥먹기'){
-      message='밥 먹는 중입니다';
-    }else if(nowAct==='훈련하기'){
-      message='훈련 중입니다';
-    }else{
-      message=`훈련이나 밥먹기가 완료된 후 ${ACT_TIME/(1000)}초 동안은 쉬어야 합니다`;
+    if (nowAct === '밥먹기') {
+      message = '밥 먹는 중입니다';
+    } else if (nowAct === '훈련하기') {
+      message = '훈련 중입니다';
+    } else {
+      message = `훈련이나 밥먹기가 완료된 후 ${ACT_TIME / (1000)}초 동안은 쉬어야 합니다`;
     }
-                                         
+
     Alert.alert(
       '경고',
       message,
       [
-        {text:'확인', onPress: ()=> {}, style:'default'}
+        { text: '확인', onPress: () => { }, style: 'default' }
       ]
     );
     return;
@@ -189,21 +191,21 @@ function Content(props) {
           <Image source={images.btnSource.collection} style={styles.buttonContent} />
           <Text style={styles.btnText}>동물도감</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={()=>changeAct('밥먹기')}>
+        <TouchableOpacity style={styles.button} onPress={() => changeAct('밥먹기')}>
           <Image source={images.btnSource.eat} style={styles.buttonContent} />
           <Text style={styles.btnText}>밥 주기</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={()=>changeAct('훈련하기')}>
+        <TouchableOpacity style={styles.button} onPress={() => changeAct('훈련하기')}>
           <Image source={images.btnSource.training} style={styles.buttonContent} />
           <Text style={styles.btnText}>훈련</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.main}>
-        {nowAct!=='밥먹기'&&nowAct!=='훈련하기'&&<Image source={imageUrl}
-          style={{ width: '100%', height: '50%', resizeMode: 'contain' }}
+        {nowAct !== '밥먹기' && nowAct !== '훈련하기' && <Image source={imageUrl}
+          style={{ width: '70%', height: '50%', resizeMode: 'contain' }}
         />}
-        {nowAct==='밥먹기'&&<Image source={images.eatCharacter[type]} style={actStyles.eating}/>}
-        {nowAct==='훈련하기'&&<Image source={require('../../../assets/game/loading/LoadingImg.gif')} style={actStyles.eating}/>}
+        {nowAct === '밥먹기' && <Image source={images.eatCharacter[type]} style={actStyles.eating} />}
+        {nowAct === '훈련하기' && <Image source={require('../../../assets/game/loading/LoadingImg.gif')} style={actStyles.eating} />}
         <Text style={{
           color: '#3B3B3B',
           fontWeight: 'bold',
@@ -232,8 +234,10 @@ function Content(props) {
           <Image source={images.btnSource.mission} style={styles.buttonContent} />
           <Text style={styles.btnText}>미션</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
-
+        <TouchableOpacity style={styles.button} onPress={() => {
+          dispatch(getAnimalDeco(userId));
+          props.navigation.navigate('GameAccessories');
+        }}>
           <Image source={images.btnSource.closet} style={styles.buttonContent} />
           <Text style={styles.btnText}>옷장</Text>
         </TouchableOpacity>
@@ -263,12 +267,12 @@ function Bottom(props) {
 }
 
 const actStyles = StyleSheet.create({
-  eating:{
+  eating: {
     resizeMode: 'contain',
     // width:SCREEN_WIDTH*0.8,
     // height:SCREEN_HEIGHT*0.6,
-    marginLeft:'8%',
-    width: SCREEN_WIDTH*0.9,
+    marginLeft: '8%',
+    width: SCREEN_WIDTH * 0.9,
     height: '50%',
     // backgroundColor:'red',
     // marginBottom: SCREEN_HEIGHT*0.01

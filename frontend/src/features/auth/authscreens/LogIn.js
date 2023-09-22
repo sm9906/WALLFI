@@ -16,8 +16,10 @@ export default function LogIn({navigation}){
 
   const dispatch = useDispatch();
 
-  const [ID, setID] = useState('');
-  const [password, setPassword] = useState('');
+  const [ID, setID] = useState('ssafy');
+  const [password, setPassword] = useState('ssafy');
+  // const [ID, setID] = useState('');
+  // const [password, setPassword] = useState('');
   
   const onPress = async()=>{
     await dispatch(postLogIn({userId:ID, password})).unwrap()
