@@ -10,6 +10,6 @@ public interface ExchangeRepository extends JpaRepository<ExchangeHistory, Long>
     @Query(value = "select * from exchange_history where 고시일자 = curdate() - interval 1 day order by 통화코드;", nativeQuery = true)
     List<ExchangeHistory> findYesterday();
 
-    @Query(value = "select * from exchange_history where 고시일자 = '2023-09-22' order by 통화코드;", nativeQuery = true)
+    @Query(value = "select * from exchange_history where 고시일자 = curdate() order by 통화코드;", nativeQuery = true)
     List<ExchangeHistory> findToday();
 }
