@@ -3,6 +3,7 @@ package com.shinhan.walfi.domain.game;
 import com.shinhan.walfi.domain.banking.BranchCurrency;
 import com.shinhan.walfi.domain.enums.CharacterType;
 import com.shinhan.walfi.domain.enums.LevelUp;
+import com.shinhan.walfi.domain.enums.TierPerColor;
 import com.shinhan.walfi.dto.game.BranchDto;
 import lombok.Getter;
 import lombok.Setter;
@@ -40,6 +41,9 @@ public class Branch {
 
     @Enumerated(EnumType.STRING)
     private CharacterType managerAnimalType;
+
+    @Enumerated(EnumType.STRING)
+    private TierPerColor managerAnimalColor;
 
     private int managerExp;
 
@@ -92,7 +96,7 @@ public class Branch {
     }
 
     public BranchDto entityToDto() {
-        BranchDto branchDto = new BranchDto(branchIdx, branchName, address, branchPhoneNumber, latitude, longitude, managerAnimalType.name(), managerLevel.getLevel(), managerExp, managerHp, managerAtk, managerDef);
+        BranchDto branchDto = new BranchDto(branchIdx, branchName, address, branchPhoneNumber, latitude, longitude, managerAnimalType.name(), managerAnimalColor.name(), managerLevel.getLevel(), managerExp, managerHp, managerAtk, managerDef);
         return branchDto;
     }
 }
