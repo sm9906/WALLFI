@@ -42,17 +42,18 @@ public class ExchangeServiceImpl implements ExchangeService {
     List<String> currency = Arrays.asList("USD", "JPY", "EUR", "CNY", "AUD");
 
     @Override
-    public ExchangeResDto getTodayExchange() {
-        Date now = new Date();
-        SimpleDateFormat format = new SimpleDateFormat("HH");
-        String hour = format.format(now);
-        // 현재 시각이 오전 12시 이후이면 이전 일자로, 이전이면 어제 일자로
-        List<ExchangeHistory> exchangeList;
-        if (Integer.parseInt(hour) >= 12) {
-            exchangeList = exchangeRepository.findToday();
-        } else {
-            exchangeList = exchangeRepository.findYesterday();
-        }
+    public ExchangeResDto getLatest() {
+//        Date now = new Date();
+//        SimpleDateFormat format = new SimpleDateFormat("HH");
+//        String hour = format.format(now);
+//        // 현재 시각이 오전 12시 이후이면 이전 일자로, 이전이면 어제 일자로
+//        List<ExchangeHistory> exchangeList;
+//        if (Integer.parseInt(hour) >= 12) {
+//            exchangeList = exchangeRepository.findToday();
+//        } else {
+//            exchangeList = exchangeRepository.findYesterday();
+//        }
+        List<ExchangeHistory> exchangeList = exchangeRepository.getLatest();
         ExchangeResDto dto = new ExchangeResDto();
         dto.setExchangeDtoList(exchangeList);
         return dto;

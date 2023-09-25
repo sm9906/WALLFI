@@ -21,13 +21,13 @@ public class ExchangeController {
 
     @GetMapping("/info")
     @ApiOperation(value = "오늘의 나라별 환율과 등락률을 조회")
-    public ResponseEntity<HttpResult> todayExchange() {
+    public ResponseEntity<HttpResult> getLatest() {
         //신한 api 환율 조회하기
         HttpResult res;
 
         try {
             res = HttpResult.getSuccess();
-            ExchangeResDto dto = exchangeService.getTodayExchange();
+            ExchangeResDto dto = exchangeService.getLatest();
             res.setData(dto);
         } catch (ParseException e) {
             res = new HttpResult(HttpStatus.FORBIDDEN, HttpResult.Result.ERROR, "환율 조회 실패");
