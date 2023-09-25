@@ -106,17 +106,16 @@ function ItemDetail(props) {
       <View style={detail.itemImgBox}>
         <Image source={image} style={detail.imgStyle}/>
       </View>
-      <View style={{ flex: 2 }}>
-        <Text style={{ fontSize: 18, fontWeight: 'bold', flex: 1, alignSelf: 'center' }}>{ '김싸피1234' }의 {props.selectedItem.name}</Text>
-        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
-          <Image source={images.gameIcon.coin} style={{ resizeMode: 'contain', height: '45%', flex: 1 }}/>
-          <Text style={{ fontSize: 15, fontWeight: 'bold', marginBottom: '2%', flex: 2, height: '65%' }}> {props.selectedItem.price}</Text>
+      <View style={detail.textGroup}>
+        <Text style={detail.itemName}>{}의 {props.selectedItem.name}</Text>
+        <View style={detail.price}>
+          <Image source={images.gameIcon.coin} style={detail.coinImg}/>
+          <Text style={detail.priceText}>{props.selectedItem.price}</Text>
         </View>
-        <View style={{ flex: 3, justifyContent: 'flex-start' }}>
-          <Text>Level: {}</Text>
-          <Text>Exp: {}</Text>
-          <Text>Atk: {}</Text>
-          <Text>Def: {}</Text>
+        <View style={detail.stats}>
+          <Text style={detail.statsText}>Level. {}</Text>
+          <Text style={detail.statsText}>Atk. {}</Text>
+          <Text style={detail.statsText}>Def. {}</Text>
         </View>
       </View>
       <View style={detail.btnGroup}>
@@ -145,6 +144,50 @@ const detail = StyleSheet.create({
     resizeMode: 'contain',
     width: '100%',
     height: '100%'
+  },
+  textGroup: { 
+    flex: 3, 
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    width: '100%'
+  },
+  itemName: { 
+    height: '20%', 
+    fontSize: 20, 
+    fontWeight: 'bold' 
+  },
+  price: { 
+    width: '40%', 
+    height: '18%', 
+    backgroundColor: '#559AEC', 
+    alignItems: 'center', 
+    justifyContent: 'flex-start',
+    flexDirection: 'row',
+    borderRadius: 20,
+    borderColor: '#77B2F8',
+    borderWidth: 2
+  },
+  coinImg: { 
+    resizeMode: 'contain', 
+    width: '30%', 
+    height: '90%' 
+  },
+  priceText: { 
+    fontSize: 18, 
+    fontWeight: 'bold', 
+    textAlign: 'right', 
+    width: '60%' 
+  },
+  stats: { 
+    height: '40%', 
+    width: '30%',
+    marginVertical: '5%',
+    justifyContent: 'center',
+    alignItems: 'flex-start'
+  },
+  statsText: {
+    fontSize: 16,
+    marginVertical: '5%',
   },
   btnGroup: {
     flex: 1, 
