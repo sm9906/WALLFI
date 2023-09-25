@@ -18,11 +18,11 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @Configuration
 public class RedisConfig {
 
-//    @Value("${spring.redis.host}")
-    private String host = "master-redis";
+    @Value("${spring.redis.host}")
+    private String host; //= "master-redis";
 
-//    @Value("${spring.redis.port}")
-    private int port = 6379;
+    @Value("${spring.redis.port}")
+    private int port; //= 6379;
 
     /**
      * get Thread-safe factory of Redis connections.
