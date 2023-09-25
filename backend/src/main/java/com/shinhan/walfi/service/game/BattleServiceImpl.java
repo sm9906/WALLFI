@@ -83,6 +83,8 @@ public class BattleServiceImpl implements BattleService{
             branch.setManagerDef(winner.getDef());
             branch.setStartTime(LocalDateTime.now());
             branch.setUserGameInfo(winnerUserGameInfo);
+            branch.setManagerAnimalType(winner.getCharacterType());
+            branch.setManagerAnimalColor(winner.getColor());
             branchRepository.save(branch);
 
             // 이긴 사람의 캐릭터 exp +50, point +50
