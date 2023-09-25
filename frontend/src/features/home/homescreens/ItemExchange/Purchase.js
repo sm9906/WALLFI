@@ -30,7 +30,11 @@ export default function Purchase() {
         visible={modalVisible}>
         <ItemDetail selectedItem={selectedItem} setModalVisible={setModalVisible}/>
       </Modal>
-      <ButtonGroup selectedBtn={selectedBtn} setSelectedBtn={setSelectedBtn}/>
+      <ButtonGroup 
+        title1={'캐릭터'} 
+        title2={'아이템'} 
+        selectedBtn={selectedBtn} 
+        setSelectedBtn={setSelectedBtn}/>
       <Search />
       <View style={styles.itemContainer}>
         <Content 
@@ -75,7 +79,7 @@ const character = [
 
 // 치장 데이터
 const deco = [
-  {id: 1, name: '트로피', imageUrl: images.defaultCharacter.MOLLY.BASIC, price: '1만'}
+  {id: 1, name: '트로피', imageUrl: images.gameIcon.trophy, price: '1만'}
 ]
 
 // 버튼을 누를 때 마다 나오는 컨텐츠
@@ -83,6 +87,8 @@ function Content(props) {
 
   return (
     <List
+      type={'purchase'}
+      selectedBtn={props.selectedBtn}
       data={props.selectedBtn ? deco : character}
       setModalVisible={props.setModalVisible}
       setSelectedBtn={props.setSelectedBtn}
@@ -100,17 +106,18 @@ function ItemDetail(props) {
       <View style={detail.itemImgBox}>
         <Image source={image} style={detail.imgStyle}/>
       </View>
-      <View style={{ flex: 2, alignItems: 'center', justifyContent: 'center' }}>
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
-          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{props.selectedItem.name}</Text>
-          </View>
-          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
-            <Image source={images.gameIcon.coin} style={{ resizeMode: 'contain', height: '100%', width: '10%' }}/>
-            <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: '2%' }}>{props.selectedItem.price}</Text>
-          </View>
+      <View style={{ flex: 2 }}>
+        <Text style={{ fontSize: 18, fontWeight: 'bold', flex: 1, alignSelf: 'center' }}>{ '김싸피1234' }의 {props.selectedItem.name}</Text>
+        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
+          <Image source={images.gameIcon.coin} style={{ resizeMode: 'contain', height: '45%', flex: 1 }}/>
+          <Text style={{ fontSize: 15, fontWeight: 'bold', marginBottom: '2%', flex: 2, height: '65%' }}> {props.selectedItem.price}</Text>
         </View>
-        <Text style={{ flex: 1 }}>경험치 / 공격력 / 방어력 / 레벨</Text>
+        <View style={{ flex: 3, justifyContent: 'flex-start' }}>
+          <Text>Level: {}</Text>
+          <Text>Exp: {}</Text>
+          <Text>Atk: {}</Text>
+          <Text>Def: {}</Text>
+        </View>
       </View>
       <View style={detail.btnGroup}>
         <TouchableOpacity style={[detail.modalBtn, detail.purchaseBtn]}>

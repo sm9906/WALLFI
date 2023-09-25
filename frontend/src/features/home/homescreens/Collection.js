@@ -36,8 +36,12 @@ export default function Collection({navigation}) {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedCharacter, setSelectedCharacter] = useState(null);
 
+  const [containerWidth, setContainerWidth] = useState(0);
+  const margins = 42 * 2;
+  const numColumns = 2;
+
   // 유저의 캐릭터 목록 조회
-  const userId = useSelector(state=>state.auth.userId)
+  const userId = useSelector(state=>state.auth.userId);
   const characterList = useSelector(state => state.home.characters);
   const characters = []
   characterList.map((character) => {
@@ -51,9 +55,9 @@ export default function Collection({navigation}) {
     })
   })
 
-  const Item = ({item}) => (
+  const Item = ({item, width}) => (
     <TouchableOpacity
-      style={styles.gridStyle}
+      style={[styles.gridStyle, { width: width }]}
       onPress={() => {
         setModalVisible(true);
         setSelectedCharacter({...item});
@@ -84,10 +88,11 @@ export default function Collection({navigation}) {
         <View style={{ flex: 6.5, width: '100%' }}>
         <FlatList 
             data={characters}
-            renderItem={({item}) => <Item item={item} />}
+            onLayout={e => setContainerWidth(e.nativeEvent.layout.width)}
+            renderItem={({item}) => <Item item={item} width={(containerWidth - margins) / numColumns}/>}
             keyExtractor={item => item.id.toString()}
-            columnWrapperStyle={{ justifyContent: 'center' }}
-            numColumns={2}/>
+            columnWrapperStyle={{ justifyContent: 'flex-start' }}
+            numColumns={numColumns}/>
         </View>
       </ImageBackground>
       <StatusBar />
@@ -132,7 +137,6 @@ function DetailPage(props) {
 const styles = StyleSheet.create({
   gridStyle: {
     backgroundColor: 'rgba(255, 255, 255, 0.7)',
-    flex: 0.5,
     marginHorizontal: '5%',
     marginVertical: '5%',
     borderRadius: 20,

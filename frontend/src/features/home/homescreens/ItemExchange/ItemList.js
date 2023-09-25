@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { 
   View, 
   Text, 
@@ -10,45 +10,54 @@ import {
 
 import { images } from '../../../../common/imgDict.js';
 
+// FlatList
 export default function List(props) {
 
-  const [containerWidth, setContainerWidth] = useState(0);
-  const margins = 30 * 2;
-  const numColumns = 2;
+  const type = props.type;
+  const dataType = props.selectedBtn ? 'item' : 'character';
 
   return (
     <FlatList 
       data={props.data}
-      onLayout={e => setContainerWidth(e.nativeEvent.layout.width)}
       renderItem={({item}) => 
-      <ItemList 
-        item={item} 
-        width={(containerWidth - margins) / numColumns}
+      <ItemList
+        type={type}
+        dataType={dataType}
+        item={item}
         setModalVisible={props.setModalVisible}
         setSelectedItem={props.setSelectedItem} />}
       keyExtractor={item => item.id.toString()}
-      columnWrapperStyle={{ justifyContent: 'flex-start' }}
-      numColumns={numColumns}
+      contentContainerStyle={{ alignItems: 'center' }}
+      showsVerticalScrollIndicator={false}
     />
   )
 }
 
+// 아이템 리스트
 function ItemList(props) {
 
   return (
     <TouchableOpacity 
-      style={[itemGroup.itemBox, { width: props.width }]} 
+      style={itemGroup.itemBox} 
       onPress={() => { props.setModalVisible(true); props.setSelectedItem({...props.item})}}>
       <View style={itemGroup.imageBox}>
         <Image source={props.item.imageUrl} style={itemGroup.itemImg} />
       </View>
       <View style={itemGroup.fontContainer}>
-        <Text style={itemGroup.fontStyle}>{props.item.name}</Text>
-        <View style={itemGroup.priceContainer}>
-          <Image source={images.gameIcon.coin} style={itemGroup.coinIcon} />
-          <View style={{ flex: 4, marginBottom: '5%' }}>
-            <Text style={itemGroup.fontStyle}>  {props.item.price}</Text>
-          </View>
+        <View style={{ alignItems: 'flex-start' }}>
+          <Text style={itemGroup.fontStyle}>{props.item.name}</Text>
+          {
+            props.type === 'purchase' ? 
+              <View style={itemGroup.priceContainer}> 
+                <Image source={images.gameIcon.coin} style={itemGroup.coinIcon} />
+                <Text style={{ color: 'white', fontSize: 15, width: '90%' }}> {props.item.price}</Text>
+              </View>
+            : props.dataType === 'character' ? 
+              <View style={itemGroup.priceContainer}>
+                <Text style={{ color: 'white', fontSize: 15 }}>LV.{props.item.level}</Text>
+              </View>
+            : null
+          }
         </View>
       </View>
     </TouchableOpacity>
@@ -57,20 +66,21 @@ function ItemList(props) {
 
 const itemGroup = StyleSheet.create({
   itemBox: {
-    backgroundColor: 'white',
+    backgroundColor: 'rgba(137, 146, 193, 0.8)',
     borderRadius: 10,
-    aspectRatio: 0.7,
+    aspectRatio: 3,
+    width: '100%',
     overflow: 'hidden',
-    margin: '5%',
-    alignItems: 'center'
+    marginVertical: '5%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row'
   },
   imageBox: { 
-    height: '50%',
-    width: '80%',
-    marginVertical: '10%',
-    backgroundColor: '#ECF7FF',
-    alignItems: 'center',
-    justifyContent: 'center'
+    flex: 1,
+    height: '70%',
+    backgroundColor: 'white',
+    marginHorizontal: '5%'
   },
   itemImg: {
     resizeMode: 'contain', 
@@ -78,24 +88,23 @@ const itemGroup = StyleSheet.create({
     height: '100%' 
   },
   fontContainer: { 
-    height: '50%',
-    width: '70%',
-    justifyContent: 'space-evenly',
+    flex: 3,
+    height: '70%',
+    marginEnd: '5%',
+    flexDirection: 'row'
   },
   fontStyle: { 
-    fontSize: 12,
-    fontWeight: 'bold',
-    color: '#474747',
+    flex: 1,
+    fontSize: 15,
+    color: 'white',
   },
   priceContainer: { 
     flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: '40%'
+    flexDirection: 'row'
   },
   coinIcon: { 
-    flex: 1,
     resizeMode: 'contain', 
-    height: '100%'
+    height: '70%',
+    width: '10%'
   }
 })
