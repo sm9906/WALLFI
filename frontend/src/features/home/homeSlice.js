@@ -349,8 +349,6 @@ export const getAnimalDeco = createAsyncThunk('GET_ANIMAL_DECO', async (userId, 
 })
 
 
-
-
 const initialState = {
   exchangeInfo: null,
   mainCharacter: null,
@@ -358,6 +356,7 @@ const initialState = {
   userGameInfo: null,
   pressedAnimal: null,
   animalDeco: null,
+  pressedAccessory: null,
 }
 
 
@@ -367,6 +366,9 @@ export const homeSlice = createSlice({
   reducers: {
     setPressedAnimal: (state, action) => {
       state.pressedAnimal = action.payload;
+    },
+    setPressedAccessory: (state, action) => {
+      state.pressedAccessory = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -401,5 +403,5 @@ export const homeSlice = createSlice({
   }
 })
 
-export const { setPressedAnimal } = homeSlice.actions;
+export const { setPressedAnimal, setPressedAccessory } = homeSlice.actions;
 export default homeSlice.reducer

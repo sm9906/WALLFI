@@ -7,11 +7,9 @@ import { setPressedAnimal } from "../../homeSlice";
 const { width } = Dimensions.get("window");
 
 export const AnimalList = () => {
-  // const animals = ["LION", "QUOKKA", "TIGER", "SHIBA", "PANDA", "EAGLE"]; // 나중에 도감 리스트로 교체
-  const animals = useSelector((state) => state.home.characters)
+  const animals = useSelector((state) => state.home.characters);
   const dispatch = useDispatch();
   const [selectBox, setSelectBox] = useState(null);
-
 
   const setAnimal = (animalType) => {
     dispatch(setPressedAnimal(animalType));

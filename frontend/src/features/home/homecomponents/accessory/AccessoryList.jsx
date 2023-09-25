@@ -2,18 +2,19 @@ import React, { useState } from "react";
 import { View, StyleSheet, Dimensions, ScrollView } from "react-native";
 import Accessory from "./Accessory";
 import { useDispatch } from "react-redux";
-import { setPressedAnimal } from "../../homeSlice";
+import { setPressedAccessory } from "../../homeSlice";
+import { FlatList } from "react-native";
 
 const { width } = Dimensions.get("window");
 
 export const AccessoryList = () => {
-  const accessorys = ["crown_cap", "ruby_necklace", "ssafy_cap" ]; // 나중에 악세 리스트로 교체
+  const accessorys = ["crown_cap", "ruby_necklace", "ssafy_cap"]; // 나중에 악세 리스트로 교체
   const dispatch = useDispatch();
   const [selectBox, setSelectBox] = useState(null);
 
-  const setAnimal = (animalType) => {
-    dispatch(setPressedAnimal(animalType));
-    setSelectBox(animalType);
+  const setDeco = (accessoryType) => {
+    dispatch(setPressedAccessory(accessoryType));
+    setSelectBox(accessoryType);
   };
 
   return (
@@ -39,7 +40,7 @@ export const AccessoryList = () => {
             <Accessory
               aType={accessoryType}
               aSize={0.7}
-              onPress={() => setAnimal(accessoryType)}
+              onPress={() => setDeco(accessoryType)}
             />
           </View>
           {index !== accessorys.length - 1 && <View style={styles.gap}></View>}

@@ -20,6 +20,7 @@ import {
   Image,
   Button,
 } from "react-native";
+import Animal from "../../fight/fightcomponents/Animal";
 
 const Map = () => {
   const [isModalVisible, setModalVisible] = useState(false);
@@ -27,11 +28,11 @@ const Map = () => {
   const [banks, setBanks] = useState(null);
   const [selectedBankDetails, setSelectedBankDetails] = useState(null);
   const [region, setRegion] = useState(null);
-  const [myAnimal, setmyAnimal] = useState(null);
   const [exchange, setexchange] = useState(null);
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const userId = useSelector(state=>state.auth.userId)
+  const userId = useSelector((state) => state.auth.userId);
+  const mainCharacter = useSelector((state) => state.home.mainCharacter); // 메인 동물 정보 받아옴
 
   useEffect(() => {
     // 내 좌표 기준 주변 은행
@@ -70,7 +71,6 @@ const Map = () => {
     try {
       // 지도상에 표시된 은행중 하나 누름
       await fetchBankDetail(bank.지점번호); // 해당 은행의 상세정보를 서버에서 받아옴
-      await playerAnimal(); // 내 메인 동물 정보 받아옴
       await todayExchange(); // 환율정보 받아옴
       setModalVisible(true); // 지점장과 은행정보 모달
     } catch (error) {
@@ -83,7 +83,7 @@ const Map = () => {
     try {
       const response = await axios.get(`/branch?idx=${idx}`);
       const data = response.data;
-      
+
       dispatch(setBankIdx(idx));
       setSelectedBankDetails(data.data);
     } catch (error) {
@@ -91,19 +91,6 @@ const Map = () => {
         "서버에서 은행 상세 정보를 가져오는 중 오류가 발생했습니다.",
         error
       );
-    }
-  };
-
-  const playerAnimal = async () => {
-    // 내 메인 동물 호출
-    try {
-      const response = await axios.post(`/character/getmain`, {
-        userId: userId,
-      });
-      const data = response.data;
-      setmyAnimal(data.data.characterDto);
-    } catch (error) {
-      console.error("메인 동물 호출중 오류가 발생했습니다.", error);
     }
   };
 
@@ -125,7 +112,7 @@ const Map = () => {
     LION: "EUR",
     QUOKKA: "AUD",
     PANDA: "CNY",
-    MOLLY: "KRW"
+    MOLLY: "KRW",
   };
 
   const setExchangeForAnimal = (animalType) => {
@@ -146,20 +133,21 @@ const Map = () => {
 
   const handleGoToBattle = () => {
     // 모달창에서 배틀로 이동시 동물 정보 리덕스에 저장 (manager...)
-    if (selectedBankDetails != null && myAnimal != null) {
-      const playerExchange = setExchangeForAnimal(myAnimal.characterType);
+    if (selectedBankDetails != null && mainCharacter != null) {
+      const playerExchange = setExchangeForAnimal(mainCharacter.characterType);
       const enemyExchange = setExchangeForAnimal(
         selectedBankDetails.managerAnimalType
       );
 
       const playerStat = {
-        animal: myAnimal?.characterType,
-        Level: myAnimal?.level,
-        exp: myAnimal.exp,
-        Hp: myAnimal?.hp,
-        attack: myAnimal?.atk,
-        defence: myAnimal?.def,
+        animal: mainCharacter?.characterType,
+        Level: mainCharacter?.level,
+        exp: mainCharacter.exp,
+        Hp: mainCharacter?.hp,
+        attack: mainCharacter?.atk,
+        defence: mainCharacter?.def,
         exchange: 1 + playerExchange / 10,
+        color: mainCharacter?.color
       };
 
       const enemyStat = {
@@ -170,6 +158,7 @@ const Map = () => {
         attack: selectedBankDetails?.branchDto.managerAtk,
         defence: selectedBankDetails?.branchDto.managerDef,
         exchange: 1 + enemyExchange / 10,
+        color: selectedBankDetails?.branchDto.managerAnimalColor,
       };
       dispatch(setEnemy(enemyStat));
       dispatch(setPlayer(playerStat));
@@ -233,13 +222,18 @@ const Map = () => {
                 {selectedBankDetails?.username}
               </Text>
               {selectedBankDetails && (
-                <Image
-                  source={
-                    images.animal[
-                      `baby_${selectedBankDetails.branchDto.managerAnimalType}`
-                    ]
+                <Animal
+                  aType={
+                    selectedBankDetails.branchDto.managerAnimalType
+                      ? selectedBankDetails.branchDto.managerAnimalType
+                      : null
                   }
-                  style={styles.modalImage}
+                  aColor={
+                    selectedBankDetails.branchDto.managerAnimalColor
+                      ? selectedBankDetails.branchDto.managerAnimalColor
+                      : "BASIC"
+                  }
+                  aSize={2}
                 />
               )}
               <Text style={styles.modalText}>
