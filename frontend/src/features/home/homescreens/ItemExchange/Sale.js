@@ -103,7 +103,7 @@ function ItemDetail(props) {
   const image = props.selectedItem.imageUrl;
 
   return (
-    <View style={[globalStyles.modalStyle, { backgroundColor: '#A6C9FF', height: SCREEN_HEIGHT }]}>
+    <View style={[globalStyles.modalStyle, { backgroundColor: '#A6C9FF' }]}>
       <View style={detail.itemImgBox}>
         <Image source={image} style={detail.imgStyle}/>
       </View>
