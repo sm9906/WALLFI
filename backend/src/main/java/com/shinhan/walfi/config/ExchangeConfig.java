@@ -20,7 +20,7 @@ public class ExchangeConfig {
 
     private final ExchangeRepository exchangeRepository;
 
-    @Scheduled(cron = "0 59 11 * * *", zone = "Asia/Seoul") // 환율 고시 시간 매일 11시
+    @Scheduled(cron = "0 10 10 * * *", zone = "Asia/Seoul") // 환율 고시 시간 매일 10시
     public void updateRanking() throws ParseException {
         List<ExchangeHistory> list = exchangeUtil.getTodayExchange();
 
