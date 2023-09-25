@@ -53,7 +53,6 @@ public class UserController {
             final String refreshToken = tokenDto.getREFRESH_TOKEN();
 
             Cookie cookie = new Cookie("Refresh-Token", refreshToken);
-            // TODO: application.yml 파일에서 RefreshToken 유효 기간 불러오기
             cookie.setMaxAge(60 * 60 * 24 * 3); // 3일
             cookie.setPath("/");
 //            cookie.setSecure(true);
