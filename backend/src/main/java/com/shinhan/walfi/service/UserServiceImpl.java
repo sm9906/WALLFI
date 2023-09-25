@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService {
         boolean isLoginSuccessful = true;
         Authentication authenticatedUser = null;
         TokenDto tokenDto = new TokenDto();
-
+        log.info("{}, {}", userId, password);
         try {
             log.info("아이디 검증 시작");
             authenticatedUser = authenticationManager.authenticate(
@@ -67,6 +67,7 @@ public class UserServiceImpl implements UserService {
             );
             log.info("아이디 검증 끝");
         } catch (Exception e) {
+            log.error(e.toString());
             log.info("에러가 잡혔습니다.");
             isLoginSuccessful = false;
             tokenDto.setLoginSuccessful(isLoginSuccessful);
@@ -74,27 +75,27 @@ public class UserServiceImpl implements UserService {
             throw new UserException(NO_MATCHING_USER);
         }
 
-//        if (isLoginSuccessful) {
-//
-//            User loginUser = (User) authenticatedUser.getPrincipal();
-//            String name = loginUser.getName();
-//
-//            String accessToken = jwtUtil.createAccessToken(userId, name);
-//            String refreshToken = jwtUtil.createRefreshToken(userId, name);
-//
-//            log.debug("로그인 성공");
-//            log.debug("user: {}", loginUser);
-//            log.debug("Access-Token: {}", accessToken);
-//            log.debug("Refresh-Token: {}", refreshToken);
-//
-//            tokenDto.setLoginSuccessful(true);
-//            tokenDto.setACCESS_TOKEN(accessToken);
-//            tokenDto.setREFRESH_TOKEN(refreshToken);
-//            tokenDto.setName(loginUser.getName());
-//
-//            // redis에 RefreshToken 저장
-//            jwtUtil.saveUserRefreshToken(userId, refreshToken);
-//        }
+        if (isLoginSuccessful) {
+
+            User loginUser = (User) authenticatedUser.getPrincipal();
+            String name = loginUser.getName();
+
+            String accessToken = jwtUtil.createAccessToken(userId, name);
+            String refreshToken = jwtUtil.createRefreshToken(userId, name);
+
+            log.debug("로그인 성공");
+            log.debug("user: {}", loginUser);
+            log.debug("Access-Token: {}", accessToken);
+            log.debug("Refresh-Token: {}", refreshToken);
+
+            tokenDto.setLoginSuccessful(true);
+            tokenDto.setACCESS_TOKEN(accessToken);
+            tokenDto.setREFRESH_TOKEN(refreshToken);
+            tokenDto.setName(loginUser.getName());
+
+            // redis에 RefreshToken 저장
+            jwtUtil.saveUserRefreshToken(userId, refreshToken);
+        }
 
         return tokenDto;
     }
