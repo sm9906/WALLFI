@@ -18,6 +18,12 @@ spring:
     properties:
       hibernate.format_sql: true
       dialect: org.hibernate.dialect.MySQL8InnoDBDialect
+  auth:
+    secretKey: 6v9y$B&E)H@MbQeThWmZq4t7w!z%C*F-
+  redis:
+    host: master-redis
+    port: 6379
+
 
 mybatis:
   type-aliases-package: com.shinhan.walfi.dao
