@@ -154,9 +154,7 @@ function RenderContent(props) {
           { text: "확인", onPress: () => {}, style: "default" },
         ]);
       } else {
-        dispatch(updatePoint({ point: -1000, userId: userId })).then((res) =>
-          console.log(res)
-        );
+        dispatch(updatePoint({ point: -1000, userId: userId }));
         dispatch(getRandomCharacter(userId)).then((response) => {
           props.setSelectedCharacter(response.payload);
           props.setModalVisible1(true);
@@ -175,9 +173,7 @@ function RenderContent(props) {
           { text: "확인", onPress: () => {}, style: "default" },
         ]);
       } else {
-        dispatch(updatePoint({ point: -9000, userId: userId })).then((res) =>
-          console.log(res)
-        );
+        dispatch(updatePoint({ point: -9000, userId: userId }))
         dispatch(getRandomTenCharacter(userId)).then((response) => {
           props.setTenCharacterList(response.payload);
           props.setModalVisible2(true);
@@ -196,9 +192,7 @@ function RenderContent(props) {
           { text: "확인", onPress: () => {}, style: "default" },
         ]);
       } else {
-        dispatch(updatePoint({ point: -500, userId: userId })).then((res) =>
-          console.log(res)
-        );
+        dispatch(updatePoint({ point: -500, userId: userId }));
         dispatch(
           changeColor({
             mainCharacterIdx: mainCharacter.characterIdx,
@@ -309,7 +303,6 @@ function RenderContent(props) {
 
 // 동물 알 1개 뽑기 모달
 function OneEgg(props) {
-  console.log("모달들어옴", props.selectedCharacter);
   const type = props.selectedCharacter.characterType;
 
   return (

@@ -111,7 +111,7 @@ function ItemDetail(props) {
         <Text style={detail.itemName}>LV.{props.selectedItem.level} {props.selectedItem.name}</Text>
         <View style={detail.price}>
           <Image source={images.gameIcon.coin} style={detail.coinImg}/>
-          <TextInput style={detail.priceText} />
+          <TextInput style={detail.priceText} keyboardType="number-pad"/>
         </View>
         <View style={detail.stats}>
           <Text style={detail.statsText}>Atk. {props.selectedItem.atk}</Text>
