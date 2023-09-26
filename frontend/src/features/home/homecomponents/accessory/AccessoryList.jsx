@@ -3,7 +3,6 @@ import { View, StyleSheet, Dimensions, ScrollView } from "react-native";
 import Accessory from "./Accessory";
 import { useDispatch } from "react-redux";
 import { setPressedAccessory } from "../../homeSlice";
-import { FlatList } from "react-native";
 
 const { width } = Dimensions.get("window");
 

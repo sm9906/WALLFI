@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   StatusBar,
   Text,
@@ -6,6 +6,7 @@ import {
   ImageBackground,
   StyleSheet,
   TouchableOpacity,
+  Animated,
 } from "react-native";
 import { globalStyles } from "../homestyles/global.js";
 import images from "../../../common/imgDict.js";
@@ -16,12 +17,90 @@ import AccessoryList from "../homecomponents/accessory/AccessoryList.jsx";
 import { useSelector } from "react-redux";
 import Accessory from "../homecomponents/accessory/Accessory.jsx";
 import Slider from "@react-native-community/slider";
+import {
+  PanGestureHandler,
+  RotationGestureHandler,
+} from "react-native-gesture-handler";
+import { State } from "react-native-gesture-handler";
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../homecomponents/ScreenSize.js";
 
 export const AnimalDeco = ({ navigation }) => {
   const selectAnimal = useSelector((state) => state.home.pressedAnimal);
   const selectAccessory = useSelector((state) => state.home.pressedAccessory);
 
   const [rotationValue, setRotationValue] = useState(0);
+  const [scaleValue, setScaleValue] = useState(1);
+
+  const translateX = new Animated.Value(0);
+  const translateY = new Animated.Value(0); // 좌표
+  const lastOffset = { x: 0, y: 0 };
+
+  const rotate = new Animated.Value(rotationValue / 360); // 초기값 설정
+  const lastRotate = { r: 0 };
+
+  useEffect(() => {
+    rotate.setValue(rotationValue / 360); // 회전
+  }, [rotationValue]);
+
+  const onGestureEvent = Animated.event(
+    [
+      {
+        nativeEvent: {
+          translationX: translateX, // 좌표
+          translationY: translateY,
+        },
+      },
+    ],
+    { useNativeDriver: true }
+  );
+
+  const onHandlerStateChange = (event) => {
+    if (event.nativeEvent.oldState === State.ACTIVE) {
+      let newX = lastOffset.x + event.nativeEvent.translationX; // 좌표
+      let newY = lastOffset.y + event.nativeEvent.translationY;
+
+      const boundary = {
+        left: -SCREEN_WIDTH * 0.23,
+        right: SCREEN_WIDTH * 0.23,
+        top: -SCREEN_HEIGHT * 0.23,
+        bottom: SCREEN_HEIGHT * 0.13,
+      };
+
+      if (newX < boundary.left) newX = boundary.left;
+      if (newX > boundary.right) newX = boundary.right;
+      if (newY < boundary.top) newY = boundary.top;
+      if (newY > boundary.bottom) newY = boundary.bottom;
+
+      lastOffset.x = newX;
+      lastOffset.y = newY;
+
+      translateX.setOffset(lastOffset.x);
+      translateX.setValue(0);
+      translateY.setOffset(lastOffset.y);
+      translateY.setValue(0);
+    }
+  };
+
+  const onRotateGestureEvent = Animated.event(
+    // 회전
+    [
+      {
+        nativeEvent: {
+          rotation: rotate,
+        },
+      },
+    ],
+    { useNativeDriver: true }
+  );
+
+  const onRotateHandlerStateChange = (event) => {
+    if (event.nativeEvent.oldState === State.ACTIVE) {
+      // 회전
+      lastRotate.r += event.nativeEvent.rotation;
+      rotate.setOffset(lastRotate.r);
+      rotate.setValue(0);
+    }
+  };
 
   return (
     <View style={globalStyles.container}>
@@ -36,11 +115,11 @@ export const AnimalDeco = ({ navigation }) => {
             <View style={styles.sliderContainer}>
               <Slider
                 style={styles.gage}
-                minimumValue={0}
-                maximumValue={360}
-                step={1}
-                // value={rotationValue}
-                // onValueChange={(value) => setRotationValue(value)}
+                minimumValue={1}
+                maximumValue={3}
+                step={0.1}
+                value={scaleValue}
+                onValueChange={(value) => setScaleValue(value)} // 크기 조절
                 thumbTintColor="gold"
                 minimumTrackTintColor="#00FF00"
                 maximumTrackTintColor="#0000FF"
@@ -53,12 +132,49 @@ export const AnimalDeco = ({ navigation }) => {
                 aColor={selectAnimal ? selectAnimal.color : null}
                 aSize={2}
               />
-              <View style={styles.accessoryOverlay}>
-                <Accessory
-                  aType={selectAccessory ? selectAccessory : null}
-                  rotationValue={rotationValue}
-                />
-              </View>
+              <PanGestureHandler
+                onGestureEvent={onGestureEvent}
+                onHandlerStateChange={onHandlerStateChange}
+              >
+                <Animated.View
+                  style={[
+                    {
+                      transform: [
+                        { translateX: translateX },
+                        { translateY: translateY },
+                      ],
+                    },
+                  ]}
+                >
+                  <RotationGestureHandler
+                    onGestureEvent={onRotateGestureEvent}
+                    onHandlerStateChange={onRotateHandlerStateChange}
+                  >
+                    <Animated.View
+                      style={[
+                        {
+                          transform: [
+                            {
+                              rotate: rotate.interpolate({
+                                inputRange: [0, 1],
+                                outputRange: ["360deg", "0deg"],
+                              }),
+                            },
+                          ],
+                        },
+                      ]}
+                    >
+                      <View style={styles.accessoryOverlay}>
+                        <Accessory
+                          aType={selectAccessory ? selectAccessory : null}
+                          aSize={scaleValue}
+                          rotationValue={rotationValue}
+                        />
+                      </View>
+                    </Animated.View>
+                  </RotationGestureHandler>
+                </Animated.View>
+              </PanGestureHandler>
             </View>
             <View style={styles.gap}></View>
             <View style={styles.sliderContainer}>
@@ -68,7 +184,7 @@ export const AnimalDeco = ({ navigation }) => {
                 maximumValue={360}
                 step={1}
                 value={rotationValue}
-                onValueChange={(value) => setRotationValue(value)}
+                onValueChange={(value) => setRotationValue(value)} // 회전 조절
                 thumbTintColor="gold"
                 minimumTrackTintColor="#00FF00"
                 maximumTrackTintColor="#0000FF"
