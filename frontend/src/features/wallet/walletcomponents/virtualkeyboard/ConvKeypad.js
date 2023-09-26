@@ -6,7 +6,7 @@ import { RFPercentage } from 'react-native-responsive-fontsize';
 
 const convInput = ['+1만', '+5만', '+10만', '+100만', '전액'];
 
-export const ConvPad = React.memo(function ConvPad({addMoney}){
+const ConvPad = React.memo(function ConvPad({addMoney}){
   // console.log('리로딩')
   const pressConvBtn = (idx)=> {
     let plus = 10000;
@@ -56,3 +56,5 @@ export const convStyle = StyleSheet.create({
     fontWeight:'bold',
   }
 })
+
+export default ConvPad

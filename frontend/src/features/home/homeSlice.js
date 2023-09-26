@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from '../../common/http-common';
-
+import { Audio } from 'expo-av';
 
 // 사용자 게임 정보 불러오기
 export const getGameInfo = createAsyncThunk('GET_GAME_INFO', async(userId, { rejectWithValue }) => {
@@ -194,14 +194,35 @@ const initialState = {
   mainCharacter: null,
   characters: null,
   userGameInfo: null,
+  music: null,
+
 }
 
 
 export const homeSlice = createSlice({
   name: 'home',
   initialState,
-  reducers:{
-
+  reducers:{ 
+    DJMing:(state, action)=>{
+      // 실행시킬 BGM 넣기
+      state.music = action.payload
+      state.music?state.music.setIsLoopingAsync(true):null;
+    },
+    PlayMusic:(state, action)=>{
+      // 뮤직 스타트!
+      state.music?state.music.playAsync():null;
+    },
+    StopMusic:(state, action)=>{
+      // 종료
+      state.music?state.music.pauseAsync():null;
+    },
+    DeleteMusic:(state,action)=>{
+      // 음악 빼내기 :9
+      if(state.music){
+        state.music.unloadAsync()
+        state.music=null;
+      }
+    } 
   },
   extraReducers: (builder) => {
     builder
@@ -249,5 +270,5 @@ export const homeSlice = createSlice({
   }
 })
 
-export const {  } = homeSlice.actions
+export const { DJMing, PlayMusic, StopMusic, DeleteMusic } = homeSlice.actions
 export default homeSlice.reducer

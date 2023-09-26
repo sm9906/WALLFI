@@ -16,18 +16,13 @@ import {Background} from '../walletcomponents/CommonStyle';
 import ShinhanLogo from '../../../assets/wallet/ShinhanLogo.png';
 import Exchange from '../../../assets/wallet/Exchange.png'
 import { getAccounts, getExchangeRate } from '../walletSlice';
+import { DeleteMusic } from '../../home/homeSlice';
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../walletcomponents/ScreenSize";
 
-
-export const SCREEN_WIDTH = Dimensions.get("window").width;
-export const SCREEN_HEIGHT= Dimensions.get("window").height;
 
 export default function WalletHome({navigation}) {
   const dispatch = useDispatch();
   const {userId, mainAccount} = useSelector(state=>state.auth)
-  // const {cards} = useSelector(state=>state.wallet);
-  // 홈에 들어올 때 마다 새로고침 하는 게 맞는데 
-  // 예적금 때문에 그럴 수 없음..
-
   const [cards, setCards] = useState();
   useFocusEffect(
     React.useCallback(()=>{
@@ -36,11 +31,11 @@ export default function WalletHome({navigation}) {
   )
 
   const getData = async() => {
+    dispatch(DeleteMusic());
     try {
       // console.log('?')
       await dispatch(getExchangeRate());
       const response = await dispatch(getAccounts({userId, mainAccount}));
-      // console.log('계좌 조회 성공',response.payload); 
       setCards(response.payload)
     } catch (err) {
       console.log('walletscreens/WalletLoading.js',err);

@@ -5,7 +5,7 @@ import {Background, ButtonStyle} from "../walletcomponents/CommonStyle";
 import SelectDropdown from 'react-native-select-dropdown'
 import { useNavigation } from "@react-navigation/native";
 import { AntDesign } from '@expo/vector-icons';
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from "./WalletHome";
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../walletcomponents/ScreenSize";
 import { useSelector } from "react-redux";
 
 const BANKS=['신한','농협','하나','카카오뱅크','토스뱅크']

@@ -154,12 +154,10 @@ function RenderContent(props) {
           { text: "확인", onPress: () => {}, style: "default" },
         ]);
       } else {
-        console.log("알 1개 뽑기 들어왔다");
         dispatch(updatePoint({ point: -1000, userId: userId })).then((res) =>
           console.log(res)
         );
         dispatch(getRandomCharacter(userId)).then((response) => {
-          console.log("랜덤 캐릭터 1개 뽑기 성공", response);
           props.setSelectedCharacter(response.payload);
           props.setModalVisible1(true);
         });
@@ -177,12 +175,10 @@ function RenderContent(props) {
           { text: "확인", onPress: () => {}, style: "default" },
         ]);
       } else {
-        console.log("알 10개 뽑기 들어왔다");
         dispatch(updatePoint({ point: -9000, userId: userId })).then((res) =>
           console.log(res)
         );
         dispatch(getRandomTenCharacter(userId)).then((response) => {
-          console.log("랜덤 캐릭터 10개 뽑기 성공", response);
           props.setTenCharacterList(response.payload);
           props.setModalVisible2(true);
         });
@@ -200,7 +196,6 @@ function RenderContent(props) {
           { text: "확인", onPress: () => {}, style: "default" },
         ]);
       } else {
-        console.log("색 바꾸기 들어왔다");
         dispatch(updatePoint({ point: -500, userId: userId })).then((res) =>
           console.log(res)
         );
@@ -210,7 +205,6 @@ function RenderContent(props) {
             userId: userId,
           })
         ).then((response) => {
-          console.log("랜덤 색 뽑기 성공", response);
           props.setSelectedColor(response.payload);
           props.setModalVisible3(true);
         });
@@ -361,8 +355,6 @@ function OneEgg(props) {
 
 // 동물 알 10개 뽑기 모달
 function TenEgg(props) {
-  console.log("모달들어옴");
-
   const characters = [];
   props.tenCharacterList.map((c, i) => {
     characters.push({
@@ -458,7 +450,6 @@ function TenEgg(props) {
 
 // 색상 뽑기 모달
 function Color(props) {
-  console.log("색뽑기 모달창 들어왔다", props.selectedColor);
   const type = props.selectedColor.characterType;
   const color = props.selectedColor.color;
 

@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from  '../../common/http-common';
-
+import {ISO} from './walletcomponents/GlobalInfo'
 
 import flagKRW from '../../assets/flag/KRW.png';
 import flagUSD from '../../assets/flag/USD.png';
@@ -17,17 +17,6 @@ const flagImage = {
   'CNY': flagCNY,
   'AUD': flagAUD 
 }
-
-const ISO = {
-  'KRW': '원',
-  'USD': '$',
-  'EUR': '€',
-  'JPY': '¥',
-  'CNY': '¥',
-  'AUD': 'AU$' 
-}
-
-
 
 export const makeAccount = createAsyncThunk('POST_MAKEACCOUJNT', async(data, {rejectWithValue})=>{
   try{
@@ -124,36 +113,7 @@ export const walletSlice = createSlice({
   name: 'wallet',
   initialState,
   reducers:{
-    minusMoney(state, action){
-      // console.log(action);
-      const data = action.payload
-      state.cards[data.outAccId].balance -= data.num_money
-    },
-    exchangeMoney(state, action){
-      const {exchangedMoney, num_money, outAccId, toNation} = action.payload;
-      let toId = 0;
-      for(let card of state.cards){
-        if(card.ntnCode===toNation && card.cardType==='저축예금'){
-          toId=card.accId;
-          break;
-        }
-      }
-      if(toNation!=='KRW'){
-        state.cards[toId].balance += Number(num_money)
-        state.cards[outAccId].balance -= Number(exchangedMoney)
-      }else{
-        state.cards[toId].balance += Number(exchangedMoney)
-        state.cards[outAccId].balance -= Number(num_money)
-      }
-      // 내 통장, ntnCode 받아서 ntnCode에 해당하는 통장 id 찾기. 
-      // 내 통장에서 금액 차감하고 ntnCode 해당 통장에는 넣어야 한다. 
-      // 여기서 환율? 을 뽑아내야함. 
-    },
-    checkAcc(state, action){
-
-      // 해당 Id에 해당하는 통장의 내역을 보여줌. 
-    }
-    // 카드 추가, 돈 추가, 빼는 로직 
+   
   },
   extraReducers: (builder)=>{
     builder.

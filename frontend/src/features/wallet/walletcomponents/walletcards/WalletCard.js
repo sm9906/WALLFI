@@ -1,13 +1,18 @@
 import React, { FC } from "react";
 import { StatusBar } from "expo-status-bar";
-import {Text, TouchableOpacity, 
-  View, Image, StyleSheet } from "react-native";
-
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../ScreenSize";
+import {
+  Text,
+  TouchableOpacity, 
+  View,
+  Image,
+  StyleSheet
+ } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import {colors} from './CardInfo';
 import { RFPercentage } from "react-native-responsive-fontsize";
 
+import {colors} from './CardInfo';
+import ChangeForm from "../ChangeForm";
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../ScreenSize";
 
 
 const CardItem = (props) => {
@@ -23,7 +28,7 @@ const CardItem = (props) => {
         <Text style={{...styles.cardinfo, fontSize:RFPercentage(2)}}>   {data.ntnCode}   {data.cardType==='저축예금'?data.accountnum:data.cardType}</Text>
       </View> 
       <View style={styles.balance}>
-        <Text style={styles.cardinfo}>{data.balance.toLocaleString('es-US')}</Text>
+        <Text style={styles.cardinfo}>{ChangeForm(data.balance)} {data.ISO}</Text>
         {props.data.cardType==='저축예금'&&(<View style={styles.buttons}>
           <TouchableOpacity onPress={()=>navigation.navigate('SendWho', {type:'송금', data})} style={styles.button}>
             <Text style={styles.txtSize}>송금하기</Text>
