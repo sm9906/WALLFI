@@ -10,11 +10,10 @@ import { RFPercentage } from "react-native-responsive-fontsize";
 import SelectDropdown from "react-native-select-dropdown";
 import axios from "../../../common/http-common";
 import { Background, ButtonStyle } from "../walletcomponents/CommonStyle";
-
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../walletcomponents/CommonStyle";
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../../common/ScreenSize";
 import { useSelector } from "react-redux";
 import { useFocusEffect } from "@react-navigation/native";
-import {ISO} from '../walletcomponents/CommonStyle'
+import { ISO } from "../walletcomponents/GlobalInfo";
 
 const Deposit = {
   'Levelup':{
@@ -33,11 +32,7 @@ const Deposit = {
 
 // 여기 따로 export 시켰어야 하는데..
 
-export default function MakeDetail({route,navigation}){
-  useFocusEffect(()=>{
-    const date = new Date().toDateString();
-    console.log(date)
-  })
+export default function MakeDeposit({route,navigation}){
   const {userId, mainAccount} = useSelector(state=> state.auth)
   const [ntnCode, setNtnCode] = useState('KRW');
   const [money, setMoney] = useState('0');  
@@ -54,9 +49,9 @@ export default function MakeDetail({route,navigation}){
     const data={
       mainAccountNum: mainAccount,
       userId:userId,
-      금리:detail.총금리,
+      금리:detail?.총금리,
       만기일: '2023',
-      상품명: detail.상품명,
+      상품명: detail?.상품명,
       입금금액: Number(money),
       통화코드: ntnCode,
     }
@@ -69,8 +64,8 @@ export default function MakeDetail({route,navigation}){
     <View style={{...Background.background, padding:'10%', justifyContent:'none'}}>
       <View style={styles.titleContent}>
         <Text style={styles.nowRate}>{`현재 적용 금리 ${detail.총금리}%`}</Text>
-        <Text style={styles.rateBg}>{`연 ${detail.기본금리}%`}</Text>
-        <Text style={styles.rateBg}>{`${Deposit[type]['message']} ${detail.추가금리}%`}</Text>
+        <Text style={styles.rateBg}>{`연 ${detail?.기본금리}%`}</Text>
+        <Text style={styles.rateBg}>{`${Deposit[type]['message']} ${detail?.추가금리}%`}</Text>
       </View>
       <View style={styles.middleContainer}>
         <Text style={{ alignSelf: 'flex-end', marginBottom:'5%', fontWeight:'bold'}}>{`가입기간 ${detail.가입기간}개월`}</Text>
