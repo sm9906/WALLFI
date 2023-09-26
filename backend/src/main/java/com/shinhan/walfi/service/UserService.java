@@ -13,4 +13,6 @@ public interface UserService {
     TokenDto login(String userId, String password);
 
     void signup(User user);
+
+    UserDto findUserById(String userId);
 }

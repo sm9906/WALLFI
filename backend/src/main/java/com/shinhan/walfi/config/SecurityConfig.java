@@ -34,12 +34,14 @@ public class SecurityConfig {
                 .and()
                 .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests()
-                .antMatchers("/user","/user/signup","/user/login",  "/test/**",
-                        // Swagger 허용 URL
-                        "/v2/api-docs", "/v3/api-docs", "/v3/api-docs/**", "/swagger-resources",
-                        "/swagger-resources/**", "/configuration/ui", "/configuration/security", "/swagger-ui/**",
-                        "/webjars/**", "/swagger-ui.html"
-                ).permitAll()
+//                .antMatchers("/user","/user/signup","/user/login",  "/test/**", "/token/**",
+//                        // Swagger 허용 URL
+//                        "/v2/api-docs", "/v3/api-docs", "/v3/api-docs/**", "/swagger-resources",
+//                        "/swagger-resources/**", "/configuration/ui", "/configuration/security", "/swagger-ui/**",
+//                        "/webjars/**", "/swagger-ui.html"
+//                )
+                .antMatchers("/**")
+                .permitAll()
                 .anyRequest()
                 .authenticated()
                 .and().exceptionHandling().authenticationEntryPoint(new CustomAuthenticationEntryPoint());

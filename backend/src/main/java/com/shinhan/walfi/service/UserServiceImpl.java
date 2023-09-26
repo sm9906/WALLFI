@@ -123,5 +123,10 @@ public class UserServiceImpl implements UserService {
                 .build();
     }
 
+    public UserDto findUserById(String userId){
+        User user = userRepository.findById(userId).get();
+        UserDto userDto = getUserDto(user);
+        return userDto;
+    }
 }
 

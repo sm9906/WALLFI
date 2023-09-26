@@ -11,6 +11,6 @@ public class UserLoginResDto {
 
     private String message;
 
-    private String nickname;
+    private String name;
 }
 

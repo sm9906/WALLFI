@@ -3,15 +3,13 @@ package com.shinhan.walfi.controller;
 import com.shinhan.walfi.domain.HttpResult;
 import com.shinhan.walfi.domain.User;
 import com.shinhan.walfi.dto.*;
-import com.shinhan.walfi.dto.game.UserGameInfoDto;
 import com.shinhan.walfi.dto.user.UserLoginResDto;
 import com.shinhan.walfi.service.UserService;
 import com.shinhan.walfi.util.JWTUtil;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,13 +39,14 @@ public class UserController {
 
     @PostMapping("/login")
     @ApiOperation(value = "로그인")
-    public ResponseEntity<UserLoginResDto> login(@RequestBody LoginReqDto loginReqDto, HttpServletResponse response){
+    public ResponseEntity<HttpResult> login(@RequestBody LoginReqDto loginReqDto, HttpServletResponse response){
         TokenDto tokenDto = userService.login(loginReqDto.getUserId(), loginReqDto.getPassword());
 
-        UserLoginResDto responseDto = null;
+        HttpResult res;
 
         // FIXME: 로그인 예외 처리 Refactoring 하기
         if (tokenDto.isLoginSuccessful()) {
+            UserDto userDto = userService.findUserById(loginReqDto.getUserId());
 
             final String accessToken = tokenDto.getACCESS_TOKEN();
             final String refreshToken = tokenDto.getREFRESH_TOKEN();
@@ -61,19 +60,14 @@ public class UserController {
             response.addHeader("Access-Token", accessToken);
             response.addCookie(cookie);
 
-            responseDto = UserLoginResDto.builder()
-                    .httpStatusCode(200)
-                    .message("정상적으로 로그인이 완료됐습니다.")
-                    .nickname(tokenDto.getName())
-                    .build();
+            res = HttpResult.getSuccess();
+            res.setMessage("정상적으로 로그인이 완료됐습니다.");
+            res.setData(userDto);
         } else {
-            responseDto = UserLoginResDto.builder()
-                    .httpStatusCode(401)
-                    .message("아이디 혹은 비밀번호가 잘못 됐습니다.")
-                    .build();
+            res = new HttpResult(HttpStatus.FORBIDDEN, HttpResult.Result.ERROR,"아이디 혹은 비밀번호가 잘못 됐습니다.");
         }
 
-        return ResponseEntity.status(responseDto.getHttpStatusCode()).body(responseDto);
+        return ResponseEntity.status(res.getStatus()).body(res);
     }
 
 
