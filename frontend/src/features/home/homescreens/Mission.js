@@ -9,9 +9,8 @@ import {
   ScrollView 
 } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import axios from 'axios';
+import axios from '../../../common/http-common';
 
-import { requestGet } from '../../../common/http-common.js';
 import { images } from '../../../common/imgDict.js'
 import { globalStyles } from '../homestyles/global.js';
 import { SCREEN_WIDTH } from '../../../common/ScreenSize.js';
@@ -23,8 +22,7 @@ export default function Mission({ navigation }) {
   [quests, setQuest] = useState([]);
 
   useEffect(() => {
-    axios
-      .get("http://j9d101a.p.ssafy.io:8094/quest?userId=ssafy")
+    axios.get("?userId=ssafy")
       .then((res) => {
         setQuest(res.data);
         console.log("quest: ", quests);

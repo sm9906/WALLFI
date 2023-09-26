@@ -203,7 +203,7 @@ export const homeSlice = createSlice({
   name: 'home',
   initialState,
   reducers:{ 
-    DJMing:(state, action)=>{
+    DJ:(state, action)=>{
       // 실행시킬 BGM 넣기
       state.music = action.payload
       state.music?state.music.setIsLoopingAsync(true):null;
@@ -217,7 +217,7 @@ export const homeSlice = createSlice({
       state.music?state.music.pauseAsync():null;
     },
     DeleteMusic:(state,action)=>{
-      // 음악 빼내기 :9
+      // 음악 빼내기 
       if(state.music){
         state.music.unloadAsync()
         state.music=null;
@@ -270,5 +270,5 @@ export const homeSlice = createSlice({
   }
 })
 
-export const { DJMing, PlayMusic, StopMusic, DeleteMusic } = homeSlice.actions
+export const { DJ, PlayMusic, StopMusic, DeleteMusic } = homeSlice.actions
 export default homeSlice.reducer
