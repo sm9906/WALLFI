@@ -60,15 +60,11 @@ public class UserServiceImpl implements UserService {
         TokenDto tokenDto = new TokenDto();
         log.info("{}, {}", userId, password);
         try {
-            log.info("아이디 검증 시작");
             authenticatedUser = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(userId, password)
-//                    new UsernamePasswordAuthenticationToken("aa", "$10$ZQXuMAL8ad3jtfR8jQ1Zy.75W5X/TGrWjVPN/do4baAtDBL6M8c2W")
             );
-            log.info("아이디 검증 끝");
         } catch (Exception e) {
             log.error(e.toString());
-            log.info("에러가 잡혔습니다.");
             isLoginSuccessful = false;
             tokenDto.setLoginSuccessful(isLoginSuccessful);
             log.error("아이디 혹은 비밀번호가 틀립니다.");

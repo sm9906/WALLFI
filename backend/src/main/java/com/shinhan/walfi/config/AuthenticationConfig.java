@@ -27,14 +27,12 @@ public class AuthenticationConfig {
     public UserDetailsService userDetailsService() {
 
         return userId -> {
-            log.info("유저를 찾습니다.");
-//            User findUser = userMapper.findByUserId(userId);
             User findUser = userRepository.findById(userId).get();
 
             log.info("get User {} in loadUserByUsername", findUser);
 
             if (findUser == null) {
-                throw new UsernameNotFoundException("아이디 혹은 비밀번호가 완전히 틀립니다.");
+                throw new UsernameNotFoundException("아이디 혹은 비밀번호가 틀립니다.");
             }
 
             return findUser;
