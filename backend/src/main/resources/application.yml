@@ -21,7 +21,7 @@ spring:
   auth:
     secretKey: 6v9y$B&E)H@MbQeThWmZq4t7w!z%C*F-
   redis:
-    host: localhost # master-redis
+    host: master-redis
     port: 6379
 
 
