@@ -143,6 +143,13 @@ export const AnimalDeco = ({ navigation }) => {
                         { translateX: translateX },
                         { translateY: translateY },
                       ],
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      alignItems: "center",
+                      justifyContent: "center",
                     },
                   ]}
                 >
@@ -164,13 +171,11 @@ export const AnimalDeco = ({ navigation }) => {
                         },
                       ]}
                     >
-                      <View style={styles.accessoryOverlay}>
-                        <Accessory
-                          aType={selectAccessory ? selectAccessory : null}
-                          aSize={scaleValue}
-                          rotationValue={rotationValue}
-                        />
-                      </View>
+                      <Accessory
+                        aType={selectAccessory ? selectAccessory : null}
+                        aSize={scaleValue}
+                        rotationValue={rotationValue}
+                      />
                     </Animated.View>
                   </RotationGestureHandler>
                 </Animated.View>
@@ -248,15 +253,6 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     backgroundColor: "rgba(255, 255, 255, 0.8)",
     // backgroundColor: "gold",
-  },
-  accessoryOverlay: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    alignItems: "center",
-    justifyContent: "center",
   },
   confirm: {
     flex: 1,
