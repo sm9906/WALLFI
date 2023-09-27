@@ -12,7 +12,7 @@ import axios from "../../../common/http-common";
 import { Background, ButtonStyle } from "../walletcomponents/CommonStyle";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../../common/ScreenSize";
 import { useSelector } from "react-redux";
-import { useFocusEffect } from "@react-navigation/native";
+import ChangeForm from "../walletcomponents/ChangeForm";
 import { ISO } from "../walletcomponents/GlobalInfo";
 
 const Deposit = {
@@ -87,9 +87,9 @@ export default function MakeDeposit({route,navigation}){
         </View>
         <View style={{width:'100%'}}>
           <Text style={styles.rateCalc}>만기 예상 원금</Text>
-          <Text style={{...styles.rateCalc, marginBottom:'3%'}}>{(total).toLocaleString('en-US')} {ISO[ntnCode]}</Text>
+          <Text style={{...styles.rateCalc, marginBottom:'3%'}}>{ChangeForm(total)} {ISO[ntnCode]}</Text>
           <Text style={styles.rateCalc}>만기 시 받는 이자 </Text>
-          <Text style={{...styles.rateCalc, marginBottom:'15%'}} >{(Math.floor(detail.총금리 * Number(money)/100)).toLocaleString('eu-US')} {ISO[ntnCode]}</Text>
+          <Text style={{...styles.rateCalc, marginBottom:'15%'}} >{ChangeForm(Math.floor(detail.총금리 * Number(money)/100))} {ISO[ntnCode]}</Text>
         </View>
         <TouchableOpacity style={{...ButtonStyle.button, backgroundColor:money==='0'?'grey':'#293694'}} onPress={onPress} disabled={money === "0"}>
           <Text style={{...ButtonStyle.btnFont, fontSize:RFPercentage(2.5)}}>가입</Text>
