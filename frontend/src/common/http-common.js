@@ -1,4 +1,5 @@
 import baseAxios from 'axios';
+import { retrieveData } from './api/JWT-common';
 
 // axios 객체 설정
 const axios = baseAxios.create({
@@ -9,18 +10,20 @@ const axios = baseAxios.create({
   },
 });
 
-export const requestGet = async (url, params) => {
+export const requestGet = async (url, params={}, headers={}) => {
+  const token = 'Bearer '+ await retrieveData();
   try {
-    const data = await axios.get(url, { params });
+    const data = await axios.get(url, { params }, {headers: {Authorization:token}});
     return data;
   } catch (error) {
     console.log(error);
   }
 };
 
-export const requestPost = async (url, body, headers) => {
+export const requestPost = async (url, body={}, headers={}) => {
+  const token = 'Bearer '+ await retrieveData();
   try {
-    const data = await axios.post(url, body, { headers });
+    const data = await axios.post(url,body,{headers:{Authorization:token}});
     return data;
   } catch (error) {
     console.log(error);
@@ -28,9 +31,10 @@ export const requestPost = async (url, body, headers) => {
   }
 };
 
-export const requestPut = async (url, body, headers) => {
+export const requestPut = async (url, body={}, headers={}) => {
+  const token = 'Bearer '+ await retrieveData();
   try {
-    const data = await axios.put(url, body, { headers });
+    const data = await axios.put(url, body, { headers: {Authorization: token} });
     return data;
   } catch (error) {
     console.log(error);

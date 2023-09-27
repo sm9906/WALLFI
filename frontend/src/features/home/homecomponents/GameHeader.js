@@ -166,9 +166,9 @@ const styles = StyleSheet.create({
   },
   rightTopBox: {
     flex: 1,
-    flexDirection: "row",
     backgroundColor: "#758DCC",
     height: "80%",
+    flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     marginHorizontal: "10%",

@@ -35,7 +35,7 @@ export default function WalletHome({navigation}) {
     try {
       // console.log('?')
       await dispatch(getExchangeRate());
-      const response = await dispatch(getAccounts({userId, mainAccount}));
+      const response = await dispatch(getAccounts(mainAccount));
       setCards(response.payload)
     } catch (err) {
       console.log('walletscreens/WalletLoading.js',err);

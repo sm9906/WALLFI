@@ -30,7 +30,6 @@ export default function WalletLoading({navigation}){
     try {
       // console.log('?')
       await dispatch(getExchangeRate());
-      const response = await dispatch(getAccounts({userId, mainAccount}));
       setTimeout(()=>{
         navigation.navigate('WalletHome');
       },2000)  

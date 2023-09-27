@@ -1,5 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from  '../../common/http-common';
+import { requestPost } from "../../common/http-common";
+
 import {ISO} from './walletcomponents/GlobalInfo'
 
 import flagKRW from '../../assets/flag/KRW.png';
@@ -46,10 +48,9 @@ export const getExchangeRate = createAsyncThunk('GET_EXCHANGE_RATE', async(_,{ r
 // 처음 로그인 해서 계좌 불러오는 action
 
 // 처음 불러온 카드 추가 로직 
-export const getAccounts = createAsyncThunk('GET_ACCOUNT', async (data, { rejectWithValue }) => {
+export const getAccounts = createAsyncThunk('GET_ACCOUNT', async (mainAccount, { rejectWithValue }) => {
   try {
-    const response = await axios.post(`account?userId=${data.userId}&userMainAccount=${data.mainAccount}`,{
-    })
+    const response = await requestPost('account',{userMainAccount:mainAccount});
     const accountDtoList = response.data.data.accountDtoList;
       const accounts = accountDtoList.map((account, index)=>{
         const data = {

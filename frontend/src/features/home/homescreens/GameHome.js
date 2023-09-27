@@ -20,15 +20,16 @@ import { images } from '../../../common/imgDict.js';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../../common/ScreenSize.js';
 
 import { Audio } from 'expo-av';
-import { DJMing, PlayMusic, StopMusic } from '../homeSlice.js';
+import { DJ, PlayMusic, StopMusic } from '../homeSlice.js';
 
 import GameHeader from '../homecomponents/GameHeader.js';
-
 // 상태바 겹침현상을 없애려면 react-native에서 StatusBar를 import 해줘야함
 
 export default function GameHome({ navigation }) {
   const dispatch = useDispatch(); 
-  // 이거 뒤로가기 버튼? 훅으로 따로 뺄거임  
+
+  console.log(navigation)
+  // 이거 뒤로가기 버튼? 훅으로 따로 뺄거임 
   useEffect(() =>
     navigation.addListener('beforeRemove', (e) => {
       if(e.data.action.type==='GO_BACK'){
@@ -80,7 +81,7 @@ const Music = React.memo(()=>{
       const {sound} = await Audio.Sound.createAsync(
         require('../../../assets/music/GameHome.mp3')
       );
-      await dispatch(DJMing(sound));
+      await dispatch(DJ(sound));
     }
   }
   
