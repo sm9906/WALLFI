@@ -9,8 +9,6 @@ import java.math.RoundingMode;
 @Getter
 public class ProductReqDto {
 
-    private String userId;
-
     private String mainAccountNum;
 
     private Long 입금금액;

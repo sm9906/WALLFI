@@ -7,8 +7,6 @@ import lombok.Setter;
 @Setter
 public class toGlobalExchangeReqDto {
 
-    private String userId;
-
     private String 사용자대표계좌;
 
     private String 도착계좌통화코드;

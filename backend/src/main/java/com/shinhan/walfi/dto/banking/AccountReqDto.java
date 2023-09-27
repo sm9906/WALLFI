@@ -7,8 +7,6 @@ import lombok.Getter;
 @Builder
 public class AccountReqDto {
 
-    private String userId;
-
     private String userMainAccount;
 
 }
