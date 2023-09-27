@@ -7,8 +7,6 @@ import lombok.Setter;
 @Setter
 public class MainCharacterReqDto {
 
-    private String userId;
-
     private Long mainCharacterIdx;
 
 }
