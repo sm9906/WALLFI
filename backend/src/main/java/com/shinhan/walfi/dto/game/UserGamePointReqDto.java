@@ -7,8 +7,6 @@ import lombok.Setter;
 @Setter
 public class UserGamePointReqDto {
 
-    private String userId;
-
     private int point;
 
 }

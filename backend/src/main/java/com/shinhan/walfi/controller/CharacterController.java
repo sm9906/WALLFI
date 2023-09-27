@@ -2,6 +2,7 @@ package com.shinhan.walfi.controller;
 
 import com.shinhan.walfi.domain.HttpResult;
 
+import com.shinhan.walfi.domain.User;
 import com.shinhan.walfi.dto.game.*;
 import com.shinhan.walfi.dto.product.ProductResDto;
 import com.shinhan.walfi.service.game.CharacterService;
@@ -9,7 +10,9 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
 @RequestMapping("/character")
@@ -20,8 +23,8 @@ public class CharacterController {
 
     @PostMapping("/create")
     @ApiOperation(value = "사용자의 계정으로 새로운 캐릭터를 랜덤한 타입으로 생성")
-    public ResponseEntity<HttpResult> createRandomCharacter(@RequestBody CharacterReqDto characterReqDto) {
-        String userId = characterReqDto.getUserId();
+    public ResponseEntity<HttpResult> createRandomCharacter(@ApiIgnore @AuthenticationPrincipal User user) {
+        String userId = user.getUserId();
         CharacterWithUserIdResDto characterWithUserIdResDto = characterService.create(userId);
 
         HttpResult res;
