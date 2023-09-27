@@ -62,7 +62,7 @@ export default function SendHow({route, navigation}){
   // 환전 하기 - 원화 -> 외화 / 외화 -> 원화
   const sendExchange= () => {
     const data = {
-      "userId":userId,
+      // "userId":userId,
       "금액": toNation==='KRW'?Number(money):Number(money),
       "사용자대표계좌": mainAccount,
     }

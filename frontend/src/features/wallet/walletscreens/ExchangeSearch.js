@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useLayoutEffect } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView } from 'react-native';
-import axios from 'axios';
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 import { AntDesign } from '@expo/vector-icons';
 import Promotion from '../../../assets/wallet/Promotion.png'
