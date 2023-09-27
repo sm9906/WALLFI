@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
@@ -24,7 +25,7 @@ public class AccountController {
 
     @PostMapping
     @ApiOperation(value = "대표 계좌로 사용자가 가진 실질 계좌들을 조회")
-    public ResponseEntity<HttpResult> getAccounts(@ApiIgnore @AuthenticationPrincipal User user, AccountReqDto accountReqDto){
+    public ResponseEntity<HttpResult> getAccounts(@ApiIgnore @AuthenticationPrincipal User user, @RequestBody AccountReqDto accountReqDto) {
         String userId = user.getUserId();
         AccountResDto accountResDto = accountService.getAccounts(userId, accountReqDto.getUserMainAccount());
 
