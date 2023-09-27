@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { SCREEN_WIDTH } from '../homecomponents/ScreenSize.js';
+import { SCREEN_WIDTH, SCREEN_HEIGHT } from '../homecomponents/ScreenSize.js';
 
 export const globalStyles = StyleSheet.create({
   container: {
@@ -31,7 +31,7 @@ export const globalStyles = StyleSheet.create({
     marginStart: "5%",
   },
   modalStyle: {
-    flex: 1,
+    height: SCREEN_HEIGHT * 0.63,
     flexDirection: 'column',
     width: '90%',
     marginHorizontal: '5%',

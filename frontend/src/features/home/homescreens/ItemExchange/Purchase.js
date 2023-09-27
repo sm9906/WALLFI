@@ -30,7 +30,11 @@ export default function Purchase() {
         visible={modalVisible}>
         <ItemDetail selectedItem={selectedItem} setModalVisible={setModalVisible}/>
       </Modal>
-      <ButtonGroup selectedBtn={selectedBtn} setSelectedBtn={setSelectedBtn}/>
+      <ButtonGroup 
+        title1={'캐릭터'} 
+        title2={'아이템'} 
+        selectedBtn={selectedBtn} 
+        setSelectedBtn={setSelectedBtn}/>
       <Search />
       <View style={styles.itemContainer}>
         <Content 
@@ -75,7 +79,7 @@ const character = [
 
 // 치장 데이터
 const deco = [
-  {id: 1, name: '트로피', imageUrl: images.defaultCharacter.MOLLY.BASIC, price: '1만'}
+  {id: 1, name: '트로피', imageUrl: images.gameIcon.trophy, price: '1만'}
 ]
 
 // 버튼을 누를 때 마다 나오는 컨텐츠
@@ -83,6 +87,8 @@ function Content(props) {
 
   return (
     <List
+      type={'purchase'}
+      selectedBtn={props.selectedBtn}
       data={props.selectedBtn ? deco : character}
       setModalVisible={props.setModalVisible}
       setSelectedBtn={props.setSelectedBtn}
@@ -100,17 +106,17 @@ function ItemDetail(props) {
       <View style={detail.itemImgBox}>
         <Image source={image} style={detail.imgStyle}/>
       </View>
-      <View style={{ flex: 2, alignItems: 'center', justifyContent: 'center' }}>
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
-          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{props.selectedItem.name}</Text>
-          </View>
-          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
-            <Image source={images.gameIcon.coin} style={{ resizeMode: 'contain', height: '100%', width: '10%' }}/>
-            <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: '2%' }}>{props.selectedItem.price}</Text>
-          </View>
+      <View style={detail.textGroup}>
+        <Text style={detail.itemName}>{}의 {props.selectedItem.name}</Text>
+        <View style={detail.price}>
+          <Image source={images.gameIcon.coin} style={detail.coinImg}/>
+          <Text style={detail.priceText}>{props.selectedItem.price}</Text>
         </View>
-        <Text style={{ flex: 1 }}>경험치 / 공격력 / 방어력 / 레벨</Text>
+        <View style={detail.stats}>
+          <Text style={detail.statsText}>Level. {}</Text>
+          <Text style={detail.statsText}>Atk. {}</Text>
+          <Text style={detail.statsText}>Def. {}</Text>
+        </View>
       </View>
       <View style={detail.btnGroup}>
         <TouchableOpacity style={[detail.modalBtn, detail.purchaseBtn]}>
@@ -138,6 +144,50 @@ const detail = StyleSheet.create({
     resizeMode: 'contain',
     width: '100%',
     height: '100%'
+  },
+  textGroup: { 
+    flex: 3, 
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    width: '100%'
+  },
+  itemName: { 
+    height: '20%', 
+    fontSize: 20, 
+    fontWeight: 'bold' 
+  },
+  price: { 
+    width: '40%', 
+    height: '18%', 
+    backgroundColor: '#559AEC', 
+    alignItems: 'center', 
+    justifyContent: 'flex-start',
+    flexDirection: 'row',
+    borderRadius: 20,
+    borderColor: '#77B2F8',
+    borderWidth: 2
+  },
+  coinImg: { 
+    resizeMode: 'contain', 
+    width: '30%', 
+    height: '90%' 
+  },
+  priceText: { 
+    fontSize: 18, 
+    fontWeight: 'bold', 
+    textAlign: 'right', 
+    width: '60%' 
+  },
+  stats: { 
+    height: '40%', 
+    width: '30%',
+    marginVertical: '5%',
+    justifyContent: 'center',
+    alignItems: 'flex-start'
+  },
+  statsText: {
+    fontSize: 16,
+    marginVertical: '5%',
   },
   btnGroup: {
     flex: 1, 

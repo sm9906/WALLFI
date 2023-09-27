@@ -1,11 +1,10 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import axios from '../../common/http-common';
-import { Audio } from 'expo-av';
+import { requestGet, requestPost, requestPut } from '../../common/http-common';
 
 // 사용자 게임 정보 불러오기
 export const getGameInfo = createAsyncThunk('GET_GAME_INFO', async(userId, { rejectWithValue }) => {
   try {
-    const res = await axios.post('game/getinfo', {
+    const res = await requestPost('game/getinfo', {
       userId: userId,
     })
 
@@ -20,7 +19,7 @@ export const getGameInfo = createAsyncThunk('GET_GAME_INFO', async(userId, { rej
 // 메인 캐릭터 불러오기
 export const getMainCharacter = createAsyncThunk('GET_MAIN_CHARACTER', async(userId, { rejectWithValue }) => {
   try {
-    const res = await axios.post('character/getmain', {
+    const res = await requestPost('character/getmain', {
       userId: userId,
     })
 
@@ -48,7 +47,7 @@ export const getMainCharacter = createAsyncThunk('GET_MAIN_CHARACTER', async(use
 // 캐릭터 리스트 불러오기
 export const getCharacterList = createAsyncThunk('GET_CHARACTER_LIST', async(userId, { rejectWithValue }) => {
   try {
-    const res = await axios.post('character/getcharacters', {
+    const res = await requestPost('character/getcharacters', {
       userId: userId,
     })
 
@@ -81,7 +80,7 @@ export const getCharacterList = createAsyncThunk('GET_CHARACTER_LIST', async(use
 // 캐릭터 수정하기 / 메인 수정 / 스탯 수정 
 export const updateCharacter = createAsyncThunk('UPDATE_CHARACTER', async(data, { rejectWithValue }) => {
   try {
-    await axios.put('character/change/status', data)
+    await requestPut('character/change/status', data)
     return data;
 
   } catch (e) {
@@ -93,7 +92,7 @@ export const updateCharacter = createAsyncThunk('UPDATE_CHARACTER', async(data, 
 // 사용자 포인트 수정
 export const updatePoint = createAsyncThunk('UPDATE_POINT', async(data, { rejectWithValue }) => {
   try {
-    await axios.post('game/pointup', data)
+    await requestPost('game/pointup', data)
     return data;
 
   } catch (e) {
@@ -105,7 +104,7 @@ export const updatePoint = createAsyncThunk('UPDATE_POINT', async(data, { reject
 // 캐릭터 색 수정
 export const changeColor = createAsyncThunk('CHANGE_COLOR', async(data, { rejectWithValue }) => {
   try {
-    const res = await axios.put('character/change/color', data);
+    const res = await requestPut('character/change/color', data);
     const color = res.data.data.characterDto;
     const changeCharacterColor = {
       characterIdx: color.characterIdx,
@@ -130,7 +129,7 @@ export const changeColor = createAsyncThunk('CHANGE_COLOR', async(data, { reject
 // 캐릭터 1개 뽑기
 export const getRandomCharacter = createAsyncThunk('GET_RANDOM_CHARACTER', async(userId, { rejectWithValue }) => {
   try {
-    const res = await axios.post('character/shop', {
+    const res = await requestPost('character/shop', {
       userId: userId
     })
 
@@ -158,7 +157,7 @@ export const getRandomCharacter = createAsyncThunk('GET_RANDOM_CHARACTER', async
 // 캐릭터 10개 뽑기
 export const getRandomTenCharacter = createAsyncThunk('GET_RANDOM_TEN_CHARACTER', async(userId, { rejectWithValue }) => {
   try {
-    const res = await axios.post('character/shopten/', {
+    const res = await requestPost('character/shopten/', {
       userId: userId
     })
 

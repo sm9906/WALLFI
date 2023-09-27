@@ -16,10 +16,10 @@ export default function ButtonGroup(props) {
   return (
     <View style={styles.btnGroup}>
       <TouchableOpacity style={[styles.btnBox, { borderRightColor: 'white', borderRightWidth: 2 }]} onPress={() => props.setSelectedBtn(false)}>
-        <Text style={[styles.textStyle, { color: color(false) }]}>캐릭터</Text>
+        <Text style={[styles.textStyle, { color: color(false) }]}>{props.title1}</Text>
       </TouchableOpacity>
       <TouchableOpacity style={[styles.btnBox, { borderLeftColor: 'white', borderLeftWidth: 2 }]} onPress={() => props.setSelectedBtn(true)}>
-        <Text style={[styles.textStyle, { color: color(true) }]}>아이템</Text>
+        <Text style={[styles.textStyle, { color: color(true) }]}>{props.title2}</Text>
       </TouchableOpacity>
     </View>
   )

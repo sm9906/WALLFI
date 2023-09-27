@@ -32,9 +32,10 @@ export const requestPost = async (url, body={}, headers={}) => {
   }
 };
 
-export const requestPut = async (url, body, headers) => {
+export const requestPut = async (url, body={}, headers={}) => {
+  const token = 'Bearer '+ await retrieveData();
   try {
-    const data = await axios.put(url, body, { headers });
+    const data = await axios.put(url, body, { headers: {Authorization: token} });
     return data;
   } catch (error) {
     console.log(error);
