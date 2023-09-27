@@ -123,9 +123,9 @@ export const AnimalDeco = ({ navigation }) => {
   console.log(decoData)
 
   dispatch(setAnimalDeco(decoData));
-  dispatch(sendAnimalDeco(decoData));
+  // dispatch(sendAnimalDeco(decoData));
 
-  navigation.navigate("GameHome");
+  // navigation.navigate("GameHome");
 };
 
   return (
