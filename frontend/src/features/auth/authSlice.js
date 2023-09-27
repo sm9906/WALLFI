@@ -15,10 +15,10 @@ export const postLogIn = createAsyncThunk('LOGIN', async(data, { rejectWithValue
 
 
 const initialState = {
-  // userId:'',
-  // mainAccount:"",
-  userId:'ssafy',
-  mainAccount:"110001785538",
+  userId:'',
+  mainAccount:"",
+  // userId:'ssafy',
+  // mainAccount:"110001785538",
 }
 
 export const authSlice = createSlice({

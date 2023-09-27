@@ -28,12 +28,12 @@ export const AnimalDeco = ({ navigation }) => {
   const selectAnimal = useSelector((state) => state.home.pressedAnimal);
   const selectAccessory = useSelector((state) => state.home.pressedAccessory);
 
+  const [lastOffset, setLastOffset] = useState({ x: 0, y: 0 });
   const [rotationValue, setRotationValue] = useState(0);
   const [scaleValue, setScaleValue] = useState(1);
 
-  const translateX = new Animated.Value(0);
-  const translateY = new Animated.Value(0); // 좌표
-  const lastOffset = { x: 0, y: 0 };
+  const translateX = new Animated.Value(lastOffset.x);
+  const translateY = new Animated.Value(lastOffset.y); // 좌표
 
   const rotate = new Animated.Value(rotationValue / 360); // 초기값 설정
   const lastRotate = { r: 0 };
@@ -55,28 +55,33 @@ export const AnimalDeco = ({ navigation }) => {
   );
 
   const onHandlerStateChange = (event) => {
+    if (event.nativeEvent.oldState === State.BEGAN) {
+      translateX.setOffset(lastOffset.x);
+      translateY.setOffset(lastOffset.y);
+      translateX.setValue(lastOffset.x);
+      translateY.setValue(lastOffset.y);
+    }
     if (event.nativeEvent.oldState === State.ACTIVE) {
-      let newX = lastOffset.x + event.nativeEvent.translationX; // 좌표
+      let newX = lastOffset.x + event.nativeEvent.translationX;
       let newY = lastOffset.y + event.nativeEvent.translationY;
-
+  
       const boundary = {
         left: -SCREEN_WIDTH * 0.23,
         right: SCREEN_WIDTH * 0.23,
-        top: -SCREEN_HEIGHT * 0.23,
+        top: -SCREEN_HEIGHT * 0.13,
         bottom: SCREEN_HEIGHT * 0.13,
       };
-
+  
       if (newX < boundary.left) newX = boundary.left;
       if (newX > boundary.right) newX = boundary.right;
       if (newY < boundary.top) newY = boundary.top;
       if (newY > boundary.bottom) newY = boundary.bottom;
-
-      lastOffset.x = newX;
-      lastOffset.y = newY;
-
-      translateX.setOffset(lastOffset.x);
-      translateX.setValue(0);
-      translateY.setOffset(lastOffset.y);
+  
+      setLastOffset({ x: newX, y: newY });
+  
+      translateX.setOffset(newX); // 최종 드랍 좌표
+      translateY.setOffset(newY);
+      translateX.setValue(0); // 드래그 시작 좌표
       translateY.setValue(0);
     }
   };

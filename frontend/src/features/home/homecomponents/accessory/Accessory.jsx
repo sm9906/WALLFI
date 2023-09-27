@@ -4,7 +4,7 @@ import { StyleSheet, Image, TouchableOpacity } from "react-native";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../ScreenSize";
 
 const Accessory = ({ aType, aSize = 1, aPosition = 1, onPress }) => {
-  console.log("값 초기화");
+  
   const imageWidth = SCREEN_WIDTH * 0.2 * aSize;
   const imageHeight = SCREEN_HEIGHT * 0.113 * aSize;
 
