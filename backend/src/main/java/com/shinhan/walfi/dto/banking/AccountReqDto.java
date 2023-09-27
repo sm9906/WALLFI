@@ -1,10 +1,8 @@
 package com.shinhan.walfi.dto.banking;
 
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 @Getter
-@Builder
 public class AccountReqDto {
 
     private String userMainAccount;
