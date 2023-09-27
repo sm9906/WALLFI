@@ -52,6 +52,7 @@ const HomeNavigation = () => {
       <Stack.Screen
         name="AnimalDeco"
         component={AnimalDeco}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name='ItemExchange'

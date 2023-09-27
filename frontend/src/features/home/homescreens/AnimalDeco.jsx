@@ -14,7 +14,7 @@ import GameHeader from "../homecomponents/GameHeader.js";
 import PageHeader from "../homecomponents/PageHeader.js";
 import Animal from "../../fight/fightcomponents/Animal.jsx";
 import AccessoryList from "../homecomponents/accessory/AccessoryList.jsx";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import Accessory from "../homecomponents/accessory/Accessory.jsx";
 import Slider from "@react-native-community/slider";
 import {
@@ -23,8 +23,11 @@ import {
 } from "react-native-gesture-handler";
 import { State } from "react-native-gesture-handler";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../homecomponents/ScreenSize.js";
+import { setAnimalDeco, sendAnimalDeco } from "../homeSlice.js";
 
 export const AnimalDeco = ({ navigation }) => {
+  const dispatch = useDispatch();
+
   const selectAnimal = useSelector((state) => state.home.pressedAnimal);
   const selectAccessory = useSelector((state) => state.home.pressedAccessory);
 
@@ -58,27 +61,27 @@ export const AnimalDeco = ({ navigation }) => {
     if (event.nativeEvent.oldState === State.BEGAN) {
       translateX.setOffset(lastOffset.x);
       translateY.setOffset(lastOffset.y);
-      translateX.setValue(lastOffset.x);
-      translateY.setValue(lastOffset.y);
+      translateX.setValue(0);
+      translateY.setValue(0);
     }
     if (event.nativeEvent.oldState === State.ACTIVE) {
       let newX = lastOffset.x + event.nativeEvent.translationX;
       let newY = lastOffset.y + event.nativeEvent.translationY;
-  
+
       const boundary = {
         left: -SCREEN_WIDTH * 0.23,
         right: SCREEN_WIDTH * 0.23,
         top: -SCREEN_HEIGHT * 0.13,
         bottom: SCREEN_HEIGHT * 0.13,
       };
-  
+
       if (newX < boundary.left) newX = boundary.left;
       if (newX > boundary.right) newX = boundary.right;
       if (newY < boundary.top) newY = boundary.top;
       if (newY > boundary.bottom) newY = boundary.bottom;
-  
+
       setLastOffset({ x: newX, y: newY });
-  
+
       translateX.setOffset(newX); // 최종 드랍 좌표
       translateY.setOffset(newY);
       translateX.setValue(0); // 드래그 시작 좌표
@@ -106,6 +109,24 @@ export const AnimalDeco = ({ navigation }) => {
       rotate.setValue(0);
     }
   };
+
+  const handleConfirm = () => {
+  const decoData = 
+    selectAnimal.characterType = {
+      name: selectAccessory,
+      y: translateY._value,
+      x: translateX._value,
+      rotation: rotationValue,
+      size: scaleValue,
+  };
+
+  console.log(decoData)
+
+  dispatch(setAnimalDeco(decoData));
+  dispatch(sendAnimalDeco(decoData));
+
+  navigation.navigate("GameHome");
+};
 
   return (
     <View style={globalStyles.container}>
@@ -203,10 +224,7 @@ export const AnimalDeco = ({ navigation }) => {
           </View>
           <AccessoryList />
           <View style={styles.confirm}>
-            <TouchableOpacity
-              style={styles.confirmBtn}
-              onPress={() => navigation.navigate("")}
-            >
+            <TouchableOpacity style={styles.confirmBtn} onPress={handleConfirm}>
               <Text style={styles.confirmText}>확정</Text>
             </TouchableOpacity>
           </View>
@@ -234,10 +252,11 @@ const styles = StyleSheet.create({
   },
   sliderContainer: {
     width: "10%",
-    height: "90%",
+    height: "100%",
     overflow: "hidden",
     justifyContent: "center",
     alignItems: "center",
+    zIndex: 1,
     // backgroundColor: "gold"
   },
   gage: {

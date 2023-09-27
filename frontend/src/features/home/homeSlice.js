@@ -188,7 +188,7 @@ export const getRandomTenCharacter = createAsyncThunk('GET_RANDOM_TEN_CHARACTER'
   }
 })
 
-// 캐릭터들 치장 데이터 뽑아오기
+// 캐릭터들 치장 데이터 받아오기
 export const getAnimalDeco = createAsyncThunk('GET_ANIMAL_DECO', async (userId, { rejectWithValue }) => {
   try {
     const res = await axios.get('deco/', {
@@ -202,151 +202,65 @@ export const getAnimalDeco = createAsyncThunk('GET_ANIMAL_DECO', async (userId, 
     // return rejectWithValue(e.res);
     return {
       data: {
-        user: "ssafy",
         animal: {
-          "SHIBA": {
-            "crown_cap": {
-              y: 11,
-              x: 12,
-              rotation: 90,
-              size: 1.2,
-              reverse: true
-            },
-            "ruby_necklace": {
-              y: 11,
-              x: 12,
-              rotation: 90,
-              size: 1.2,
-              reverse: true
-            },
-            "ssafy_cap": {
-              y: 11,
-              x: 12,
-              rotation: 90,
-              size: 1.2,
-              reverse: true
-            },
+          SHIBA: {
+            name: "ssafy_cap",
+            y: 11,
+            x: 1,
+            rotation: 90,
+            size: 1.2,
           },
-          "LION": {
-            "crown_cap": {
-              y: 11,
-              x: 12,
-              rotation: 90,
-              size: 1.2,
-              reverse: true
-            },
-            "ruby_necklace": {
-              y: 11,
-              x: 12,
-              rotation: 90,
-              size: 1.2,
-              reverse: true
-            },
-            "ssafy_cap": {
-              y: 11,
-              x: 12,
-              rotation: 90,
-              size: 1.2,
-              reverse: true
-            },
+          LION: {
+            name: "crown_cap",
+            y: 22,
+            x: 2,
+            rotation: 80,
+            size: 1.1,
           },
-          "QUOKKA": {
-            "crown_cap": {
-              y: 11,
-              x: 12,
-              rotation: 90,
-              size: 1.2,
-              reverse: true
-            },
-            "ruby_necklace": {
-              y: 11,
-              x: 12,
-              rotation: 90,
-              size: 1.2,
-              reverse: true
-            },
-            "ssafy_cap": {
-              y: 11,
-              x: 12,
-              rotation: 90,
-              size: 1.2,
-              reverse: true
-            },
+          EAGLE: {
+            name: "ruby_necklace",
+            y: 33,
+            x: 3,
+            rotation: 70,
+            size: 1.0, // 1 이어도 상관없
           },
-          "TIGER": {
-            "crown_cap": {
-              y: 11,
-              x: 12,
-              rotation: 90,
-              size: 1.2,
-              reverse: true
-            },
-            "ruby_necklace": {
-              y: 11,
-              x: 12,
-              rotation: 90,
-              size: 1.2,
-              reverse: true
-            },
-            "ssafy_cap": {
-              y: 11,
-              x: 12,
-              rotation: 90,
-              size: 1.2,
-              reverse: true
-            },
+          QUOKKA: {
+            name: "ssafy_cap",
+            y: 44,
+            x: 4,
+            rotation: 60,
+            size: 0.9,
           },
-          "PANDA": {
-            "crown_cap": {
-              y: 11,
-              x: 12,
-              rotation: 90,
-              size: 1.2,
-              reverse: true
-            },
-            "ruby_necklace": {
-              y: 11,
-              x: 12,
-              rotation: 90,
-              size: 1.2,
-              reverse: true
-            },
-            "ssafy_cap": {
-              y: 11,
-              x: 12,
-              rotation: 90,
-              size: 1.2,
-              reverse: true
-            },
+          PANDA: {
+            name: "crown_cap",
+            y: 55,
+            x: 5,
+            rotation: 50,
+            size: 0.8,
           },
-          "EAGLE": {
-            "crown_cap": {
-              y: 11,
-              x: 12,
-              rotation: 90,
-              size: 1.2,
-              reverse: true
-            },
-            "ruby_necklace": {
-              y: 11,
-              x: 12,
-              rotation: 90,
-              size: 1.2,
-              reverse: true
-            },
-            "ssafy_cap": {
-              y: 11,
-              x: 12,
-              rotation: 90,
-              size: 1.2,
-              reverse: true
-            },
+          TIGER: {
+            name: "ruby_necklace",
+            y: 66,
+            x: 6,
+            rotation: 40,
+            size: 0.7,
           },
         }
       }
     }
   }
-})
+});
+
+// 악세서리 데이터 서버에 전송하기
+export const sendAnimalDeco = createAsyncThunk('SEND_ANIMAL_DECO', async (data, { rejectWithValue }) => {
+  try {
+    const res = await axios.post('실제 엔드포인트 URL', data);
+    return res.data;
+  } catch (e) {
+    console.error('홈슬라이스/sendAnimalDeco 실패', e);
+    return rejectWithValue(e.res);
+  }
+});
 
 
 const initialState = {
@@ -354,13 +268,55 @@ const initialState = {
   mainCharacter: null,
   characters: null,
   userGameInfo: null,
-  pressedAnimal: null,
   animalDeco: null,
+  // animalDeco: {
+  //   SHIBA: {
+  //     name: "ssafy_cap",
+  //     y: 11,
+  //     x: 1,
+  //     rotation: 90,
+  //     size: 1.2,
+  //   },
+  // LION: {
+  //     name: "crown_cap",
+  //     y: 22,
+  //     x: 2,
+  //     rotation: 80,
+  //     size: 1.1,
+  //   },
+  // EAGLE: {
+  //     name: "ruby_necklace",
+  //     y: 33,
+  //     x: 3,
+  //     rotation: 70,
+  //     size: 1.0, // 1 이어도 상관없
+  //   },
+  // QUOKKA: {
+  //     name: "ssafy_cap",
+  //     y: 44,
+  //     x: 4,
+  //     rotation: 60,
+  //     size: 0.9,
+  //   },
+  // PANDA {
+  //     name: "crown_cap",
+  //     y: 55,
+  //     x: 5,
+  //     rotation: 50,
+  //     size: 0.8,
+  //   },
+  // TIGER: {
+  //     name: "ruby_necklace",
+  //     y: 66,
+  //     x: 6,
+  //     rotation: 40,
+  //     size: 0.7,
+  //   },
+  // },
+  pressedAnimal: null,
   pressedAccessory: null,
   music: null,
-
 }
-
 
 export const homeSlice = createSlice({
   name: 'home',
@@ -371,6 +327,10 @@ export const homeSlice = createSlice({
     },
     setPressedAccessory: (state, action) => {
       state.pressedAccessory = action.payload;
+    },
+    setAnimalDeco: (state, action) => {
+      const animalType = Object.keys(action.payload)[0];
+      state.animalDeco[animalType] = action.payload[animalType];
     },
     DJ: (state, action) => {
       // 실행시킬 BGM 넣기
@@ -436,9 +396,12 @@ export const homeSlice = createSlice({
           }
         })
       })
+      .addCase(getAnimalDeco.fulfilled, (state, action) => {
+        state.animalDeco = action.payload.data.animal;
+      })
   }
 })
 
-export const { setPressedAnimal, setPressedAccessory, DJ, PlayMusic, StopMusic, DeleteMusic } = homeSlice.actions;
+export const { setPressedAnimal, setPressedAccessory, setAnimalDeco, DJ, PlayMusic, StopMusic, DeleteMusic } = homeSlice.actions;
 
 export default homeSlice.reducer
