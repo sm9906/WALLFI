@@ -10,7 +10,7 @@ import {
 import { globalStyles } from '../homestyles/global.js';
 import { images } from '../../../common/imgDict.js';
 
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../homecomponents/ScreenSize.js';
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../../common/ScreenSize.js';
 
 import GameHeader from '../homecomponents/GameHeader';
 import PageHeader from '../homecomponents/PageHeader.js';

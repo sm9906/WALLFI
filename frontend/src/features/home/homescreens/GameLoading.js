@@ -21,9 +21,9 @@ export default function GameLoading({navigation}) {
 
     const getData = async () => {
         try {
-            await dispatch(getGameInfo(userId))
-            await dispatch(getMainCharacter(userId))
-            await dispatch(getCharacterList(userId))
+            await dispatch(getGameInfo())
+            await dispatch(getMainCharacter())
+            await dispatch(getCharacterList())
             setTimeout(()=>{
                 navigation.navigate('GameHome');
             }, 2000)
