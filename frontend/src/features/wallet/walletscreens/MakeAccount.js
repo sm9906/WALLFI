@@ -18,27 +18,23 @@ import {Background} from '../walletcomponents/CommonStyle';
 import GoFight from '../walletcomponents/GoFight';
 
 import { SCREEN_HEIGHT,SCREEN_WIDTH } from '../walletcomponents/ScreenSize';
-import axios from '../../../common/http-common';
+import {requestPost} from '../../../common/http-common';
 import { useSelector } from 'react-redux';
 import { ScrollView } from 'react-native-gesture-handler';
 
 export default function MakeAccount({ navigation }){
-  const userId = useSelector(state=>state.auth.userId)
   const onPress = async(type) => {
     let response;
-    const data = {
-      userId
-    }
     try{
       if(type==='Levelup'){
-        response = await axios.post('character/maxcharacter', data);
+        response = await requestPost('character/maxcharacter');
       }else if(type==='Top10'){
-        response = await axios.post('branch/getmanagernum',data);
+        response = await requestPost('branch/getmanagernum');
       }else if(type==='Battle'){
-        response = await axios.post(`battle/getbattlecount?userId=${userId}`)
+        response = await requestPost(`battle/getbattlecount`);
         console.log(response)
       }else if(type==='Land'){
-        response = await axios.post(`branch/getmanagernum`,data)
+        response = await requestPost(`branch/getmanagernum`);
       }else{
         return;
       }
