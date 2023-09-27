@@ -7,8 +7,6 @@ import lombok.Setter;
 @Setter
 public class CharacterStatusReqDto {
 
-    private String userId;
-
     private Long characterIdx;
 
     private String statusType;
