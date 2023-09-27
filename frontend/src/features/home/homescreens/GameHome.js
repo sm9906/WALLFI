@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { LinearGradient } from 'expo-linear-gradient';
 import {
   StatusBar,
   StyleSheet,
@@ -8,27 +7,31 @@ import {
   Image,
   ImageBackground,
   TouchableOpacity,
-  Modal,
   Alert
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
+import { RFPercentage } from 'react-native-responsive-fontsize';
 import { useFocusEffect } from '@react-navigation/native';
+import { LinearGradient } from 'expo-linear-gradient';
 
 import { getMainCharacter, updateCharacter, getAnimalDeco } from '../homeSlice.js';
 
 import { globalStyles } from '../homestyles/global.js';
 import { images } from '../../../common/imgDict.js';
-import GameHeader from '../homecomponents/GameHeader.js';
-import { RFPercentage } from 'react-native-responsive-fontsize';
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../homecomponents/ScreenSize.js';
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../../common/ScreenSize.js';
 
+import { Audio } from 'expo-av';
+import { DJ, PlayMusic, StopMusic } from '../homeSlice.js';
+
+import GameHeader from '../homecomponents/GameHeader.js';
 // 상태바 겹침현상을 없애려면 react-native에서 StatusBar를 import 해줘야함
 
 export default function GameHome({ navigation }) {
   const dispatch = useDispatch();
-  // const [mainCharacter, setMainCharacter] = useState('');
-  // 이거 뒤로가기 버튼? 훅으로 따로 뺄거임  
-  React.useEffect(() =>
+
+  console.log(navigation)
+  // 이거 뒤로가기 버튼? 훅으로 따로 뺄거임 
+  useEffect(() =>
     navigation.addListener('beforeRemove', (e) => {
       if (e.data.action.type === 'GO_BACK') {
         e.preventDefault();
@@ -88,10 +91,9 @@ export default function GameHome({ navigation }) {
           </View>
         </Modal>
         <GameHeader />
+        <Music />
         <Season />
         <Content navigation={navigation}
-          modalVisible={modalVisible}
-          setModalVisible={setModalVisible}
           userId={userId}
         />
         <Bottom navigation={navigation} />
@@ -102,11 +104,57 @@ export default function GameHome({ navigation }) {
   )
 }
 
+
+const Music = React.memo(() => {
+  const dispatch = useDispatch();
+  const [on, setON] = useState(true);
+  const music = useSelector(state => state.home.music);
+
+  useEffect(() => {
+    DJselect();
+  }, []);
+
+  const DJselect = async () => {
+    if (!music) {
+      const { sound } = await Audio.Sound.createAsync(
+        require('../../../assets/music/GameHome.mp3')
+      );
+      await dispatch(DJ(sound));
+    }
+  }
+
+  useEffect(() => {
+    if (music) {
+      on ? dispatch(PlayMusic()) : dispatch(StopMusic());
+    }
+  }, [on, music]);
+
+  return (
+    <View>
+      {music && <TouchableOpacity onPress={() => { setON(!on) }}>
+        <Image source={on ? images.gameIcon.musicon : images.gameIcon.musicoff} style={musicStyles.music} />
+      </TouchableOpacity>
+      }
+    </View>
+  )
+})
+
+
+const musicStyles = StyleSheet.create({
+  music: {
+    resizeMode: 'contain',
+    marginLeft: SCREEN_WIDTH * 0.03,
+    height: SCREEN_HEIGHT * 0.07,
+    width: SCREEN_WIDTH * 0.07,
+    position: "absolute",
+  },
+});
+
 function Season() {
 
   return (
     <View style={styles.season}>
-      <LinearGradient style={styles.box} colors={['rgba(142, 170, 245, 1)', 'rgba(72, 122, 255, 0.4)', 'transparent']}>
+      <LinearGradient style={styles.box} colors={['rgba(142, 170, 245, 1)', 'rgba(72, 122, 255, 0.5)', 'transparent']}>
         <Image source={images.gameIcon.trophy} style={styles.trophy} />
         <Text style={styles.seasonText}>여름 시즌</Text>
       </LinearGradient>
@@ -223,12 +271,9 @@ function Content(props) {
         }}>{timeText}</Text>
       </View>
       <View style={styles.sideBar}>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => props.setModalVisible(true)}
-        >
-          <Image source={images.btnSource.notice} style={styles.buttonContent} />
-          <Text style={styles.btnText}>공지</Text>
+        <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate('ItemExchange')}>
+          <Image source={images.btnSource.handshake} style={styles.buttonContent} />
+          <Text style={styles.btnText}>거래소</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate('Mission')}>
           <Image source={images.btnSource.mission} style={styles.buttonContent} />
@@ -269,13 +314,9 @@ function Bottom(props) {
 const actStyles = StyleSheet.create({
   eating: {
     resizeMode: 'contain',
-    // width:SCREEN_WIDTH*0.8,
-    // height:SCREEN_HEIGHT*0.6,
     marginLeft: '8%',
     width: SCREEN_WIDTH * 0.9,
     height: '50%',
-    // backgroundColor:'red',
-    // marginBottom: SCREEN_HEIGHT*0.01
   }
 })
 

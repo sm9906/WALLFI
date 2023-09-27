@@ -1,5 +1,5 @@
-import React from "react";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import React from 'react';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 // Navigator
 import GameHome from "../homescreens/GameHome";
@@ -9,34 +9,35 @@ import Market from "../homescreens/Market";
 import GameLoading from "../homescreens/GameLoading";
 import GameAccessories from "../homescreens/GameAccessories";
 import AnimalDeco from "../homescreens/AnimalDeco";
+import ItemExchange from '../homescreens/ItemExchange';
 
 const Stack = createNativeStackNavigator();
 
 const HomeNavigation = () => {
   return (
-    <Stack.Navigator initialRouteName="GameLoading">
+    <Stack.Navigator initialRouteName='GameLoading'>
       <Stack.Screen
-        name="GameLoading"
+        name='GameLoading'
         component={GameLoading}
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="GameHome"
+        name='GameHome'
         component={GameHome}
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="Mission"
+        name='Mission'
         component={Mission}
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="Collection"
+        name='Collection'
         component={Collection}
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="Market"
+        name='Market'
         component={Market}
         options={{ headerShown: false }}
       />
@@ -51,6 +52,10 @@ const HomeNavigation = () => {
       <Stack.Screen
         name="AnimalDeco"
         component={AnimalDeco}
+      />
+      <Stack.Screen
+        name='ItemExchange'
+        component={ItemExchange}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>

@@ -4,6 +4,7 @@ import market from "../assets/background/Market.png";
 import mission from "../assets/background/mission.png";
 import accessory from "../assets/background/accessory.png"
 import deco from "../assets/background/deco.png";
+import itemExchange from "../assets/background/itemExchange.png";
 
 import molly_basic from "../assets/characters/default/baby_duderge.png";
 
@@ -63,10 +64,14 @@ import modalCloseBtn from "../assets/game/button/modalClose.png";
 import noticeBtn from "../assets/game/button/notice.png";
 import trainingBtn from "../assets/game/button/training.png";
 import walletBtn from "../assets/game/button/wallet.png";
-import closetBtn from '../assets/game/button/closet.png';
+import sunglassesBtn from '../assets/game/button/sunglasses.png';
+import auction from '../assets/game/button/auction.png';
+import handshake from '../assets/game/button/handshake.png'
 
 import coinIcon from "../assets/game/icon/coin.png";
 import trophyIcon from "../assets/game/icon/trophy.png";
+import musiconIcon from "../assets/game/icon/musicon.png";
+import musicoffIcon from "../assets/game/icon/musicoff.png";
 
 import color from "../assets/game/market/characterColor.gif";
 import marketEgg from "../assets/game/market/marketEgg.png";
@@ -120,7 +125,8 @@ export const images = {
     market: market,
     mission: mission,
     accessory: accessory,
-    deco: deco
+    deco: deco,
+    itemExchange: itemExchange,
   },
 
   defaultCharacter: {
@@ -202,12 +208,16 @@ export const images = {
     notice: noticeBtn,
     training: trainingBtn,
     wallet: walletBtn,
-    closet: closetBtn,
+    sunglasses: sunglassesBtn,
+    auction : auction,
+    handshake : handshake
   },
 
   gameIcon: {
     coin: coinIcon,
     trophy: trophyIcon,
+    musicon: musiconIcon,
+    musicoff: musicoffIcon
   },
 
   marketSource: {

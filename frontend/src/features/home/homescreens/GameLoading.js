@@ -1,18 +1,15 @@
 import React, { useEffect } from 'react';
-import {
-    View,
-    Text,
-    StyleSheet,
-    Image
-} from 'react-native'
+import { View, Text, StyleSheet, Image } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux';
+import { RFPercentage } from 'react-native-responsive-fontsize';
+
 import { getCharacterList, getGameInfo, getMainCharacter } from '../homeSlice';
 
-import LoadingImg from '../../../assets/game/loading/LoadingImg.gif'
-import ShinhanLogo from '../../../assets/wallet/ShinhanLogo.png'
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../../common/ScreenSize.js';
 
-import { RFPercentage } from 'react-native-responsive-fontsize';
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../homecomponents/ScreenSize';
+import LoadingImg from '../../../assets/game/loading/LoadingImg.gif'
+import SSAFY from '../../../assets/wallet/SSAFY.png'
+
 
 export default function GameLoading({navigation}) {
 
@@ -54,8 +51,8 @@ export default function GameLoading({navigation}) {
         </Text>
       </View>
       <View style={loadingStyle.logoContainer}>
-        <Image resizeMode='contain'style={loadingStyle.shinhanLogo} source={ShinhanLogo}/>
-        <Text style={loadingStyle.shinhanTXT}>Shinhan Bank</Text>
+        <Image resizeMode='contain'style={loadingStyle.shinhanLogo} source={SSAFY}/>
+        <Text style={loadingStyle.shinhanTXT}>SSAFY</Text>
       </View>
 
     </View>

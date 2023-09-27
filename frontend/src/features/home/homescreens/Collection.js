@@ -1,42 +1,42 @@
 import React, { useState } from 'react';
-import {
-    StatusBar,
-    StyleSheet,
-    Text,
-    View,
-    Image,
-    ImageBackground,
-    TouchableOpacity,
-    FlatList,
-    Modal,
-    Alert
+import { 
+  StatusBar, 
+  StyleSheet, 
+  Text, 
+  View, 
+  Image, 
+  ImageBackground, 
+  TouchableOpacity, 
+  FlatList, 
+  Modal
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
+import { RFPercentage } from 'react-native-responsive-fontsize';
+
 import { updateCharacter } from '../homeSlice.js';
 import { globalStyles } from "../homestyles/global.js";
 import { images } from '../../../common/imgDict.js';
+
 import GameHeader from '../homecomponents/GameHeader.js';
 import ExpBar from '../homecomponents/exp/ExpBar.js';
-import { RFPercentage } from 'react-native-responsive-fontsize';
 import PageHeader from '../homecomponents/PageHeader.js';
 
 const type = {
-    'EAGLE':'독수리',
-    'LION':'사자',
-    'PANDA':'판다',
-    'QUOKKA':'쿼카',
-    'SHIBA':'시바',
-    'LION':'호랑이',
-    'MOLLY': '몰리',
+    EAGLE: '독수리',
+    LION: '사자',
+    PANDA: '판다',
+    QUOKKA: '쿼카',
+    SHIBA: '시바',
+    TIGER: '호랑이',
+    MOLLY: '몰리',
 }
-
 
 export default function Collection({navigation}) {
 
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedCharacter, setSelectedCharacter] = useState(null);
 
-  // 유저의 캐릭터 목록을 조회 
+  // 유저의 캐릭터 목록 조회
   const userId = useSelector(state=>state.auth.userId)
   const characterList = useSelector(state => state.home.characters);
   const characters = []
@@ -72,10 +72,7 @@ export default function Collection({navigation}) {
           animationType='fade'
           transparent={true}
           visible={modalVisible}
-          onRequestClose={() => {
-            Alert.alert('Modal has been closed.');
-            setModalVisible(!modalVisible);
-            }}>
+        >
           <DetailPage modalVisible={modalVisible} 
             setModalVisible={setModalVisible} 
             selectedCharacter={selectedCharacter} 
@@ -104,7 +101,7 @@ function DetailPage(props) {
     dispatch(updateCharacter({act: '', characterIdx: props.selectedCharacter.id, statusType: 'isMain', userId: props.userId, value: 0}))
   }
   return (
-    <View style={styles.modalStyle}>
+    <View style={[globalStyles.modalStyle, { backgroundColor: '#FBA728' }]}>
         <View style={styles.modalBox}>
             <View style={styles.modalContent}>
                 <Text style={{ fontSize: 25, fontWeight: 'bold' }}>{props.selectedCharacter.name}</Text>
@@ -115,9 +112,15 @@ function DetailPage(props) {
         </View>
         <View style={styles.modalItems}>
             <Image source={props.selectedCharacter.imageUrl} style={{ flex: 5, resizeMode: 'contain', overflow: 'hidden' }}/>
-            <TouchableOpacity style={styles.mainCharacterBtn} onPress={()=>{ setMain(); props.setModalVisible(false);}}>
-                <Text style={{ fontSize: 15, fontWeight: 'bold', color: 'white' }}>대표동물</Text>
-            </TouchableOpacity>
+            {
+              props.selectedCharacter.main 
+                ? <TouchableOpacity style={styles.mainCharacterBtn}>
+                    <Text style={{ fontSize: 15, fontWeight: 'bold', color: 'white' }}>현재 대표동물</Text>
+                  </TouchableOpacity>
+                : <TouchableOpacity style={styles.mainCharacterBtn} onPress={()=>{ setMain(); props.setModalVisible(false);}}>
+                    <Text style={{ fontSize: 15, fontWeight: 'bold', color: 'white' }}>대표동물</Text>
+                  </TouchableOpacity>
+            }
         </View>
         <View style={styles.modalBottom}>        
         <ExpBar ExpStyle={ExpStyle} exp={props.selectedCharacter.exp} level={props.selectedCharacter.level}/> 
@@ -127,18 +130,6 @@ function DetailPage(props) {
 }
 
 const styles = StyleSheet.create({
-  modalStyle: {
-    flex: 1,
-    flexDirection: 'column',
-    width: '90%',
-    backgroundColor: '#FBA728',
-    marginHorizontal: '5%',
-    marginTop: '45%',
-    marginBottom: '10%',
-    borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
   gridStyle: {
     backgroundColor: 'rgba(255, 255, 255, 0.7)',
     flex: 0.5,

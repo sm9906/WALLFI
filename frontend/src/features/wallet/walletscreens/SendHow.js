@@ -1,21 +1,21 @@
 import React, {useEffect, useState, useMemo} from "react";
-import { View, Text, StyleSheet } from 'react-native';
-import { ConvPad } from "../walletcomponents/virtualkeyboard/ConvKeypad";
-import { RFPercentage } from "react-native-responsive-fontsize";
-import VirtualKeyboard from "../walletcomponents/virtualkeyboard/VirtualKeypad";
-import { minusMoney, exchangeMoney, postSendMoney, postExchangeKRW, postExchangeFOR } from "../walletSlice";
 import { useDispatch, useSelector } from "react-redux";
+import ChangeForm from "../walletcomponents/ChangeForm";
+
+import { View, Text, StyleSheet } from 'react-native';
+import { RFPercentage } from "react-native-responsive-fontsize";
+import ConvPad from "../walletcomponents/virtualkeyboard/ConvKeypad";
+import VirtualKeyboard from "../walletcomponents/virtualkeyboard/VirtualKeypad";
+
+import { postSendMoney, postExchangeKRW, postExchangeFOR } from "../walletSlice";
+
 
 export default function SendHow({route, navigation}){
   const dispatch = useDispatch();
 
-  // console.log('얼마나 보낼까요',route)
-  // 이체, 환전 (1. 원화 -> 외화 2. 외화 -> 원화) 가 달라서... 엄청 어지러운 변수 선언..
-  // 고치고 싶음 ㅠ
   const type= route.params.type;
   const outAcc = route.params.outAcc;
   const balance = outAcc.balance; 
-  const outAccId = outAcc.accId
   // 이체 필요 부분
   const toAccount = type==='송금'?route.params.account :'';
   const toBank = type==='송금'?route.params.bank||'신한': '';
@@ -25,16 +25,15 @@ export default function SendHow({route, navigation}){
   const ISO = type==='환전'?route.params.ISO:outAcc.ISO;
   
 
-  const form_balance = Number(balance).toLocaleString('es-US'); // 잔액을 돈 형식 정규화
-
+  const form_balance = ChangeForm(balance); // 잔액을 돈 형식 정규화
   // 입력 금액 
   const [money, setMoney] = useState(0); // 입력 금액 (문자)
   const num_money=Number(money); // 입력 금액 -> 숫자
-  const form_money=Number(money).toLocaleString('es-US'); // 돈 형식으로 정규화
+  const form_money = ChangeForm(money);
 
   // 원화로 계산한 외화
   const exchangedMoney = ((Number(exchangeRate)*num_money)/(ISO==='¥'?100:1)).toFixed(0) // 환전 시 매매율 * 입력 금액해서 원화 표기 
-  const form_exchangedMoney = Number(exchangedMoney).toLocaleString('es-US');
+  const form_exchangedMoney = ChangeForm(exchangedMoney)
 
   // 잔액 확인
   const isOver = type==='송금'||toNation==='KRW'? 
@@ -42,7 +41,7 @@ export default function SendHow({route, navigation}){
 
   const {mainAccount, userId} = useSelector(state=>state.auth)
   
-  // 이체하기. 
+  // 송금하기. 
   const sendMoney = () => {
     const data = {
       '이체금액': num_money,
@@ -67,7 +66,6 @@ export default function SendHow({route, navigation}){
       "금액": toNation==='KRW'?Number(money):Number(money),
       "사용자대표계좌": mainAccount,
     }
-    console.log(data)
     if(toNation!=='KRW'){      
       data["도착계좌통화코드"] = toNation
       data["전신환매도환율"]= exchangeRate
@@ -77,9 +75,8 @@ export default function SendHow({route, navigation}){
         console.log(err);
       })
     }else{
-      data["전신환매입환율"]= exchangeRate
+      data["전신환매입환율"] = exchangeRate
       data["출발계좌통화코드"] = outAcc.ntnCode;
-      console.log('ㅎㅇ')
       dispatch(postExchangeFOR(data))
       .then((res)=>sendExchangeMemo(res))
       .catch((err)=>{
@@ -90,12 +87,9 @@ export default function SendHow({route, navigation}){
 
   // 환전 - 메모로 보내기
   const sendExchangeMemo = async(res) => {
-    
     if(res.error){
       console.log('에러 발생')
     }
-
-    await dispatch(exchangeMoney({num_money,exchangedMoney,outAccId,toNation}))
     const outISO = toNation==='KRW'? '원' : ISO
     const formMoney = toNation==='KRW'? form_exchangedMoney : form_money
     navigation.navigate('SendMemo', props = {type, toNation, toAccount, toBank, formMoney, outISO, outAcc})
@@ -106,8 +100,6 @@ export default function SendHow({route, navigation}){
     if(res.error){
       console.log('에러 발생') // 여기 에러 발생하면 return 0으로 예외처리 
     }
-    await dispatch(minusMoney({num_money, outAccId}))
-    
     const outISO = ISO
     const formMoney = form_money
     navigation.navigate('SendMemo', props = {type, toNation, toAccount, toBank, formMoney, outISO, outAcc})
@@ -147,7 +139,10 @@ export default function SendHow({route, navigation}){
           <Text style={{...styles.accountTo,marginBottom:'5%' }}>{toBank} {toAccount} {toNation}</Text>
           <Text style={styles.infoText}>얼마를 {type==='송금'?'보낼':'바꿀'}까요?</Text>
         </View>
-        <Text style={{...styles.currMoney, color:isOver?'red':'black'}}>{form_money}{ISO||'원'}</Text>
+        <View>
+          <Text style={{...styles.currMoney, color:isOver?'red':'black'}}>{form_money}{ISO||'원'}</Text>
+          <Text style={styles.warnTxt}>{isOver&&'잔액 부족!'}</Text>
+        </View>
         {type==='환전'&&<Text style={{textAlign:'center', fontSize:RFPercentage(2), color:'grey'}}>{form_exchangedMoney}원</Text>}
         <View style={styles.myAccount}>
           <Text style={styles.accountTo} >신한 {outAcc.accountnum}   {form_balance}{outAcc.ISO}</Text>
@@ -187,6 +182,10 @@ const styles = StyleSheet.create({
   currMoney:{
     textAlign:'center',
     fontSize:RFPercentage(3)
-  }
+  },
+  warnTxt:{
+    color:'#FF6666',
+    textAlign:'center',
+  },
 
 })

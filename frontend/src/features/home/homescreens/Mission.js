@@ -1,30 +1,28 @@
-import React, { useEffect, useState } from "react";
-import {
-  StatusBar,
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  ImageBackground,
-  TouchableOpacity,
-  ScrollView
-} from "react-native";
-import { globalStyles } from "../homestyles/global.js";
-import PageHeader from "../homecomponents/PageHeader.js";
+import React, { useEffect, useState } from 'react';
+import { 
+  StatusBar, 
+  StyleSheet, 
+  Text, 
+  View, 
+  ImageBackground, 
+  TouchableOpacity, 
+  ScrollView 
+} from 'react-native';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import axios from '../../../common/http-common';
 
-import GameHeader from "../homecomponents/GameHeader.js";
-import mission from "../../.././assets/background/mission.png";
-import axios from "axios";
-import { requestGet } from "../../../common/http-common.js";
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../homecomponents/ScreenSize.js";
-import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import { images } from '../../../common/imgDict.js'
+import { globalStyles } from '../homestyles/global.js';
+import { SCREEN_WIDTH } from '../../../common/ScreenSize.js';
+
+import GameHeader from '../homecomponents/GameHeader.js';
+import PageHeader from '../homecomponents/PageHeader.js';
 
 export default function Mission({ navigation }) {
   [quests, setQuest] = useState([]);
 
   useEffect(() => {
-    axios
-      .get("http://j9d101a.p.ssafy.io:8094/quest?userId=ssafy")
+    axios.get("?userId=ssafy")
       .then((res) => {
         setQuest(res.data);
         console.log("quest: ", quests);
@@ -36,7 +34,7 @@ export default function Mission({ navigation }) {
 
   return (
     <View style={globalStyles.container}>
-      <ImageBackground source={mission} style={[globalStyles.bgImg, { alignItems: "center" }]}>
+      <ImageBackground source={images.Background.mission} style={[globalStyles.bgImg, { alignItems: "center" }]}>
         <GameHeader />
         <PageHeader navigation={navigation} color={'#76009F'} title={'미션'}/>
         <MenuBar quests={quests}/>
@@ -67,7 +65,7 @@ function determineButtonColor(status) {
 const Tab = createMaterialTopTabNavigator();
 function MenuBar({quests}) {
   return (
-    <View style={{ flex: 7, width: SCREEN_WIDTH }}>
+    <View style={{ flex: 6.5, width: SCREEN_WIDTH }}>
       <Tab.Navigator
         // tabBarOptions={{
         //   labelStyle: { fontSize: 12 },
@@ -125,7 +123,7 @@ function DailyQuest({ quest, type }) {
   }
 
   return (
-    <View style={{ flex: 7, marginTop: 5 }}>
+    <View style={{ flex: 6.5, marginTop: 5 }}>
       <ScrollView>
         <View style={styles.questContainer}>
           {quest.map((quest, idx) => {
