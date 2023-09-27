@@ -28,9 +28,7 @@ import GameHeader from '../homecomponents/GameHeader.js';
 // 상태바 겹침현상을 없애려면 react-native에서 StatusBar를 import 해줘야함
 
 export default function GameHome({ navigation }) {
-  const dispatch = useDispatch();
-
-  console.log(navigation)
+  const dispatch = useDispatch(); 
   // 이거 뒤로가기 버튼? 훅으로 따로 뺄거임 
   useEffect(() =>
     navigation.addListener('beforeRemove', (e) => {

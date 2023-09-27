@@ -8,7 +8,7 @@ import {
  } from "react-native";
 import { RFPercentage } from "react-native-responsive-fontsize";
 import SelectDropdown from "react-native-select-dropdown";
-import axios from "../../../common/http-common";
+import {requestGet} from "../../../common/http-common";
 import { Background, ButtonStyle } from "../walletcomponents/CommonStyle";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../../common/ScreenSize";
 import { useSelector } from "react-redux";
@@ -33,7 +33,7 @@ const Deposit = {
 // 여기 따로 export 시켰어야 하는데..
 
 export default function MakeDeposit({route,navigation}){
-  const {userId, mainAccount} = useSelector(state=> state.auth)
+  const {mainAccount} = useSelector(state=> state.auth)
   const [ntnCode, setNtnCode] = useState('KRW');
   const [money, setMoney] = useState('0');  
 
@@ -48,15 +48,13 @@ export default function MakeDeposit({route,navigation}){
   const onPress = () => {
     const data={
       mainAccountNum: mainAccount,
-      userId:userId,
       금리:detail?.총금리,
       만기일: '2023',
       상품명: detail?.상품명,
       입금금액: Number(money),
       통화코드: ntnCode,
     }
-    console.log(data)
-    const response = axios.post('product/create', data)
+    requestGet('product/create', data)
     .then(res=>navigation.navigate('WalletHome'));
   }
 

@@ -22,8 +22,9 @@ import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../walletcomponents/ScreenSize";
 
 export default function WalletHome({navigation}) {
   const dispatch = useDispatch();
-  const {userId, mainAccount} = useSelector(state=>state.auth)
+  const {mainAccount} = useSelector(state=>state.auth)
   const [cards, setCards] = useState();
+
   useFocusEffect(
     React.useCallback(()=>{
       getData()
@@ -36,7 +37,7 @@ export default function WalletHome({navigation}) {
       // console.log('?')
       await dispatch(getExchangeRate());
       const response = await dispatch(getAccounts(mainAccount));
-      setCards(response.payload)
+      setCards(response.payload);
     } catch (err) {
       console.log('walletscreens/WalletLoading.js',err);
     }

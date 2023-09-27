@@ -141,7 +141,6 @@ export default function Market({ navigation }) {
 
 // 컨텐츠 렌더링 함수
 function RenderContent(props) {
-  const userId = useSelector((state) => state.auth.userId);
   const mainCharacter = useSelector((state) => state.home.mainCharacter);
   const userInfo = useSelector((state) => state.home.userGameInfo);
   const dispatch = useDispatch();
@@ -154,10 +153,8 @@ function RenderContent(props) {
           { text: "확인", onPress: () => {}, style: "default" },
         ]);
       } else {
-        dispatch(updatePoint({ point: -1000, userId: userId })).then((res) =>
-          console.log(res)
-        );
-        dispatch(getRandomCharacter(userId)).then((response) => {
+        dispatch(updatePoint({ point: -1000 }));
+        dispatch(getRandomCharacter()).then((response) => {
           props.setSelectedCharacter(response.payload);
           props.setModalVisible1(true);
         });
@@ -175,10 +172,8 @@ function RenderContent(props) {
           { text: "확인", onPress: () => {}, style: "default" },
         ]);
       } else {
-        dispatch(updatePoint({ point: -9000, userId: userId })).then((res) =>
-          console.log(res)
-        );
-        dispatch(getRandomTenCharacter(userId)).then((response) => {
+        dispatch(updatePoint({ point: -9000}))
+        dispatch(getRandomTenCharacter()).then((response) => {
           props.setTenCharacterList(response.payload);
           props.setModalVisible2(true);
         });
@@ -196,13 +191,10 @@ function RenderContent(props) {
           { text: "확인", onPress: () => {}, style: "default" },
         ]);
       } else {
-        dispatch(updatePoint({ point: -500, userId: userId })).then((res) =>
-          console.log(res)
-        );
+        dispatch(updatePoint({ point: -500 }));
         dispatch(
           changeColor({
             mainCharacterIdx: mainCharacter.characterIdx,
-            userId: userId,
           })
         ).then((response) => {
           props.setSelectedColor(response.payload);
@@ -309,7 +301,6 @@ function RenderContent(props) {
 
 // 동물 알 1개 뽑기 모달
 function OneEgg(props) {
-  console.log("모달들어옴", props.selectedCharacter);
   const type = props.selectedCharacter.characterType;
 
   return (
