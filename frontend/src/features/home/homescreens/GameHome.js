@@ -27,8 +27,6 @@ import GameHeader from '../homecomponents/GameHeader.js';
 
 export default function GameHome({ navigation }) {
   const dispatch = useDispatch(); 
-
-  console.log(navigation)
   // 이거 뒤로가기 버튼? 훅으로 따로 뺄거임 
   useEffect(() =>
     navigation.addListener('beforeRemove', (e) => {

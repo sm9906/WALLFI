@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from  '../../common/http-common';
-import { requestPost } from "../../common/http-common";
+import { requestPost, requestGet } from "../../common/http-common";
 
 import {ISO} from './walletcomponents/GlobalInfo'
 
@@ -22,7 +22,7 @@ const flagImage = {
 
 export const makeAccount = createAsyncThunk('POST_MAKEACCOUJNT', async(data, {rejectWithValue})=>{
   try{
-    const response = await axios.post('product',data);
+    const response = await requestPost('product',data);
   }catch(err){
     console.log(err)
     return rejectWithValue(err);
@@ -32,7 +32,7 @@ export const makeAccount = createAsyncThunk('POST_MAKEACCOUJNT', async(data, {re
 // 환율 정보 불러오기
 export const getExchangeRate = createAsyncThunk('GET_EXCHANGE_RATE', async(_,{ rejectWithValue })=>{
   try{
-    const response = await axios.get('exchange/info')
+    const response = await requestGet('exchange/info')
     const exchangeDtoList = response.data.data.exchangeDtoList;
     const exchanges = {} 
     exchangeDtoList.map((exchange)=>{
@@ -76,7 +76,7 @@ export const getAccounts = createAsyncThunk('GET_ACCOUNT', async (mainAccount, {
 // export const postExchange = createAsyncThunk('POST_EXCHANGE', async())
 export const postSendMoney = createAsyncThunk('POST_SENDMONEY', async(data, { rejectWithValue }) => {
   try {
-    const response = await axios.post('bank/transfer', data)
+    const response = await requestPost('bank/transfer', data)
     return response
   } catch (err) {
     console.log('지갑Slice.postSendMoney',err.response)
@@ -86,7 +86,7 @@ export const postSendMoney = createAsyncThunk('POST_SENDMONEY', async(data, { re
 
 export const postExchangeKRW = createAsyncThunk('POST_EXCHANGEKRW', async(data, { rejectWithValue }) => {
   try {
-    const response = await axios.post('exchange/toglobal', data)
+    const response = await requestPost('exchange/toglobal', data)
     return response
   } catch (err) {
     console.log('지갑Slice.EXCHANGEMONEY',err.response)
@@ -96,7 +96,7 @@ export const postExchangeKRW = createAsyncThunk('POST_EXCHANGEKRW', async(data, 
 
 export const postExchangeFOR = createAsyncThunk('POST_EXCHANGEFOR', async(data, { rejectWithValue }) => {
   try {
-    const response = await axios.post('exchange/fromglobal', data)
+    const response = await requestPost('exchange/fromglobal', data)
     return response
   } catch (err) {
     console.log('지갑Slice.EXCHANGEMONEY',err.response)
