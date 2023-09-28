@@ -42,7 +42,7 @@ public class User implements Serializable, UserDetails {
     private List<Account> accounts = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private List<CryptoWallet> cryptoWallet = new ArrayList<>();
+    private List<CryptoWallet> cryptoWallets = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

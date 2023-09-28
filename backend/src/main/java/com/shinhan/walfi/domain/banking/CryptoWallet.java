@@ -14,8 +14,9 @@ import static javax.persistence.FetchType.LAZY;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CryptoWallet {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String jsonWallet;
@@ -34,7 +35,7 @@ public class CryptoWallet {
     private User user;
 
 
-    public CryptoWallet createCryptoWallet(String jsonWallet, String encpwd, String passwordKey, String address, CoinType coinType) {
+    public static CryptoWallet createCryptoWallet(String jsonWallet, String encpwd, String passwordKey, String address, User user, CoinType coinType) {
         CryptoWallet cryptoWallet = new CryptoWallet();
         cryptoWallet.jsonWallet = jsonWallet;
         cryptoWallet.encpwd = encpwd;
@@ -42,6 +43,10 @@ public class CryptoWallet {
         cryptoWallet.address = address;
         cryptoWallet.coinType = coinType;
 
+        cryptoWallet.user = user;
+        user.getCryptoWallets().add(cryptoWallet);
+
         return cryptoWallet;
     }
+
 }
