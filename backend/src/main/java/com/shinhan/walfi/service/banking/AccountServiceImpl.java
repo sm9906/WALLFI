@@ -65,7 +65,9 @@ public class AccountServiceImpl implements AccountService{
         List<CryptoWallet> cryptoWallets = cryptoWalletRepository.findCryptoWallets(user);
 
         List<AccountDto> cryptoAccountDtos = cryptoWallets.stream()
-                .map(wallet -> AccountDto.cryptoWalletToAccountDto(wallet, cryptoUtil.checkBalance(wallet.getAddress())))
+                .map(wallet -> AccountDto.cryptoWalletToAccountDto(wallet,
+                        cryptoUtil.checkBalance(wallet.getAddress()),
+                        cryptoUtil.convertEthToKrw(cryptoUtil.checkBalance(wallet.getAddress()))))
                 .collect(Collectors.toList());
 
         accountDtoList.addAll(cryptoAccountDtos);
