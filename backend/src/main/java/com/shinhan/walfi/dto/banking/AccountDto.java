@@ -80,7 +80,8 @@ public class AccountDto {
     public static AccountDto cryptoWalletToAccountDto(CryptoWallet wallet, BigDecimal balance) {
         return AccountDto.builder()
                 .계좌번호(wallet.getAddress())
-                .상품명("가상화폐")
+                .구분("가상화폐")
+                .상품명(wallet.getCoinType().toString())
                 .잔액가상화폐(balance)
                 .통화(wallet.getCoinType().toString())
                 .build();
