@@ -20,13 +20,5 @@ public class CryptoWalletController {
     @Autowired
     private CryptoWalletService cryptoWalletService;
 
-    @PostMapping("/create")
-    public ResponseEntity<Object> createCryptoWallet(@ApiIgnore @AuthenticationPrincipal User user){
-
-        cryptoWalletService.createCryptoWallet(user.getUserId());
-        HttpResult res = HttpResult.getSuccess();
-
-        return ResponseEntity.status(res.getStatus()).body(res);
-    }
 
 }

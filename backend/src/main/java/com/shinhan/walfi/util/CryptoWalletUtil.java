@@ -2,6 +2,7 @@ package com.shinhan.walfi.util;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.response.EthGetBalance;
@@ -11,6 +12,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 
 @Slf4j
+@Component
 @RequiredArgsConstructor
 public class CryptoWalletUtil {
 
