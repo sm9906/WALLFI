@@ -2,7 +2,6 @@ package com.shinhan.walfi.dto.banking;
 
 import com.shinhan.walfi.domain.banking.Account;
 import com.shinhan.walfi.domain.banking.CryptoWallet;
-import com.shinhan.walfi.util.CryptoWalletUtil;
 import lombok.Builder;
 import lombok.Getter;
 

@@ -10,16 +10,13 @@ import com.shinhan.walfi.exception.AccountException;
 import com.shinhan.walfi.exception.UserErrorCode;
 import com.shinhan.walfi.exception.UserException;
 import com.shinhan.walfi.repository.UserRepository;
-import com.shinhan.walfi.repository.banking.AccountRepository;
 import com.shinhan.walfi.repository.banking.CryptoWalletRepository;
-import com.shinhan.walfi.util.AccountUtil;
-import com.shinhan.walfi.util.CryptoWalletUtil;
+import com.shinhan.walfi.util.CryptoUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,7 +30,7 @@ public class AccountServiceImpl implements AccountService{
 
     private final CryptoWalletRepository cryptoWalletRepository;
 
-    private final CryptoWalletUtil cryptoWalletUtil;
+    private final CryptoUtil cryptoUtil;
 
     /**
      * 유저와 연관된 계좌들을 조회 하는 기능
@@ -68,12 +65,12 @@ public class AccountServiceImpl implements AccountService{
         List<CryptoWallet> cryptoWallets = cryptoWalletRepository.findCryptoWallets(user);
 
         List<AccountDto> cryptoAccountDtos = cryptoWallets.stream()
-                .map(wallet -> AccountDto.cryptoWalletToAccountDto(wallet, cryptoWalletUtil.checkBalance(wallet.getAddress())))
+                .map(wallet -> AccountDto.cryptoWalletToAccountDto(wallet, cryptoUtil.checkBalance(wallet.getAddress())))
                 .collect(Collectors.toList());
 
         accountDtoList.addAll(cryptoAccountDtos);
 
-        String balance = cryptoWalletUtil.checkBalance("0x036f648cFf81D850fFEF601FE01A3041951d94F3");
+        String balance = cryptoUtil.checkBalance("0x036f648cFf81D850fFEF601FE01A3041951d94F3");
         log.info("=== 이더잔액: {} ===", balance);
 
         AccountResDto accountResDto = AccountResDto.getAccountResDto(userId, accountDtoList);

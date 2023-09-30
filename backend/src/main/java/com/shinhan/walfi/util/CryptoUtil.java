@@ -14,7 +14,7 @@ import java.math.BigInteger;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class CryptoWalletUtil {
+public class CryptoUtil {
 
     private final Web3j web3j;
 

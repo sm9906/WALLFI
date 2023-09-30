@@ -9,13 +9,11 @@ import com.shinhan.walfi.exception.UserException;
 import com.shinhan.walfi.repository.UserRepository;
 import com.shinhan.walfi.repository.banking.CryptoWalletRepository;
 import com.shinhan.walfi.repository.game.UserGameInfoRepository;
-import com.shinhan.walfi.util.CryptoWalletUtil;
+import com.shinhan.walfi.util.CryptoUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.math.BigDecimal;
 
 import static com.shinhan.walfi.exception.UserErrorCode.NO_MATCHING_USER;
 
@@ -31,7 +29,7 @@ public class UserGameInfoServiceImpl implements UserGameInfoService{
 
     private final CryptoWalletRepository cryptoWalletRepository;
 
-    private final CryptoWalletUtil cryptoWalletUtil;
+    private final CryptoUtil cryptoUtil;
 
     /**
      * 유저의 게임 포인트, 게임 내 타이틀, 이더 잔액을 반환하는 기능
@@ -53,7 +51,7 @@ public class UserGameInfoServiceImpl implements UserGameInfoService{
         }
 
         CryptoWallet wallet = cryptoWalletRepository.findWallet(user, CoinType.SEPOLIA);
-        String ethBalance = cryptoWalletUtil.checkBalance(wallet.getAddress());
+        String ethBalance = cryptoUtil.checkBalance(wallet.getAddress());
 
         return  UserGameInfoDto.getUserGameInfoDto(findUserGameInfo, user.getName(), ethBalance);
 
