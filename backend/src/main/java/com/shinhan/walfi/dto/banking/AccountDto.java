@@ -4,6 +4,7 @@ import com.shinhan.walfi.domain.banking.Account;
 import com.shinhan.walfi.domain.banking.CryptoWallet;
 import lombok.Builder;
 import lombok.Getter;
+import org.bouncycastle.operator.KeyWrapper;
 
 import javax.persistence.Id;
 import java.math.BigDecimal;
@@ -42,8 +43,6 @@ public class AccountDto {
 
     private byte 자동해지여부;
 
-    private String 잔액가상화폐;
-
 
     /**
      * Account를 AccountDto로 변환하는 기능
@@ -76,13 +75,16 @@ public class AccountDto {
      * @param wallet, balance
      * @return AccountDto
      */
-    public static AccountDto cryptoWalletToAccountDto(CryptoWallet wallet, String  balance) {
+    public static AccountDto cryptoWalletToAccountDto(CryptoWallet wallet, String balance, String krwBalance) {
         return AccountDto.builder()
                 .계좌번호(wallet.getAddress())
                 .구분("가상화폐")
                 .상품명(wallet.getCoinType().toString())
-                .잔액가상화폐(balance)
-                .통화(wallet.getCoinType().toString())
+                .잔액통화별(Long.parseLong(balance))
+                .평가금액통화별(Long.parseLong(balance))
+                .잔액원화(Long.parseLong(krwBalance))
+                .평가금액원화(Long.parseLong(krwBalance))
+                .통화(wallet.getCoinType().getCoinSymbol().toString())
                 .build();
     }
 
