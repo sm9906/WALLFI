@@ -18,15 +18,14 @@ public class CryptoWalletUtil {
 
     private final Web3j web3j;
 
-    public BigDecimal checkBalance(String address) {
+    public String checkBalance(String address) {
 
-        BigDecimal balanceInEther = null;
+        String balanceInEther = null;
 
         try {
             EthGetBalance ethGetBalance = web3j.ethGetBalance(address, DefaultBlockParameterName.LATEST).send();
-            System.out.println("ethGetBalance = " + ethGetBalance);
             BigInteger balanceInWei = ethGetBalance.getBalance();
-            balanceInEther = Convert.fromWei(new BigDecimal(balanceInWei), Convert.Unit.ETHER);
+            balanceInEther = convertWeiToEth(balanceInWei);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -34,5 +33,9 @@ public class CryptoWalletUtil {
 
         log.info("=== 잔액 {} ===", balanceInEther);
         return balanceInEther;
+    }
+
+    public String convertWeiToEth(BigInteger wei) {
+        return Convert.fromWei(new BigDecimal(wei), Convert.Unit.ETHER).toPlainString();
     }
 }

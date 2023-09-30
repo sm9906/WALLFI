@@ -53,7 +53,7 @@ public class UserGameInfoServiceImpl implements UserGameInfoService{
         }
 
         CryptoWallet wallet = cryptoWalletRepository.findWallet(user, CoinType.SEPOLIA);
-        BigDecimal ethBalance = cryptoWalletUtil.checkBalance(wallet.getAddress());
+        String ethBalance = cryptoWalletUtil.checkBalance(wallet.getAddress());
 
         return  UserGameInfoDto.getUserGameInfoDto(findUserGameInfo, user.getName(), ethBalance);
 

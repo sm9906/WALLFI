@@ -73,8 +73,8 @@ public class AccountServiceImpl implements AccountService{
 
         accountDtoList.addAll(cryptoAccountDtos);
 
-        BigDecimal bigDecimal = cryptoWalletUtil.checkBalance("0x036f648cFf81D850fFEF601FE01A3041951d94F3");
-        log.info("잔액: {}", bigDecimal);
+        String balance = cryptoWalletUtil.checkBalance("0x036f648cFf81D850fFEF601FE01A3041951d94F3");
+        log.info("=== 이더잔액: {} ===", balance);
 
         AccountResDto accountResDto = AccountResDto.getAccountResDto(userId, accountDtoList);
 
