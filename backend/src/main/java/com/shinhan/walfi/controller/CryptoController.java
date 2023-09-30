@@ -21,7 +21,7 @@ public class CryptoController {
     private final CryptoService cryptoService;
 
     @GetMapping("/gas")
-    @ApiOperation(value = "대표 계좌로 사용자가 가진 실질 계좌들을 조회")
+    @ApiOperation(value = "송금시 필요한 가스비 조회")
     public ResponseEntity<HttpResult> getGasInfo() {
         GasResDto gasResDto = cryptoService.getGasFee();
 
