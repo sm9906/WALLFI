@@ -2,7 +2,6 @@ package com.shinhan.walfi.dto.banking;
 
 import com.shinhan.walfi.domain.banking.Account;
 import com.shinhan.walfi.domain.banking.CryptoWallet;
-import com.shinhan.walfi.util.CryptoWalletUtil;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -43,7 +42,7 @@ public class AccountDto {
 
     private byte 자동해지여부;
 
-    private BigDecimal 잔액가상화폐;
+    private String 잔액가상화폐;
 
 
     /**
@@ -77,7 +76,7 @@ public class AccountDto {
      * @param wallet, balance
      * @return AccountDto
      */
-    public static AccountDto cryptoWalletToAccountDto(CryptoWallet wallet, BigDecimal balance) {
+    public static AccountDto cryptoWalletToAccountDto(CryptoWallet wallet, String  balance) {
         return AccountDto.builder()
                 .계좌번호(wallet.getAddress())
                 .구분("가상화폐")

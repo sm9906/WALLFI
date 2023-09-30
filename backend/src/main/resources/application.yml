@@ -28,6 +28,8 @@ spring:
 ethereum:
   service:
     url: https://eth-sepolia.g.alchemy.com/v2/c2-H0YY16C5nDYa21bfu38rvmR-ilM36
+  api:
+    key: TN6YGB9WW6J9HNFDRH9GEMD3SMBTYI6ISY
 
 mybatis:
   type-aliases-package: com.shinhan.walfi.dao

@@ -18,7 +18,7 @@ public class UserGameInfoDto {
 
     private String status;
 
-    private BigDecimal 이더잔액;
+    private String 이더잔액;
     /**
      * userGameInfo 정보를 UserGameInfoDto로 변환하는 기능
      *
@@ -33,7 +33,7 @@ public class UserGameInfoDto {
                 .build();
     }
 
-    public static UserGameInfoDto getUserGameInfoDto(UserGameInfo userGameInfo, String username, BigDecimal ethBalance) {
+    public static UserGameInfoDto getUserGameInfoDto(UserGameInfo userGameInfo, String username, String ethBalance) {
         return UserGameInfoDto.builder()
                 .userId(userGameInfo.getUserId())
                 .point(userGameInfo.getPoint())
