@@ -28,10 +28,10 @@ public class UserGameInfo {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "userGameInfo")
+    @OneToMany(mappedBy = "userGameInfo", fetch = LAZY)
     private List<Branch> branches = new ArrayList<>();
 
-    @OneToMany(mappedBy = "userGameInfo")
+    @OneToMany(mappedBy = "userGameInfo", fetch = LAZY)
     private List<GameCharacter> gameCharacters = new ArrayList<>();
 
 

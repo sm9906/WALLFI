@@ -25,6 +25,10 @@ spring:
     port: 6379
 
 
+ethereum:
+  service:
+    url: https://eth-sepolia.g.alchemy.com/v2/c2-H0YY16C5nDYa21bfu38rvmR-ilM36
+
 mybatis:
   type-aliases-package: com.shinhan.walfi.dao
   mapper-locations: classpath:mapper/*.xml
