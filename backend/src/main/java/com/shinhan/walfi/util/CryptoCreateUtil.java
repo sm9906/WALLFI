@@ -33,8 +33,6 @@ public class CryptoCreateUtil {
 
     private final UserRepository userRepository;
 
-    private final CryptoCreateUtil cryptoCreateUtil;
-
     /**
      * 가상화폐 계좌 생성
      * @param userId
@@ -47,7 +45,7 @@ public class CryptoCreateUtil {
         Map<String, Object> map;
 
         // 계좌 생성
-        map = cryptoCreateUtil.createCredentials();
+        map = createCredentials();
 
         String jsonWalletString = (String) map.get("jsonWalletString");
         String encPwd = (String) map.get("encPwd");
