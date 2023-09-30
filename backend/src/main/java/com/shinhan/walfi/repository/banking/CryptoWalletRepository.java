@@ -3,6 +3,7 @@ package com.shinhan.walfi.repository.banking;
 
 import com.shinhan.walfi.domain.User;
 import com.shinhan.walfi.domain.banking.CryptoWallet;
+import com.shinhan.walfi.domain.enums.CoinType;
 import com.shinhan.walfi.domain.game.UserGameInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -29,4 +30,10 @@ public class CryptoWalletRepository {
         return wallets;
     }
 
+    public CryptoWallet findWallet(User user, CoinType coinType) {
+        return em.createQuery("select c from CryptoWallet c where user=:user and coinType=:coinType", CryptoWallet.class)
+                .setParameter("user", user)
+                .setParameter("coinType", coinType)
+                .getSingleResult();
+    }
 }
