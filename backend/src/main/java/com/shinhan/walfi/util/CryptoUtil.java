@@ -1,10 +1,14 @@
 package com.shinhan.walfi.util;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.shinhan.walfi.domain.banking.CryptoWallet;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.web3j.crypto.*;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.response.EthGetBalance;
@@ -22,9 +26,12 @@ import java.util.Map;
 public class CryptoUtil {
 
     @Value("${ethereum.api.key}")
-    private String apiKey;
+    private String gasApiKey;
 
     private final Web3j web3j;
+
+    private final CryptoSignUtil cryptoSignUtil;
+
 
     public String checkBalance(String address) {
 
@@ -43,15 +50,16 @@ public class CryptoUtil {
         return balanceInEther;
     }
 
+
     /**
      * eth 단위의 가스비 확인
      * @return
      */
     public String getGasFeeInEth() {
-        String api = apiKey;
+        String api = gasApiKey;
 
         WebClient webClient = WebClient.create();
-        String url = String.format("https://api.etherscan.io/api?module=gastracker&action=gasoracle&apikey=%s", apiKey);
+        String url = String.format("https://api.etherscan.io/api?module=gastracker&action=gasoracle&apikey=%s", gasApiKey);
 
         Map<String, Object> response = webClient.get()
                 .uri(url)
@@ -114,6 +122,43 @@ public class CryptoUtil {
 
     public String convertWeiToEth(BigInteger wei) {
         return Convert.fromWei(new BigDecimal(wei), Convert.Unit.ETHER).toPlainString();
+    }
+
+
+    /**
+     * 1. json_wallet에서 파일 읽고 encpwd와 password_key로 암호 복호화 <br>
+     * 2. 복호화한 암호와 json_wallet을 이용해 타원 키 쌍 복호화 <br>
+     * 3. 복호화 한 타원 키 쌍으로 Credentials 재생성
+     * @param cryptoWallet
+     * @return
+     */
+    public Credentials getCredential(CryptoWallet cryptoWallet) {
+        // DB에서 필요한 정보 가져오기
+        String jsonWalletString = cryptoWallet.getJsonWallet();
+        String encPwd = cryptoWallet.getEncpwd();  // DB에서 가져온 값
+        String passwordKey =cryptoWallet.getPasswordKey();  // DB에서 가져온 값
+
+        // JSON 문자열을 WalletFile 객체로 변환
+        ObjectMapper objectMapper = new ObjectMapper();
+        WalletFile walletFile = null;
+        Credentials credentials = null;
+        try {
+            walletFile = objectMapper.readValue(jsonWalletString, WalletFile.class);
+
+            // 암호화된 비밀번호 복호화
+            String password = cryptoSignUtil.decrypt(encPwd, passwordKey);
+
+            // Credentials 객체 생성
+            ECKeyPair ecKeyPair = Wallet.decrypt(password, walletFile);
+            credentials = Credentials.create(ecKeyPair);
+
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        } catch (CipherException e) {
+            throw new RuntimeException(e);
+        }
+
+        return credentials;
     }
 
 
