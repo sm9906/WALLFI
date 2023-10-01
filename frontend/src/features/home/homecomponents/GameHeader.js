@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
   coinImg: {
     resizeMode: "contain",
     height: "85%",
-    width: "30%",
+    width: "25%",
     marginLeft: "3%",
   },
   headerRight: {
