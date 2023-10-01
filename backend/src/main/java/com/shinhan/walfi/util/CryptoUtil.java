@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shinhan.walfi.domain.banking.CryptoWallet;
 import com.shinhan.walfi.domain.enums.CoinType;
+import com.shinhan.walfi.exception.TransferException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,6 +22,8 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
+
+import static com.shinhan.walfi.exception.TransferErrorCode.OVERDRAWN;
 
 @Slf4j
 @Component
@@ -177,6 +180,12 @@ public class CryptoUtil {
         // 송신자 계정 주소 가져오기
         String fromAccount = fromWallet.getAddress();
         Credentials fromCredential = getCredential(fromWallet);
+
+
+        BigDecimal balance = new BigDecimal(checkBalance(fromAccount));
+        if (balance.compareTo(sendingAmount) < 0) {
+            throw new TransferException(OVERDRAWN);
+        }
 
         try {
             fromAccount = Keys.toChecksumAddress(fromAccount);

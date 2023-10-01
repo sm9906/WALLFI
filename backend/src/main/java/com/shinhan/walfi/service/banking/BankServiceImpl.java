@@ -48,6 +48,7 @@ public class BankServiceImpl implements BankService {
             CryptoWallet toWallet = cryptoWalletRepository.findWallet(DEPOSIT_MAIN_ACCOUNT_NUMBER, CoinType.SEP);
             CryptoWallet fromWallet = cryptoWalletRepository.findWallet(WITHDRAWAL_MAIN_ACCOUNT_NUMBER, CoinType.SEP);
             cryptoUtil.sendEthTransaction(fromWallet, toWallet.getAddress(), transferDTO.get이체금액());
+
             return;
         }
 
