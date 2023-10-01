@@ -73,7 +73,7 @@ public class CryptoUtil {
             if (result != null) {
                 String safeGasPriceInGWei = (String) result.get("FastGasPrice");
                 log.info("=== gwei 가스비: {} ===", safeGasPriceInGWei);
-                BigInteger safeGasPriceInWei = convertGWeiToWei(safeGasPriceInGWei);
+                BigInteger safeGasPriceInWei = convertGWeiToWeiWithPrice(safeGasPriceInGWei);
                 log.info("=== wei 가스비: {} ===", safeGasPriceInWei);
                 safeGasPriceInEth = convertWeiToEth(new BigInteger(safeGasPriceInWei.toString()));
                 log.info("=== eth 가스비: {} ===", safeGasPriceInEth);
@@ -116,9 +116,10 @@ public class CryptoUtil {
         return String.valueOf(convertedPrice);
     }
 
-    public BigInteger convertGWeiToWei(String price) {
-        return new BigDecimal(price).multiply(BigDecimal.valueOf(21000)).multiply(BigDecimal.valueOf(1000000000)).toBigInteger();
+    public BigInteger convertGWeiToWeiWithPrice(String price) {
+        return  Convert.toWei(new BigDecimal(price).multiply(BigDecimal.valueOf(21000)), Convert.Unit.GWEI).toBigInteger();
     }
+
 
     public String convertWeiToEth(BigInteger wei) {
         return Convert.fromWei(new BigDecimal(wei), Convert.Unit.ETHER).toPlainString();
