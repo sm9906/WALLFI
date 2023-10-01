@@ -3,6 +3,7 @@ package com.shinhan.walfi.util;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shinhan.walfi.domain.banking.CryptoWallet;
+import com.shinhan.walfi.domain.enums.CoinType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,14 +12,21 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.web3j.crypto.*;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
+import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.methods.response.EthGetBalance;
+import org.web3j.protocol.core.methods.response.EthSendRawTransaction;
+import org.web3j.protocol.core.methods.response.EthSendTransaction;
+import org.web3j.utils.Bytes;
 import org.web3j.utils.Convert;
 import reactor.core.publisher.Mono;
 
+import javax.xml.bind.DatatypeConverter;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
+
+import static org.bouncycastle.asn1.crmf.SinglePubInfo.web;
 
 @Slf4j
 @Component
@@ -162,5 +170,47 @@ public class CryptoUtil {
         return credentials;
     }
 
+    /**
+     * 1. 이더 전송에는 평균 21000 가스가 소비됨
+     * 2. '1 가스당' 금액은 시세에 따라 변동 (maxFeePerGasInWei)
+     * @param fromCredential
+     * @param sendingAmount
+     */
+    public void sendTransaction(Credentials fromCredential, String toAccount, BigDecimal sendingAmount) {
+
+        // 송신자 계정 주소 가져오기
+        String fromAccount = fromCredential.getAddress();
+
+        try {
+            fromAccount = Keys.toChecksumAddress(fromAccount);
+            toAccount = Keys.toChecksumAddress(toAccount);
+
+            // TODO: 없으면 에러
+
+            BigInteger nonce =
+                    web3j.ethGetTransactionCount(fromAccount, DefaultBlockParameterName.LATEST).send().getTransactionCount();
+
+            BigInteger valueInWei =
+                    Convert.toWei(sendingAmount, Convert.Unit.ETHER).toBigInteger();
+
+            BigInteger maxFeePerGasInWei =
+                    Convert.toWei(new BigDecimal(getGasFeeInEth()), Convert.Unit.GWEI).toBigInteger();
+
+            RawTransaction rawTransaction =
+                    RawTransaction.createEtherTransaction(nonce, BigInteger.valueOf(21000), maxFeePerGasInWei, toAccount, valueInWei);
+
+            int chainId = CoinType.SEPOLIA.getChainId();
+            byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, chainId, fromCredential);
+
+            String hexValue= "0x" + DatatypeConverter.printHexBinary(signedMessage);
+
+            EthSendTransaction ethSendTransaction = web3j.ethSendRawTransaction(hexValue).send();
+
+            log.info("=== Transaction hash: {} ===", ethSendTransaction.getTransactionHash());
+
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+    }
 
 }
