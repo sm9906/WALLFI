@@ -4,11 +4,16 @@ import lombok.Getter;
 
 @Getter
 public enum CoinType {
-    ETHEREUM("ETH"),
-    KOREAN("KRW"),
-    SEPOLIA("SEP");
+    ETHEREUM("ETH", 1),
+    KOREAN("KRW", -1),
+    SEPOLIA("SEP", 11155111);
 
     final String coinSymbol;
 
-    CoinType(String coinSymbol) {this.coinSymbol = coinSymbol;}
+    final int chainId;
+
+    CoinType(String coinSymbol, int chainId) {
+        this.chainId = chainId;
+        this.coinSymbol = coinSymbol;
+    }
 }
