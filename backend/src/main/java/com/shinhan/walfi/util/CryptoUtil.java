@@ -63,7 +63,7 @@ public class CryptoUtil {
         if (response != null) {
             Map<String, Object> result = (Map<String, Object>) response.get("result");
             if (result != null) {
-                String safeGasPriceInGWei = (String) result.get("SafeGasPrice");
+                String safeGasPriceInGWei = (String) result.get("FastGasPrice");
                 log.info("=== gwei 가스비: {} ===", safeGasPriceInGWei);
                 BigInteger safeGasPriceInWei = convertGWeiToWei(safeGasPriceInGWei);
                 log.info("=== wei 가스비: {} ===", safeGasPriceInWei);
