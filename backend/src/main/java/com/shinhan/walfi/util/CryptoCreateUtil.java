@@ -93,10 +93,7 @@ public class CryptoCreateUtil {
             //ECKeyPair 객체로 Credentials 객체 생성, 거래를 생성하거나 서명할 때 사용
             String address = Credentials.create(ecKeyPair).getAddress();
 
-            log.info("=== jsonWallet: {} ===", jsonWalletString);
-            log.info("=== encPwd: {} ===", encPwd);
             // 암호화하지 않은 비밀번호
-            log.info("=== passwordKey: {} ===", password);
 
             map.put("jsonWalletString", jsonWalletString);
             map.put("encPwd", encPwd);

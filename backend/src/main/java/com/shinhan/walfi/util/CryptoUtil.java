@@ -12,21 +12,15 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.web3j.crypto.*;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
-import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.methods.response.EthGetBalance;
-import org.web3j.protocol.core.methods.response.EthSendRawTransaction;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
-import org.web3j.utils.Bytes;
 import org.web3j.utils.Convert;
-import reactor.core.publisher.Mono;
 
 import javax.xml.bind.DatatypeConverter;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
-
-import static org.bouncycastle.asn1.crmf.SinglePubInfo.web;
 
 @Slf4j
 @Component
@@ -80,11 +74,11 @@ public class CryptoUtil {
             Map<String, Object> result = (Map<String, Object>) response.get("result");
             if (result != null) {
                 String safeGasPriceInGWei = (String) result.get("FastGasPrice");
-                log.info("=== gwei 가스비: {} ===", safeGasPriceInGWei);
+//                log.info("=== gwei 가스비: {} ===", safeGasPriceInGWei);
                 BigInteger safeGasPriceInWei = convertGWeiToWeiWithPrice(safeGasPriceInGWei);
-                log.info("=== wei 가스비: {} ===", safeGasPriceInWei);
+//                log.info("=== wei 가스비: {} ===", safeGasPriceInWei);
                 safeGasPriceInEth = convertWeiToEth(new BigInteger(safeGasPriceInWei.toString()));
-                log.info("=== eth 가스비: {} ===", safeGasPriceInEth);
+//                log.info("=== eth 가스비: {} ===", safeGasPriceInEth);
             }
         }
 
@@ -173,13 +167,16 @@ public class CryptoUtil {
     /**
      * 1. 이더 전송에는 평균 21000 가스가 소비됨
      * 2. '1 가스당' 금액은 시세에 따라 변동 (maxFeePerGasInWei)
-     * @param fromCredential
+     *
+     * @param fromWallet
      * @param sendingAmount
+     * @return
      */
-    public void sendTransaction(Credentials fromCredential, String toAccount, BigDecimal sendingAmount) {
+    public String sendEthTransaction(CryptoWallet fromWallet, String toAccount, BigDecimal sendingAmount) {
 
         // 송신자 계정 주소 가져오기
-        String fromAccount = fromCredential.getAddress();
+        String fromAccount = fromWallet.getAddress();
+        Credentials fromCredential = getCredential(fromWallet);
 
         try {
             fromAccount = Keys.toChecksumAddress(fromAccount);
@@ -208,9 +205,12 @@ public class CryptoUtil {
 
             log.info("=== Transaction hash: {} ===", ethSendTransaction.getTransactionHash());
 
+            return ethSendTransaction.getTransactionHash();
         } catch(Exception e){
             e.printStackTrace();
         }
+
+        return "FAIL";
     }
 
 }
