@@ -33,6 +33,8 @@ public class CryptoCreateUtil {
 
     private final UserRepository userRepository;
 
+    private final CryptoSignUtil cryptoSignUtil;
+
     /**
      * 가상화폐 계좌 생성
      * @param userId
@@ -53,12 +55,19 @@ public class CryptoCreateUtil {
         String address = (String) map.get("address");
 
         // 다른 코인 계좌 만들고 싶으면 여기서 변경...
-        CryptoWallet cryptoWallet = CryptoWallet.createCryptoWallet(jsonWalletString, encPwd, passwordKey, address, user, CoinType.SEPOLIA);
+        CryptoWallet cryptoWallet = CryptoWallet.createCryptoWallet(jsonWalletString, encPwd, passwordKey, address, user, CoinType.SEP);
         cryptoWalletRepository.save(cryptoWallet);
-        log.info("=== {} 코인에 대한 {} 계좌 생성", CoinType.SEPOLIA, address);
+        log.info("=== {} 코인에 대한 {} 계좌 생성", CoinType.SEP, address);
 
     }
 
+    /**
+     * 1. 임의의 비밀번호 생성 <br>
+     * 2. 비밀번호와 타원 곡선 암호화 쌍으로 json_wallet 파일 생성 <br>
+     * 3. 잠금 키로 비밀번호 암호화 <br>
+     * 4. 암호화 한 비밀번호, 잠금키, json_wallet 저장 <br>
+     * @return
+     */
     private Map<String, Object> createCredentials() {
         Map<String, Object> map = new HashMap<>();
         try {
@@ -72,10 +81,10 @@ public class CryptoCreateUtil {
             WalletFile walletFile = Wallet.createStandard(password, ecKeyPair);
 
             // 비밀번호 안호화하는데 사용하는 키
-            String passwordKey = getSecretKey();
+            String passwordKey = cryptoSignUtil.getSecretKey();
 
-            // 비밀번호 암호화
-            String encPwd = encrypt(password, passwordKey);
+            // 비밀번호 암호화 (위에서 생성한 password를 passwordKey로 암호화)
+            String encPwd = cryptoSignUtil.encrypt(password, passwordKey);
 
             ObjectMapper objectMapper = new ObjectMapper();
 
@@ -84,9 +93,7 @@ public class CryptoCreateUtil {
             //ECKeyPair 객체로 Credentials 객체 생성, 거래를 생성하거나 서명할 때 사용
             String address = Credentials.create(ecKeyPair).getAddress();
 
-            log.info("=== jsonWallet: {} ===", jsonWalletString);
-            log.info("=== encPwd: {} ===", encPwd);
-            log.info("=== passwordKey: {} ===", password);
+            // 암호화하지 않은 비밀번호
 
             map.put("jsonWalletString", jsonWalletString);
             map.put("encPwd", encPwd);
@@ -104,25 +111,6 @@ public class CryptoCreateUtil {
 
     }
 
-    private String getSecretKey() throws NoSuchAlgorithmException {
-        KeyGenerator keyGen = KeyGenerator.getInstance("AES");
-        keyGen.init(128); // for example
-        SecretKey secretKey = keyGen.generateKey();
-        return Base64.getEncoder().encodeToString(secretKey.getEncoded());
-    }
 
-    private String encrypt(String strToEncrypt, String secret) {
-        try {
-            byte[] decodedKey = Base64.getDecoder().decode(secret);
-            SecretKeySpec secretKey = new SecretKeySpec(decodedKey, 0, decodedKey.length, "AES");
-
-            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
-            cipher.init(Cipher.ENCRYPT_MODE, secretKey);
-            return Base64.getEncoder().encodeToString(cipher.doFinal(strToEncrypt.getBytes("UTF-8")));
-        } catch (Exception e) {
-            System.out.println("Error while encrypting: " + e.toString());
-        }
-        return null;
-    }
 }
 

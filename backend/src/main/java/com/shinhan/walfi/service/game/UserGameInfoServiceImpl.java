@@ -50,7 +50,7 @@ public class UserGameInfoServiceImpl implements UserGameInfoService{
             throw new UserException(NO_MATCHING_USER);
         }
 
-        CryptoWallet wallet = cryptoWalletRepository.findWallet(user, CoinType.SEPOLIA);
+        CryptoWallet wallet = cryptoWalletRepository.findWallet(user.get대표계좌(), CoinType.SEP);
         String ethBalance = cryptoUtil.checkBalance(wallet.getAddress());
 
         return  UserGameInfoDto.getUserGameInfoDto(findUserGameInfo, user.getName(), ethBalance);

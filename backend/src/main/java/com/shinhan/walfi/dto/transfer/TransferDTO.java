@@ -3,6 +3,8 @@ package com.shinhan.walfi.dto.transfer;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.math.BigDecimal;
+
 
 @Getter
 @ToString
@@ -12,7 +14,7 @@ public class TransferDTO {
 
     private String 입금은행코드;
 
-    private long 이체금액;
+    private BigDecimal 이체금액;
 
     private String 통화코드;
 

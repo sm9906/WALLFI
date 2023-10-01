@@ -30,10 +30,11 @@ public class CryptoWalletRepository {
         return wallets;
     }
 
-    public CryptoWallet findWallet(User user, CoinType coinType) {
-        return em.createQuery("select c from CryptoWallet c where user=:user and coinType=:coinType", CryptoWallet.class)
-                .setParameter("user", user)
+    public CryptoWallet findWallet(String accountNum, CoinType coinType) {
+        return em.createQuery("select c from CryptoWallet c where c.user.대표계좌=:accountNum and coinType=:coinType", CryptoWallet.class)
+                .setParameter("accountNum", accountNum)
                 .setParameter("coinType", coinType)
                 .getSingleResult();
     }
+
 }

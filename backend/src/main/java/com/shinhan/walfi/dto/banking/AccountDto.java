@@ -84,7 +84,7 @@ public class AccountDto {
                 .평가금액통화별(Long.parseLong(balance))
                 .잔액원화(Long.parseLong(krwBalance))
                 .평가금액원화(Long.parseLong(krwBalance))
-                .통화(wallet.getCoinType().getCoinSymbol().toString())
+                .통화(wallet.getCoinType().toString())
                 .build();
     }
 
