@@ -55,9 +55,9 @@ public class CryptoCreateUtil {
         String address = (String) map.get("address");
 
         // 다른 코인 계좌 만들고 싶으면 여기서 변경...
-        CryptoWallet cryptoWallet = CryptoWallet.createCryptoWallet(jsonWalletString, encPwd, passwordKey, address, user, CoinType.SEPOLIA);
+        CryptoWallet cryptoWallet = CryptoWallet.createCryptoWallet(jsonWalletString, encPwd, passwordKey, address, user, CoinType.SEP);
         cryptoWalletRepository.save(cryptoWallet);
-        log.info("=== {} 코인에 대한 {} 계좌 생성", CoinType.SEPOLIA, address);
+        log.info("=== {} 코인에 대한 {} 계좌 생성", CoinType.SEP, address);
 
     }
 

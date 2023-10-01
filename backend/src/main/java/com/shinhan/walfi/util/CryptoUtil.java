@@ -196,7 +196,7 @@ public class CryptoUtil {
             RawTransaction rawTransaction =
                     RawTransaction.createEtherTransaction(nonce, BigInteger.valueOf(21000), maxFeePerGasInWei, toAccount, valueInWei);
 
-            int chainId = CoinType.SEPOLIA.getChainId();
+            int chainId = CoinType.SEP.getChainId();
             byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, chainId, fromCredential);
 
             String hexValue= "0x" + DatatypeConverter.printHexBinary(signedMessage);
