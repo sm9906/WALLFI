@@ -31,7 +31,7 @@ public class CryptoWallet {
     private CoinType coinType;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "userId")
+    @JoinColumn(name = "`대표계좌`", referencedColumnName = "`대표계좌`")
     private User user;
 
 
