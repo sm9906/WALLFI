@@ -15,14 +15,13 @@ import { RFPercentage } from 'react-native-responsive-fontsize';
 import { useFocusEffect } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 
+import { Audio } from 'expo-av';
+import { DJ, PlayMusic, StopMusic } from '../homeSlice.js';
 import { getMainCharacter, updateCharacter, getAnimalDeco } from '../homeSlice.js';
 
 import { globalStyles } from '../homestyles/global.js';
 import { images } from '../../../common/imgDict.js';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../../common/ScreenSize.js';
-
-import { Audio } from 'expo-av';
-import { DJ, PlayMusic, StopMusic } from '../homeSlice.js';
 
 import GameHeader from '../homecomponents/GameHeader.js';
 // 상태바 겹침현상을 없애려면 react-native에서 StatusBar를 import 해줘야함

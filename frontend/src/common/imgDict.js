@@ -71,6 +71,7 @@ import closet from '../assets/game/button/closet.png'
 
 import coinIcon from "../assets/game/icon/coin.png";
 import trophyIcon from "../assets/game/icon/trophy.png";
+import ethereum from '../assets/game/icon/ethereum.png'
 import musiconIcon from "../assets/game/icon/musicon.png";
 import musicoffIcon from "../assets/game/icon/musicoff.png";
 
@@ -219,7 +220,8 @@ export const images = {
     coin: coinIcon,
     trophy: trophyIcon,
     musicon: musiconIcon,
-    musicoff: musicoffIcon
+    musicoff: musicoffIcon,
+    ethereum : ethereum
   },
 
   marketSource: {

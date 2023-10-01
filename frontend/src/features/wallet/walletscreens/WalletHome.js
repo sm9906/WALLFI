@@ -27,31 +27,32 @@ export default function WalletHome({navigation}) {
 
   useFocusEffect(
     React.useCallback(()=>{
-      getData()
+      // getData()
     },[])
   )
 
-  const getData = async() => {
-    dispatch(DeleteMusic());
-    try {
-      // console.log('?')
-      await dispatch(getExchangeRate());
-      const response = await dispatch(getAccounts(mainAccount));
-      setCards(response.payload);
-    } catch (err) {
-      console.log('walletscreens/WalletLoading.js',err);
-    }
-  }
+  // const getData = async() => {
+  //   dispatch(DeleteMusic());
+  //   try {
+  //     // console.log('?')
+  //     await dispatch(getExchangeRate());
+  //     const response = await dispatch(getAccounts(mainAccount));
+  //     setCards(response.payload);
+  //   } catch (err) {
+  //     console.log('walletscreens/WalletLoading.js',err);
+  //   }
+  // }
   
   return (
     <>
-    {cards&&<View style={Background.background}>
+    {/* {cards&&<View style={Background.background}> */}
+    {<View style={Background.background}>
       <View style={{height:SCREEN_HEIGHT*0.25}}>
-        <ScrollView pagingEnabled showsHorizontalScrollIndicator={false} horizontal={true} style={{marginHorizontal:SCREEN_WIDTH*0.05}}>
+        {/* <ScrollView pagingEnabled showsHorizontalScrollIndicator={false} horizontal={true} style={{marginHorizontal:SCREEN_WIDTH*0.05}}>
           {cards&&cards.map((card, index)=>{
               return(<CardItem key={index} data={card} />)
           })}
-        </ScrollView>
+        </ScrollView> */}
       </View>
       <View style={styles.buttons}>
         <TouchableOpacity style={styles.button} onPress={()=>navigation.navigate('MakeAccount')}>
