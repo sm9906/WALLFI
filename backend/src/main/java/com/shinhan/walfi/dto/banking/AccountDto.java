@@ -21,9 +21,9 @@ public class AccountDto {
 
     private String 상품명;
 
-    private long 잔액통화별;
+    private String 잔액통화별;
 
-    private long 평가금액통화별;
+    private String 평가금액통화별;
 
     private Date 신규일;
 
@@ -37,9 +37,9 @@ public class AccountDto {
 
     private String 과세;
 
-    private long 잔액원화;
+    private String 잔액원화;
 
-    private long 평가금액원화;
+    private String 평가금액원화;
 
     private byte 자동해지여부;
 
@@ -55,16 +55,16 @@ public class AccountDto {
                 .계좌번호(account.get계좌번호())
                 .구분(account.get구분())
                 .상품명(account.get상품명())
-                .잔액통화별(account.get잔액통화별())
-                .평가금액통화별(account.get평가금액통화별())
+                .잔액통화별(String.valueOf(account.get잔액통화별()))
+                .평가금액통화별(String.valueOf(account.get평가금액통화별()))
                 .신규일(account.get신규일())
                 .만기일(account.get만기일())
                 .관리점명(account.get관리점명())
                 .금리수익률(account.get금리수익률())
                 .통화(account.get통화())
                 .과세(account.get과세())
-                .잔액원화(account.get잔액원화())
-                .평가금액원화(account.get평가금액원화())
+                .잔액원화(String.valueOf(account.get잔액원화()))
+                .평가금액원화(String.valueOf(account.get평가금액원화()))
                 .자동해지여부(account.get자동해지여부())
                 .build();
     }
@@ -80,10 +80,10 @@ public class AccountDto {
                 .계좌번호(wallet.getAddress())
                 .구분("가상화폐")
                 .상품명(wallet.getCoinType().toString())
-                .잔액통화별(Long.parseLong(balance))
-                .평가금액통화별(Long.parseLong(balance))
-                .잔액원화(Long.parseLong(krwBalance))
-                .평가금액원화(Long.parseLong(krwBalance))
+                .잔액통화별(balance)
+                .평가금액통화별(balance)
+                .잔액원화(krwBalance)
+                .평가금액원화(krwBalance)
                 .통화(wallet.getCoinType().toString())
                 .build();
     }
