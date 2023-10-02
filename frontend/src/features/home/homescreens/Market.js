@@ -39,6 +39,7 @@ export default function Market({ navigation }) {
   const [modalVisible1, setModalVisible1] = useState(false);
   const [modalVisible2, setModalVisible2] = useState(false);
   const [modalVisible3, setModalVisible3] = useState(false);
+  const [modalVisible4, setModalVisible4] = useState(false);
   const [selectedCharacter, setSelectedCharacter] = useState('');
   const [tenCharacterList, setTenCharacterList] = useState([]);
   const [selectedColor, setSelectedColor] = useState('');
@@ -115,6 +116,15 @@ export default function Market({ navigation }) {
           >
             <Text style={styles.btnText}>🎨 동물 색상 뽑기</Text>
           </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => setSelectedBtn(3)}
+            style={[
+              styles.btnStyle,
+              { backgroundColor: selectedBtn === 3 ? "#138383" : "#00B1B1" },
+            ]}
+          >
+            <Text style={styles.btnText}>🎁 치장 아이템 뽑기</Text>
+          </TouchableOpacity>
         </View>
         {/* 컨텐츠 렌더링 */}
         <RenderContent
@@ -126,6 +136,8 @@ export default function Market({ navigation }) {
           setModalVisible2={setModalVisible2}
           modalVisible3={modalVisible3}
           setModalVisible3={setModalVisible3}
+          modalVisible4={modalVisible4}
+          setModalVisible4={setModalVisible4}
           selectedCharacter={selectedCharacter}
           setSelectedCharacter={setSelectedCharacter}
           tenCharacterList={tenCharacterList}
@@ -205,6 +217,21 @@ function RenderContent(props) {
       console.log("color", err);
     }
   };
+
+  // 치장아이템 뽑기 함수
+  const randomItem = async () => {
+    try {
+      if (userInfo.point < 1000) {
+        Alert.alert("경고", "포인트가 부족합니다!", [
+          { text: "확인", onPress: () => {}, style: "default" },
+        ]);
+      } else {
+        dispatch(updatePoint({ point: -1000 }));
+      }
+    } catch (err) {
+      console.log("item", err);
+    }
+  }
 
   // 동물 알 뽑기 버튼을 눌렀을 때
   if (props.selectedBtn === 1) {
@@ -291,6 +318,46 @@ function RenderContent(props) {
             >
               <Image source={images.gameIcon.coin} style={styles.coinIcon} />
               <Text style={styles.coinText}>500</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+    );
+  }
+
+  // 치장 아이템 뽑기 버튼을 눌렀을 때
+  if (props.selectedBtn === 3) {
+    return (
+      <View style={styles.marketContent}>
+        <View
+          style={{
+            flex: 3.5,
+            width: "100%",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Image
+            source={images.marketSource.color}
+            style={{
+              resizeMode: "contain",
+              height: "120%",
+              width: "100%",
+              marginBottom: "10%",
+            }}
+          />
+        </View>
+        <View style={styles.bottom}>
+          <View style={[styles.bottomItems, { flex: 0.45 }]}>
+            <Text style={{ fontSize: 16, fontWeight: "bold" }}>🎁 X 1</Text>
+            <TouchableOpacity
+              style={styles.puchaseBtn}
+              onPress={() => {
+                randomColor();
+              }}
+            >
+              <Image source={images.gameIcon.coin} style={styles.coinIcon} />
+              <Text style={styles.coinText}>1,000</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -491,7 +558,7 @@ function Color(props) {
 const styles = StyleSheet.create({
   buttonBox: {
     flex: 1.5,
-    width: "85%",
+    width: "90%",
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
@@ -499,7 +566,7 @@ const styles = StyleSheet.create({
   btnStyle: {
     flex: 1,
     height: "30%",
-    marginHorizontal: "5%",
+    marginHorizontal: "1%",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
@@ -507,7 +574,7 @@ const styles = StyleSheet.create({
     borderColor: "#007272",
   },
   btnText: {
-    fontSize: 15,
+    fontSize: 12,
     fontWeight: "bold",
     color: "white",
     textShadowColor: "#0E6F6F",

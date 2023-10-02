@@ -80,12 +80,14 @@ const itemGroup = StyleSheet.create({
     flex: 1,
     height: '70%',
     backgroundColor: 'white',
-    marginHorizontal: '5%'
+    marginHorizontal: '5%',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   itemImg: {
     resizeMode: 'contain', 
-    width: '100%', 
-    height: '100%' 
+    width: '70%', 
+    height: '70%' 
   },
   fontContainer: { 
     flex: 3,
