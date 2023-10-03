@@ -18,10 +18,10 @@ export default function LogIn({navigation}){
 
   const dispatch = useDispatch();
 
-  // const ID = useRef('');
-  // const password = useRef('');
-  const ID = useRef('ssafy');
-  const password = useRef('ssafy');
+  const ID = useRef('');
+  const password = useRef('');
+  // const ID = useRef('ssafy');
+  // const password = useRef('ssafy');
   const [isWrong, setIsWrong] = useState(false)
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const onPress = async()=>{
