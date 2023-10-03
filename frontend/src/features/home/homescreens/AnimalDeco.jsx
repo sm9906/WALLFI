@@ -111,21 +111,20 @@ export const AnimalDeco = ({ navigation }) => {
   };
 
   const handleConfirm = () => {
-  const decoData = 
-    selectAnimal.characterType = {
-      name: selectAccessory,
-      y: translateY._value,
-      x: translateX._value,
-      rotation: rotationValue,
-      size: scaleValue,
-  };
-
-  console.log(decoData)
+    const decoData = {
+      [selectAnimal.characterType]: {
+        name: selectAccessory,
+        y: translateY._value,
+        x: translateX._value,
+        rotation: rotationValue,
+        size: scaleValue,
+      }
+    };    
 
   dispatch(setAnimalDeco(decoData));
   // dispatch(sendAnimalDeco(decoData));
-
-  // navigation.navigate("GameHome");
+  // 데코 서버 생기면 활성화
+  navigation.navigate("GameHome");
 };
 
   return (

@@ -185,15 +185,15 @@ export const getAnimalDeco = createAsyncThunk('GET_ANIMAL_DECO', async (userId, 
 
   } catch (e) {
     console.log('치장/animalDeco 실패', e)
-    // return rejectWithValue(e.res);
+    // return rejectWithValue(e.res); // 데코 서버 생기면 아래거 지우고 활성화
     return {
       data: {
         animal: {
           SHIBA: {
             name: "ssafy_cap",
-            y: -54.630860805511475,
-            x: -50.43108367919922,
-            rotation: 90,
+            y: -49.947266697883606,
+            x: -47.696984589099884,
+            rotation: 0,
             size: 1.2000000029802322,
           },
           LION: {
@@ -254,51 +254,51 @@ const initialState = {
   mainCharacter: null,
   characters: null,
   userGameInfo: null,
-  animalDeco: null,
-  // animalDeco: {
-  //   SHIBA: {
-  //     name: "ssafy_cap",
-  //     y: 11,
-  //     x: 1,
-  //     rotation: 90,
-  //     size: 1.2,
-  //   },
-  // LION: {
-  //     name: "crown_cap",
-  //     y: 22,
-  //     x: 2,
-  //     rotation: 80,
-  //     size: 1.1,
-  //   },
-  // EAGLE: {
-  //     name: "ruby_necklace",
-  //     y: 33,
-  //     x: 3,
-  //     rotation: 70,
-  //     size: 1.0, // 1 이어도 상관없
-  //   },
-  // QUOKKA: {
-  //     name: "ssafy_cap",
-  //     y: 44,
-  //     x: 4,
-  //     rotation: 60,
-  //     size: 0.9,
-  //   },
-  // PANDA {
-  //     name: "crown_cap",
-  //     y: 55,
-  //     x: 5,
-  //     rotation: 50,
-  //     size: 0.8,
-  //   },
-  // TIGER: {
-  //     name: "ruby_necklace",
-  //     y: 66,
-  //     x: 6,
-  //     rotation: 40,
-  //     size: 0.7,
-  //   },
-  // },
+  // animalDeco: null, // 데코 서버 생기면 아래거 지우고 활성화
+  animalDeco: {
+    SHIBA: {
+    name: "ssafy_cap",
+    y: -49.947266697883606,
+    x: -47.696984589099884,
+    rotation: 0,
+    size: 1.2000000029802322,
+  },
+  LION: {
+    name: "crown_cap",
+    y: 44.35295867919922,
+    x: 5.424107074737549,
+    rotation: 360,
+    size: 3,
+  },
+  EAGLE: {
+    name: "ssafy_cap",
+    y: -79.34322757516588,
+    x: 29.05329304933548,
+    rotation: 311,
+    size: 1.800000011920929, // 1 이어도 상관없
+  },
+  QUOKKA: {
+    name: "ruby_necklace",
+    y: -6.104631543159485,
+    x: 5.712890565395355,
+    rotation: 0,
+    size: 1.4000000059604645,
+  },
+  PANDA: {
+    name: "crown_cap",
+    y: -41.13839244842529,
+    x: -72.00753259658813,
+    rotation: 39,
+    size: 1.2000000029802322,
+  },
+  TIGER: {
+    name: "ruby_necklace",
+    y: 15.401785850524902,
+    x: 18.57003402709961,
+    rotation: 151,
+    size: 1.2000000029802322,
+  },
+  },
   pressedAnimal: null,
   pressedAccessory: null,
   music: null,
