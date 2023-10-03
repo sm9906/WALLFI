@@ -1,5 +1,6 @@
 package com.shinhan.walfi.domain.game;
 
+import com.shinhan.walfi.domain.enums.ItemName;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,12 +11,13 @@ import static javax.persistence.FetchType.LAZY;
 @Entity
 @Getter
 @Setter
-public class Game_Item {
+public class GameItem {
 
     @Id
     private Long itemIdx;
 
-    private String itemName;
+    @Enumerated(EnumType.STRING)
+    private ItemName itemName;
 
     private int y;
 

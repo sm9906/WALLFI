@@ -1,9 +1,9 @@
 package com.shinhan.walfi.controller;
 
+import com.shinhan.walfi.dao.ItemDao;
 import com.shinhan.walfi.domain.HttpResult;
 import com.shinhan.walfi.domain.User;
-import com.shinhan.walfi.domain.game.Game_Item;
-import com.shinhan.walfi.dto.game.CharacterWithUserIdResDto;
+import com.shinhan.walfi.domain.game.GameItem;
 import com.shinhan.walfi.dto.game.ItemReqDto;
 import com.shinhan.walfi.dto.game.ItemResDto;
 import com.shinhan.walfi.service.game.DecoService;
@@ -28,7 +28,7 @@ public class DecoController {
     public ResponseEntity<HttpResult> getItemAndCharactor(@ApiIgnore @AuthenticationPrincipal User user) {
         String userId = user.getUserId();
 
-        ItemResDto itemResDto = decoService.getList(userId);
+        List<ItemResDto> itemResDto = decoService.getList(userId);
 
         HttpResult res;
 
@@ -56,7 +56,7 @@ public class DecoController {
     public ResponseEntity<HttpResult> createRandomItem(@ApiIgnore @AuthenticationPrincipal User user) {
         String userId = user.getUserId();
 
-        Game_Item item = decoService.create(userId);
+        ItemDao item = decoService.create(userId);
         HttpResult res;
 
         res = HttpResult.getSuccess();
@@ -70,7 +70,7 @@ public class DecoController {
     public ResponseEntity<HttpResult> getItemList(@ApiIgnore @AuthenticationPrincipal User user) {
         String userId = user.getUserId();
 
-        List<Game_Item> itemList = decoService.getItemList(userId);
+        List<GameItem> itemList = decoService.getItemList(userId);
         HttpResult res;
 
         res = HttpResult.getSuccess();

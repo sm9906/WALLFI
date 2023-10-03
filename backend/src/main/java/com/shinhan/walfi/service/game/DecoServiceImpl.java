@@ -1,30 +1,48 @@
 package com.shinhan.walfi.service.game;
 
-import com.shinhan.walfi.domain.game.Game_Item;
+import com.shinhan.walfi.dao.ItemDao;
+import com.shinhan.walfi.domain.enums.ItemName;
+import com.shinhan.walfi.domain.game.GameItem;
 import com.shinhan.walfi.dto.game.ItemReqDto;
 import com.shinhan.walfi.dto.game.ItemResDto;
+import com.shinhan.walfi.mapper.DecoMapper;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
+@RequiredArgsConstructor
 public class DecoServiceImpl implements DecoService{
 
+    private final DecoMapper decoMapper;
+
     @Override
-    public ItemResDto getList(String userId) {
-        return null;
+    public List<ItemResDto> getList(String userId) {
+        List<ItemResDto> items = decoMapper.getList(userId);
+        return items;
     }
 
     @Override
     public void update(ItemReqDto itemReqDto) {
-
+        decoMapper.update(itemReqDto);
     }
 
     @Override
-    public Game_Item create(String userId) {
-        return null;
+    public ItemDao create(String userId) {
+        ItemDao itemDao = new ItemDao();
+        itemDao.setItemName(ItemName.randomItemName());
+        itemDao.setUserId(userId);
+        int countSameItem = decoMapper.count(itemDao);
+        if(countSameItem == 0){
+            decoMapper.create(itemDao);
+        }
+        return itemDao;
     }
 
     @Override
-    public List<Game_Item> getItemList(String userId) {
-        return null;
+    public List<GameItem> getItemList(String userId) {
+        List<GameItem> items = decoMapper.getItemList(userId);
+        return items;
     }
 }

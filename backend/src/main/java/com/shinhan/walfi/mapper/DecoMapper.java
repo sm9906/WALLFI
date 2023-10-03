@@ -1,19 +1,24 @@
-package com.shinhan.walfi.service.game;
+package com.shinhan.walfi.mapper;
 
 import com.shinhan.walfi.dao.ItemDao;
 import com.shinhan.walfi.domain.game.GameItem;
 import com.shinhan.walfi.dto.game.ItemReqDto;
 import com.shinhan.walfi.dto.game.ItemResDto;
+import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
-public interface DecoService {
+@Mapper
+public interface DecoMapper {
 
     List<ItemResDto> getList(String userId);
 
     void update(ItemReqDto itemReqDto);
 
-    ItemDao create(String userId);
+    void create(ItemDao itemDao);
+
+    int count(ItemDao itemDao);
 
     List<GameItem> getItemList(String userId);
+
 }
