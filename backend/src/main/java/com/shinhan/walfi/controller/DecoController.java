@@ -41,7 +41,7 @@ public class DecoController {
 
     @PostMapping("/update")
     @ApiOperation(value = "사용자가 세팅한 동물의 치장정보를 저장")
-    public ResponseEntity<HttpResult> updateGameItem(@ApiIgnore @AuthenticationPrincipal User user, @RequestBody ItemReqDto itemReqDto) {
+    public ResponseEntity<HttpResult> updateGameItem(@RequestBody ItemReqDto itemReqDto) {
 
         decoService.update(itemReqDto);
 
