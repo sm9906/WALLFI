@@ -21,4 +21,6 @@ public interface DecoMapper {
 
     List<GameItem> getItemList(String userId);
 
+    void changeOwner(String userId, Long itemIdx);
+    // Todo : xml 구현
 }

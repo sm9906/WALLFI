@@ -4,6 +4,8 @@ import com.shinhan.walfi.domain.HttpResult;
 import com.shinhan.walfi.domain.User;
 import com.shinhan.walfi.domain.game.Goods;
 import com.shinhan.walfi.dto.game.BuyReqDto;
+import com.shinhan.walfi.dto.game.GoodsCharacterResDto;
+import com.shinhan.walfi.dto.game.GoodsItemResDto;
 import com.shinhan.walfi.dto.game.MarketReqDto;
 import com.shinhan.walfi.service.game.MarketService;
 import io.swagger.annotations.ApiOperation;
@@ -24,11 +26,22 @@ public class MarketController {
 
     private final MarketService marketService;
 
-    @GetMapping
+    @GetMapping("/item")
     @ApiOperation(value = "현재 거래소에서 거래 중인 상품들을 조회")
-    public ResponseEntity<HttpResult> getGoodsList() {
+    public ResponseEntity<HttpResult> getItemList() {
 
-        List<Goods> goodsList = marketService.getGoodsList();
+        List<GoodsItemResDto> goodsList = marketService.getItemList();
+
+        HttpResult res = HttpResult.getSuccess();
+        res.setData(goodsList);
+        return ResponseEntity.status(res.getStatus()).body(res);
+    }
+
+    @GetMapping("/character")
+    @ApiOperation(value = "현재 거래소에서 거래 중인 상품들을 조회")
+    public ResponseEntity<HttpResult> getCharacterList() {
+
+        List<GoodsCharacterResDto> goodsList = marketService.getCharacterList();
 
         HttpResult res = HttpResult.getSuccess();
         res.setData(goodsList);
@@ -49,7 +62,8 @@ public class MarketController {
     @ApiOperation(value = "사용자가 구매하고 싶은 상품을 구매")
     public ResponseEntity<HttpResult> getItemAndCharactor(@ApiIgnore @AuthenticationPrincipal User user, BuyReqDto buyReqDto) {
 
-        marketService.buy(buyReqDto);
+        String userId = user.getUserId();
+        marketService.buy(userId, buyReqDto);
         HttpResult res = HttpResult.getSuccess();
         return ResponseEntity.status(res.getStatus()).body(res);
     }

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shinhan.walfi.mapper.MarketMapper">
+
+    <resultMap id="Goods" type="com.shinhan.walfi.domain.game.Goods">
+        <result column="goods_idx" property="goodsIdx"></result>
+        <result column="goods_Type" property="goodsType"></result>
+        <result column="price" property="price"></result>
+        <result column="create_Time" property="createTime"></result>
+        <result column="character_idx" property="characterIdx"></result>
+        <result column="item_idx" property="itemIdx"></result>
+    </resultMap>
+
+    <select id="getList" resultMap="Goods">
+        SELECT *  FROM goods;
+    </select>
+
+
+</mapper>
