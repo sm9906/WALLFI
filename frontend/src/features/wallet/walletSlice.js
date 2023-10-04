@@ -114,7 +114,7 @@ export const postExchangeFOR = createAsyncThunk('POST_EXCHANGEFOR', async(data, 
 })
 
 const initialState = {
-  cards:null, // 월렛 들어갈 때 카드 컴포넌트 받아오면서 저장.
+  accounts:null, // 월렛 들어갈 때 카드 컴포넌트 받아오면서 저장.
   exchangeRates: null,
   ethereum: null,
 }
@@ -133,7 +133,7 @@ export const walletSlice = createSlice({
     })
     .addCase(getAccounts.fulfilled, (state,{payload}) => {
       state.ethereum = payload.ethereum;
-      state.cards = payload.accounts;
+      state.accounts = payload.accounts;
     })
   }
 })

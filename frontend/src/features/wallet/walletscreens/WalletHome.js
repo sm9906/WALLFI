@@ -22,12 +22,11 @@ import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../walletcomponents/ScreenSize";
 
 export default function WalletHome({navigation}) {
   const dispatch = useDispatch();
-  const {mainAccount} = useSelector(state=>state.auth)
-  const [cards, setCards] = useState();
-  const [accounts, setAccounts] = useState();
-  const [ethereum, setEthereum] = useState();
-  const [type, setType] = useState(false);
+  const {mainAccount} = useSelector(state=>state.auth);
+  const {accounts, ethereum}=useSelector(state=>state.wallet);
+  const [type, setType] = useState(true);
   const scrollViewRef = useRef(null);
+  const cards = type?accounts:ethereum;
 
   useFocusEffect(
     React.useCallback(()=>{
@@ -42,20 +41,14 @@ export default function WalletHome({navigation}) {
   const getData = async() => {
     dispatch(DeleteMusic());
     try {
-      // console.log('?')
       await dispatch(getExchangeRate());
-      const response = await dispatch(getAccounts(mainAccount));
-      setAccounts(response.payload['accounts']);
-      setEthereum(response.payload['ethereum']);
-      setType(!type)
+      await dispatch(getAccounts(mainAccount));
     } catch (err) {
       console.log('walletscreens/WalletLoading.js',err);
     }
   }
 
   const changeCard = () => {
-    const showCard = type? accounts:ethereum;
-    setCards(showCard);
     scrollViewRef.current?scrollViewRef.current.scrollTo({ x: 0, animated: false }):null;
   }
   

@@ -17,7 +17,6 @@ import {
   })
   navigation.addListener('beforeRemove', (e) => {
     if (e.data.action.type === 'GO_BACK') {
-      console.log('hdhd')
       e.preventDefault();
     }
   });

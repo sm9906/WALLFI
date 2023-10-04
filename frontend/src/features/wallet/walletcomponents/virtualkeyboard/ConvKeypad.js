@@ -6,6 +6,16 @@ import { RFPercentage } from 'react-native-responsive-fontsize';
 
 const convInput = ['+1만', '+5만', '+10만', '+100만', '전액'];
 
+
+export const EthereumConvPad = React.memo(function EthereumConvPad({addMoney}){
+  return(
+    <>
+     <VirtualKeyboard addMoney={addMoney} color='black' decimal={true}/>
+    </>
+  )
+})
+
+
 export const NoConvPad = React.memo(function NoConvPad({addMoney}){
   return(
     <>
