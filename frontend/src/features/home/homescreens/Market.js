@@ -390,6 +390,46 @@ function RenderContent(props) {
       </View>
     );
   }
+
+  // 치장 아이템 뽑기 버튼을 눌렀을 때
+  if (props.selectedBtn === 3) {
+    return (
+      <View style={styles.marketContent}>
+        <View
+          style={{
+            flex: 3.5,
+            width: "100%",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Image
+            source={images.marketSource.color}
+            style={{
+              resizeMode: "contain",
+              height: "120%",
+              width: "100%",
+              marginBottom: "10%",
+            }}
+          />
+        </View>
+        <View style={styles.bottom}>
+          <View style={[styles.bottomItems, { flex: 0.45 }]}>
+            <Text style={{ fontSize: 16, fontWeight: "bold" }}>🎁 X 1</Text>
+            <TouchableOpacity
+              style={styles.puchaseBtn}
+              onPress={() => {
+                randomColor();
+              }}
+            >
+              <Image source={images.gameIcon.coin} style={styles.coinIcon} />
+              <Text style={styles.coinText}>1,000</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+    );
+  }
 }
 
 // 동물 알 1개 뽑기 모달

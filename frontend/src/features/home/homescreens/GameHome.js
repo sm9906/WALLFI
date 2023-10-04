@@ -7,8 +7,7 @@ import {
   Image,
   ImageBackground,
   TouchableOpacity,
-  Alert,
-  Modal
+  Alert
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { RFPercentage } from 'react-native-responsive-fontsize';
@@ -42,8 +41,8 @@ export default function GameHome({ navigation }) {
       }
     }), [navigation]
   );
-
-  useFocusEffect(() => {
+  
+  useFocusEffect(()=>{
     dispatch(getMainCharacter());
   })
   return (
