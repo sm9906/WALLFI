@@ -7,6 +7,8 @@ import lombok.Setter;
 @Setter
 public class ItemReqDto {
 
+    private Long characterIdx;
+
     private Long itemIdx;
 
     private int y;
@@ -17,5 +19,4 @@ public class ItemReqDto {
 
     private double size;
 
-    private Long characterIdx;
 }

@@ -19,19 +19,8 @@ public class GameItem {
     @Enumerated(EnumType.STRING)
     private ItemName itemName;
 
-    private int y;
-
-    private int x;
-
-    private double rotation;
-
-    private double size;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_id")
     private UserGameInfo userGameInfo;
-
-    @OneToOne(fetch = LAZY)
-    @JoinColumn(name = "characterIdx")
-    private GameCharacter gameCharacter;
 }

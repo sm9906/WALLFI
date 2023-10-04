@@ -11,7 +11,7 @@ import java.util.List;
 @Mapper
 public interface DecoMapper {
 
-    List<ItemResDto> getList(String userId);
+    List<ItemResDto> getItemCharacter(String userId);
 
     void update(ItemReqDto itemReqDto);
 
@@ -22,5 +22,6 @@ public interface DecoMapper {
     List<GameItem> getItemList(String userId);
 
     void changeOwner(String userId, Long itemIdx);
-    // Todo : xml 구현
+    // Todo : xml 구현 필요
+
 }

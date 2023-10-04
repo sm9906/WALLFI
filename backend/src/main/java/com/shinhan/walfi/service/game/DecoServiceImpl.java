@@ -2,14 +2,21 @@ package com.shinhan.walfi.service.game;
 
 import com.shinhan.walfi.dao.ItemDao;
 import com.shinhan.walfi.domain.enums.ItemName;
+import com.shinhan.walfi.domain.game.GameCharacter;
 import com.shinhan.walfi.domain.game.GameItem;
+import com.shinhan.walfi.domain.game.UserGameInfo;
+import com.shinhan.walfi.dto.game.CharacterDto;
+import com.shinhan.walfi.dto.game.CharacterListResDto;
 import com.shinhan.walfi.dto.game.ItemReqDto;
 import com.shinhan.walfi.dto.game.ItemResDto;
 import com.shinhan.walfi.mapper.DecoMapper;
+import com.shinhan.walfi.repository.game.CharacterRepository;
+import com.shinhan.walfi.repository.game.UserGameInfoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -19,7 +26,7 @@ public class DecoServiceImpl implements DecoService{
 
     @Override
     public List<ItemResDto> getList(String userId) {
-        List<ItemResDto> items = decoMapper.getList(userId);
+        List<ItemResDto> items = decoMapper.getItemCharacter(userId);
         return items;
     }
 
