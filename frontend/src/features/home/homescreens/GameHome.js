@@ -25,8 +25,11 @@ import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../../common/ScreenSize.js';
 import GameHeader from '../homecomponents/GameHeader.js';
 // 상태바 겹침현상을 없애려면 react-native에서 StatusBar를 import 해줘야함
 
+import Animal from '../../fight/fightcomponents/Animal.jsx';
+import Accessory from '../homecomponents/accessory/Accessory.jsx';
+
 export default function GameHome({ navigation }) {
-  const dispatch = useDispatch(); 
+  const dispatch = useDispatch();
   // 이거 뒤로가기 버튼? 훅으로 따로 뺄거임 
   useEffect(() =>
     navigation.addListener('beforeRemove', (e) => {
@@ -41,9 +44,12 @@ export default function GameHome({ navigation }) {
       }
     }), [navigation]
   );
-  
-  useFocusEffect(()=>{
-    dispatch(getMainCharacter());
+
+  const userId = useSelector(state => state.auth.userId);
+
+  useFocusEffect(() => {
+    dispatch(getMainCharacter(userId));
+    // dispatch(getAnimalDeco(userId)); // 데코 서버 생기면 활성화
   })
   return (
     <View style={globalStyles.container}>
@@ -140,6 +146,9 @@ function Content(props) {
   const imageUrl = images.defaultCharacter[type][color];
   // 훈련
 
+  // 치장 아이템
+  const animalDeco = useSelector(state => state.home.animalDeco);
+
   useEffect(() => {
     if (nowAct) {
       setTimeout(() => {
@@ -203,26 +212,46 @@ function Content(props) {
         </TouchableOpacity>
       </View>
       <View style={styles.main}>
-        {nowAct !== '밥먹기' && nowAct !== '훈련하기' && <Image source={imageUrl}
-          style={{ width: '70%', height: '50%', resizeMode: 'contain' }}
-        />}
+        <View style={{ alignItems: 'center' }}>
+          {nowAct !== '밥먹기' && nowAct !== '훈련하기' && (
+            <>
+              <Animal aType={type} aColor={color} aSize={2} />
+              {animalDeco &&
+                <Accessory
+                  aType={animalDeco[type].name}
+                  aSize={animalDeco[type].size}
+                  rotation={animalDeco[type].rotation}
+                  aAbosulte="absolute"
+                  aMain={true}
+                  aXY={[animalDeco[type].x, animalDeco[type].y]}
+                />
+              }
+            </>
+          )}
+        </View>
+
         {nowAct === '밥먹기' && <Image source={images.eatCharacter[type]} style={actStyles.eating} />}
         {nowAct === '훈련하기' && <Image source={require('../../../assets/game/loading/LoadingImg.gif')} style={actStyles.eating} />}
-        <Text style={{
-          color: '#3B3B3B',
-          fontWeight: 'bold',
-          fontSize: RFPercentage(2),
-          margin: '5%',
-        }}>&lt;{userName}&gt;</Text>
-        <Text style={{
-          color: 'white',
-          fontSize: 18,
-          fontWeight: 'bold',
-          textShadowColor: 'black',
-          textShadowRadius: 2,
-          textShadowOffset: { width: 1, height: 2 },
-          elevation: 2,
-        }}>{timeText}</Text>
+        <View style={{
+          marginTop: "10%",
+          alignItems: "center"
+        }}>
+          <Text style={{
+            color: '#3B3B3B',
+            fontWeight: 'bold',
+            fontSize: RFPercentage(2),
+            margin: '5%',
+          }}>&lt;{userName}&gt;</Text>
+          <Text style={{
+            color: 'white',
+            fontSize: 18,
+            fontWeight: 'bold',
+            textShadowColor: 'black',
+            textShadowRadius: 2,
+            textShadowOffset: { width: 1, height: 2 },
+            elevation: 2,
+          }}>{timeText}</Text>
+        </View>
       </View>
       <View style={styles.sideBar}>
         <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate('ItemExchange')}>
@@ -233,10 +262,9 @@ function Content(props) {
           <Image source={images.btnSource.mission} style={styles.buttonContent} />
           <Text style={styles.btnText}>미션</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => {
-          dispatch(getAnimalDeco(userId));
-          props.navigation.navigate('GameAccessories');
-        }}>
+        <TouchableOpacity style={styles.button} onPress={() =>
+          props.navigation.navigate('GameAccessories')
+        }>
           <Image source={images.btnSource.closet} style={styles.buttonContent} />
           <Text style={styles.btnText}>악세서리</Text>
         </TouchableOpacity>
@@ -271,6 +299,7 @@ const actStyles = StyleSheet.create({
     marginLeft: '8%',
     width: SCREEN_WIDTH * 0.9,
     height: '50%',
+    marginBottom: "-10%"
   }
 })
 
@@ -315,6 +344,7 @@ const styles = StyleSheet.create({
     flex: 3,
     justifyContent: 'center',
     alignItems: 'center',
+    // backgroundColor: "red"
   },
   sideBar: {
     flex: 1,
@@ -327,6 +357,7 @@ const styles = StyleSheet.create({
     padding: '1%',
     justifyContent: 'center',
     alignItems: 'center',
+    zIndex: 1
   },
   button: {
     backgroundColor: 'rgba(65, 66, 69, 0.55)',
@@ -349,6 +380,7 @@ const styles = StyleSheet.create({
     flex: 1.5,
     flexDirection: 'row',
     alignItems: 'center',
+    zIndex: 1,
   },
   bottomBtn: {
     backgroundColor: '#6B6F89',

@@ -7,8 +7,6 @@ const Animal = ({ aType, aColor, aSize = 1, aPosition = 1, onPress }) => {
   const imageWidth = ScreenWidth * 0.2 * aSize;
   const imageHeight = ScreenHeight * 0.113 * aSize;
 
-  console.log(aType, aColor);
-
   return (
     <>
       {aType && aColor ? (
@@ -31,6 +29,7 @@ const Animal = ({ aType, aColor, aSize = 1, aPosition = 1, onPress }) => {
 const styles = StyleSheet.create({
   image: {
     resizeMode: "contain",
+    // position: "absolute",
     // backgroundColor: "yellow"
   },
 });

@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { 
-  StatusBar, 
-  StyleSheet, 
-  Text, 
-  View, 
-  Image, 
-  ImageBackground, 
-  TouchableOpacity, 
-  FlatList, 
+import {
+  StatusBar,
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  ImageBackground,
+  TouchableOpacity,
+  FlatList,
   Modal
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
@@ -21,17 +21,20 @@ import GameHeader from '../homecomponents/GameHeader.js';
 import ExpBar from '../homecomponents/exp/ExpBar.js';
 import PageHeader from '../homecomponents/PageHeader.js';
 
+import Animal from '../../fight/fightcomponents/Animal.jsx';
+import Accessory from '../homecomponents/accessory/Accessory.jsx';
+
 const type = {
-    EAGLE: '독수리',
-    LION: '사자',
-    PANDA: '판다',
-    QUOKKA: '쿼카',
-    SHIBA: '시바',
-    TIGER: '호랑이',
-    MOLLY: '몰리',
+  EAGLE: '독수리',
+  LION: '사자',
+  PANDA: '판다',
+  QUOKKA: '쿼카',
+  SHIBA: '시바',
+  TIGER: '호랑이',
+  MOLLY: '몰리',
 }
 
-export default function Collection({navigation}) {
+export default function Collection({ navigation }) {
 
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedCharacter, setSelectedCharacter] = useState(null);
@@ -41,32 +44,54 @@ export default function Collection({navigation}) {
   const numColumns = 2;
 
   // 유저의 캐릭터 목록 조회
+  const userId = useSelector(state => state.auth.userId);
   const characterList = useSelector(state => state.home.characters);
-  const characters = []
-  characterList.map((character) => {
-    characters.push({
-      id: character.characterIdx,
-      name: type[character.characterType],
-      imageUrl: images.defaultCharacter[character.characterType][character.color],
-      level: character.level,
-      exp: character.exp,
-      main: character.main
-    })
-  })
+  const characters = characterList.slice(0, 6).map((character) => ({
+    id: character.characterIdx,
+    name: type[character.characterType],
+    type: character.characterType,
+    color: character.color,
+    imageUrl: images.defaultCharacter[character.characterType][character.color],
+    level: character.level,
+    exp: character.exp,
+    main: character.main,
+  }));
 
-  const Item = ({item, width}) => (
+  const animalDeco = useSelector(state => state.home.animalDeco);
+
+  const Item = ({ item, width }) => (
     <TouchableOpacity
       style={[styles.gridStyle, { width: width }]}
       onPress={() => {
         setModalVisible(true);
-        setSelectedCharacter({...item});
+        setSelectedCharacter({ ...item });
       }}>
-      <View style={{ flex: 1, alignItems: 'center' }}>
-        <Image source={item.imageUrl} style={styles.gridItemStyle}/>    
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: "center" }}>
+        <Animal
+          aType={item.type}
+          aColor={item.color}
+          aSize={1.2}
+          onPress={() => {
+            setModalVisible(true);
+            setSelectedCharacter({ ...item });
+          }}
+        />
+        <Accessory
+          aType={animalDeco[item.type].name}
+          aSize={animalDeco[item.type].size * 0.6}
+          rotation={animalDeco[item.type].rotation}
+          aAbosulte="absolute"
+          aCollection={true}
+          aXY={[animalDeco[item.type].x, animalDeco[item.type].y]}
+          onPress={() => {
+            setModalVisible(true);
+            setSelectedCharacter({ ...item });
+          }}
+        />
       </View>
     </TouchableOpacity>
   )
-    
+
   return (
     <View style={globalStyles.container}>
       <ImageBackground source={images.Background.collection} style={[globalStyles.bgImg, { alignItems: 'center' }]}>
@@ -76,21 +101,23 @@ export default function Collection({navigation}) {
           transparent={true}
           visible={modalVisible}
         >
-          <DetailPage modalVisible={modalVisible} 
-            setModalVisible={setModalVisible} 
-            selectedCharacter={selectedCharacter} 
+          <DetailPage modalVisible={modalVisible}
+            setModalVisible={setModalVisible}
+            selectedCharacter={selectedCharacter}
             setSelectedCharacter={setSelectedCharacter}
+            userId={userId}
+            animalDeco={animalDeco}
           />
         </Modal>
-        <PageHeader navigation={navigation} color={'#DD4F00'} title={'동물도감'}/>
+        <PageHeader navigation={navigation} color={'#DD4F00'} title={'동물도감'} />
         <View style={{ flex: 6.5, width: '100%' }}>
-        <FlatList 
+          <FlatList
             data={characters}
             onLayout={e => setContainerWidth(e.nativeEvent.layout.width)}
-            renderItem={({item}) => <Item item={item} width={(containerWidth - margins) / numColumns}/>}
+            renderItem={({ item }) => <Item item={item} width={(containerWidth - margins) / numColumns} />}
             keyExtractor={item => item.id.toString()}
             columnWrapperStyle={{ justifyContent: 'flex-start' }}
-            numColumns={numColumns}/>
+            numColumns={numColumns} />
         </View>
       </ImageBackground>
       <StatusBar />
@@ -99,35 +126,44 @@ export default function Collection({navigation}) {
 }
 
 function DetailPage(props) {
+
   const dispatch = useDispatch();
   const setMain = () => {
-    dispatch(updateCharacter({act: '', characterIdx: props.selectedCharacter.id, statusType: 'isMain', value: 0}))
+    dispatch(updateCharacter({ act: '', characterIdx: props.selectedCharacter.id, statusType: 'isMain', userId: props.userId, value: 0 }))
   }
   return (
     <View style={[globalStyles.modalStyle, { backgroundColor: '#FBA728' }]}>
-        <View style={styles.modalBox}>
-            <View style={styles.modalContent}>
-                <Text style={{ fontSize: 25, fontWeight: 'bold' }}>{props.selectedCharacter.name}</Text>
-            </View>
-            <TouchableOpacity onPress={() => props.setModalVisible(false)} style={{ flex: 1 }}>
-                <Image source={images.btnSource.modalClose} style={{ resizeMode: 'contain', width: '70%' }} />
+      <View style={styles.modalBox}>
+        <View style={styles.modalContent}>
+          <Text style={{ fontSize: 25, fontWeight: 'bold' }}>{props.selectedCharacter.name}</Text>
+        </View>
+        <TouchableOpacity onPress={() => props.setModalVisible(false)} style={{ flex: 1 }}>
+          <Image source={images.btnSource.modalClose} style={{ resizeMode: 'contain', width: '70%' }} />
+        </TouchableOpacity>
+      </View>
+      <View style={styles.modalItems}>
+        <Image source={props.selectedCharacter.imageUrl} style={{ flex: 5, resizeMode: 'contain', overflow: 'hidden', marginTop: 15 }} />
+        <Accessory
+          aType={props.animalDeco[props.selectedCharacter.type].name}
+          aSize={props.animalDeco[props.selectedCharacter.type].size}
+          rotation={props.animalDeco[props.selectedCharacter.type].rotation}
+          aAbosulte="absolute"
+          aMain={true}
+          aXY={[props.animalDeco[props.selectedCharacter.type].x, props.animalDeco[props.selectedCharacter.type].y]}
+        />
+        {
+          props.selectedCharacter.main
+            ? <TouchableOpacity style={styles.mainCharacterBtn}>
+              <Text style={{ fontSize: 15, fontWeight: 'bold', color: 'white' }}>현재 대표동물</Text>
             </TouchableOpacity>
-        </View>
-        <View style={styles.modalItems}>
-            <Image source={props.selectedCharacter.imageUrl} style={{ resizeMode: 'contain', overflow: 'hidden', width: '100%', height: '50%' }}/>
-            {
-              props.selectedCharacter.main 
-                ? <TouchableOpacity style={styles.mainCharacterBtn}>
-                    <Text style={{ fontSize: 15, fontWeight: 'bold', color: 'white' }}>현재 대표동물</Text>
-                  </TouchableOpacity>
-                : <TouchableOpacity style={styles.mainCharacterBtn} onPress={()=>{ setMain(); props.setModalVisible(false);}}>
-                    <Text style={{ fontSize: 15, fontWeight: 'bold', color: 'white' }}>대표동물</Text>
-                  </TouchableOpacity>
-            }
-        </View>
-        <View style={styles.modalBottom}>        
-        <ExpBar ExpStyle={ExpStyle} exp={props.selectedCharacter.exp} level={props.selectedCharacter.level}/> 
-        </View>
+            : <TouchableOpacity style={styles.mainCharacterBtn} onPress={() => { setMain(); props.setModalVisible(false); }}>
+              <Text style={{ fontSize: 15, fontWeight: 'bold', color: 'white' }}>대표동물</Text>
+            </TouchableOpacity>
+        }
+      </View>
+      <View style={styles.modalBottom}>
+        <ExpBar ExpStyle={ExpStyle} exp={props.selectedCharacter.exp} level={props.selectedCharacter.level} />
+      </View>
     </View>
   )
 }
@@ -141,32 +177,32 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
     overflow: 'hidden',
   },
-  gridItemStyle: { 
-    resizeMode: 'contain', 
-    width: '60%', 
+  gridItemStyle: {
+    resizeMode: 'contain',
+    width: '60%',
     height: '100%',
   },
-  modalBox: { 
-    flex: 1, 
-    flexDirection: 'row', 
-    alignItems: 'center' 
+  modalBox: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center'
   },
-  modalContent: { 
-    flex: 6, 
-    alignItems: 'center', 
-    marginStart: '10%' 
+  modalContent: {
+    flex: 6,
+    alignItems: 'center',
+    marginStart: '10%'
   },
-  modalItems: { 
-    flex: 5, 
-    width: '100%', 
-    backgroundColor: '#FFF7DB', 
-    borderBottomColor: '#000000', 
+  modalItems: {
+    flex: 5,
+    width: '100%',
+    backgroundColor: '#FFF7DB',
+    borderBottomColor: '#000000',
     borderBottomWidth: 3,
     justifyContent: 'center',
     alignItems: 'center'
   },
   mainCharacterBtn: {
-    height: '18%',
+    flex: 1,
     width: '30%',
     backgroundColor: '#DD4F00',
     justifyContent: 'center',
@@ -176,10 +212,10 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: '#BE4400'
   },
-  modalBottom: { 
-    flex: 2, 
-    width: '100%', 
-    backgroundColor: '#FFF2BA', 
+  modalBottom: {
+    flex: 2,
+    width: '100%',
+    backgroundColor: '#FFF2BA',
     marginBottom: '10%',
     justifyContent: 'center',
     alignItems: 'center'
@@ -187,28 +223,28 @@ const styles = StyleSheet.create({
 })
 
 const ExpStyle = StyleSheet.create({
-  container:{
-    width:'80%',
+  container: {
+    width: '80%',
     height: "50%",
-    flexDirection:'row',
-    alignItems:'center',
-    justifyContent:'space-evenly'
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-evenly'
   },
-  LvTxt:{
-    color:'#FF5C00',
-    alignContent:'center',
-    fontWeight:'bold',
-    fontSize:RFPercentage(3)
+  LvTxt: {
+    color: '#FF5C00',
+    alignContent: 'center',
+    fontWeight: 'bold',
+    fontSize: RFPercentage(3)
   },
   barContainer: {
-      width: "60%",
-      height: "50%",
-      backgroundColor: "#929292",
-      borderRadius:5
+    width: "60%",
+    height: "50%",
+    backgroundColor: "#929292",
+    borderRadius: 5
   },
-  exp:{
-    backgroundColor:'#FF5C00',
-    height:'100%',
-    borderRadius:5
+  exp: {
+    backgroundColor: '#FF5C00',
+    height: '100%',
+    borderRadius: 5
   }
 })
