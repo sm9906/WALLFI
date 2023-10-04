@@ -22,9 +22,15 @@ export default function SendWho({route}){
 
 const SendMoney = (props) => {
   const navigation = useNavigation();
-  
   const [bank, setBank] = useState('신한');
   const [account, setAccount] = useState('');
+  const onPress = () => {
+    if(props.outAcc.ntnCode==='SEP'){
+      navigation.navigate('EthereumHow',{bank, account, outAcc:props.outAcc})
+    }else{
+    navigation.navigate('SendHow',{type:"송금", bank, account, outAcc:props.outAcc})
+    }
+  }
 
   return(
     <View style={{height:SCREEN_HEIGHT*0.7, justifyContent:'center', alignItems:'center'}}>
@@ -51,7 +57,7 @@ const SendMoney = (props) => {
             onChangeText={text => setAccount(text)}
           />
         </View>
-        <TouchableOpacity style={{...ButtonStyle.button, marginTop:'10%'}} onPress={()=>navigation.navigate('SendHow',{type:"송금", bank, account, outAcc:props.outAcc})}>
+        <TouchableOpacity style={{...ButtonStyle.button, marginTop:'10%'}} onPress={onPress}>
           <Text style={ButtonStyle.btnFont}>다음</Text>
         </TouchableOpacity>       
       </View>

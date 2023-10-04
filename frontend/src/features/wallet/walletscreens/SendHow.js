@@ -4,7 +4,7 @@ import ChangeForm from "../walletcomponents/ChangeForm";
 
 import { View, Text, StyleSheet } from 'react-native';
 import { RFPercentage } from "react-native-responsive-fontsize";
-import ConvPad from "../walletcomponents/virtualkeyboard/ConvKeypad";
+import ConvPad, { NoConvPad } from "../walletcomponents/virtualkeyboard/ConvKeypad";
 import VirtualKeyboard from "../walletcomponents/virtualkeyboard/VirtualKeypad";
 
 import { postSendMoney, postExchangeKRW, postExchangeFOR } from "../walletSlice";
@@ -40,7 +40,6 @@ export default function SendHow({route, navigation}){
       balance < num_money: balance< Number(exchangedMoney) 
 
   const {mainAccount, userId} = useSelector(state=>state.auth)
-  
   // 송금하기. 
   const sendMoney = () => {
     const data = {
@@ -148,9 +147,54 @@ export default function SendHow({route, navigation}){
           <Text style={styles.accountTo} >신한 {outAcc.accountnum}   {form_balance}{outAcc.ISO}</Text>
         </View>
       </View>
-      {type==="송금"?<ConvPad addMoney={addMoney} />:<VirtualKeyboard addMoney={addMoney}/>}
+      {type==="송금"?<ConvPad addMoney={addMoney} />:<NoConvPad addMoney={addMoney}/>}
     </View>
   )
+}
+
+export const EthereumHow = ({route, navigation}) => {
+  console.log('환영합니다',route)
+
+  const {mainAccount} = useSelector(state=>state.auth)
+
+  const dispatch = useDispatch();
+
+  const outAcc = route.params.outAcc;
+  const balance = outAcc.balance; 
+  // 이체 필요 부분
+  const toAccount = route.params.account;
+  const toBank = route.params.bank;
+  // 환전 필요 부분
+  const ISO = outAcc.ISO;
+  
+
+  const form_balance = ChangeForm(balance); // 잔액을 돈 형식 정규화
+  // 입력 금액 
+  const [money, setMoney] = useState(0); // 입력 금액 (문자)
+  const num_money = Number(money); // 입력 금액 -> 숫자
+  const form_money = ChangeForm(money);
+
+  // 잔액 확인
+  const isOver = balance < num_money 
+  
+  return(
+    <View style={styles.background}>
+      <View style={styles.textContainer}>
+        <View>
+          <Text style={{...styles.accountTo,marginBottom:'5%' }}></Text>
+          <Text style={styles.infoText}>얼마를 보낼까요?</Text>
+        </View>
+        <View>
+          <Text style={{...styles.currMoney}}>{num_money}{ISO}</Text>
+          <Text style={styles.warnTxt}>{isOver&&'잔액 부족!'}</Text>
+        </View>
+        <View style={styles.myAccount}>
+          <Text style={styles.accountTo} >신한 {mainAccount}   {form_balance}{ISO}</Text>
+        </View>
+      </View>
+    </View>
+  )
+
 }
 
 const styles = StyleSheet.create({

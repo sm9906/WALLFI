@@ -20,7 +20,7 @@ const CardItem = (props) => {
   const navigation = useNavigation();
   const data = props.data;
   const id = props.data.accId
-  console.log(data)
+
   return (
     <View style={{...styles.card, backgroundColor:data.cardType!=='SEP'?colors[id%5]:'black'}}>
       <View style={styles.account}>
