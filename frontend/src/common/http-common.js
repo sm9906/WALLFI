@@ -22,6 +22,7 @@ export const requestGet = async (url, params={}) => {
 
 export const requestPost = async (url, body={}, headers={}) => {
   const token = 'Bearer '+ await retrieveData();       
+  console.log(body);
   try {
     const data = await axios.post(url,body,{headers:{Authorization:token}});
     return data;

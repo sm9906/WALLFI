@@ -114,7 +114,7 @@ function DetailPage(props) {
             </TouchableOpacity>
         </View>
         <View style={styles.modalItems}>
-            <Image source={props.selectedCharacter.imageUrl} style={{ flex: 5, resizeMode: 'contain', overflow: 'hidden' }}/>
+            <Image source={props.selectedCharacter.imageUrl} style={{ resizeMode: 'contain', overflow: 'hidden', width: '100%', height: '50%' }}/>
             {
               props.selectedCharacter.main 
                 ? <TouchableOpacity style={styles.mainCharacterBtn}>
@@ -143,8 +143,8 @@ const styles = StyleSheet.create({
   },
   gridItemStyle: { 
     resizeMode: 'contain', 
-    width: '100%', 
-    height: '100%' 
+    width: '60%', 
+    height: '100%',
   },
   modalBox: { 
     flex: 1, 
@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   mainCharacterBtn: {
-    flex: 1,
+    height: '18%',
     width: '30%',
     backgroundColor: '#DD4F00',
     justifyContent: 'center',

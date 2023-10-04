@@ -25,8 +25,10 @@ export const postSignUp = createAsyncThunk('POST_SIGNUP', async(data, {rejectWit
 
 
 const initialState = {
-  userId:'ssafy',
-  mainAccount:'110001785538',
+  userId:'',
+  mainAccount:"",
+  // userId:'ssafy',
+  // mainAccount:"110001785538",
   isLoading: false
 }
 

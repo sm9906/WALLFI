@@ -159,7 +159,7 @@ const GameMain = () => {
             <Animated.View
               style={{ transform: [{ translateY: playerJumpValue }] }}
             >
-              <Animal aType={playerAnimal.animal} aPosition={-1} aSize={1} />
+              <Animal aType={playerAnimal.animal} aColor={playerAnimal.color} aPosition={-1} aSize={1} />
             </Animated.View>
             <HpBar hP={playerHp} maxHp={playerMaxHp}></HpBar>
           </View>
@@ -167,7 +167,7 @@ const GameMain = () => {
             <Animated.View
               style={{ transform: [{ translateY: enemyJumpValue }] }}
             >
-              <Animal aType={enemyAnimal.animal} aSize={1} />
+              <Animal aType={enemyAnimal.animal} aColor={enemyAnimal.color} aSize={1} />
             </Animated.View>
             <HpBar hP={enemyHp} maxHp={enemyMaxHp}></HpBar>
           </View>

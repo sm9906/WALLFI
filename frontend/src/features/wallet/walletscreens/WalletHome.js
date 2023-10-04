@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import { 
   StyleSheet,
   Dimensions,
@@ -24,6 +24,10 @@ export default function WalletHome({navigation}) {
   const dispatch = useDispatch();
   const {mainAccount} = useSelector(state=>state.auth)
   const [cards, setCards] = useState();
+  const [accounts, setAccounts] = useState();
+  const [ethereum, setEthereum] = useState();
+  const [type, setType] = useState(false);
+  const scrollViewRef = useRef(null);
 
   useFocusEffect(
     React.useCallback(()=>{
@@ -31,23 +35,41 @@ export default function WalletHome({navigation}) {
     },[])
   )
 
+  useEffect(()=>{
+    changeCard();
+  },[type])
+
   const getData = async() => {
     dispatch(DeleteMusic());
     try {
       // console.log('?')
       await dispatch(getExchangeRate());
       const response = await dispatch(getAccounts(mainAccount));
-      setCards(response.payload);
+      setAccounts(response.payload['accounts']);
+      setEthereum(response.payload['ethereum']);
+      setType(!type)
     } catch (err) {
       console.log('walletscreens/WalletLoading.js',err);
     }
   }
+
+  const changeCard = () => {
+    const showCard = type? accounts:ethereum;
+    setCards(showCard);
+    scrollViewRef.current?scrollViewRef.current.scrollTo({ x: 0, animated: false }):null;
+  }
   
   return (
     <>
-    {cards&&<View style={Background.background}>
+    {cards&&
+    <View style={Background.background}>
+      <View style={{flexDirection:'row', height:SCREEN_HEIGHT*0.05}}>
+        <TouchableOpacity onPress={()=>setType(true)}><Text style={{...styles.accountTxt, color:type?'black':'grey'}}>전체 계좌</Text></TouchableOpacity> 
+        <Text style={styles.accountTxt}>    |   </Text>
+        <TouchableOpacity onPress={()=>setType(false)}><Text style={{...styles.accountTxt, color:!type?'black':'grey'}}>가상 화폐</Text></TouchableOpacity> 
+      </View>
       <View style={{height:SCREEN_HEIGHT*0.25}}>
-        <ScrollView pagingEnabled showsHorizontalScrollIndicator={false} horizontal={true} style={{marginHorizontal:SCREEN_WIDTH*0.05}}>
+        <ScrollView pagingEnabled showsHorizontalScrollIndicator={false} horizontal={true} style={{marginHorizontal:SCREEN_WIDTH*0.05}} ref={scrollViewRef}>
           {cards&&cards.map((card, index)=>{
               return(<CardItem key={index} data={card} />)
           })}
@@ -72,6 +94,10 @@ export default function WalletHome({navigation}) {
 }
 
 const styles = StyleSheet.create({
+  accountTxt:{
+    fontWeight:'bold',
+    fontSize:RFPercentage(2)
+  },
   buttons:{
     marginTop:'10%',
     height:'40%',

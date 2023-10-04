@@ -10,6 +10,7 @@ import flagEUR from '../../assets/flag/EUR.png';
 import flagCNY from '../../assets/flag/CNY.png';
 import flagJPY from '../../assets/flag/JPY.png';
 import flagAUD from '../../assets/flag/AUD.png';
+import flagETH from '../../assets/flag/white_ethereum.png'
 
 const flagImage = {
   'KRW': flagKRW,
@@ -17,7 +18,8 @@ const flagImage = {
   'EUR': flagEUR,
   'JPY': flagJPY,
   'CNY': flagCNY,
-  'AUD': flagAUD 
+  'AUD': flagAUD,
+  'SEP': flagETH 
 }
 
 export const makeAccount = createAsyncThunk('POST_MAKEACCOUJNT', async(data, {rejectWithValue})=>{
@@ -52,19 +54,26 @@ export const getAccounts = createAsyncThunk('GET_ACCOUNT', async (mainAccount, {
   try {
     const response = await requestPost('account',{userMainAccount:mainAccount});
     const accountDtoList = response.data.data.accountDtoList;
-      const accounts = accountDtoList.map((account, index)=>{
-        const data = {
-          accId: index,
-          accountnum: account.계좌번호,
-          ntnCode:account.통화, 
-          balance: account.잔액통화별,
-          cardType: account.상품명, // '저축예금' || '정기적금'
-          image: flagImage[account.통화],
-          ISO: ISO[account.통화]
-        }
-        return data
-      })
-    return accounts
+    const accounts = [];
+    const ethereum = [];
+    for(let i = 0; i<accountDtoList.length; i++){
+      const data = {
+        accId: i,
+        accountnum: accountDtoList[i].계좌번호,
+        ntnCode:accountDtoList[i].통화, 
+        balance: accountDtoList[i].잔액통화별,
+        cardType: accountDtoList[i].상품명, // '저축예금' || '정기적금'
+        image: flagImage[accountDtoList[i].통화],
+        ISO: ISO[accountDtoList[i].통화]
+      }
+      if(data.cardType==='SEP'){
+        ethereum.push(data);
+      }else{
+        accounts.push(data);
+      }
+    }
+    const allAccounts = {'accounts':accounts, 'ethereum':ethereum};
+    return allAccounts
   } catch (err) {
     console.log(err)
     return rejectWithValue(err.response);
@@ -107,6 +116,7 @@ export const postExchangeFOR = createAsyncThunk('POST_EXCHANGEFOR', async(data, 
 const initialState = {
   cards:null, // 월렛 들어갈 때 카드 컴포넌트 받아오면서 저장.
   exchangeRates: null,
+  ethereum: null,
 }
 
 
@@ -122,7 +132,8 @@ export const walletSlice = createSlice({
       state.exchangeRates = payload;
     })
     .addCase(getAccounts.fulfilled, (state,{payload}) => {
-      state.cards = payload
+      state.ethereum = payload.ethereum;
+      state.cards = payload.accounts;
     })
   }
 })

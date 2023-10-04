@@ -2,22 +2,21 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { requestPost, requestPut } from '../../common/http-common';
 
 // 사용자 게임 정보 불러오기
-export const getGameInfo = createAsyncThunk('GET_GAME_INFO', async({ rejectWithValue }) => {
+export const getGameInfo = createAsyncThunk('GET_GAME_INFO', async(_, { rejectWithValue }) => {
   try {
     const res = await requestPost('game/getinfo')
-
     return res.data.data;
 
-  } catch(e) {
+  } catch (e) {
     console.error('홈슬라이스/getGameInfo 실패', e);
     return rejectWithValue(e.res);
   }
 })
 
 // 메인 캐릭터 불러오기
-export const getMainCharacter = createAsyncThunk('GET_MAIN_CHARACTER', async({ rejectWithValue }) => {
+export const getMainCharacter = createAsyncThunk('GET_MAIN_CHARACTER', async(_, { rejectWithValue }) => {
   try {
-    const res = await requestPost('character/getmain')
+    const res = await requestPost('character/getmain');
 
     const characterDto = res.data.data.characterDto;
     const data = {
@@ -41,9 +40,9 @@ export const getMainCharacter = createAsyncThunk('GET_MAIN_CHARACTER', async({ r
 });
 
 // 캐릭터 리스트 불러오기
-export const getCharacterList = createAsyncThunk('GET_CHARACTER_LIST', async({ rejectWithValue }) => {
+export const getCharacterList = createAsyncThunk('GET_CHARACTER_LIST', async(_, { rejectWithValue }) => {
   try {
-    const res = await requestPost('character/getcharacters')
+    const res = await requestPost('character/getcharacters');
 
     const characterDtoList = res.data.data.characterDtoList;
     const characters = characterDtoList.map((character) => {
@@ -58,9 +57,7 @@ export const getCharacterList = createAsyncThunk('GET_CHARACTER_LIST', async({ r
         def: character.def,
         main: character.main
       }
-
       return data;
-
     })
 
     return characters;
@@ -72,19 +69,19 @@ export const getCharacterList = createAsyncThunk('GET_CHARACTER_LIST', async({ r
 })
 
 // 캐릭터 수정하기 / 메인 수정 / 스탯 수정 
-export const updateCharacter = createAsyncThunk('UPDATE_CHARACTER', async(data, { rejectWithValue }) => {
+export const updateCharacter = createAsyncThunk('UPDATE_CHARACTER', async (data, { rejectWithValue }) => {
   try {
     await requestPut('character/change/status', data)
     return data;
 
   } catch (e) {
-    console.error('홈슬라이스/updatecharacter 실패',e);
+    console.error('홈슬라이스/updatecharacter 실패', e);
     return rejectWithValue(e.res);
   }
 })
 
 // 사용자 포인트 수정
-export const updatePoint = createAsyncThunk('UPDATE_POINT', async(data, { rejectWithValue }) => {
+export const updatePoint = createAsyncThunk('UPDATE_POINT', async (data, { rejectWithValue }) => {
   try {
     await requestPost('game/pointup', data)
     return data;
@@ -96,7 +93,7 @@ export const updatePoint = createAsyncThunk('UPDATE_POINT', async(data, { reject
 })
 
 // 캐릭터 색 수정
-export const changeColor = createAsyncThunk('CHANGE_COLOR', async(data, { rejectWithValue }) => {
+export const changeColor = createAsyncThunk('CHANGE_COLOR', async (data, { rejectWithValue }) => {
   try {
     const res = await requestPut('character/change/color', data);
     const color = res.data.data.characterDto;
@@ -114,16 +111,16 @@ export const changeColor = createAsyncThunk('CHANGE_COLOR', async(data, { reject
 
     return changeCharacterColor;
 
-  } catch(e) {
+  } catch (e) {
     console.error('홈슬라이스/changeColor 실패', e);
     return rejectWithValue(e.res);
   }
 })
 
 // 캐릭터 1개 뽑기
-export const getRandomCharacter = createAsyncThunk('GET_RANDOM_CHARACTER', async({ rejectWithValue }) => {
+export const getRandomCharacter = createAsyncThunk('GET_RANDOM_CHARACTER', async(_, { rejectWithValue }) => {
   try {
-    const res = await requestPost('character/shop')
+    const res = await requestPost('character/shop');
 
     const characterDto = res.data.data.characterDto;
     const character = {
@@ -147,9 +144,9 @@ export const getRandomCharacter = createAsyncThunk('GET_RANDOM_CHARACTER', async
 })
 
 // 캐릭터 10개 뽑기
-export const getRandomTenCharacter = createAsyncThunk('GET_RANDOM_TEN_CHARACTER', async({ rejectWithValue }) => {
+export const getRandomTenCharacter = createAsyncThunk('GET_RANDOM_TEN_CHARACTER', async(_, { rejectWithValue }) => {
   try {
-    const res = await requestPost('character/shopten/')
+    const res = await requestPost('character/shopten/');
 
     const characterDtoList = res.data.data.characterDtoList;
     const characters = characterDtoList.map((a) => {
@@ -177,87 +174,234 @@ export const getRandomTenCharacter = createAsyncThunk('GET_RANDOM_TEN_CHARACTER'
   }
 })
 
+// 캐릭터 치장 아이템 뽑기
+export const getRandomItem = createAsyncThunk('GET_RANDOM_ITEM', async(_, { rejectWithValue }) => {
+  try {
+    const res = await requestPost('deco/item');
+    const item = res.data.data.itemName;
+
+    return item;
+
+  } catch (e) {
+    console.error('홈슬라이스/getRandomItem 실패', e)
+    return rejectWithValue(e.res);
+  }
+})
+
+// 캐릭터들 치장 데이터 받아오기
+export const getAnimalDeco = createAsyncThunk('GET_ANIMAL_DECO', async (userId, { rejectWithValue }) => {
+  try {
+    const res = await axios.get('deco/', {
+      userId: userId
+    })
+    const animalDeco = res.data;
+    return animalDeco;
+
+  } catch (e) {
+    console.log('치장/animalDeco 실패', e)
+    // return rejectWithValue(e.res);
+    return {
+      data: {
+        animal: {
+          SHIBA: {
+            name: "ssafy_cap",
+            y: -54.630860805511475,
+            x: -50.43108367919922,
+            rotation: 90,
+            size: 1.2000000029802322,
+          },
+          LION: {
+            name: "crown_cap",
+            y: 44.35295867919922,
+            x: 5.424107074737549,
+            rotation: 360,
+            size: 3,
+          },
+          EAGLE: {
+            name: "ssafy_cap",
+            y: -79.34322757516588,
+            x: 29.05329304933548,
+            rotation: 311,
+            size: 1.800000011920929, // 1 이어도 상관없
+          },
+          QUOKKA: {
+            name: "ruby_necklace",
+            y: -6.104631543159485,
+            x: 5.712890565395355,
+            rotation: 0,
+            size: 1.4000000059604645,
+          },
+          PANDA: {
+            name: "crown_cap",
+            y: -41.13839244842529,
+            x: -72.00753259658813,
+            rotation: 39,
+            size: 1.2000000029802322,
+          },
+          TIGER: {
+            name: "ruby_necklace",
+            y: 15.401785850524902,
+            x: 18.57003402709961,
+            rotation: 151,
+            size: 1.2000000029802322,
+          },
+        }
+      }
+    }
+  }
+});
+
+// 악세서리 데이터 서버에 전송하기
+export const sendAnimalDeco = createAsyncThunk('SEND_ANIMAL_DECO', async (data, { rejectWithValue }) => {
+  try {
+    const res = await axios.post('실제 엔드포인트 URL', data);
+    return res.data;
+  } catch (e) {
+    console.error('홈슬라이스/sendAnimalDeco 실패', e);
+    return rejectWithValue(e.res);
+  }
+});
+
 
 const initialState = {
   exchangeInfo: null,
   mainCharacter: null,
   characters: null,
   userGameInfo: null,
+  animalDeco: null,
+  // animalDeco: {
+  //   SHIBA: {
+  //     name: "ssafy_cap",
+  //     y: 11,
+  //     x: 1,
+  //     rotation: 90,
+  //     size: 1.2,
+  //   },
+  // LION: {
+  //     name: "crown_cap",
+  //     y: 22,
+  //     x: 2,
+  //     rotation: 80,
+  //     size: 1.1,
+  //   },
+  // EAGLE: {
+  //     name: "ruby_necklace",
+  //     y: 33,
+  //     x: 3,
+  //     rotation: 70,
+  //     size: 1.0, // 1 이어도 상관없
+  //   },
+  // QUOKKA: {
+  //     name: "ssafy_cap",
+  //     y: 44,
+  //     x: 4,
+  //     rotation: 60,
+  //     size: 0.9,
+  //   },
+  // PANDA {
+  //     name: "crown_cap",
+  //     y: 55,
+  //     x: 5,
+  //     rotation: 50,
+  //     size: 0.8,
+  //   },
+  // TIGER: {
+  //     name: "ruby_necklace",
+  //     y: 66,
+  //     x: 6,
+  //     rotation: 40,
+  //     size: 0.7,
+  //   },
+  // },
+  pressedAnimal: null,
+  pressedAccessory: null,
   music: null,
-
 }
-
 
 export const homeSlice = createSlice({
   name: 'home',
   initialState,
-  reducers:{ 
-    DJ:(state, action)=>{
+  reducers: {
+    setPressedAnimal: (state, action) => {
+      state.pressedAnimal = action.payload;
+    },
+    setPressedAccessory: (state, action) => {
+      state.pressedAccessory = action.payload;
+    },
+    setAnimalDeco: (state, action) => {
+      const animalType = Object.keys(action.payload)[0];
+      state.animalDeco[animalType] = action.payload[animalType];
+    },
+    DJ: (state, action) => {
       // 실행시킬 BGM 넣기
       state.music = action.payload
-      state.music?state.music.setIsLoopingAsync(true):null;
+      state.music ? state.music.setIsLoopingAsync(true) : null;
     },
-    PlayMusic:(state, action)=>{
+    PlayMusic: (state, action) => {
       // 뮤직 스타트!
-      state.music?state.music.playAsync():null;
+      state.music ? state.music.playAsync() : null;
     },
-    StopMusic:(state, action)=>{
+    StopMusic: (state, action) => {
       // 종료
-      state.music?state.music.pauseAsync():null;
+      state.music ? state.music.pauseAsync() : null;
     },
-    DeleteMusic:(state,action)=>{
+    DeleteMusic: (state, action) => {
       // 음악 빼내기 
-      if(state.music){
+      if (state.music) {
         state.music.unloadAsync()
-        state.music=null;
+        state.music = null;
       }
-    } 
+    }
   },
   extraReducers: (builder) => {
     builder
-    .addCase(getMainCharacter.fulfilled, (state, action) => {
-      state.mainCharacter = action.payload;
-    })
-    .addCase(getCharacterList.fulfilled, (state, action) => {
-      state.characters = action.payload;
-    })
-    .addCase(getGameInfo.fulfilled, (state, action) => {
-      state.userGameInfo = action.payload;
-    })
-    .addCase(updateCharacter.fulfilled, (state, action)=>{
-      // 메인으로 설정한 캐릭터의 Idx 가져오기
-      const id = action.payload.characterIdx;
-
-      // characterIdx가 id와 같으면 해당 캐릭터를 메인캐릭터로 상태 변경
-      state.characters.map(character => {
-        if (character.characterIdx == id) {
-          state.mainCharacter = character;
-          character.main = true;
-        } else {
-          character.main = false;
-        }
+      .addCase(getMainCharacter.fulfilled, (state, action) => {
+        state.mainCharacter = action.payload;
       })
-    })
-    .addCase(updatePoint.fulfilled, (state, action) => {
-
-      // 상점에서 포인트를 사용했을 때 음수값으로 포인트를 입력하기 때문에 그대로 + 해주면됨
-      state.userGameInfo.point += action.payload.point;
-    })
-    .addCase(changeColor.fulfilled, (state, action) => {
-
-      // 캐릭터 색 변경대상 Idx값 가져오기
-      const id = action.payload.characterIdx;
-
-      // id값과 같은 characterIdx값을 갖고있는 객체의 색 상태값 변경
-      state.characters.forEach(character => {
-        if (character.characterIdx == id) {
-          character.color = action.payload.color;
-          return;
-        }
+      .addCase(getCharacterList.fulfilled, (state, action) => {
+        state.characters = action.payload;
       })
-    })
+      .addCase(getGameInfo.fulfilled, (state, action) => {
+        state.userGameInfo = action.payload;
+      })
+      .addCase(updateCharacter.fulfilled, (state, action) => {
+        // 메인으로 설정한 캐릭터의 Idx 가져오기
+        const id = action.payload.characterIdx;
+
+        // characterIdx가 id와 같으면 해당 캐릭터를 메인캐릭터로 상태 변경
+        state.characters.map(character => {
+          if (character.characterIdx == id) {
+            state.mainCharacter = character;
+            character.main = true;
+          } else {
+            character.main = false;
+          }
+        })
+      })
+      .addCase(updatePoint.fulfilled, (state, action) => {
+
+        // 상점에서 포인트를 사용했을 때 음수값으로 포인트를 입력하기 때문에 그대로 + 해주면됨
+        state.userGameInfo.point += action.payload.point;
+      })
+      .addCase(changeColor.fulfilled, (state, action) => {
+
+        // 캐릭터 색 변경대상 Idx값 가져오기
+        const id = action.payload.characterIdx;
+
+        // id값과 같은 characterIdx값을 갖고있는 객체의 색 상태값 변경
+        state.characters.forEach(character => {
+          if (character.characterIdx == id) {
+            character.color = action.payload.color;
+            return;
+          }
+        })
+      })
+      .addCase(getAnimalDeco.fulfilled, (state, action) => {
+        state.animalDeco = action.payload.data.animal;
+      })
   }
 })
 
-export const { DJ, PlayMusic, StopMusic, DeleteMusic } = homeSlice.actions
+export const { setPressedAnimal, setPressedAccessory, setAnimalDeco, DJ, PlayMusic, StopMusic, DeleteMusic } = homeSlice.actions;
+
 export default homeSlice.reducer

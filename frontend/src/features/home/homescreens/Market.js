@@ -16,6 +16,7 @@ import {
   changeColor, 
   getRandomCharacter, 
   getRandomTenCharacter, 
+  getRandomItem,
   updatePoint } 
 from '../homeSlice.js';
 import { globalStyles } from '../homestyles/global.js';
@@ -39,9 +40,11 @@ export default function Market({ navigation }) {
   const [modalVisible1, setModalVisible1] = useState(false);
   const [modalVisible2, setModalVisible2] = useState(false);
   const [modalVisible3, setModalVisible3] = useState(false);
+  const [modalVisible4, setModalVisible4] = useState(false);
   const [selectedCharacter, setSelectedCharacter] = useState('');
   const [tenCharacterList, setTenCharacterList] = useState([]);
   const [selectedColor, setSelectedColor] = useState('');
+  const [selectedItem, setSelectedItem] = useState('');
 
   return (
     <View style={globalStyles.container}>
@@ -94,6 +97,22 @@ export default function Market({ navigation }) {
             setSelectedColor={setSelectedColor}
           />
         </Modal>
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={modalVisible4}
+          onRequestClose={() => {
+            Alert.alert("Modal has been closed.");
+            setModalVisible4(!modalVisible4);
+          }}
+        >
+          <Item 
+            modalVisible4={modalVisible4}
+            setModalVisible4={setModalVisible4}
+            selectedItem={selectedItem}
+            setSelectedItem={setSelectedItem}
+          />
+        </Modal>
         <GameHeader />
         <PageHeader navigation={navigation} color={'#FFC700'} title={'상점'} />
         <View style={styles.buttonBox}>
@@ -104,7 +123,7 @@ export default function Market({ navigation }) {
               { backgroundColor: selectedBtn === 1 ? "#138383" : "#00B1B1" },
             ]}
           >
-            <Text style={styles.btnText}>🥚 동물 알 뽑기</Text>
+            <Text style={styles.btnText}>🥚 동물 알</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => setSelectedBtn(2)}
@@ -113,7 +132,16 @@ export default function Market({ navigation }) {
               { backgroundColor: selectedBtn === 2 ? "#138383" : "#00B1B1" },
             ]}
           >
-            <Text style={styles.btnText}>🎨 동물 색상 뽑기</Text>
+            <Text style={styles.btnText}>🎨 동물 색상</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => setSelectedBtn(3)}
+            style={[
+              styles.btnStyle,
+              { backgroundColor: selectedBtn === 3 ? "#138383" : "#00B1B1" },
+            ]}
+          >
+            <Text style={styles.btnText}>🎁 치장 아이템</Text>
           </TouchableOpacity>
         </View>
         {/* 컨텐츠 렌더링 */}
@@ -126,12 +154,16 @@ export default function Market({ navigation }) {
           setModalVisible2={setModalVisible2}
           modalVisible3={modalVisible3}
           setModalVisible3={setModalVisible3}
+          modalVisible4={modalVisible4}
+          setModalVisible4={setModalVisible4}
           selectedCharacter={selectedCharacter}
           setSelectedCharacter={setSelectedCharacter}
           tenCharacterList={tenCharacterList}
           setTenCharacterList={setTenCharacterList}
           selectedColor={selectedColor}
           setSelectedColor={setSelectedColor}
+          selectedItem={selectedItem}
+          setSelectedItem={setSelectedItem}
         />
       </ImageBackground>
       <StatusBar />
@@ -141,6 +173,7 @@ export default function Market({ navigation }) {
 
 // 컨텐츠 렌더링 함수
 function RenderContent(props) {
+  const userId = useSelector((state) => state.auth.userId);
   const mainCharacter = useSelector((state) => state.home.mainCharacter);
   const userInfo = useSelector((state) => state.home.userGameInfo);
   const dispatch = useDispatch();
@@ -153,8 +186,8 @@ function RenderContent(props) {
           { text: "확인", onPress: () => {}, style: "default" },
         ]);
       } else {
-        dispatch(updatePoint({ point: -1000 }));
-        dispatch(getRandomCharacter()).then((response) => {
+        dispatch(updatePoint({ point: -1000, userId: userId }));
+        dispatch(getRandomCharacter(userId)).then((response) => {
           props.setSelectedCharacter(response.payload);
           props.setModalVisible1(true);
         });
@@ -172,7 +205,7 @@ function RenderContent(props) {
           { text: "확인", onPress: () => {}, style: "default" },
         ]);
       } else {
-        dispatch(updatePoint({ point: -9000 }))
+        dispatch(updatePoint({ point: -9000 }));
         dispatch(getRandomTenCharacter()).then((response) => {
           props.setTenCharacterList(response.payload);
           props.setModalVisible2(true);
@@ -186,12 +219,12 @@ function RenderContent(props) {
   // 색상 뽑기 함수
   const randomColor = async () => {
     try {
-      if (userInfo.point < 500) {
+      if (userInfo.point < 1000) {
         Alert.alert("경고", "포인트가 부족합니다!", [
           { text: "확인", onPress: () => {}, style: "default" },
         ]);
       } else {
-        dispatch(updatePoint({ point: -500 }));
+        dispatch(updatePoint({ point: -1000 }));
         dispatch(
           changeColor({
             mainCharacterIdx: mainCharacter.characterIdx
@@ -205,6 +238,26 @@ function RenderContent(props) {
       console.log("color", err);
     }
   };
+
+  // 치장아이템 뽑기 함수
+  const randomItem = async () => {
+    try {
+      if (userInfo.point < 1000) {
+        Alert.alert("경고", "포인트가 부족합니다!", [
+          { text: "확인", onPress: () => {}, style: "default" },
+        ]);
+      } else {
+        dispatch(updatePoint({ point: -1000 }));
+        dispatch(getRandomItem()).then((response) => {
+          console.log(response.payload);
+          props.setSelectedItem(response.payload);
+          props.setModalVisible4(true);
+        });
+      }
+    } catch (err) {
+      console.log("item", err);
+    }
+  }
 
   // 동물 알 뽑기 버튼을 눌렀을 때
   if (props.selectedBtn === 1) {
@@ -290,7 +343,47 @@ function RenderContent(props) {
               }}
             >
               <Image source={images.gameIcon.coin} style={styles.coinIcon} />
-              <Text style={styles.coinText}>500</Text>
+              <Text style={styles.coinText}>1,000</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+    );
+  }
+
+  // 치장 아이템 뽑기 버튼을 눌렀을 때
+  if (props.selectedBtn === 3) {
+    return (
+      <View style={styles.marketContent}>
+        <View
+          style={{
+            flex: 3.5,
+            width: "100%",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Image
+            source={images.marketSource.item}
+            style={{
+              resizeMode: "contain",
+              height: "120%",
+              width: "100%",
+              marginBottom: "10%",
+            }}
+          />
+        </View>
+        <View style={styles.bottom}>
+          <View style={[styles.bottomItems, { flex: 0.45 }]}>
+            <Text style={{ fontSize: 16, fontWeight: "bold" }}>🎁 X 1</Text>
+            <TouchableOpacity
+              style={styles.puchaseBtn}
+              onPress={() => {
+                randomItem();
+              }}
+            >
+              <Image source={images.gameIcon.coin} style={styles.coinIcon} />
+              <Text style={styles.coinText}>1,000</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -460,11 +553,12 @@ function Color(props) {
             height: "80%",
             backgroundColor: "white",
             borderRadius: 15,
+            justifyContent: "center",
           }}
         >
           <Image
             source={images.defaultCharacter[type][color]}
-            style={{ width: "100%", height: "100%" }}
+            style={{ width: "70%", height: "70%", resizeMode:"contain", marginLeft:"15%" }}
           />
         </View>
       </View>
@@ -487,10 +581,57 @@ function Color(props) {
   );
 }
 
+// 아이템 뽑기 모달
+function Item(props) {
+  const item = props.selectedItem;
+
+  const itemList = {
+    SSAFY_CAP: '싸피모자',
+    CROWN_CAP: '왕관',
+    RUBY_NECKLACE: '루비 목걸이',
+  };
+
+  return (
+    <View style={[globalStyles.modalStyle, { backgroundColor: '#FFFDD2' }]}>
+      <View style={styles.modalBox}>
+        <View
+            style={{
+              width: "80%",
+              height: "80%",
+              backgroundColor: "white",
+              borderRadius: 15,
+              justifyContent: "center",
+            }}
+          >
+          <Image
+            source={images.accessory[item.toLowerCase()]}
+            style={{ width: "70%", resizeMode:"contain", marginLeft:"15%" }}
+          />
+        </View>
+      </View>
+      <Text
+        style={{
+          flex: 1,
+          fontSize: 20,
+          fontWeight: "bold",
+        }}
+      >
+        {itemList[item]}
+      </Text>
+      <TouchableOpacity
+        style={styles.okBtn}
+        onPress={() => props.setModalVisible4(false)}
+      >
+        <Text style={styles.okText}>확인</Text>
+      </TouchableOpacity>
+    </View>
+  )
+}
+
 const styles = StyleSheet.create({
   buttonBox: {
     flex: 1.5,
-    width: "85%",
+    width: "90%",
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
@@ -498,7 +639,7 @@ const styles = StyleSheet.create({
   btnStyle: {
     flex: 1,
     height: "30%",
-    marginHorizontal: "5%",
+    marginHorizontal: "1%",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
