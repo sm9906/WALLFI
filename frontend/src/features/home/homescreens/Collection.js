@@ -41,7 +41,6 @@ export default function Collection({navigation}) {
   const numColumns = 2;
 
   // 유저의 캐릭터 목록 조회
-  const userId = useSelector(state=>state.auth.userId);
   const characterList = useSelector(state => state.home.characters);
   const characters = []
   characterList.map((character) => {
@@ -81,7 +80,6 @@ export default function Collection({navigation}) {
             setModalVisible={setModalVisible} 
             selectedCharacter={selectedCharacter} 
             setSelectedCharacter={setSelectedCharacter}
-            userId = {userId}
           />
         </Modal>
         <PageHeader navigation={navigation} color={'#DD4F00'} title={'동물도감'}/>
@@ -103,7 +101,7 @@ export default function Collection({navigation}) {
 function DetailPage(props) {
   const dispatch = useDispatch();
   const setMain = () => {
-    dispatch(updateCharacter({act: '', characterIdx: props.selectedCharacter.id, statusType: 'isMain', userId: props.userId, value: 0}))
+    dispatch(updateCharacter({act: '', characterIdx: props.selectedCharacter.id, statusType: 'isMain', value: 0}))
   }
   return (
     <View style={[globalStyles.modalStyle, { backgroundColor: '#FBA728' }]}>

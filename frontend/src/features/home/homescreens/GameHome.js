@@ -41,11 +41,9 @@ export default function GameHome({ navigation }) {
       }
     }),[navigation]
   );
-
-  const userId = useSelector(state=>state.auth.userId);
   
   useFocusEffect(()=>{
-    dispatch(getMainCharacter(userId));
+    dispatch(getMainCharacter());
   })
   return (
     <View style={globalStyles.container}>
@@ -53,9 +51,7 @@ export default function GameHome({ navigation }) {
         <GameHeader/>
         <Music/>
         <Season />
-        <Content navigation={navigation}
-          userId={userId}
-        />
+        <Content navigation={navigation}/>
         <Bottom navigation={navigation} />
       </ImageBackground>
       <StatusBar />
@@ -137,7 +133,6 @@ function Content(props) {
   // 메인캐릭터, 칭호;
   const [nowAct, setNowAct] = useState();
   const timeText = action[nowAct]
-
   const type = mainCharacter.characterType;
   const color = mainCharacter.color;
   const imageUrl = images.defaultCharacter[type][color];
@@ -160,7 +155,6 @@ function Content(props) {
         act: action,
         characterIdx: mainCharacter.characterIdx,
         statusType: action==='밥먹기'?"atk":"def",
-        userId: props.userId,
         value: 1
         }))
       setNowAct(action)
