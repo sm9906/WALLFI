@@ -147,7 +147,7 @@ const Map = () => {
         attack: mainCharacter?.atk,
         defence: mainCharacter?.def,
         exchange: 1 + playerExchange / 10,
-        color: mainCharacter?.color
+        color: mainCharacter?.color,
       };
 
       const enemyStat = {

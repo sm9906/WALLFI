@@ -59,38 +59,44 @@ export default function Collection({ navigation }) {
 
   const animalDeco = useSelector(state => state.home.animalDeco);
 
-  const Item = ({ item, width }) => (
-    <TouchableOpacity
-      style={[styles.gridStyle, { width: width }]}
-      onPress={() => {
-        setModalVisible(true);
-        setSelectedCharacter({ ...item });
-      }}>
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: "center" }}>
-        <Animal
-          aType={item.type}
-          aColor={item.color}
-          aSize={1.2}
-          onPress={() => {
-            setModalVisible(true);
-            setSelectedCharacter({ ...item });
-          }}
-        />
-        <Accessory
-          aType={animalDeco[item.type].name}
-          aSize={animalDeco[item.type].size * 0.6}
-          rotation={animalDeco[item.type].rotation}
-          aAbosulte="absolute"
-          aCollection={true}
-          aXY={[animalDeco[item.type].x, animalDeco[item.type].y]}
-          onPress={() => {
-            setModalVisible(true);
-            setSelectedCharacter({ ...item });
-          }}
-        />
-      </View>
-    </TouchableOpacity>
-  )
+  const Item = ({ item, width }) => {
+    const matchedDeco = animalDeco.find(deco => deco.characterType === item.type);
+
+    return (
+      <TouchableOpacity
+        style={[styles.gridStyle, { width: width }]}
+        onPress={() => {
+          setModalVisible(true);
+          setSelectedCharacter({ ...item });
+        }}>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: "center" }}>
+          <Animal
+            aType={item.type}
+            aColor={item.color}
+            aSize={1.2}
+            onPress={() => {
+              setModalVisible(true);
+              setSelectedCharacter({ ...item });
+            }}
+          />
+          {matchedDeco &&
+            <Accessory
+              aType={matchedDeco.itemName.toLowerCase()}
+              aSize={matchedDeco.size * 0.6}
+              rotation={matchedDeco.rotation}
+              aAbosulte="absolute"
+              aCollection={true}
+              aXY={[matchedDeco.x, matchedDeco.y]}
+              onPress={() => {
+                setModalVisible(true);
+                setSelectedCharacter({ ...item });
+              }}
+            />
+          }
+        </View>
+      </TouchableOpacity>
+    )
+  }
 
   return (
     <View style={globalStyles.container}>
@@ -131,6 +137,9 @@ function DetailPage(props) {
   const setMain = () => {
     dispatch(updateCharacter({ act: '', characterIdx: props.selectedCharacter.id, statusType: 'isMain', userId: props.userId, value: 0 }))
   }
+
+  const matchedDeco = props.animalDeco.find(deco => deco.characterType === props.selectedCharacter.type);
+
   return (
     <View style={[globalStyles.modalStyle, { backgroundColor: '#FBA728' }]}>
       <View style={styles.modalBox}>
@@ -143,14 +152,16 @@ function DetailPage(props) {
       </View>
       <View style={styles.modalItems}>
         <Image source={props.selectedCharacter.imageUrl} style={{ flex: 5, resizeMode: 'contain', overflow: 'hidden', marginTop: 15 }} />
-        <Accessory
-          aType={props.animalDeco[props.selectedCharacter.type].name}
-          aSize={props.animalDeco[props.selectedCharacter.type].size}
-          rotation={props.animalDeco[props.selectedCharacter.type].rotation}
-          aAbosulte="absolute"
-          aMain={true}
-          aXY={[props.animalDeco[props.selectedCharacter.type].x, props.animalDeco[props.selectedCharacter.type].y]}
-        />
+        {matchedDeco &&
+          <Accessory
+            aType={matchedDeco.itemName.toLowerCase()}
+            aSize={matchedDeco.size}
+            rotation={matchedDeco.rotation}
+            aAbosulte="absolute"
+            aMain={true}
+            aXY={[matchedDeco.x, matchedDeco.y]}
+          />
+        }
         {
           props.selectedCharacter.main
             ? <TouchableOpacity style={styles.mainCharacterBtn}>
@@ -167,6 +178,7 @@ function DetailPage(props) {
     </View>
   )
 }
+
 
 const styles = StyleSheet.create({
   gridStyle: {

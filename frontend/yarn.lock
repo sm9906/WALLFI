@@ -3390,23 +3390,12 @@ expo-location@~16.1.0:
   resolved "https://registry.yarnpkg.com/expo-location/-/expo-location-16.1.0.tgz#251a465790d6622f828fd18f0edb2a73b9664b72"
   integrity sha512-/jfRyYrXb9vjr8HoYmVHnzEqnw+0jaoRbHsxj6ePPAbevXmvXZqYHFRtfZtQ+q32SB4X6kUAXu28eBcLS+tqaA==
 
-expo-modules-autolinking@1.5.1:
+expo-modules-autolinking@1.5.1, expo-modules-autolinking@~1.5.0:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/expo-modules-autolinking/-/expo-modules-autolinking-1.5.1.tgz#363f90c172769ce12bf56c7be9ca0897adfc7a81"
   integrity sha512-yt5a1VCp2BF9CrsO689PCD5oXKP14MMhnOanQMvDn4BDpURYfzAlDVGC5fZrNQKtwn/eq3bcrxIwZ7D9QjVVRg==
   dependencies:
     "@expo/config" "~8.1.0"
-    chalk "^4.1.0"
-    commander "^7.2.0"
-    fast-glob "^3.2.5"
-    find-up "^5.0.0"
-    fs-extra "^9.1.0"
-
-expo-modules-autolinking@^0.8.1:
-  version "0.8.1"
-  resolved "https://registry.yarnpkg.com/expo-modules-autolinking/-/expo-modules-autolinking-0.8.1.tgz#533c38192847d2272e9af986f8f4c58aae6dfff3"
-  integrity sha512-S8qfaXCv//7tQWV9M+JKx3CF7ypYhDdSUbkUQdaVO/r8D76/aRTArY/aRw1yEfaAOzyK8C8diDToV1itl51DfQ==
-  dependencies:
     chalk "^4.1.0"
     commander "^7.2.0"
     fast-glob "^3.2.5"

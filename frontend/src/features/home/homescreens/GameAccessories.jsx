@@ -1,4 +1,13 @@
+import Modal from "react-native-modal";
+import images from "../../../common/imgDict.js";
+import { setPressedAnimal } from "../homeSlice.js";
 import React, { useEffect, useState } from "react";
+import { globalStyles } from "../homestyles/global.js";
+import { useSelector, useDispatch } from "react-redux";
+import GameHeader from "../homecomponents/GameHeader.js";
+import PageHeader from "../homecomponents/PageHeader.js";
+import Animal from "../../fight/fightcomponents/Animal.jsx";
+import AnimalList from "../homecomponents/accessory/AnimalList.jsx";
 import {
   StatusBar,
   Text,
@@ -6,23 +15,15 @@ import {
   ImageBackground,
   StyleSheet,
   TouchableOpacity,
-  Alert,
 } from "react-native";
-import { globalStyles } from "../homestyles/global.js";
-import images from "../../../common/imgDict.js";
-import GameHeader from "../homecomponents/GameHeader.js";
-import PageHeader from "../homecomponents/PageHeader.js";
-import Animal from "../../fight/fightcomponents/Animal.jsx";
-import AnimalList from "../homecomponents/accessory/AnimalList.jsx";
-import { useSelector, useDispatch } from "react-redux";
-import { setPressedAnimal } from "../homeSlice.js";
-import Modal from "react-native-modal";
 
 export const GameAccessories = ({ navigation }) => {
   const selectAnimal = useSelector((state) => state.home.pressedAnimal);
+
   const dispatch = useDispatch();
 
   const [isModalVisible, setModalVisible] = useState(false);
+
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
@@ -46,7 +47,11 @@ export const GameAccessories = ({ navigation }) => {
         <View style={styles.mainContent}>
           <View style={styles.select}>
             <View style={styles.selectBack}>
-            <Animal aType={selectAnimal ? selectAnimal.characterType : null} aColor={selectAnimal ? selectAnimal.color : null} aSize={2} />
+              <Animal
+                aType={selectAnimal ? selectAnimal.characterType : null}
+                aColor={selectAnimal ? selectAnimal.color : null}
+                aSize={2}
+              />
             </View>
           </View>
           <AnimalList />
@@ -135,7 +140,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#f2f2f2",
     alignItems: "center",
     justifyContent: "center",
-    marginLeft: "10%"
+    marginLeft: "10%",
   },
   modalText: {
     fontSize: 18,
