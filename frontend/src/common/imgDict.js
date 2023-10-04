@@ -2,6 +2,8 @@ import home from "../assets/background/home.png";
 import collection from "../assets/background/collection.png";
 import market from "../assets/background/Market.png";
 import mission from "../assets/background/mission.png";
+import accessory from "../assets/background/accessory.png"
+import deco from "../assets/background/deco.png";
 import itemExchange from "../assets/background/itemExchange.png";
 
 import molly_basic from "../assets/characters/default/baby_duderge.png";
@@ -65,9 +67,11 @@ import walletBtn from "../assets/game/button/wallet.png";
 import sunglassesBtn from '../assets/game/button/sunglasses.png';
 import auction from '../assets/game/button/auction.png';
 import handshake from '../assets/game/button/handshake.png'
+import closet from '../assets/game/button/closet.png'
 
 import coinIcon from "../assets/game/icon/coin.png";
 import trophyIcon from "../assets/game/icon/trophy.png";
+import ethereum from '../assets/game/icon/ethereum.png'
 import musiconIcon from "../assets/game/icon/musicon.png";
 import musicoffIcon from "../assets/game/icon/musicoff.png";
 
@@ -112,12 +116,18 @@ import question from "../assets/battle/question.png";
 import time from "../assets/battle/time.png";
 import guts from "../assets/battle/guts.png";
 
+import crown_cap from "../assets/accessory/crown_cap.png";
+import ruby_necklace from "../assets/accessory/ruby_necklace.png";
+import ssafy_cap from "../assets/accessory/ssafy_cap.png";
+
 export const images = {
   Background: {
     home: home,
     collection: collection,
     market: market,
     mission: mission,
+    accessory: accessory,
+    deco: deco,
     itemExchange: itemExchange,
   },
 
@@ -202,14 +212,16 @@ export const images = {
     wallet: walletBtn,
     sunglasses: sunglassesBtn,
     auction : auction,
-    handshake : handshake
+    handshake : handshake,
+    closet : closet
   },
 
   gameIcon: {
     coin: coinIcon,
     trophy: trophyIcon,
     musicon: musiconIcon,
-    musicoff: musicoffIcon
+    musicoff: musicoffIcon,
+    ethereum : ethereum
   },
 
   marketSource: {
@@ -259,6 +271,11 @@ export const images = {
     time_0: time,
     guts_0: guts,
   },
+  accessory: {
+    crown_cap: crown_cap,
+    ruby_necklace: ruby_necklace,
+    ssafy_cap: ssafy_cap,
+  }
 };
 
 export default images;

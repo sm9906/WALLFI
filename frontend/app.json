@@ -11,26 +11,35 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
     "android": {
+      "versionCode": 2,
       "adaptiveIcon": {
         "foregroundImage": "./src/assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "permissions": ["ACCESS_BACKGROUND_LOCATION"],
-      "package": "com.패키지명.패키지명",
+      "permissions": [
+        "ACCESS_BACKGROUND_LOCATION",
+
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION"
+      ],
+      "package": "com.ssafyD101.walfy",
       "config": {
-        "googleMaps": { "apiKey": "AIzaSyBEmWSXbZV3mg-KQ15Y2zovXv_qS87FTmE" }
+        "googleMaps": {
+          "apiKey": "AIzaSyBEmWSXbZV3mg-KQ15Y2zovXv_qS87FTmE"
+        }
       }
     },
     "web": {
       "favicon": "./src/assets/favicon.png"
     },
-    "permissions": ["ACCESS_COARSE_LOCATION", "ACCESS_FINE_LOCATION"]
+    "extra": {
+      "eas": {
+      }
+    }
   }
 }

@@ -8,7 +8,8 @@ const initialState = {
     Hp: 50,
     attack: 2,
     defence: 2,
-    exchange: 1
+    exchange: 1,
+    color: "BASIC"
   },
 
   enemy: {
@@ -18,7 +19,8 @@ const initialState = {
     Hp: 50,
     attack: 2,
     defence: 2,
-    exchange: 1
+    exchange: 1,
+    color: "BASIC"
   },
 };
 
@@ -36,6 +38,7 @@ const animalReducer = (state = initialState, action) => {
           attack: action.stat.attack || state.enemy.attack,
           defence: action.stat.defence || state.enemy.defence,
           exchange: action.stat.exchange || state.enemy.exchange,
+          color: action.stat.color || state.enemy.color,
         }
       };
     case SET_PLAYER:
@@ -50,6 +53,7 @@ const animalReducer = (state = initialState, action) => {
           attack: action.stat.attack || state.player.attack,
           defence: action.stat.defence || state.player.defence,
           exchange: action.stat.exchange || state.player.exchange,
+          color: action.stat.color || state.player.color,
         }
       };
     case RESET_ANIMAL:
@@ -61,7 +65,9 @@ const animalReducer = (state = initialState, action) => {
           exp: 0,
           Hp: 50,
           attack: 2,
-          defence: 2
+          defence: 2,
+          exchange: 1,
+          color: "BASIC"
         },
       };
     default:
