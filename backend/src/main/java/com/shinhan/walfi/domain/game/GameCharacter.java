@@ -43,12 +43,24 @@ public class GameCharacter {
 
     private boolean isMain;
 
+    private int y;
+
+    private int x;
+
+    private int rotation;
+
+    private double size;
+
     @CreationTimestamp
     private LocalDateTime createdTime;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_id")
     private UserGameInfo userGameInfo;
+
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "item_idx")
+    private GameItem gameItem;
 
     /**
      * 게임 캐릭터 생성, enum은 service에서 설정
