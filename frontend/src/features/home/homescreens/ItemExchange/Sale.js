@@ -138,12 +138,13 @@ const detail = StyleSheet.create({
     width: '80%',
     marginVertical: '10%',
     backgroundColor: 'white',
-    borderRadius: 20
+    borderRadius: 20,
+    justifyContent: 'center'
   },
   imgStyle: {
     resizeMode: 'contain',
     width: '100%',
-    height: '100%'
+    height: '70%'
   },
   textGroup: { 
     flex: 3, 
