@@ -53,7 +53,7 @@ export default function GameHome({ navigation }) {
 
   useFocusEffect(() => {
     dispatch(getMainCharacter(userId));
-    // dispatch(getAnimalDeco(userId)); // 데코 서버 생기면 활성화
+    dispatch(getAnimalDeco(userId)); // 데코 서버 생기면 활성화
   })
   return (
     <View style={globalStyles.container}>

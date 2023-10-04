@@ -175,12 +175,12 @@ export const getRandomTenCharacter = createAsyncThunk('GET_RANDOM_TEN_CHARACTER'
 })
 
 // 캐릭터들 치장 데이터 받아오기
-export const getAnimalDeco = createAsyncThunk('GET_ANIMAL_DECO', async (userId, { rejectWithValue }) => {
+export const getAnimalDeco = createAsyncThunk('GET_ANIMAL_DECO', async (_, { rejectWithValue }) => {
   try {
-    const res = await axios.get('deco/', {
-      userId: userId
-    })
-    const animalDeco = res.data;
+    // const res = await requestGet('deco')
+    const res = await requestGet('decos')
+    const animalDeco = res.data
+    console.log(animalDeco)
     return animalDeco;
 
   } catch (e) {

@@ -57,13 +57,16 @@ const sendDataToServer = async (data) => { // 내가 모은 좌표 데이터들 
 };
 
 export const LocationProvider = ({ children }) => { // 위치 수집 권한 요청
-  const [myLocation, setMyLocation] = useState(null);
+  // const [myLocation, setMyLocation] = useState(null);
+  const [locationSubscription, setLocationSubscription] = useState(null);
 
   useEffect(() => {
-    (async () => {
-      let { status } = await Location.getBackgroundPermissionsAsync(); // 좌표값 받아도 되나요?
+    (async () => { // 앱 통과를 못해서 일단 백그라운드 코드 포그라운드로 변경
+      // let { status } = await Location.getBackgroundPermissionsAsync(); // 좌표값 받아도 되나요?
+      let { status } = await Location.getForegroundPermissionsAsync(); // 좌표값 받아도 되나요?
       if (status !== 'granted') {
-        const response = await Location.requestBackgroundPermissionsAsync(); // 좌표값 받아도 되는걸 허가받아도 되나요?
+        // const response = await Location.requestBackgroundPermissionsAsync(); // 좌표값 받아도 되는걸 허가받아도 되나요?
+        const response = await Location.requestForegroundPermissionsAsync(); // 좌표값 받아도 되는걸 허가받아도 되나요?
         status = response.status;
       }
       if (status !== "granted") {
@@ -71,11 +74,20 @@ export const LocationProvider = ({ children }) => { // 위치 수집 권한 요�
         return;
       }
 
-      await Location.startLocationUpdatesAsync(LOCATION_TASK_NAME, {
+      // await Location.startLocationUpdatesAsync(LOCATION_TASK_NAME, {
+      //   accuracy: Location.Accuracy.High,
+      //   distanceInterval: 10,
+      //   timeInterval: 5000, // 내 좌표 몇초마다 갱신할지
+      // });
+      const subscription = await Location.watchPositionAsync({
         accuracy: Location.Accuracy.High,
         distanceInterval: 10,
-        timeInterval: 5000, // 내 좌표 몇초마다 갱신할지
+        timeInterval: 5000,
+      }, (location) => {
+        setLocationSubscription([location.coords.latitude, location.coords.longitude]);
       });
+  
+      setLocationSubscription(subscription);
 
       if (await isServerConnected()) { // 서버 연결되어 있으면 저장소에서 데이터 꺼내서 서버로 전송
         const storedData = await getData();
@@ -85,29 +97,35 @@ export const LocationProvider = ({ children }) => { // 위치 수집 권한 요�
         }
       }
     })();
+
+    return () => {
+      if (locationSubscription) {
+        locationSubscription.remove();
+      }
+    };
   }, []);
 
-  TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => { // 백그라운드용 로직
-    if (error) {
-      console.error(error);
-      return;
-    }
-    if (data) {
-      const {
-        locations: [location],
-      } = data;
-      setMyLocation([location.coords.latitude, location.coords.longitude]);
+  // TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => { // 백그라운드용 로직
+  //   if (error) {
+  //     console.error(error);
+  //     return;
+  //   }
+  //   if (data) {
+  //     const {
+  //       locations: [location],
+  //     } = data;
+  //     setMyLocation([location.coords.latitude, location.coords.longitude]);
 
-      if (await isServerConnected()) {
-        sendDataToServer([location.coords.latitude, location.coords.longitude]);
-      } else {
-        setData(location.coords.latitude, location.coords.longitude);
-      }
-    }
-  });
+  //     if (await isServerConnected()) {
+  //       sendDataToServer([location.coords.latitude, location.coords.longitude]);
+  //     } else {
+  //       setData(location.coords.latitude, location.coords.longitude);
+  //     }
+  //   }
+  // });
 
   return (
-    <LocationContext.Provider value={myLocation}>
+    <LocationContext.Provider value={locationSubscription}>
       {children}
     </LocationContext.Provider>
   );

@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
   modalBox: {
     flex: 1,
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   modalContent: {
     flex: 6,
@@ -199,7 +199,7 @@ const styles = StyleSheet.create({
     borderBottomColor: '#000000',
     borderBottomWidth: 3,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   mainCharacterBtn: {
     flex: 1,
