@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { StatusBar, StyleSheet, Text, View, ImageBackground, TouchableOpacity, ScrollView } from "react-native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import axios from "../../../common/http-common";
+import axios, { requestGet } from "../../../common/http-common";
 
 import { images } from "../../../common/imgDict.js";
 import { globalStyles } from "../homestyles/global.js";
@@ -16,8 +16,7 @@ export default function Mission({ navigation }) {
   [quests, setQuest] = useState([]);
 
   useEffect(() => {
-    axios
-      .get(`quest?userId=${userId}`)
+    requestGet(`quest?userId=${userId}`)
       .then((res) => {
         setQuest(res.data);
         console.log("quest: ", quests);
@@ -90,18 +89,19 @@ function DailyQuest({ quest, type }) {
   //   console.log("A")
   // }, [quest])
 
-  function getQuestReward({ idx, status }) {
-    console.log(quest);
-    if (status === 1) {
+  const userId = useSelector((state) => state.auth.userId);
+
+  function getQuestReward(info) {
+    if (info.status === 1) {
       axios
         .post("http://j9d101a.p.ssafy.io:8094/quest", {
-          questIdx: idx,
-          userId: "ssafy",
+          questIdx: info.idx,
+          userId: userId,
         })
         .then(() => {
           setQuest((prevQuest) => {
             const newQuest = prevQuest.map((quest) => {
-              if (quest.idx === idx) {
+              if (quest.idx === info.idx) {
                 return { ...quest, status: 2 };
               }
 
