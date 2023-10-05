@@ -82,7 +82,7 @@ const setAnimalHp = (
     newEnemyHp = 1;
     newEnemyGuts -= 1;
   }
-  return [newPlayerHp, newEnemyHp];
+  return [newPlayerHp, newEnemyHp, newPlayerGuts, newEnemyGuts];
 };
 
 const startBattle = async (
@@ -125,7 +125,7 @@ const startBattle = async (
     enemyAnimal
   );
 
-  console.log("적에게 공격하는 이펙트!");
+  // console.log("적에게 공격하는 이펙트!");
   await new Promise((resolve) => setTimeout(resolve, 1500)); // 연출을 위한 시간 생성
 
   const animalHp = setAnimalHp(
@@ -140,8 +140,8 @@ const startBattle = async (
 
   dispatch(setHpBar("player", animalHp[0]));
   dispatch(setHpBar("enemy", animalHp[1]));
-  dispatch(setGuts("player", guts[0]));
-  dispatch(setGuts("enemy", guts[1]));
+  dispatch(setGuts("player", animalHp[2]));
+  dispatch(setGuts("enemy", animalHp[3]));
   await new Promise((resolve) => setTimeout(resolve, 2500)); // 연출을 위한 시간 생성
 
   dispatch(setEnemySelect({ type: "enemy", number: 0 }));
