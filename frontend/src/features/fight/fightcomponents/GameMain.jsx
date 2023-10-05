@@ -169,7 +169,7 @@ const GameMain = () => {
                 aPosition={-1}
                 aSize={1}
               />
-              <Accessory
+              {/* <Accessory
               aType={playerDeco.itemName.toLowerCase()}
               aSize={playerDeco.size*0.5}
               rotation={playerDeco.rotation}
@@ -177,7 +177,7 @@ const GameMain = () => {
               aBattle={true}
               aXY={[playerDeco.x, playerDeco.y]}
               aPosition = {-1}
-              />
+              /> */}
             </Animated.View>
             <HpBar hP={playerHp} maxHp={playerMaxHp}></HpBar>
           </View>

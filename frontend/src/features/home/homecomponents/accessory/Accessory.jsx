@@ -31,10 +31,10 @@ const Accessory = ({
     dynamicTop = -imageHeight * 0.5 - SCREEN_HEIGHT * 0.113 * 0.6 + aXY[1] * 0.6;
     dynamicBottom = imageHeight * 0.5 - SCREEN_HEIGHT * 0.113 * 0.6;
   } else if (aBattle) {
-    dynamicLeft = imageWidth * 1 - aXY[0] * 0;
-    dynamicRight = -imageWidth * 1;
-    dynamicTop = -imageHeight * 1 - SCREEN_HEIGHT * 0.113 * 0 + aXY[1] * 0;
-    dynamicBottom = imageHeight * 1 - SCREEN_HEIGHT * 0.113 * 0;
+    dynamicLeft = imageWidth * 1 - SCREEN_WIDTH * 0.1 * 0.5 - aXY[0] * 0;
+    dynamicRight = -imageWidth * 1 - SCREEN_WIDTH * 0.1 * 0.5;
+    dynamicTop = -imageHeight * 1 - SCREEN_HEIGHT * 0.025 * 1 + aXY[1] * 0;
+    dynamicBottom = imageHeight * 1 - SCREEN_HEIGHT * 0.025 * 1;
   } else {
     dynamicLeft = 0;
     dynamicRight = 0;
