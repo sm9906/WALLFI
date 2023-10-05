@@ -1,20 +1,22 @@
 import React, { useState } from "react";
-import { View, StyleSheet, Dimensions, ScrollView } from "react-native";
-import Animal from "../../../fight/fightcomponents/Animal";
-import { useDispatch, useSelector } from "react-redux";
 import { setPressedAnimal } from "../../homeSlice";
+import { useDispatch, useSelector } from "react-redux";
+import Animal from "../../../fight/fightcomponents/Animal";
+import { View, StyleSheet, Dimensions, ScrollView } from "react-native";
 
 const { width } = Dimensions.get("window");
 
 export const AnimalList = () => {
-  const animals = useSelector((state) => state.home.characters);
   const dispatch = useDispatch();
-  const [selectBox, setSelectBox] = useState(null);
-
   const setAnimal = (animalType) => {
     dispatch(setPressedAnimal(animalType));
     setSelectBox(animalType);
   };
+
+  const animalList = useSelector((state) => state.home.characters);
+  const animals = animalList.slice(0, 6);
+
+  const [selectBox, setSelectBox] = useState(null);
 
   return (
     <ScrollView

@@ -1,13 +1,15 @@
 import React, {useEffect, useState, useMemo} from "react";
 import { useDispatch, useSelector } from "react-redux";
-import ChangeForm from "../walletcomponents/ChangeForm";
+import { useFocusEffect } from '@react-navigation/native';
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 
-import { View, Text, StyleSheet } from 'react-native';
+import ChangeForm from "../walletcomponents/ChangeForm";
 import { RFPercentage } from "react-native-responsive-fontsize";
-import ConvPad from "../walletcomponents/virtualkeyboard/ConvKeypad";
-import VirtualKeyboard from "../walletcomponents/virtualkeyboard/VirtualKeypad";
+import ConvPad, { NoConvPad, EthereumConvPad } from "../walletcomponents/virtualkeyboard/ConvKeypad";
+import { ButtonStyle } from "../walletcomponents/CommonStyle";
 
 import { postSendMoney, postExchangeKRW, postExchangeFOR } from "../walletSlice";
+import axios from "../../../common/http-common";
 
 
 export default function SendHow({route, navigation}){
@@ -24,7 +26,6 @@ export default function SendHow({route, navigation}){
   const toNation = type==='환전'?route.params.toNation:'';
   const ISO = type==='환전'?route.params.ISO:outAcc.ISO;
   
-
   const form_balance = ChangeForm(balance); // 잔액을 돈 형식 정규화
   // 입력 금액 
   const [money, setMoney] = useState(0); // 입력 금액 (문자)
@@ -40,7 +41,6 @@ export default function SendHow({route, navigation}){
       balance < num_money: balance< Number(exchangedMoney) 
 
   const {mainAccount, userId} = useSelector(state=>state.auth)
-  
   // 송금하기. 
   const sendMoney = () => {
     const data = {
@@ -131,7 +131,6 @@ export default function SendHow({route, navigation}){
     }  
   }
 
-
   return(
     <View style={styles.background}>
       <View style={styles.textContainer}>
@@ -148,7 +147,100 @@ export default function SendHow({route, navigation}){
           <Text style={styles.accountTo} >신한 {outAcc.accountnum}   {form_balance}{outAcc.ISO}</Text>
         </View>
       </View>
-      {type==="송금"?<ConvPad addMoney={addMoney} />:<VirtualKeyboard addMoney={addMoney}/>}
+      {type==="송금"?<ConvPad addMoney={addMoney} />:<NoConvPad addMoney={addMoney}/>}
+    </View>
+  )
+}
+
+export const EthereumHow = ({route, navigation}) => {
+  const {mainAccount} = useSelector(state=>state.auth)
+  const dispatch = useDispatch();
+
+  const outAcc = route.params.outAcc;
+  const balance = outAcc.balance; 
+  // 이체 필요 부분
+  const toAccount = route.params.account;
+  const toBank = route.params.bank;
+  // 환전 필요 부분
+  const ISO = outAcc.ISO;
+  const form_balance = ChangeForm(balance); // 잔액을 돈 형식 정규화
+  // 입력 금액 
+  const [gas, setGas] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isDecimal, setIsDecimal] = useState(false);
+  const [money, setMoney] = useState('0'); // 입력 금액 (문자)
+  
+  const num_money = Number(money); // 입력 금액 -> 숫자
+
+  // 잔액 확인
+  const isOver = balance < (num_money + gas); 
+    
+  useFocusEffect(()=>{
+    axios.get('crypto/gas').then((res)=>{
+      setGas(Number(res.data.data.ethGas))
+    }
+    )
+  })
+
+  const addMoney=(value)=>{
+    const currMon = money;
+    if(value === 'back'){
+      if(currMon.slice(-1)==='.'){
+        setIsDecimal(false);
+      }
+      setMoney(currMon.length===1?'0':currMon.slice(0,-1));
+
+    }else if(value === 'clear'){
+      setMoney('0');
+    }else if(value === '.'){
+      if(!isDecimal){
+        setIsDecimal(true);
+        setMoney(prev=>(prev==='0'&&value!=='.')?value:prev+value);
+      }
+    }else{
+      setMoney((prev)=>prev==='0'?value:prev+value)
+    } 
+  }
+
+  const sendEthereum = async() => {
+    await setIsLoading(true)
+    const data = {
+      // '이체금액': num_money+gas,
+      '이체금액':0.000001,
+      '입금계좌번호' : '123', // 일단 확인용으로 고정..
+      '입금계좌통장메모': '보냅니다',
+      '입금은행코드': toBank,
+      '출금계좌번호': mainAccount,   
+      '출금계좌통장메모':'',
+      '통화코드': 'SEP'
+    }
+    const response = await dispatch(postSendMoney(data));
+    if(!response.error){
+      setIsLoading(false)
+      navigation.navigate('SendMemo', props = {type:'송금', toNation:'', toAccount, toBank, formMoney:money, outISO:ISO, outAcc:mainAccount})
+    }
+  }
+
+  return(
+    <View style={styles.background}>
+      <View style={styles.textContainer}>
+        <View>
+          <Text style={{...styles.accountTo,marginBottom:'5%' }}>{toBank} {toAccount}</Text>
+          <Text style={styles.infoText}>얼마를 보낼까요?</Text>
+        </View>
+        <View>
+          <Text style={{...styles.currMoney, color:isOver?'#FF6666':'black'}}>{money}{ISO}</Text>
+          <Text style={styles.warnTxt}>{isOver&&'잔액 부족!'}</Text>
+          <Text style={{...styles.accountTo, textAlign:'center', marginTop:'5%'}}>{gas}ETH의 가스비(수수료)가 발생합니다</Text>
+        </View>
+        <View style={styles.myAccount}>
+          <Text style={styles.accountTo} >신한 {mainAccount}   {form_balance}{ISO}</Text>
+        </View>
+        <EthereumConvPad addMoney={addMoney}/>
+        <TouchableOpacity disabled={isLoading} style={{...ButtonStyle.button, height:'8%', backgroundColor:isLoading?'grey':'#293694'}} onPress={()=>!isOver&&sendEthereum()} >
+          <Text style={ButtonStyle.btnFont}>확인</Text> 
+        </TouchableOpacity>
+      </View>      
     </View>
   )
 }

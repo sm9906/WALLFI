@@ -9,6 +9,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { RFPercentage } from 'react-native-responsive-fontsize';
 import { useFocusEffect } from '@react-navigation/native';
+import SSAFY from '../../../assets/wallet/SSAFY.png'
 
 import CardItem from '../walletcomponents/walletcards/WalletCard';
 import GoFight from '../walletcomponents/GoFight';
@@ -16,18 +17,19 @@ import {Background} from '../walletcomponents/CommonStyle';
 import ShinhanLogo from '../../../assets/wallet/ShinhanLogo.png';
 import Exchange from '../../../assets/wallet/Exchange.png'
 import { getAccounts, getExchangeRate } from '../walletSlice';
-import { DeleteMusic } from '../../home/homeSlice';
+import { ChangeMusic } from '../../home/homeSlice';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../walletcomponents/ScreenSize";
 
 
+import Music from '../../home/homecomponents/Music';
+
 export default function WalletHome({navigation}) {
   const dispatch = useDispatch();
-  const {mainAccount} = useSelector(state=>state.auth)
-  const [cards, setCards] = useState();
-  const [accounts, setAccounts] = useState();
-  const [ethereum, setEthereum] = useState();
-  const [type, setType] = useState(false);
+  const {mainAccount} = useSelector(state=>state.auth);
+  const {accounts, ethereum}=useSelector(state=>state.wallet);
+  const [type, setType] = useState(true);
   const scrollViewRef = useRef(null);
+  const cards = type?accounts:ethereum;
 
   useFocusEffect(
     React.useCallback(()=>{
@@ -40,22 +42,16 @@ export default function WalletHome({navigation}) {
   },[type])
 
   const getData = async() => {
-    dispatch(DeleteMusic());
+    dispatch(ChangeMusic());
     try {
-      // console.log('?')
       await dispatch(getExchangeRate());
-      const response = await dispatch(getAccounts(mainAccount));
-      setAccounts(response.payload['accounts']);
-      setEthereum(response.payload['ethereum']);
-      setType(!type)
+      await dispatch(getAccounts(mainAccount));
     } catch (err) {
       console.log('walletscreens/WalletLoading.js',err);
     }
   }
 
   const changeCard = () => {
-    const showCard = type? accounts:ethereum;
-    setCards(showCard);
     scrollViewRef.current?scrollViewRef.current.scrollTo({ x: 0, animated: false }):null;
   }
   
@@ -77,7 +73,7 @@ export default function WalletHome({navigation}) {
       </View>
       <View style={styles.buttons}>
         <TouchableOpacity style={styles.button} onPress={()=>navigation.navigate('MakeAccount')}>
-          <Image source={ShinhanLogo} style={{width:'20%', height:'35%', resizeMode:'contain'}}></Image>
+          <Image source={SSAFY} style={{width:'20%', height:'35%', resizeMode:'contain'}}></Image>
           <Text style={styles.txtSize}>예적금 만들기</Text>
           <Text style={{marginLeft:'40%'}}>&gt;</Text>
         </TouchableOpacity>  

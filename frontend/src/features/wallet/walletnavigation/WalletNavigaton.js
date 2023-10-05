@@ -5,7 +5,7 @@ import MakeAccount from '../walletscreens/MakeAccount';
 import WalletHome from '../walletscreens/WalletHome';
 import ExchangeSearch from '../walletscreens/ExchangeSearch';
 import SendWho from '../walletscreens/SendWho';
-import SendHow from '../walletscreens/SendHow';
+import SendHow, {EthereumHow} from '../walletscreens/SendHow';
 import SendMemo from '../walletscreens/SendMemo';
 import WalletLoading from '../walletscreens/WalletLoading';
 import MakeDeposit from '../walletscreens/MakeDeposit' 
@@ -24,6 +24,7 @@ const WalletNavigation = () => {
       <Stack.Screen name="SendMemo" component={SendMemo} options={{ headerShown: false }} />
       <Stack.Screen name="WalletLoading" component={WalletLoading} options={{headerShown: false}}/>
       <Stack.Screen name="MakeDeposit" component={MakeDeposit} options={{title:''}}/>
+      <Stack.Screen name="EthereumHow" component={EthereumHow} options={{title:''}}/>
     </Stack.Navigator>
     )
 }

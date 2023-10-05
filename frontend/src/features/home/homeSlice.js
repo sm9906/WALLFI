@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { requestGet, requestPost, requestPut } from '../../common/http-common';
 
 // 사용자 게임 정보 불러오기
-export const getGameInfo = createAsyncThunk('GET_GAME_INFO', async(_, { rejectWithValue }) => {
+export const getGameInfo = createAsyncThunk('GET_GAME_INFO', async (_, { rejectWithValue }) => {
   try {
     const res = await requestPost('game/getinfo')
     return res.data.data;
@@ -14,7 +14,7 @@ export const getGameInfo = createAsyncThunk('GET_GAME_INFO', async(_, { rejectWi
 })
 
 // 메인 캐릭터 불러오기
-export const getMainCharacter = createAsyncThunk('GET_MAIN_CHARACTER', async(_, { rejectWithValue }) => {
+export const getMainCharacter = createAsyncThunk('GET_MAIN_CHARACTER', async (_, { rejectWithValue }) => {
   try {
     const res = await requestPost('character/getmain');
 
@@ -40,7 +40,7 @@ export const getMainCharacter = createAsyncThunk('GET_MAIN_CHARACTER', async(_, 
 });
 
 // 캐릭터 리스트 불러오기
-export const getCharacterList = createAsyncThunk('GET_CHARACTER_LIST', async(_, { rejectWithValue }) => {
+export const getCharacterList = createAsyncThunk('GET_CHARACTER_LIST', async (_, { rejectWithValue }) => {
   try {
     const res = await requestPost('character/getcharacters');
 
@@ -118,7 +118,7 @@ export const changeColor = createAsyncThunk('CHANGE_COLOR', async (data, { rejec
 })
 
 // 캐릭터 1개 뽑기
-export const getRandomCharacter = createAsyncThunk('GET_RANDOM_CHARACTER', async(_, { rejectWithValue }) => {
+export const getRandomCharacter = createAsyncThunk('GET_RANDOM_CHARACTER', async (_, { rejectWithValue }) => {
   try {
     const res = await requestPost('character/shop');
 
@@ -144,7 +144,7 @@ export const getRandomCharacter = createAsyncThunk('GET_RANDOM_CHARACTER', async
 })
 
 // 캐릭터 10개 뽑기
-export const getRandomTenCharacter = createAsyncThunk('GET_RANDOM_TEN_CHARACTER', async(_, { rejectWithValue }) => {
+export const getRandomTenCharacter = createAsyncThunk('GET_RANDOM_TEN_CHARACTER', async (_, { rejectWithValue }) => {
   try {
     const res = await requestPost('character/shopten/');
 
@@ -210,73 +210,36 @@ export const getItemList = createAsyncThunk('GET_ITEM_LIST', async(_, { rejectWi
   }
 })
 
-// 캐릭터들 치장 데이터 받아오기
-export const getAnimalDeco = createAsyncThunk('GET_ANIMAL_DECO', async (userId, { rejectWithValue }) => {
+//  계정 악세 정보 받아오기
+export const getAccessoryList = createAsyncThunk('GET_ACCESSORY_LIST', async (_, { rejectWithValue }) => {
   try {
-    const res = await axios.get('deco/', {
-      userId: userId
-    })
-    const animalDeco = res.data;
+    const res = await requestGet('deco/itemList')
+    const accessoryList = res.data.data
+    return accessoryList;
+
+  } catch (e) {
+    console.log('치장/accessoryList 실패', e)
+    return rejectWithValue(e.res);
+  }
+});
+
+// 캐릭터들 치장 데이터 받아오기
+export const getAnimalDeco = createAsyncThunk('GET_ANIMAL_DECO', async (_, { rejectWithValue }) => {
+  try {
+    const res = await requestGet('deco')
+    const animalDeco = res.data.data
     return animalDeco;
 
   } catch (e) {
     console.log('치장/animalDeco 실패', e)
-    // return rejectWithValue(e.res); // 데코 서버 생기면 아래거 지우고 활성화
-    return {
-      data: {
-        animal: {
-          SHIBA: {
-            name: "ssafy_cap",
-            y: -49.947266697883606,
-            x: -47.696984589099884,
-            rotation: 0,
-            size: 1.2000000029802322,
-          },
-          LION: {
-            name: "crown_cap",
-            y: 44.35295867919922,
-            x: 5.424107074737549,
-            rotation: 360,
-            size: 3,
-          },
-          EAGLE: {
-            name: "ssafy_cap",
-            y: -79.34322757516588,
-            x: 29.05329304933548,
-            rotation: 311,
-            size: 1.800000011920929, // 1 이어도 상관없
-          },
-          QUOKKA: {
-            name: "ruby_necklace",
-            y: -6.104631543159485,
-            x: 5.712890565395355,
-            rotation: 0,
-            size: 1.4000000059604645,
-          },
-          PANDA: {
-            name: "crown_cap",
-            y: -41.13839244842529,
-            x: -72.00753259658813,
-            rotation: 39,
-            size: 1.2000000029802322,
-          },
-          TIGER: {
-            name: "ruby_necklace",
-            y: 15.401785850524902,
-            x: 18.57003402709961,
-            rotation: 151,
-            size: 1.2000000029802322,
-          },
-        }
-      }
-    }
+    return rejectWithValue(e.res);
   }
 });
 
 // 악세서리 데이터 서버에 전송하기
 export const sendAnimalDeco = createAsyncThunk('SEND_ANIMAL_DECO', async (data, { rejectWithValue }) => {
   try {
-    const res = await axios.post('실제 엔드포인트 URL', data);
+    const res = await requestPost('deco/update', data);
     return res.data;
   } catch (e) {
     console.error('홈슬라이스/sendAnimalDeco 실패', e);
@@ -370,54 +333,11 @@ const initialState = {
   userGameInfo: null,
   purchaseCharacters: null,
   purchaseItems: null,
-  // animalDeco: null, // 데코 서버 생기면 아래거 지우고 활성화
-  animalDeco: {
-    SHIBA: {
-    name: "ssafy_cap",
-    y: -49.947266697883606,
-    x: -47.696984589099884,
-    rotation: 0,
-    size: 1.2000000029802322,
-  },
-  LION: {
-    name: "crown_cap",
-    y: 44.35295867919922,
-    x: 5.424107074737549,
-    rotation: 360,
-    size: 3,
-  },
-  EAGLE: {
-    name: "ssafy_cap",
-    y: -79.34322757516588,
-    x: 29.05329304933548,
-    rotation: 311,
-    size: 1.800000011920929, // 1 이어도 상관없
-  },
-  QUOKKA: {
-    name: "ruby_necklace",
-    y: -6.104631543159485,
-    x: 5.712890565395355,
-    rotation: 0,
-    size: 1.4000000059604645,
-  },
-  PANDA: {
-    name: "crown_cap",
-    y: -41.13839244842529,
-    x: -72.00753259658813,
-    rotation: 39,
-    size: 1.2000000029802322,
-  },
-  TIGER: {
-    name: "ruby_necklace",
-    y: 15.401785850524902,
-    x: 18.57003402709961,
-    rotation: 151,
-    size: 1.2000000029802322,
-  },
-  },
+  animalDeco: null,
   pressedAnimal: null,
   pressedAccessory: null,
   music: null,
+  now : null,
 }
 
 export const homeSlice = createSlice({
@@ -431,11 +351,32 @@ export const homeSlice = createSlice({
       state.pressedAccessory = action.payload;
     },
     setAnimalDeco: (state, action) => {
-      const animalType = Object.keys(action.payload)[0];
-      state.animalDeco[animalType] = action.payload[animalType];
+      const newDeco = action.payload;
+      const characterIdx = newDeco.characterIdx;
+
+      const existingDecoIndex = state.animalDeco.findIndex(
+        (deco) => deco.characterIdx === characterIdx
+      );
+
+      if (existingDecoIndex !== -1) {
+        state.animalDeco[existingDecoIndex] = newDeco;
+      } else {
+        state.animalDeco.push(newDeco);
+      }
+    },
+    ChangeMusic : (state, action) => {
+      state.now = action.payload;
+      if(!action.payload && state.music){
+        state.music.unloadAsync()
+        state.music = null;
+      }
     },
     DJ: (state, action) => {
       // 실행시킬 BGM 넣기
+      if (state.music) {
+        state.music.unloadAsync();
+        state.music = null;
+      }
       state.music = action.payload
       state.music ? state.music.setIsLoopingAsync(true) : null;
     },
@@ -462,6 +403,8 @@ export const homeSlice = createSlice({
       })
       .addCase(getCharacterList.fulfilled, (state, action) => {
         state.characters = action.payload;
+        const newArray = state.characters.filter(obj => obj.characterType !== 'MOLLY');
+        state.characters = newArray;
       })
       .addCase(getGameInfo.fulfilled, (state, action) => {
         state.userGameInfo = action.payload;
@@ -508,7 +451,7 @@ export const homeSlice = createSlice({
         state.purchaseItems = action.payload;
       })
       .addCase(getAnimalDeco.fulfilled, (state, action) => {
-        state.animalDeco = action.payload.data.animal;
+        state.animalDeco = action.payload
       })
       .addCase(getBuy.fulfilled, (state, action) => {
         const idx = action.payload.goodsIdx;
@@ -531,6 +474,6 @@ export const homeSlice = createSlice({
   }
 })
 
-export const { setPressedAnimal, setPressedAccessory, setAnimalDeco, DJ, PlayMusic, StopMusic, DeleteMusic } = homeSlice.actions;
+export const { setPressedAnimal, setPressedAccessory, setAnimalDeco, DJ, PlayMusic, StopMusic, DeleteMusic, ChangeMusic } = homeSlice.actions;
 
 export default homeSlice.reducer

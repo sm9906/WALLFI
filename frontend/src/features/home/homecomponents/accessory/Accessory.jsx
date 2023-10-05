@@ -1,7 +1,7 @@
 import React from "react";
 import images from "../../../../common/imgDict";
-import { StyleSheet, Image, TouchableOpacity } from "react-native";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../ScreenSize";
+import { StyleSheet, Image, TouchableOpacity } from "react-native";
 
 const Accessory = ({
   aType,
@@ -12,6 +12,7 @@ const Accessory = ({
   aAbosulte = "relative",
   aMain = false,
   aCollection = false,
+  aBattle = false,
   aXY,
 }) => {
   const imageWidth = SCREEN_WIDTH * 0.2 * aSize;
@@ -27,15 +28,21 @@ const Accessory = ({
   } else if (aCollection) {
     dynamicLeft = -imageWidth * 0.5 + aXY[0] * 0.6;
     dynamicRight = imageWidth * 0.5;
-    dynamicTop =
-      -imageHeight * 0.5 - SCREEN_HEIGHT * 0.113 * 0.6 + aXY[1] * 0.6;
+    dynamicTop = -imageHeight * 0.5 - SCREEN_HEIGHT * 0.113 * 0.6 + aXY[1] * 0.6;
     dynamicBottom = imageHeight * 0.5 - SCREEN_HEIGHT * 0.113 * 0.6;
+  } else if (aBattle) {
+    dynamicLeft = imageWidth * 1 - SCREEN_WIDTH * 0.1 * 0.5 - aXY[0] * 0;
+    dynamicRight = -imageWidth * 1 - SCREEN_WIDTH * 0.1 * 0.5;
+    dynamicTop = -imageHeight * 1 - SCREEN_HEIGHT * 0.025 * 1 + aXY[1] * 0;
+    dynamicBottom = imageHeight * 1 - SCREEN_HEIGHT * 0.025 * 1;
   } else {
     dynamicLeft = 0;
     dynamicRight = 0;
     dynamicTop = 0;
     dynamicBottom = 0;
   }
+
+// console.log(aXY)
 
   return (
     <TouchableOpacity onPress={onPress} delayPressIn={100}>

@@ -4,8 +4,9 @@ import Animal from "../fightcomponents/Animal";
 import React, { useRef, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setGuide } from "../../../actions/turnActions";
-import { View, StyleSheet, Modal, Text, Button, Animated } from "react-native";
+import Accessory from "../../home/homecomponents/accessory/Accessory";
 import { ScreenHeight, ScreenWidth } from "./../fightcomponents/ScreenSize";
+import { View, StyleSheet, Modal, Text, Button, Animated } from "react-native";
 
 const GameMain = () => {
   const dispatch = useDispatch();
@@ -24,12 +25,15 @@ const GameMain = () => {
   const battleLoading = useSelector((state) => state.loading.battleLoading);
   const playerGuts = useSelector((state) => state.loading.guts.playerGuts);
   const enemyGuts = useSelector((state) => state.loading.guts.enemyGuts);
+  const animalDeco = useSelector(state => state.home.animalDeco);
   const guide = useSelector((state) => state.turn.guide);
   const playerRotateValue = useRef(new Animated.Value(0)).current;
   const enemyRotateValue = useRef(new Animated.Value(0)).current;
   const playerJumpValue = useRef(new Animated.Value(0)).current;
   const enemyJumpValue = useRef(new Animated.Value(0)).current;
   
+  const playerDeco = animalDeco.find(deco => deco.characterType === playerAnimal.animal);
+
   useEffect(() => {
     // 플레이어 애니메이션
     Animated.parallel([
@@ -159,7 +163,21 @@ const GameMain = () => {
             <Animated.View
               style={{ transform: [{ translateY: playerJumpValue }] }}
             >
-              <Animal aType={playerAnimal.animal} aColor={playerAnimal.color} aPosition={-1} aSize={1} />
+              <Animal
+                aType={playerAnimal.animal}
+                aColor={playerAnimal.color}
+                aPosition={-1}
+                aSize={1}
+              />
+              {/* <Accessory
+              aType={playerDeco.itemName.toLowerCase()}
+              aSize={playerDeco.size*0.5}
+              rotation={playerDeco.rotation}
+              aAbosulte="absolute"
+              aBattle={true}
+              aXY={[playerDeco.x, playerDeco.y]}
+              aPosition = {-1}
+              /> */}
             </Animated.View>
             <HpBar hP={playerHp} maxHp={playerMaxHp}></HpBar>
           </View>
@@ -167,7 +185,11 @@ const GameMain = () => {
             <Animated.View
               style={{ transform: [{ translateY: enemyJumpValue }] }}
             >
-              <Animal aType={enemyAnimal.animal} aColor={enemyAnimal.color} aSize={1} />
+              <Animal
+                aType={enemyAnimal.animal}
+                aColor={enemyAnimal.color}
+                aSize={1}
+              />
             </Animated.View>
             <HpBar hP={enemyHp} maxHp={enemyMaxHp}></HpBar>
           </View>

@@ -32,7 +32,6 @@ export default function MakeAccount({ navigation }){
         response = await requestPost('branch/getmanagernum');
       }else if(type==='Battle'){
         response = await requestPost(`battle/getbattlecount`);
-        console.log(response)
       }else if(type==='Land'){
         response = await requestPost(`branch/getmanagernum`);
       }else{

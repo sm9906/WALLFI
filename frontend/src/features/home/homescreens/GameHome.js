@@ -14,10 +14,9 @@ import { RFPercentage } from 'react-native-responsive-fontsize';
 import { useFocusEffect } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 
-import { Audio } from 'expo-av';
-import { DJ, PlayMusic, StopMusic } from '../homeSlice.js';
-import { getMainCharacter, updateCharacter, getAnimalDeco } from '../homeSlice.js';
+import { getMainCharacter, updateCharacter, getAnimalDeco, ChangeMusic } from '../homeSlice.js';
 
+import Music from '../homecomponents/Music.js';
 import { globalStyles } from '../homestyles/global.js';
 import { images } from '../../../common/imgDict.js';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../../common/ScreenSize.js';
@@ -48,14 +47,15 @@ export default function GameHome({ navigation }) {
   const userId = useSelector(state => state.auth.userId);
 
   useFocusEffect(() => {
+    dispatch(ChangeMusic('home'));
     dispatch(getMainCharacter(userId));
-    // dispatch(getAnimalDeco(userId)); // 데코 서버 생기면 활성화
+    dispatch(getAnimalDeco(userId));
   })
   return (
     <View style={globalStyles.container}>
       <ImageBackground source={images.Background.home} style={globalStyles.bgImg}>
         <GameHeader />
-        <Music />
+        <Music props={'home'}/>
         <Season />
         <Content navigation={navigation}/>
         <Bottom navigation={navigation} />
@@ -66,51 +66,6 @@ export default function GameHome({ navigation }) {
   )
 }
 
-
-const Music = React.memo(() => {
-  const dispatch = useDispatch();
-  const [on, setON] = useState(true);
-  const music = useSelector(state => state.home.music);
-
-  useEffect(() => {
-    DJselect();
-  }, []);
-
-  const DJselect = async () => {
-    if (!music) {
-      const { sound } = await Audio.Sound.createAsync(
-        require('../../../assets/music/GameHome.mp3')
-      );
-      await dispatch(DJ(sound));
-    }
-  }
-
-  useEffect(() => {
-    if (music) {
-      on ? dispatch(PlayMusic()) : dispatch(StopMusic());
-    }
-  }, [on, music]);
-
-  return (
-    <View>
-      {music && <TouchableOpacity onPress={() => { setON(!on) }}>
-        <Image source={on ? images.gameIcon.musicon : images.gameIcon.musicoff} style={musicStyles.music} />
-      </TouchableOpacity>
-      }
-    </View>
-  )
-})
-
-
-const musicStyles = StyleSheet.create({
-  music: {
-    resizeMode: 'contain',
-    marginLeft: SCREEN_WIDTH * 0.03,
-    height: SCREEN_HEIGHT * 0.07,
-    width: SCREEN_WIDTH * 0.07,
-    position: "absolute",
-  },
-});
 
 function Season() {
 
@@ -148,6 +103,8 @@ function Content(props) {
 
   // 치장 아이템
   const animalDeco = useSelector(state => state.home.animalDeco);
+  const currentDeco = animalDeco ? animalDeco.find(deco => deco.characterType === type) : null;
+
 
   useEffect(() => {
     if (nowAct) {
@@ -216,14 +173,14 @@ function Content(props) {
           {nowAct !== '밥먹기' && nowAct !== '훈련하기' && (
             <>
               <Animal aType={type} aColor={color} aSize={2} />
-              {animalDeco &&
+              {currentDeco &&
                 <Accessory
-                  aType={animalDeco[type].name}
-                  aSize={animalDeco[type].size}
-                  rotation={animalDeco[type].rotation}
+                  aType={currentDeco.itemName.toLowerCase()}
+                  aSize={currentDeco.size}
+                  rotation={currentDeco.rotation}
                   aAbosulte="absolute"
                   aMain={true}
-                  aXY={[animalDeco[type].x, animalDeco[type].y]}
+                  aXY={[currentDeco.x, currentDeco.y]}
                 />
               }
             </>
@@ -231,27 +188,22 @@ function Content(props) {
         </View>
 
         {nowAct === '밥먹기' && <Image source={images.eatCharacter[type]} style={actStyles.eating} />}
-        {nowAct === '훈련하기' && <Image source={require('../../../assets/game/loading/LoadingImg.gif')} style={actStyles.eating} />}
-        <View style={{
-          marginTop: "10%",
-          alignItems: "center"
-        }}>
-          <Text style={{
-            color: '#3B3B3B',
-            fontWeight: 'bold',
-            fontSize: RFPercentage(2),
-            margin: '5%',
-          }}>&lt;{userName}&gt;</Text>
-          <Text style={{
-            color: 'white',
-            fontSize: 18,
-            fontWeight: 'bold',
-            textShadowColor: 'black',
-            textShadowRadius: 2,
-            textShadowOffset: { width: 1, height: 2 },
-            elevation: 2,
-          }}>{timeText}</Text>
-        </View>
+        {nowAct === '훈련하기' && <Image source={type==='SHIBA'?require('../../../assets/game/loading/LoadingImg.gif'):imageUrl} style={actStyles.eating} />}
+        <Text style={{
+          color: '#3B3B3B',
+          fontWeight: 'bold',
+          fontSize: RFPercentage(2),
+          margin: '5%',
+        }}>&lt;{userName}&gt;</Text>
+        <Text style={{
+          color: 'white',
+          fontSize: 18,
+          fontWeight: 'bold',
+          textShadowColor: 'black',
+          textShadowRadius: 2,
+          textShadowOffset: { width: 1, height: 2 },
+          elevation: 2,
+        }}>{timeText}</Text>
       </View>
       <View style={styles.sideBar}>
         <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate('ItemExchange')}>
@@ -299,7 +251,6 @@ const actStyles = StyleSheet.create({
     marginLeft: '8%',
     width: SCREEN_WIDTH * 0.9,
     height: '50%',
-    marginBottom: "-10%"
   }
 })
 

@@ -1,28 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import { 
-  StatusBar, 
-  StyleSheet, 
-  Text, 
-  View, 
-  ImageBackground, 
-  TouchableOpacity, 
-  ScrollView 
-} from 'react-native';
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import axios from '../../../common/http-common';
+import React, { useEffect, useState } from "react";
+import { StatusBar, StyleSheet, Text, View, ImageBackground, TouchableOpacity, ScrollView } from "react-native";
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import axios, { requestGet } from "../../../common/http-common";
 
-import { images } from '../../../common/imgDict.js'
-import { globalStyles } from '../homestyles/global.js';
-import { SCREEN_WIDTH } from '../../../common/ScreenSize.js';
+import { images } from "../../../common/imgDict.js";
+import { globalStyles } from "../homestyles/global.js";
+import { SCREEN_WIDTH } from "../../../common/ScreenSize.js";
+import { useSelector } from "react-redux";
 
-import GameHeader from '../homecomponents/GameHeader.js';
-import PageHeader from '../homecomponents/PageHeader.js';
+import GameHeader from "../homecomponents/GameHeader.js";
+import PageHeader from "../homecomponents/PageHeader.js";
 
 export default function Mission({ navigation }) {
+  const userId = useSelector((state) => state.auth.userId);
   [quests, setQuest] = useState([]);
 
   useEffect(() => {
-    axios.get("?userId=ssafy")
+    requestGet(`quest?userId=${userId}`)
       .then((res) => {
         setQuest(res.data);
         console.log("quest: ", quests);
@@ -36,8 +30,8 @@ export default function Mission({ navigation }) {
     <View style={globalStyles.container}>
       <ImageBackground source={images.Background.mission} style={[globalStyles.bgImg, { alignItems: "center" }]}>
         <GameHeader />
-        <PageHeader navigation={navigation} color={'#76009F'} title={'미션'}/>
-        <MenuBar quests={quests}/>
+        <PageHeader navigation={navigation} color={"#76009F"} title={"미션"} />
+        <MenuBar quests={quests} />
         {/* <View style={{ flex: 6.5 }}></View> */}
       </ImageBackground>
       <StatusBar />
@@ -63,7 +57,7 @@ function determineButtonColor(status) {
 }
 
 const Tab = createMaterialTopTabNavigator();
-function MenuBar({quests}) {
+function MenuBar({ quests }) {
   return (
     <View style={{ flex: 6.5, width: SCREEN_WIDTH }}>
       <Tab.Navigator
@@ -80,9 +74,9 @@ function MenuBar({quests}) {
       >
         {/* <Tab.Screen name="일간" component={DailyQuest} initialParams={{quest: quests, type: "Daily"}} /> */}
         <Tab.Screen name="일간" children={() => <DailyQuest quest={quests} type="Daily" />} />
-        <Tab.Screen name="주간" children={() => <DailyQuest quest={quests} type="Weekly"/>} />
-        <Tab.Screen name="월간" children={() => <DailyQuest quest={quests} type="Monthly"/>} />
-        <Tab.Screen name="특별" children={() => <DailyQuest quest={quests} type="Specially"/>} />
+        <Tab.Screen name="주간" children={() => <DailyQuest quest={quests} type="Weekly" />} />
+        <Tab.Screen name="월간" children={() => <DailyQuest quest={quests} type="Monthly" />} />
+        <Tab.Screen name="특별" children={() => <DailyQuest quest={quests} type="Specially" />} />
       </Tab.Navigator>
     </View>
   );
@@ -95,18 +89,19 @@ function DailyQuest({ quest, type }) {
   //   console.log("A")
   // }, [quest])
 
-  function getQuestReward({ idx, status }) {
-    console.log(quest);
-    if (status === 1) {
+  const userId = useSelector((state) => state.auth.userId);
+
+  function getQuestReward(info) {
+    if (info.status === 1) {
       axios
         .post("http://j9d101a.p.ssafy.io:8094/quest", {
-          questIdx: idx,
-          userId: "ssafy",
+          questIdx: info.idx,
+          userId: userId,
         })
         .then(() => {
           setQuest((prevQuest) => {
             const newQuest = prevQuest.map((quest) => {
-              if (quest.idx === idx) {
+              if (quest.idx === info.idx) {
                 return { ...quest, status: 2 };
               }
 
@@ -134,10 +129,7 @@ function DailyQuest({ quest, type }) {
                     <Text style={{ fontSize: 20, fontWeight: "bold" }}>{quest.title}</Text>
                   </View>
                   <View style={styles.questInfotatusArea}>
-                    <TouchableOpacity
-                      onPress={getQuestReward.bind(this, quest)}
-                      disabled={quest.status == 1 ? false : true}
-                    >
+                    <TouchableOpacity onPress={getQuestReward.bind(this, quest)} disabled={quest.status == 1 ? false : true}>
                       <View
                         style={[
                           { width: 60, height: 42 },

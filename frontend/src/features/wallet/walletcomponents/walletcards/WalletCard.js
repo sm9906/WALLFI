@@ -20,9 +20,9 @@ const CardItem = (props) => {
   const navigation = useNavigation();
   const data = props.data;
   const id = props.data.accId
-  console.log(data)
+
   return (
-    <View style={{...styles.card, backgroundColor:data.cardType!=='SEP'?colors[id%5]:'black'}}>
+    <View style={{...styles.card, backgroundColor:(data.cardType!=='SEP'&&data.cardType!=='WALFI')?colors[id%5]:'black'}}>
       <View style={styles.account}>
         {data.image&&<Image source={data.image} style={styles.flagImg}/>}
         <Text style={{...styles.cardinfo, fontSize:RFPercentage(2)}}>   {data.ntnCode}   {data.cardType==='저축예금'?data.accountnum:data.cardType}</Text>

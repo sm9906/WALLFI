@@ -33,6 +33,7 @@ export default function SendMemo({route,navigation}) {
       <TouchableOpacity style={{...ButtonStyle.button, height:'8%'}} onPress={()=>navigation.navigate('WalletHome')}>
         <Text style={ButtonStyle.btnFont}>확인</Text> 
       </TouchableOpacity>
+      
     </View>
   );
 }
