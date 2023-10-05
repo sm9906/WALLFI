@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   View, 
   Text, 
@@ -133,7 +133,7 @@ function ItemDetail(props) {
         characterIdx: type === 'c' ? props.selectedItem.id : null,
         goodsType: type,
         itemIdx: type === 'i' ? props.selectedItem.id : null,
-        price: numPrice})).then(response => console.log('판매창', response));
+        price: numPrice}));
     } catch (err) {
       console.log('sellItem', err);
     }

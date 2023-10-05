@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   View, 
   Text, 
@@ -131,10 +131,7 @@ function ItemDetail(props) {
   const dispatch = useDispatch();
   const purchaseItem = async() => {
     try {
-      dispatch(getBuy({ goodsIdx: props.selectedItem.goodsIdx, price: props.selectedItem.price }))
-      .then((response) => {
-        console.log('구매창', response);
-      });
+      dispatch(getBuy({ goodsIdx: props.selectedItem.goodsIdx, price: props.selectedItem.price }));
     } catch (err) {
       console.log('purchaseItem', err);
     }

@@ -317,7 +317,7 @@ export const getBuy = createAsyncThunk('GET_BUY', async(data, { rejectWithValue 
 // 거래소에서 상품 판매하기
 export const sellItem = createAsyncThunk('SELL_ITEM', async(data, { rejectWithValue }) => {
   try {
-    await requestPost('sell', data).then(res => console.log(res));
+    await requestPost('sell', data);
     return data;
   } catch (e) {
     console.error('홈슬라이스/sellItem 실패', e);
