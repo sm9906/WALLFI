@@ -25,11 +25,8 @@ import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../../common/ScreenSize.js';
 import GameHeader from '../homecomponents/GameHeader.js';
 // 상태바 겹침현상을 없애려면 react-native에서 StatusBar를 import 해줘야함
 
-<<<<<<< HEAD
 import Animal from '../../fight/fightcomponents/Animal.jsx';
 import Accessory from '../homecomponents/accessory/Accessory.jsx';
-=======
->>>>>>> 6c4eaedf7d15c7cbe094db32012514daa26d0067
 
 export default function GameHome({ navigation }) {
   const dispatch = useDispatch();
