@@ -19,24 +19,26 @@ const CardItem = (props) => {
   // configuring navigation
   const navigation = useNavigation();
   const data = props.data;
-  // const flag = require(`../../../../assets/flag`)
   const id = props.data.accId
+
   return (
-    <View style={{...styles.card, backgroundColor:colors[id%5]}}>
+    <View style={{...styles.card, backgroundColor:data.cardType!=='SEP'?colors[id%5]:'black'}}>
       <View style={styles.account}>
         {data.image&&<Image source={data.image} style={styles.flagImg}/>}
         <Text style={{...styles.cardinfo, fontSize:RFPercentage(2)}}>   {data.ntnCode}   {data.cardType==='저축예금'?data.accountnum:data.cardType}</Text>
       </View> 
       <View style={styles.balance}>
         <Text style={styles.cardinfo}>{ChangeForm(data.balance)} {data.ISO}</Text>
-        {props.data.cardType==='저축예금'&&(<View style={styles.buttons}>
+        <View style={styles.buttons}>
+          {(data.cardType==='저축예금'||data.cardType==='SEP')&&
           <TouchableOpacity onPress={()=>navigation.navigate('SendWho', {type:'송금', data})} style={styles.button}>
             <Text style={styles.txtSize}>송금하기</Text>
-          </TouchableOpacity>
+          </TouchableOpacity>}
+          {data.cardType==='저축예금'&&
           <TouchableOpacity onPress={()=>navigation.navigate('SendWho', {type:'환전', data})} style={styles.button}>
             <Text style={styles.txtSize}>환전하기</Text>
-          </TouchableOpacity>
-        </View>)}
+          </TouchableOpacity>}
+        </View>
       </View>
     </View>
   );
@@ -80,9 +82,10 @@ const styles = StyleSheet.create({
   buttons:{
     width:'70%',
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-evenly',
   },
   button:{
+    marginHorizontal:'5%',
     paddingHorizontal:'5%',
     paddingVertical:'2%',
     backgroundColor:'white',

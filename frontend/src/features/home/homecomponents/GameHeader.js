@@ -9,6 +9,8 @@ import { useSelector } from 'react-redux';
 import { RFPercentage } from 'react-native-responsive-fontsize';
 import { AntDesign } from '@expo/vector-icons';
 
+import CoinUnit from './CoinUnit.js';
+
 import { images } from '../../../common/imgDict.js';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../../common/ScreenSize.js';
 
@@ -102,22 +104,23 @@ function GameHeader(props) {
         </View>
         <View style={{ flexDirection: "column", flex: 1 }}>
           <View style={styles.headerRight}>
-            <View style={styles.rightTopBox}>
+            <View style={{...styles.rightTopBox, marginRight:'0%'}}>
+              <Image
+                source={images.gameIcon.ethereum}
+                style={{...styles.coinImg, width:'20%'}}
+              />
+              <Text style={styles.coinTxt}>
+                {gameUser.이더잔액&&CoinUnit(gameUser.이더잔액)}
+              </Text>
+            </View>
+            <View style={{...styles.rightTopBox, marginLeft:'0%'}}>
               <Image
                 source={images.gameIcon.coin}
-                style={{ resizeMode: "contain", height: "85%", width: "20%" }}
+                style={styles.coinImg}
               />
               <Text
-                style={{
-                  fontSize: 18,
-                  fontWeight: "bold",
-                  color: "white",
-                  height: "85%",
-                  marginEnd: "10%",
-                }}
-              >
-                {" "}
-                {gameUser.point}
+                style={styles.coinTxt}>
+                {gameUser.point&&CoinUnit(gameUser.point)}
               </Text>
             </View>
           </View>
@@ -135,7 +138,7 @@ export default GameHeader;
 
 const styles = StyleSheet.create({
   header: {
-    height: SCREEN_HEIGHT*0.135,
+    height: SCREEN_HEIGHT * 0.135,
     width: SCREEN_WIDTH,
     flexDirection: "row",
     backgroundColor: "rgba(41, 54, 148, 0.8)",
@@ -158,6 +161,21 @@ const styles = StyleSheet.create({
     marginTop: "5%",
     marginStart: "10%",
   },
+  coinTxt: {
+    paddingVertical: "10%",
+    alignItems: "center",
+    fontSize: RFPercentage(1.5),
+    fontWeight: "bold",
+    color: "white",
+    height: "85%",
+    marginEnd: "10%",
+  },
+  coinImg: {
+    resizeMode: "contain",
+    height: "85%",
+    width: "25%",
+    marginLeft: "3%",
+  },
   headerRight: {
     flex: 1,
     flexDirection: "row",
@@ -170,7 +188,7 @@ const styles = StyleSheet.create({
     height: "80%",
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent: "space-around",
     marginHorizontal: "10%",
     marginTop: "3%",
     borderRadius: 20,

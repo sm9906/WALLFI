@@ -71,7 +71,6 @@ export default function MakeDeposit({route,navigation}){
           <SelectDropdown
             data={selNations}
             onSelect={(selectedItem, index)=>{
-              console.log(selectedItem, index)
               setNtnCode(selectedItem)
             }}
             buttonTextAfterSelection={(selectedItem, index)=>{

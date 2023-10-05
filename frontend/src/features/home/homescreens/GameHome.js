@@ -15,14 +15,13 @@ import { RFPercentage } from 'react-native-responsive-fontsize';
 import { useFocusEffect } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 
+import { Audio } from 'expo-av';
+import { DJ, PlayMusic, StopMusic } from '../homeSlice.js';
 import { getMainCharacter, updateCharacter, getAnimalDeco } from '../homeSlice.js';
 
 import { globalStyles } from '../homestyles/global.js';
 import { images } from '../../../common/imgDict.js';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../../common/ScreenSize.js';
-
-import { Audio } from 'expo-av';
-import { DJ, PlayMusic, StopMusic } from '../homeSlice.js';
 
 import GameHeader from '../homecomponents/GameHeader.js';
 // 상태바 겹침현상을 없애려면 react-native에서 StatusBar를 import 해줘야함
@@ -274,27 +273,22 @@ function Content(props) {
         </View>
 
         {nowAct === '밥먹기' && <Image source={images.eatCharacter[type]} style={actStyles.eating} />}
-        {nowAct === '훈련하기' && <Image source={require('../../../assets/game/loading/LoadingImg.gif')} style={actStyles.eating} />}
-        <View style={{
-          marginTop: "10%",
-          alignItems: "center"
-        }}>
-          <Text style={{
-            color: '#3B3B3B',
-            fontWeight: 'bold',
-            fontSize: RFPercentage(2),
-            margin: '5%',
-          }}>&lt;{userName}&gt;</Text>
-          <Text style={{
-            color: 'white',
-            fontSize: 18,
-            fontWeight: 'bold',
-            textShadowColor: 'black',
-            textShadowRadius: 2,
-            textShadowOffset: { width: 1, height: 2 },
-            elevation: 2,
-          }}>{timeText}</Text>
-        </View>
+        {nowAct === '훈련하기' && <Image source={type==='SHIBA'?require('../../../assets/game/loading/LoadingImg.gif'):imageUrl} style={actStyles.eating} />}
+        <Text style={{
+          color: '#3B3B3B',
+          fontWeight: 'bold',
+          fontSize: RFPercentage(2),
+          margin: '5%',
+        }}>&lt;{userName}&gt;</Text>
+        <Text style={{
+          color: 'white',
+          fontSize: 18,
+          fontWeight: 'bold',
+          textShadowColor: 'black',
+          textShadowRadius: 2,
+          textShadowOffset: { width: 1, height: 2 },
+          elevation: 2,
+        }}>{timeText}</Text>
       </View>
       <View style={styles.sideBar}>
         <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate('ItemExchange')}>

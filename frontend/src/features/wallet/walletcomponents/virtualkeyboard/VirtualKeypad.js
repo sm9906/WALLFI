@@ -63,7 +63,7 @@ export default class VirtualKeyboard extends Component {
           <View style={[styles.row, this.props.rowStyle]}>
             {this.Backspace()}
             {this.Cell(0)}				
-            {this.Cell('완료')}
+            {this.Cell(this.props.decimal?'.':'완료')}
           </View>
 			  </View>
       </View>
@@ -92,7 +92,7 @@ export default class VirtualKeyboard extends Component {
 	Cell(symbol) {
 		return (
 			<TouchableOpacity style={[styles.cell, this.props.cellStyle]} key={symbol} 
-				accessibilityLabel={symbol.toString()} onPress={() => { this.props.addMoney(symbol.toString()) }}>
+				accessibilityLabel={symbol.toString()} onPress={() => { this.props.addMoney(String(symbol)) }}>
 				<Text style={[styles.number, this.props.textStyle, { color: symbol==='완료'?'#498AC6':this.props.color }]}>{symbol}</Text>
 			</TouchableOpacity>
 		);

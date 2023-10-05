@@ -29,7 +29,6 @@ export default function SignUp({navigation}){
       password : password.current
     }
     await dispatch(postSignUp(data)).then((res)=>{
-      console.log('회원가입 성공!',res);
       navigation.navigate('LogIn');      
     });
   }
