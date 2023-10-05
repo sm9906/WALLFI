@@ -6,7 +6,7 @@ import { RFPercentage } from 'react-native-responsive-fontsize';
 import { 
   getCharacterList, 
   getGameInfo, 
-  getItemList, 
+  getItemList,
   getMainCharacter, 
   purchaseCharacter, 
   purchaseItem 
@@ -27,11 +27,12 @@ export default function GameLoading({navigation}) {
 
     const getData = async () => {
         try {
-            await dispatch(getGameInfo())
+            await dispatch(getGameInfo()).then(res => console.log(res, '로딩'));
             await dispatch(getMainCharacter())
             await dispatch(getCharacterList())
             await dispatch(purchaseCharacter())
             await dispatch(purchaseItem())
+            await dispatch(getItemList())
             setTimeout(()=>{
                 navigation.navigate('GameHome');
             }, 2000)

@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   TextInput
 } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import ButtonGroup from './ButtonGroup.js';
 import Search from './Search.js';
@@ -17,6 +17,7 @@ import List from '../ItemExchange/ItemList.js';
 import { globalStyles } from '../../homestyles/global.js';
 import { type } from '../../../../common/characterType.js';
 import { images } from '../../../../common/imgDict.js';
+import { sellItem } from '../../homeSlice.js';
 
 import { SCREEN_HEIGHT } from '../../homecomponents/ScreenSize.js';
 
@@ -33,7 +34,10 @@ export default function Sale() {
         animationType='fade'
         transparent={true}
         visible={modalVisible}>
-        <ItemDetail selectedItem={selectedItem} setModalVisible={setModalVisible}/>
+        <ItemDetail 
+          selectedItem={selectedItem} 
+          setModalVisible={setModalVisible}
+        />
       </Modal>
       <ButtonGroup 
         title1={'캐릭터'} 
@@ -69,7 +73,8 @@ const styles = StyleSheet.create({
 function Content(props) {
 
   const characterList = useSelector(state => state.home.characters);
-  const characters = [];
+  const itemList = useSelector(state => state.home.items);
+  const characters = [], items = [];
   characterList.map((character) => {
 
     if (character.main === false) {
@@ -79,18 +84,32 @@ function Content(props) {
         imgUrl: images.defaultCharacter[character.characterType][character.color],
         level: character.level,
         atk: character.atk,
-        def: character.def
+        def: character.def,
+        type: 'c'
       })
     }
   })
 
-  const deco = [];
+  const itemName = {
+    CROWN_CAP: '왕관',
+    RUBY_NECKLACE: '루비목걸이',
+    SSAFY_CAP: '싸피모자',
+  }
+
+  itemList.map((item) => {
+    items.push({
+      id: item.itemIdx,
+      name: itemName[item.itemName],
+      imgUrl: images.accessory[item.itemName.toLowerCase()],
+      type: 'i'
+    })
+  })
 
   return (
     <List
       type={'sale'}
       selectedBtn={props.selectedBtn}
-      data={props.selectedBtn ? deco : characters}
+      data={props.selectedBtn ? items : characters}
       setModalVisible={props.setModalVisible}
       setSelectedBtn={props.setSelectedBtn}
       setSelectedItem={props.setSelectedItem}
@@ -100,7 +119,25 @@ function Content(props) {
 
 // 아이템 상세 정보 모달창
 function ItemDetail(props) {
+
+  const [price, setPrice] = useState(0);
+  const numPrice = Number(price); // 입력 금액 -> 숫자
+
   const image = props.selectedItem.imgUrl;
+  const type = props.selectedItem.type;
+
+  const dispatch = useDispatch();
+  const saleItem = async() => {
+    try {
+      dispatch(sellItem({
+        characterIdx: type === 'c' ? props.selectedItem.id : null,
+        goodsType: type,
+        itemIdx: type === 'i' ? props.selectedItem.id : null,
+        price: numPrice})).then(response => console.log('판매창', response));
+    } catch (err) {
+      console.log('sellItem', err);
+    }
+  }
 
   return (
     <View style={[globalStyles.modalStyle, { backgroundColor: '#A6C9FF' }]}>
@@ -108,18 +145,32 @@ function ItemDetail(props) {
         <Image source={image} style={detail.imgStyle}/>
       </View>
       <View style={detail.textGroup}>
-        <Text style={detail.itemName}>LV.{props.selectedItem.level} {props.selectedItem.name}</Text>
+        <Text style={detail.itemName}>{props.selectedItem.name}</Text>
         <View style={detail.price}>
           <Image source={images.gameIcon.ethereum} style={detail.coinImg}/>
-          <TextInput style={detail.priceText} keyboardType="number-pad"/>
+          <TextInput 
+            style={detail.priceText} 
+            keyboardType="number-pad"
+            placeholder='가격 입력'
+            value={String(price)}
+            onChangeText={setPrice}
+          />
         </View>
-        <View style={detail.stats}>
-          <Text style={detail.statsText}>Atk. {props.selectedItem.atk}</Text>
-          <Text style={detail.statsText}>Def. {props.selectedItem.def}</Text>
-        </View>
+        {
+          type === 'i' ? null :
+          <View style={detail.stats}>
+            <Text style={detail.statsText}>Atk. {props.selectedItem.atk}</Text>
+            <Text style={detail.statsText}>Def. {props.selectedItem.def}</Text>
+          </View>
+        }
       </View>
       <View style={detail.btnGroup}>
-        <TouchableOpacity style={[detail.modalBtn, detail.purchaseBtn]}>
+        <TouchableOpacity style={[detail.modalBtn, detail.purchaseBtn]}
+          onPress={() => {
+            saleItem();
+            props.setModalVisible(false);
+          }}
+        >
           <Text style={detail.btnText}>판매</Text>
         </TouchableOpacity>
         <TouchableOpacity 

@@ -46,7 +46,7 @@ export default function Collection({ navigation }) {
   // 유저의 캐릭터 목록 조회
   const userId = useSelector(state => state.auth.userId);
   const characterList = useSelector(state => state.home.characters);
-  const characters = characterList.slice(0, 6).map((character) => ({
+  const characters = characterList.map((character) => ({
     id: character.characterIdx,
     name: type[character.characterType],
     type: character.characterType,

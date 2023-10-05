@@ -189,6 +189,26 @@ export const getRandomItem = createAsyncThunk('GET_RANDOM_ITEM', async(_, { reje
 })
 
 // 사용자가 보유하고 있는 아이템 조회
+export const getItemList = createAsyncThunk('GET_ITEM_LIST', async(_, { rejectWithValue }) => {
+  try {
+    const response = await requestGet('deco/itemList')
+    const itemList = response.data.data;
+    const items = itemList.map((i) => {
+      const item = {
+        itemIdx: i.itemIdx,
+        itemName: i.itemName
+      }
+
+      return item;
+    })
+
+    return items;
+
+  } catch (e) {
+    console.error('홈슬라이스/getItemList 실패', e);
+    return rejectWithValue(e.res);
+  }
+})
 
 // 캐릭터들 치장 데이터 받아오기
 export const getAnimalDeco = createAsyncThunk('GET_ANIMAL_DECO', async (userId, { rejectWithValue }) => {
@@ -322,7 +342,7 @@ export const purchaseItem = createAsyncThunk('PURCHASE_ITEM', async(_, { rejectW
 // 거래소에서 상품 구매하기
 export const getBuy = createAsyncThunk('GET_BUY', async(data, { rejectWithValue }) => {
   try {
-    await requestPost('buy', data).then(res => console.log('홈슬라이스들어옴', res));
+    await requestPost('buy', data);
     return data;
 
   } catch (e) {
@@ -332,11 +352,21 @@ export const getBuy = createAsyncThunk('GET_BUY', async(data, { rejectWithValue 
 })
 
 // 거래소에서 상품 판매하기
+export const sellItem = createAsyncThunk('SELL_ITEM', async(data, { rejectWithValue }) => {
+  try {
+    await requestPost('sell', data).then(res => console.log(res));
+    return data;
+  } catch (e) {
+    console.error('홈슬라이스/sellItem 실패', e);
+    return rejectWithValue(e.res);
+  }
+})
 
 const initialState = {
   exchangeInfo: null,
   mainCharacter: null,
   characters: null,
+  items: null,
   userGameInfo: null,
   purchaseCharacters: null,
   purchaseItems: null,
@@ -436,6 +466,9 @@ export const homeSlice = createSlice({
       .addCase(getGameInfo.fulfilled, (state, action) => {
         state.userGameInfo = action.payload;
       })
+      .addCase(getItemList.fulfilled, (state, action) => {
+        state.items = action.payload;
+      })
       .addCase(updateCharacter.fulfilled, (state, action) => {
         // 메인으로 설정한 캐릭터의 Idx 가져오기
         const id = action.payload.characterIdx;
@@ -478,6 +511,22 @@ export const homeSlice = createSlice({
         state.animalDeco = action.payload.data.animal;
       })
       .addCase(getBuy.fulfilled, (state, action) => {
+        const idx = action.payload.goodsIdx;
+        const newArray1 = state.purchaseCharacters.filter(obj => obj.goodsIdx !== idx);
+        const newArray2 = state.purchaseItems.filter(obj => obj.goodsIdx !== idx);
+        state.purchaseCharacters = newArray1;
+        state.purchaseItems = newArray2;
+      })
+      .addCase(sellItem.fulfilled, (state, action) => {
+        if (action.payload.goodsType === 'c') {
+          const idx = action.payload.characterIdx;
+          const newArray = state.characters.filter(obj => obj.characterIdx !== idx);
+          state.characters = newArray;
+        } else {
+          const idx = action.payload.itemIdx;
+          const newArray = state.items.filter(obj => obj.itemIdx !== idx);
+          state.items = newArray;
+        }
       })
   }
 })
