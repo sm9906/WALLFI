@@ -41,7 +41,7 @@ function ItemList(props) {
       style={itemGroup.itemBox} 
       onPress={() => { props.setModalVisible(true); props.setSelectedItem({...props.item})}}>
       <View style={itemGroup.imageBox}>
-        <Image source={props.item.imageUrl} style={itemGroup.itemImg} />
+        <Image source={props.item.imgUrl} style={itemGroup.itemImg} />
       </View>
       <View style={itemGroup.fontContainer}>
         <View style={{ alignItems: 'flex-start' }}>
@@ -49,7 +49,7 @@ function ItemList(props) {
           {
             props.type === 'purchase' ? 
               <View style={itemGroup.priceContainer}> 
-                <Image source={images.gameIcon.coin} style={itemGroup.coinIcon} />
+                <Image source={images.gameIcon.ethereum} style={itemGroup.coinIcon} />
                 <Text style={{ color: 'white', fontSize: 15, width: '90%' }}> {props.item.price}</Text>
               </View>
             : props.dataType === 'character' ? 

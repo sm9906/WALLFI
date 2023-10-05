@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { requestPost, requestPut } from '../../common/http-common';
+import { requestGet, requestPost, requestPut } from '../../common/http-common';
 
 // 사용자 게임 정보 불러오기
 export const getGameInfo = createAsyncThunk('GET_GAME_INFO', async(_, { rejectWithValue }) => {
@@ -188,6 +188,8 @@ export const getRandomItem = createAsyncThunk('GET_RANDOM_ITEM', async(_, { reje
   }
 })
 
+// 사용자가 보유하고 있는 아이템 조회
+
 // 캐릭터들 치장 데이터 받아오기
 export const getAnimalDeco = createAsyncThunk('GET_ANIMAL_DECO', async (userId, { rejectWithValue }) => {
   try {
@@ -262,12 +264,82 @@ export const sendAnimalDeco = createAsyncThunk('SEND_ANIMAL_DECO', async (data, 
   }
 });
 
+// 현재 거래중인 캐릭터 조회
+export const purchaseCharacter = createAsyncThunk('PURCHASE_CHARACTER', async(_, { rejectWithValue }) => {
+  try {
+    const response = await requestGet('character');
+    
+    const characterList = response.data.data;
+    const characters = characterList.map((character) => {
+      const data = {
+        characterIdx: character.characterIdx,
+        characterType: character.characterType,
+        color: character.color,
+        goodsIdx: character.goodsIdx,
+        goodsType: character.goodsType,
+        price: character.price,
+        seller: character.seller
+      }
+
+      return data;
+    })
+
+    return characters;
+
+  } catch (e) {
+    console.error('홈슬라이스/purchaseCharacter 실패', e);
+    return rejectWithValue(e.res);
+  }
+})
+
+// 현재 거래중인 아이템 조회
+export const purchaseItem = createAsyncThunk('PURCHASE_ITEM', async(_, { rejectWithValue }) => {
+  try {
+    const response = await requestGet('item');
+    
+    const itemList = response.data.data;
+    const items = itemList.map((item) => {
+      const data = {
+        goodsIdx: item.goodsIdx,
+        goodsType: item.goodsType,
+        price: item.price,
+        itemIdx: item.itemIdx,
+        seller: item.seller,
+        itemName: item.itemName
+      }
+
+      return data;
+    })
+
+    return items;
+
+  } catch (e) {
+    console.error('홈슬라이스/purchaseItem 실패', e);
+    return rejectWithValue(e.res);
+  }
+})
+
+// 거래소에서 상품 구매하기
+export const getBuy = createAsyncThunk('GET_BUY', async(data, { rejectWithValue }) => {
+  try {
+    await requestPost('buy', data).then(res => console.log('홈슬라이스들어옴', res));
+    return data;
+
+  } catch (e) {
+    console.error('홈슬라이스/getBuy 실패', e);
+    return rejectWithValue(e.res);
+  }
+})
+
+// 거래소에서 상품 판매하기
 
 const initialState = {
   exchangeInfo: null,
   mainCharacter: null,
   characters: null,
   userGameInfo: null,
+  purchaseCharacters: null,
+  purchaseItems: null,
   // animalDeco: null, // 데코 서버 생기면 아래거 지우고 활성화
   animalDeco: {
     SHIBA: {
@@ -396,8 +468,16 @@ export const homeSlice = createSlice({
           }
         })
       })
+      .addCase(purchaseCharacter.fulfilled, (state, action) => {
+        state.purchaseCharacters = action.payload;
+      })
+      .addCase(purchaseItem.fulfilled, (state, action) => {
+        state.purchaseItems = action.payload;
+      })
       .addCase(getAnimalDeco.fulfilled, (state, action) => {
         state.animalDeco = action.payload.data.animal;
+      })
+      .addCase(getBuy.fulfilled, (state, action) => {
       })
   }
 })

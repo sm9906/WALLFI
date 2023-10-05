@@ -76,7 +76,7 @@ function Content(props) {
       characters.push({
         id: character.characterIdx,
         name: type[character.characterType],
-        imageUrl: images.defaultCharacter[character.characterType][character.color],
+        imgUrl: images.defaultCharacter[character.characterType][character.color],
         level: character.level,
         atk: character.atk,
         def: character.def
@@ -100,7 +100,7 @@ function Content(props) {
 
 // 아이템 상세 정보 모달창
 function ItemDetail(props) {
-  const image = props.selectedItem.imageUrl;
+  const image = props.selectedItem.imgUrl;
 
   return (
     <View style={[globalStyles.modalStyle, { backgroundColor: '#A6C9FF' }]}>
@@ -110,7 +110,7 @@ function ItemDetail(props) {
       <View style={detail.textGroup}>
         <Text style={detail.itemName}>LV.{props.selectedItem.level} {props.selectedItem.name}</Text>
         <View style={detail.price}>
-          <Image source={images.gameIcon.coin} style={detail.coinImg}/>
+          <Image source={images.gameIcon.ethereum} style={detail.coinImg}/>
           <TextInput style={detail.priceText} keyboardType="number-pad"/>
         </View>
         <View style={detail.stats}>
@@ -158,7 +158,7 @@ const detail = StyleSheet.create({
     fontWeight: 'bold' 
   },
   price: { 
-    width: '40%', 
+    width: '45%', 
     height: '18%', 
     backgroundColor: '#559AEC', 
     alignItems: 'center', 

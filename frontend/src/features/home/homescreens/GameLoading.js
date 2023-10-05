@@ -3,7 +3,14 @@ import { View, Text, StyleSheet, Image } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux';
 import { RFPercentage } from 'react-native-responsive-fontsize';
 
-import { getCharacterList, getGameInfo, getMainCharacter } from '../homeSlice';
+import { 
+  getCharacterList, 
+  getGameInfo, 
+  getItemList, 
+  getMainCharacter, 
+  purchaseCharacter, 
+  purchaseItem 
+} from '../homeSlice';
 
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../../common/ScreenSize.js';
 
@@ -23,6 +30,8 @@ export default function GameLoading({navigation}) {
             await dispatch(getGameInfo())
             await dispatch(getMainCharacter())
             await dispatch(getCharacterList())
+            await dispatch(purchaseCharacter())
+            await dispatch(purchaseItem())
             setTimeout(()=>{
                 navigation.navigate('GameHome');
             }, 2000)

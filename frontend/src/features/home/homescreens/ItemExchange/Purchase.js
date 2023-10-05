@@ -7,9 +7,11 @@ import {
   Image,
   Modal
 } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { globalStyles } from '../../homestyles/global.js';
 import { images } from '../../../../common/imgDict.js';
+import { getBuy } from '../../homeSlice.js';
 
 import ButtonGroup from './ButtonGroup.js';
 import Search from './Search.js';
@@ -21,6 +23,47 @@ export default function Purchase() {
   const [selectedBtn, setSelectedBtn] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedItem, setSelectedItem] = useState([]);
+
+  const characterName = {
+    EAGLE: '독수리',
+    LION: '사자',
+    PANDA: '판다',
+    QUOKKA: '쿼카',
+    SHIBA: '시바',
+    TIGER: '호랑이'
+  }
+
+  const itemName = {
+    CROWN_CAP: '왕관',
+    RUBY_NECKLACE: '루비목걸이',
+    SSAFY_CAP: '싸피모자',
+  }
+
+  const characterData = useSelector(state => state.home.purchaseCharacters);
+  const itemData = useSelector(state => state.home.purchaseItems);
+  let character = [], item = [];
+
+  characterData.map((data, idx) => {
+    character.push({
+      id: idx,
+      goodsIdx: data.goodsIdx,
+      name: characterName[data.characterType],
+      imgUrl: images.defaultCharacter[data.characterType][data.color],
+      price: data.price,
+      seller: data.seller
+    });
+  })
+
+  itemData.map((data, idx) => {
+    item.push({
+      id: idx,
+      goodsIdx: data.goodsIdx,
+      name: itemName[data.itemName],
+      imgUrl: images.accessory[data.itemName.toLowerCase()],
+      price: data.price,
+      seller: data.seller
+    })
+  })
 
   return (
     <View style={styles.purchaseContainer}>
@@ -41,7 +84,9 @@ export default function Purchase() {
           selectedBtn={selectedBtn} 
           setModalVisible={setModalVisible}
           setSelectedItem={setSelectedItem}
-          setSelectedBtn={setSelectedBtn} />
+          setSelectedBtn={setSelectedBtn}
+          character={character}
+          item={item} />
       </View>
     </View>
   )
@@ -60,36 +105,17 @@ const styles = StyleSheet.create({
   }
 })
 
-// 캐릭터 데이터
-const character = [
-  {id: 1, name: '호랑이', imageUrl: images.defaultCharacter.TIGER.LED, price: '100만'},
-  {id: 2, name: '호랑이', imageUrl: images.defaultCharacter.SHIBA.LED, price: '1만'},
-  {id: 3, name: '몰리', imageUrl: images.defaultCharacter.MOLLY.BASIC, price: '1만'},
-  {id: 4, name: '호랑이', imageUrl: images.defaultCharacter.LION.LED, price: '1만'},
-  {id: 5, name: '호랑이', imageUrl: images.defaultCharacter.QUOKKA.LED, price: '1만'},
-  {id: 6, name: '호랑이', imageUrl: images.defaultCharacter.EAGLE.LED, price: '1만'},
-  {id: 7, name: '호랑이', imageUrl: images.defaultCharacter.PANDA.LED, price: '1만'},
-  {id: 8, name: '호랑이', imageUrl: images.defaultCharacter.TIGER.LED, price: '1만'},
-  {id: 9, name: '호랑이', imageUrl: images.defaultCharacter.TIGER.LED, price: '1만'},
-  {id: 10, name: '호랑이', imageUrl: images.defaultCharacter.TIGER.LED, price: '1만'},
-  {id: 11, name: '호랑이', imageUrl: images.defaultCharacter.TIGER.LED, price: '1만'},
-  {id: 12, name: '호랑이', imageUrl: images.defaultCharacter.TIGER.LED, price: '1만'},
-  {id: 13, name: '호랑이', imageUrl: images.defaultCharacter.TIGER.LED, price: '1만'},
-]
-
-// 치장 데이터
-const deco = [
-  {id: 1, name: '트로피', imageUrl: images.gameIcon.trophy, price: '1만'}
-]
-
 // 버튼을 누를 때 마다 나오는 컨텐츠
 function Content(props) {
+
+  const character = props.character;
+  const item = props.item;
 
   return (
     <List
       type={'purchase'}
       selectedBtn={props.selectedBtn}
-      data={props.selectedBtn ? deco : character}
+      data={props.selectedBtn ? item : character}
       setModalVisible={props.setModalVisible}
       setSelectedBtn={props.setSelectedBtn}
       setSelectedItem={props.setSelectedItem}
@@ -99,7 +125,20 @@ function Content(props) {
 
 // 아이템 상세 정보 모달창
 function ItemDetail(props) {
-  const image = props.selectedItem.imageUrl;
+  const image = props.selectedItem.imgUrl;
+
+  // 구매하기
+  const dispatch = useDispatch();
+  const purchaseItem = async() => {
+    try {
+      dispatch(getBuy({ goodsIdx: props.selectedItem.goodsIdx, price: props.selectedItem.price }))
+      .then((response) => {
+        console.log('구매창', response);
+      });
+    } catch (err) {
+      console.log('purchaseItem', err);
+    }
+  }
 
   return (
     <View style={[globalStyles.modalStyle, { backgroundColor: '#A6C9FF' }]}>
@@ -107,19 +146,19 @@ function ItemDetail(props) {
         <Image source={image} style={detail.imgStyle}/>
       </View>
       <View style={detail.textGroup}>
-        <Text style={detail.itemName}>{}의 {props.selectedItem.name}</Text>
+        <Text style={detail.itemName}>{props.selectedItem.seller}의 {props.selectedItem.name}</Text>
         <View style={detail.price}>
-          <Image source={images.gameIcon.coin} style={detail.coinImg}/>
+          <Image source={images.gameIcon.ethereum} style={detail.coinImg}/>
           <Text style={detail.priceText}>{props.selectedItem.price}</Text>
-        </View>
-        <View style={detail.stats}>
-          <Text style={detail.statsText}>Level. {}</Text>
-          <Text style={detail.statsText}>Atk. {}</Text>
-          <Text style={detail.statsText}>Def. {}</Text>
         </View>
       </View>
       <View style={detail.btnGroup}>
-        <TouchableOpacity style={[detail.modalBtn, detail.purchaseBtn]}>
+        <TouchableOpacity style={[detail.modalBtn, detail.purchaseBtn]}
+          onPress={() => { 
+            purchaseItem();
+            props.setModalVisible(false);
+        }}
+        >
           <Text style={detail.btnText}>구매</Text>
         </TouchableOpacity>
         <TouchableOpacity 
@@ -153,12 +192,12 @@ const detail = StyleSheet.create({
     width: '100%'
   },
   itemName: { 
-    height: '20%', 
+    height: '40%', 
     fontSize: 20, 
     fontWeight: 'bold' 
   },
   price: { 
-    width: '40%', 
+    width: '45%', 
     height: '18%', 
     backgroundColor: '#559AEC', 
     alignItems: 'center', 
@@ -178,17 +217,6 @@ const detail = StyleSheet.create({
     fontWeight: 'bold', 
     textAlign: 'right', 
     width: '60%' 
-  },
-  stats: { 
-    height: '40%', 
-    width: '30%',
-    marginVertical: '5%',
-    justifyContent: 'center',
-    alignItems: 'flex-start'
-  },
-  statsText: {
-    fontSize: 16,
-    marginVertical: '5%',
   },
   btnGroup: {
     flex: 1, 
