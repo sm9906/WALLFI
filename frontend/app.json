@@ -16,13 +16,13 @@
       "supportsTablet": true
     },
     "android": {
-      "versionCode": 2,
+      "versionCode": 4,
       "adaptiveIcon": {
         "foregroundImage": "./src/assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
       "permissions": [
-        "ACCESS_BACKGROUND_LOCATION",
+        // "ACCESS_BACKGROUND_LOCATION",
 
         "ACCESS_COARSE_LOCATION",
         "ACCESS_FINE_LOCATION"

@@ -1,19 +1,37 @@
-import React, { useState } from "react";
-import { View, StyleSheet, Dimensions, ScrollView } from "react-native";
 import Accessory from "./Accessory";
 import { useDispatch } from "react-redux";
+import { getAccessoryList } from "../../homeSlice";
+import React, { useEffect, useState } from "react";
 import { setPressedAccessory } from "../../homeSlice";
+import { View, Text, StyleSheet, Dimensions, ScrollView } from "react-native";
 
 const { width } = Dimensions.get("window");
 
 export const AccessoryList = () => {
-  const accessorys = ["crown_cap", "ruby_necklace", "ssafy_cap"]; // 나중에 악세 리스트로 교체
   const dispatch = useDispatch();
+  
+  const [accessorys, setAccessorys] = useState([]);
   const [selectBox, setSelectBox] = useState(null);
 
-  const setDeco = (accessoryType) => {
-    dispatch(setPressedAccessory(accessoryType));
-    setSelectBox(accessoryType);
+  useEffect(() => {
+    const fetchAccessoryList = async () => {
+      const result = await dispatch(getAccessoryList());
+      if (getAccessoryList.fulfilled.match(result)) {
+        setAccessorys(result.payload);
+      }
+    };
+
+    fetchAccessoryList();
+  }, [dispatch]);
+
+  const setDeco = (accessoryItem) => {
+    dispatch(
+      setPressedAccessory([
+        accessoryItem.itemName.toLowerCase(),
+        accessoryItem.itemIdx,
+      ])
+    );
+    setSelectBox(accessoryItem.itemName);
   };
 
   return (
@@ -28,23 +46,35 @@ export const AccessoryList = () => {
       scrollEventThrottle={16}
     >
       <View style={styles.gap}></View>
-      {accessorys.map((accessoryType, index) => (
-        <React.Fragment key={index}>
-          <View
-            style={[
-              styles.listBack,
-              selectBox === accessoryType ? styles.selectedBorder : null,
-            ]}
-          >
-            <Accessory
-              aType={accessoryType}
-              aSize={0.7}
-              onPress={() => setDeco(accessoryType)}
-            />
-          </View>
-          {index !== accessorys.length - 1 && <View style={styles.gap}></View>}
-        </React.Fragment>
-      ))}
+      {accessorys.length === 0 ? (
+        <View style={styles.noAccessoryContainer}>
+          <Text style={styles.noAccessoryText}>
+            보유한 악세사리가 없습니다.
+          </Text>
+        </View>
+      ) : (
+        accessorys.map((accessoryItem, index) => (
+          <React.Fragment key={index}>
+            <View
+              style={[
+                styles.listBack,
+                selectBox === accessoryItem.itemName
+                  ? styles.selectedBorder
+                  : null,
+              ]}
+            >
+              <Accessory
+                aType={accessoryItem.itemName.toLowerCase()}
+                aSize={0.7}
+                onPress={() => setDeco(accessoryItem)}
+              />
+            </View>
+            {index !== accessorys.length - 1 && (
+              <View style={styles.gap}></View>
+            )}
+          </React.Fragment>
+        ))
+      )}
       <View style={styles.gap}></View>
     </ScrollView>
   );
@@ -72,6 +102,15 @@ const styles = StyleSheet.create({
   },
   gap: {
     width: width * 0.041,
+  },
+  noAccessoryContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 10,
+  },
+  noAccessoryText: {
+    fontSize: 16,
+    color: "gray",
   },
 });
 

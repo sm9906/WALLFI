@@ -52,7 +52,7 @@ export default function GameHome({ navigation }) {
 
   useFocusEffect(() => {
     dispatch(getMainCharacter(userId));
-    // dispatch(getAnimalDeco(userId)); // 데코 서버 생기면 활성화
+    dispatch(getAnimalDeco(userId));
   })
   return (
     <View style={globalStyles.container}>
@@ -189,6 +189,8 @@ function Content(props) {
 
   // 치장 아이템
   const animalDeco = useSelector(state => state.home.animalDeco);
+  const currentDeco = animalDeco ? animalDeco.find(deco => deco.characterType === type) : null;
+
 
   useEffect(() => {
     if (nowAct) {
@@ -258,14 +260,14 @@ function Content(props) {
           {nowAct !== '밥먹기' && nowAct !== '훈련하기' && (
             <>
               <Animal aType={type} aColor={color} aSize={2} />
-              {animalDeco &&
+              {currentDeco &&
                 <Accessory
-                  aType={animalDeco[type].name}
-                  aSize={animalDeco[type].size}
-                  rotation={animalDeco[type].rotation}
+                  aType={currentDeco.itemName.toLowerCase()}
+                  aSize={currentDeco.size}
+                  rotation={currentDeco.rotation}
                   aAbosulte="absolute"
                   aMain={true}
-                  aXY={[animalDeco[type].x, animalDeco[type].y]}
+                  aXY={[currentDeco.x, currentDeco.y]}
                 />
               }
             </>

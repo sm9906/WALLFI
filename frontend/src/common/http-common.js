@@ -11,9 +11,14 @@ const axios = baseAxios.create({
 });
 
 export const requestGet = async (url, params={}) => {
-  const token = 'Bearer '+ await retrieveData();  
+  const token = 'Bearer ' + await retrieveData();
   try {
-    const data = await axios.get(url, {params}, {headers:{Authorization : token}});
+    const data = await axios.get(url, {
+      params: params,
+      headers: {
+        Authorization: token
+      }
+    });
     return data;
   } catch (error) {
     console.log(error);

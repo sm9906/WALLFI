@@ -1,4 +1,24 @@
+import images from "../../../common/imgDict.js";
 import React, { useEffect, useState } from "react";
+import Slider from "@react-native-community/slider";
+import { globalStyles } from "../homestyles/global.js";
+import { useSelector, useDispatch } from "react-redux";
+import GameHeader from "../homecomponents/GameHeader.js";
+import PageHeader from "../homecomponents/PageHeader.js";
+import Animal from "../../fight/fightcomponents/Animal.jsx";
+import Accessory from "../homecomponents/accessory/Accessory.jsx";
+import AccessoryList from "../homecomponents/accessory/AccessoryList.jsx";
+import { State } from "react-native-gesture-handler";
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../homecomponents/ScreenSize.js";
+import {
+  setAnimalDeco,
+  sendAnimalDeco,
+  setPressedAccessory,
+} from "../homeSlice.js";
+import {
+  PanGestureHandler,
+  RotationGestureHandler,
+} from "react-native-gesture-handler";
 import {
   StatusBar,
   Text,
@@ -8,22 +28,6 @@ import {
   TouchableOpacity,
   Animated,
 } from "react-native";
-import { globalStyles } from "../homestyles/global.js";
-import images from "../../../common/imgDict.js";
-import GameHeader from "../homecomponents/GameHeader.js";
-import PageHeader from "../homecomponents/PageHeader.js";
-import Animal from "../../fight/fightcomponents/Animal.jsx";
-import AccessoryList from "../homecomponents/accessory/AccessoryList.jsx";
-import { useSelector, useDispatch } from "react-redux";
-import Accessory from "../homecomponents/accessory/Accessory.jsx";
-import Slider from "@react-native-community/slider";
-import {
-  PanGestureHandler,
-  RotationGestureHandler,
-} from "react-native-gesture-handler";
-import { State } from "react-native-gesture-handler";
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../homecomponents/ScreenSize.js";
-import { setAnimalDeco, sendAnimalDeco } from "../homeSlice.js";
 
 export const AnimalDeco = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -111,21 +115,26 @@ export const AnimalDeco = ({ navigation }) => {
   };
 
   const handleConfirm = () => {
-    const decoData = {
-      [selectAnimal.characterType]: {
-        name: selectAccessory,
-        y: translateY._value,
-        x: translateX._value,
-        rotation: rotationValue,
-        size: scaleValue,
-      }
-    };    
+    const commonData = {
+      characterIdx: selectAnimal.characterIdx,
+      itemIdx: selectAccessory[1],
+      y: translateY._value,
+      x: translateX._value,
+      rotation: rotationValue,
+      size: scaleValue,
+    };
 
-  dispatch(setAnimalDeco(decoData));
-  // dispatch(sendAnimalDeco(decoData));
-  // 데코 서버 생기면 활성화
-  navigation.navigate("GameHome");
-};
+    const decoData = {
+      ...commonData,
+      characterType: selectAnimal.characterType,
+      itemName: selectAccessory[0].toUpperCase().replace("_", ""),
+    };
+
+    dispatch(setAnimalDeco(decoData)); // 리덕스
+    dispatch(setPressedAccessory("")); // 리덕스
+    dispatch(sendAnimalDeco(commonData)); // 서버
+    navigation.navigate("GameHome");
+  };
 
   return (
     <View style={globalStyles.container}>
@@ -197,7 +206,7 @@ export const AnimalDeco = ({ navigation }) => {
                       ]}
                     >
                       <Accessory
-                        aType={selectAccessory ? selectAccessory : null}
+                        aType={selectAccessory ? selectAccessory[0] : null}
                         aSize={scaleValue}
                         rotationValue={rotationValue}
                       />

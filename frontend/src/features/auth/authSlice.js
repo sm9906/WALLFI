@@ -3,21 +3,21 @@ import axios from "../../common/http-common";
 import { retrieveData, storageData } from "../../common/api/JWT-common";
 
 // 로그인 버튼 누르면, 로그인 처리,
-export const postLogIn = createAsyncThunk('POST_LOGIN', async(data, { rejectWithValue })=>{
-  try{
-    const response = await axios.post('user/login',data);
+export const postLogIn = createAsyncThunk('POST_LOGIN', async (data, { rejectWithValue }) => {
+  try {
+    const response = await axios.post('user/login', data);
     storageData(response.headers['access-token']);
     return response.data.data;
-  }catch(err){
-    console.log('회원관리/authSlice.postLogIn',err.response.data)
+  } catch (err) {
+    console.log('회원관리/authSlice.postLogIn', err.response.data)
   }
 })
 
-export const postSignUp = createAsyncThunk('POST_SIGNUP', async(data, {rejectWithValue})=>{
-  try{
-    const response = await axios.post('user/signup',data)
+export const postSignUp = createAsyncThunk('POST_SIGNUP', async (data, { rejectWithValue }) => {
+  try {
+    const response = await axios.post('user/signup', data)
     return response.data.data
-  }catch(err){
+  } catch (err) {
     console.error('회원가입/autSlice.POST_SIGNUP', err.response.data)
     return rejectWithValue(err.response.data);
   }
@@ -25,8 +25,8 @@ export const postSignUp = createAsyncThunk('POST_SIGNUP', async(data, {rejectWit
 
 
 const initialState = {
-  userId:'',
-  mainAccount:"",
+  userId: '',
+  mainAccount: "",
   // userId:'ssafy',
   // mainAccount:"110001785538",
   isLoading: false
@@ -35,23 +35,23 @@ const initialState = {
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
-  reducers:{
+  reducers: {
   },
-  extraReducers: (builder)=>{
+  extraReducers: (builder) => {
     builder
-    .addCase(postLogIn.fulfilled, (state, action) => {
-      state.userId = action.payload.userId;
-      state.mainAccount = action.payload.userMainAccount;
-    })
-    .addCase(postSignUp.pending, (state) => {
-      state.isLoading = true;
-    })
-    .addCase(postSignUp.fulfilled, (state) => {
-      state.isLoading = false;
-    })
+      .addCase(postLogIn.fulfilled, (state, action) => {
+        state.userId = action.payload.userId;
+        state.mainAccount = action.payload.userMainAccount;
+      })
+      .addCase(postSignUp.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(postSignUp.fulfilled, (state) => {
+        state.isLoading = false;
+      })
   }
 })
 
 
-export const {} = authSlice.actions
+export const { } = authSlice.actions
 export default authSlice.reducer

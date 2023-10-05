@@ -5,21 +5,22 @@ import * as TaskManager from "expo-task-manager";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Map from "../googlemapcomponents/Map";
 import { LocationContext } from "../googlemaphooks/UseMap";
-import { ScreenHeight, ScreenWidth } from './../googlemapcomponents/ScreenSize';
-
+import { ScreenHeight, ScreenWidth } from "./../googlemapcomponents/ScreenSize";
 
 const LOCATION_TASK_NAME = "background-location-task";
 
 export const useLocation = () => useContext(LocationContext);
 
-const getCurrentTimeString = () => { // 현재 시간 저장, 좌표 저장시 키값일 예정
+const getCurrentTimeString = () => {
+  // 현재 시간 저장, 좌표 저장시 키값일 예정
   const now = new Date();
   return `${now.getFullYear()}-${
     now.getMonth() + 1
   }-${now.getDate()} ${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
 };
 
-const getData = async () => { // 저장소에 저장한 좌표값들 꺼내옴 (백그라운드 구동 용)
+const getData = async () => {
+  // 저장소에 저장한 좌표값들 꺼내옴 (백그라운드 구동 용)
   try {
     const jsonValue = await AsyncStorage.getItem("location");
     const data = jsonValue != null ? JSON.parse(jsonValue) : {};
@@ -29,7 +30,8 @@ const getData = async () => { // 저장소에 저장한 좌표값들 꺼내옴 (
   }
 };
 
-const setData = async (latitude, longitude) => { // 저장소에 좌표값들 저장 (백그라운드 구동 용)
+const setData = async (latitude, longitude) => {
+  // 저장소에 좌표값들 저장 (백그라운드 구동 용)
   try {
     const storedData = await getData();
     const currentTime = getCurrentTimeString();
@@ -43,7 +45,8 @@ const setData = async (latitude, longitude) => { // 저장소에 좌표값들 �
   }
 };
 
-const isServerConnected = async () => { // 서버 연결되었는지 여부
+const isServerConnected = async () => {
+  // 서버 연결되었는지 여부
   try {
     const response = await fetch("서버 주소");
     return response.status === 200;
@@ -52,18 +55,24 @@ const isServerConnected = async () => { // 서버 연결되었는지 여부
   }
 };
 
-const sendDataToServer = async (data) => { // 내가 모은 좌표 데이터들 전송 (근데 아직 api 구현 안된듯)
+const sendDataToServer = async (data) => {
+  // 내가 모은 좌표 데이터들 전송 (근데 아직 api 구현 안된듯)
   // 서버로 데이터 전송
 };
 
-export const LocationProvider = ({ children }) => { // 위치 수집 권한 요청
-  const [myLocation, setMyLocation] = useState(null);
+export const LocationProvider = ({ children }) => {
+  // 위치 수집 권한 요청
+  // const [myLocation, setMyLocation] = useState(null);
+  const [locationSubscription, setLocationSubscription] = useState(null);
 
   useEffect(() => {
     (async () => {
-      let { status } = await Location.getBackgroundPermissionsAsync(); // 좌표값 받아도 되나요?
-      if (status !== 'granted') {
-        const response = await Location.requestBackgroundPermissionsAsync(); // 좌표값 받아도 되는걸 허가받아도 되나요?
+      // 앱 통과를 못해서 일단 백그라운드 코드 포그라운드로 변경
+      // let { status } = await Location.getBackgroundPermissionsAsync(); // 좌표값 받아도 되나요?
+      let { status } = await Location.getForegroundPermissionsAsync(); // 좌표값 받아도 되나요?
+      if (status !== "granted") {
+        // const response = await Location.requestBackgroundPermissionsAsync(); // 좌표값 받아도 되는걸 허가받아도 되나요?
+        const response = await Location.requestForegroundPermissionsAsync(); // 좌표값 받아도 되는걸 허가받아도 되나요?
         status = response.status;
       }
       if (status !== "granted") {
@@ -71,13 +80,29 @@ export const LocationProvider = ({ children }) => { // 위치 수집 권한 요�
         return;
       }
 
-      await Location.startLocationUpdatesAsync(LOCATION_TASK_NAME, {
-        accuracy: Location.Accuracy.High,
-        distanceInterval: 10,
-        timeInterval: 5000, // 내 좌표 몇초마다 갱신할지
-      });
+      // await Location.startLocationUpdatesAsync(LOCATION_TASK_NAME, {
+      //   accuracy: Location.Accuracy.High,
+      //   distanceInterval: 10,
+      //   timeInterval: 5000, // 내 좌표 몇초마다 갱신할지
+      // });
+      const subscription = await Location.watchPositionAsync(
+        {
+          accuracy: Location.Accuracy.High,
+          distanceInterval: 10,
+          timeInterval: 5000,
+        },
+        (location) => {
+          setLocationSubscription([
+            location.coords.latitude,
+            location.coords.longitude,
+          ]);
+        }
+      );
 
-      if (await isServerConnected()) { // 서버 연결되어 있으면 저장소에서 데이터 꺼내서 서버로 전송
+      setLocationSubscription(subscription);
+
+      if (await isServerConnected()) {
+        // 서버 연결되어 있으면 저장소에서 데이터 꺼내서 서버로 전송
         const storedData = await getData();
         if (storedData) {
           await sendDataToServer(storedData);
@@ -85,29 +110,35 @@ export const LocationProvider = ({ children }) => { // 위치 수집 권한 요�
         }
       }
     })();
+
+    return () => {
+      if (locationSubscription) {
+        locationSubscription.remove();
+      }
+    };
   }, []);
 
-  TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => { // 백그라운드용 로직
-    if (error) {
-      console.error(error);
-      return;
-    }
-    if (data) {
-      const {
-        locations: [location],
-      } = data;
-      setMyLocation([location.coords.latitude, location.coords.longitude]);
+  // TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => { // 백그라운드용 로직
+  //   if (error) {
+  //     console.error(error);
+  //     return;
+  //   }
+  //   if (data) {
+  //     const {
+  //       locations: [location],
+  //     } = data;
+  //     setMyLocation([location.coords.latitude, location.coords.longitude]);
 
-      if (await isServerConnected()) {
-        sendDataToServer([location.coords.latitude, location.coords.longitude]);
-      } else {
-        setData(location.coords.latitude, location.coords.longitude);
-      }
-    }
-  });
+  //     if (await isServerConnected()) {
+  //       sendDataToServer([location.coords.latitude, location.coords.longitude]);
+  //     } else {
+  //       setData(location.coords.latitude, location.coords.longitude);
+  //     }
+  //   }
+  // });
 
   return (
-    <LocationContext.Provider value={myLocation}>
+    <LocationContext.Provider value={locationSubscription}>
       {children}
     </LocationContext.Provider>
   );
