@@ -174,8 +174,14 @@ export const getRandomTenCharacter = createAsyncThunk('GET_RANDOM_TEN_CHARACTER'
   }
 })
 
+<<<<<<< HEAD
 //  계정 악세 정보 받아오기
 export const getAccessoryList = createAsyncThunk('GET_ACCESSORY_LIST', async (_, { rejectWithValue }) => {
+=======
+
+// 캐릭터들 치장 데이터 받아오기
+export const getAnimalDeco = createAsyncThunk('GET_ANIMAL_DECO', async (userId, { rejectWithValue }) => {
+>>>>>>> 6c4eaedf7d15c7cbe094db32012514daa26d0067
   try {
     const res = await requestGet('deco/itemList')
     const accessoryList = res.data.data
@@ -221,6 +227,7 @@ const initialState = {
   pressedAnimal: null,
   pressedAccessory: null,
   music: null,
+  now : null,
 }
 
 export const homeSlice = createSlice({
@@ -247,8 +254,19 @@ export const homeSlice = createSlice({
         state.animalDeco.push(newDeco);
       }
     },
+    ChangeMusic : (state, action) => {
+      state.now = action.payload;
+      if(!action.payload && state.music){
+        state.music.unloadAsync()
+        state.music = null;
+      }
+    },
     DJ: (state, action) => {
       // 실행시킬 BGM 넣기
+      if (state.music) {
+        state.music.unloadAsync();
+        state.music = null;
+      }
       state.music = action.payload
       state.music ? state.music.setIsLoopingAsync(true) : null;
     },
@@ -317,6 +335,6 @@ export const homeSlice = createSlice({
   }
 })
 
-export const { setPressedAnimal, setPressedAccessory, setAnimalDeco, DJ, PlayMusic, StopMusic, DeleteMusic } = homeSlice.actions;
+export const { setPressedAnimal, setPressedAccessory, setAnimalDeco, DJ, PlayMusic, StopMusic, DeleteMusic, ChangeMusic } = homeSlice.actions;
 
 export default homeSlice.reducer

@@ -15,10 +15,9 @@ import { RFPercentage } from 'react-native-responsive-fontsize';
 import { useFocusEffect } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 
-import { Audio } from 'expo-av';
-import { DJ, PlayMusic, StopMusic } from '../homeSlice.js';
-import { getMainCharacter, updateCharacter, getAnimalDeco } from '../homeSlice.js';
+import { getMainCharacter, updateCharacter, getAnimalDeco, ChangeMusic } from '../homeSlice.js';
 
+import Music from '../homecomponents/Music.js';
 import { globalStyles } from '../homestyles/global.js';
 import { images } from '../../../common/imgDict.js';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../../common/ScreenSize.js';
@@ -26,8 +25,11 @@ import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../../common/ScreenSize.js';
 import GameHeader from '../homecomponents/GameHeader.js';
 // 상태바 겹침현상을 없애려면 react-native에서 StatusBar를 import 해줘야함
 
+<<<<<<< HEAD
 import Animal from '../../fight/fightcomponents/Animal.jsx';
 import Accessory from '../homecomponents/accessory/Accessory.jsx';
+=======
+>>>>>>> 6c4eaedf7d15c7cbe094db32012514daa26d0067
 
 export default function GameHome({ navigation }) {
   const dispatch = useDispatch();
@@ -51,6 +53,7 @@ export default function GameHome({ navigation }) {
   const userId = useSelector(state => state.auth.userId);
 
   useFocusEffect(() => {
+    dispatch(ChangeMusic('home'));
     dispatch(getMainCharacter(userId));
     dispatch(getAnimalDeco(userId));
   })
@@ -93,7 +96,7 @@ export default function GameHome({ navigation }) {
           </View>
         </Modal>
         <GameHeader />
-        <Music />
+        <Music props={'home'}/>
         <Season />
         <Content navigation={navigation}
           userId={userId}
@@ -106,51 +109,6 @@ export default function GameHome({ navigation }) {
   )
 }
 
-
-const Music = React.memo(() => {
-  const dispatch = useDispatch();
-  const [on, setON] = useState(true);
-  const music = useSelector(state => state.home.music);
-
-  useEffect(() => {
-    DJselect();
-  }, []);
-
-  const DJselect = async () => {
-    if (!music) {
-      const { sound } = await Audio.Sound.createAsync(
-        require('../../../assets/music/GameHome.mp3')
-      );
-      await dispatch(DJ(sound));
-    }
-  }
-
-  useEffect(() => {
-    if (music) {
-      on ? dispatch(PlayMusic()) : dispatch(StopMusic());
-    }
-  }, [on, music]);
-
-  return (
-    <View>
-      {music && <TouchableOpacity onPress={() => { setON(!on) }}>
-        <Image source={on ? images.gameIcon.musicon : images.gameIcon.musicoff} style={musicStyles.music} />
-      </TouchableOpacity>
-      }
-    </View>
-  )
-})
-
-
-const musicStyles = StyleSheet.create({
-  music: {
-    resizeMode: 'contain',
-    marginLeft: SCREEN_WIDTH * 0.03,
-    height: SCREEN_HEIGHT * 0.07,
-    width: SCREEN_WIDTH * 0.07,
-    position: "absolute",
-  },
-});
 
 function Season() {
 
