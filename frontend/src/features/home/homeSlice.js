@@ -321,7 +321,11 @@ export const homeSlice = createSlice({
       state.animalDeco[animalType] = action.payload[animalType];
     },
     ChangeMusic : (state, action) => {
-      state.now = action.payload
+      state.now = action.payload;
+      if(!action.payload && state.music){
+        state.music.unloadAsync()
+        state.music = null;
+      }
     },
     DJ: (state, action) => {
       // 실행시킬 BGM 넣기
