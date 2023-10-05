@@ -42,7 +42,7 @@ const Accessory = ({
     dynamicBottom = 0;
   }
 
-console.log(aXY)
+// console.log(aXY)
 
   return (
     <TouchableOpacity onPress={onPress} delayPressIn={100}>

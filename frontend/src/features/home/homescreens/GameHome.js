@@ -293,7 +293,6 @@ const actStyles = StyleSheet.create({
     marginLeft: '8%',
     width: SCREEN_WIDTH * 0.9,
     height: '50%',
-    marginBottom: "-10%"
   }
 })
 
