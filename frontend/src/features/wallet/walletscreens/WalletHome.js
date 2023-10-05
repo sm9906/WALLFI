@@ -9,6 +9,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { RFPercentage } from 'react-native-responsive-fontsize';
 import { useFocusEffect } from '@react-navigation/native';
+import SSAFY from '../../../assets/wallet/SSAFY.png'
 
 import CardItem from '../walletcomponents/walletcards/WalletCard';
 import GoFight from '../walletcomponents/GoFight';
@@ -70,7 +71,7 @@ export default function WalletHome({navigation}) {
       </View>
       <View style={styles.buttons}>
         <TouchableOpacity style={styles.button} onPress={()=>navigation.navigate('MakeAccount')}>
-          <Image source={ShinhanLogo} style={{width:'20%', height:'35%', resizeMode:'contain'}}></Image>
+          <Image source={SSAFY} style={{width:'20%', height:'35%', resizeMode:'contain'}}></Image>
           <Text style={styles.txtSize}>예적금 만들기</Text>
           <Text style={{marginLeft:'40%'}}>&gt;</Text>
         </TouchableOpacity>  

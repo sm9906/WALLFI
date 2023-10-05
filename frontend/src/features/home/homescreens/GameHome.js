@@ -251,7 +251,7 @@ function Content(props) {
           style={{ width: '70%', height: '50%', resizeMode: 'contain' }}
         />}
         {nowAct === '밥먹기' && <Image source={images.eatCharacter[type]} style={actStyles.eating} />}
-        {nowAct === '훈련하기' && <Image source={require('../../../assets/game/loading/LoadingImg.gif')} style={actStyles.eating} />}
+        {nowAct === '훈련하기' && <Image source={type==='SHIBA'?require('../../../assets/game/loading/LoadingImg.gif'):imageUrl} style={actStyles.eating} />}
         <Text style={{
           color: '#3B3B3B',
           fontWeight: 'bold',
