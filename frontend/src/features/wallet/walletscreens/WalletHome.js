@@ -17,9 +17,11 @@ import {Background} from '../walletcomponents/CommonStyle';
 import ShinhanLogo from '../../../assets/wallet/ShinhanLogo.png';
 import Exchange from '../../../assets/wallet/Exchange.png'
 import { getAccounts, getExchangeRate } from '../walletSlice';
-import { DeleteMusic } from '../../home/homeSlice';
+import { ChangeMusic } from '../../home/homeSlice';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../walletcomponents/ScreenSize";
 
+
+import Music from '../../home/homecomponents/Music';
 
 export default function WalletHome({navigation}) {
   const dispatch = useDispatch();
@@ -40,7 +42,7 @@ export default function WalletHome({navigation}) {
   },[type])
 
   const getData = async() => {
-    dispatch(DeleteMusic());
+    dispatch(ChangeMusic());
     try {
       await dispatch(getExchangeRate());
       await dispatch(getAccounts(mainAccount));

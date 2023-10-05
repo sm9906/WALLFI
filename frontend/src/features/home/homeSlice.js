@@ -221,6 +221,7 @@ const initialState = {
   pressedAnimal: null,
   pressedAccessory: null,
   music: null,
+  now : null,
 }
 
 export const homeSlice = createSlice({
@@ -247,8 +248,19 @@ export const homeSlice = createSlice({
         state.animalDeco.push(newDeco);
       }
     },
+    ChangeMusic : (state, action) => {
+      state.now = action.payload;
+      if(!action.payload && state.music){
+        state.music.unloadAsync()
+        state.music = null;
+      }
+    },
     DJ: (state, action) => {
       // 실행시킬 BGM 넣기
+      if (state.music) {
+        state.music.unloadAsync();
+        state.music = null;
+      }
       state.music = action.payload
       state.music ? state.music.setIsLoopingAsync(true) : null;
     },
@@ -317,6 +329,6 @@ export const homeSlice = createSlice({
   }
 })
 
-export const { setPressedAnimal, setPressedAccessory, setAnimalDeco, DJ, PlayMusic, StopMusic, DeleteMusic } = homeSlice.actions;
+export const { setPressedAnimal, setPressedAccessory, setAnimalDeco, DJ, PlayMusic, StopMusic, DeleteMusic, ChangeMusic } = homeSlice.actions;
 
 export default homeSlice.reducer

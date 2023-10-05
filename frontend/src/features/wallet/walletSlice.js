@@ -10,7 +10,8 @@ import flagEUR from '../../assets/flag/EUR.png';
 import flagCNY from '../../assets/flag/CNY.png';
 import flagJPY from '../../assets/flag/JPY.png';
 import flagAUD from '../../assets/flag/AUD.png';
-import flagETH from '../../assets/flag/white_ethereum.png'
+import flagETH from '../../assets/flag/white_ethereum.png';
+import flagWALFI from '../../assets/flag/WALFI.png';
 
 const flagImage = {
   'KRW': flagKRW,
@@ -19,7 +20,8 @@ const flagImage = {
   'JPY': flagJPY,
   'CNY': flagCNY,
   'AUD': flagAUD,
-  'SEP': flagETH 
+  'SEP': flagETH,
+  'WALFI': flagWALFI 
 }
 
 export const makeAccount = createAsyncThunk('POST_MAKEACCOUJNT', async(data, {rejectWithValue})=>{
@@ -66,7 +68,7 @@ export const getAccounts = createAsyncThunk('GET_ACCOUNT', async (mainAccount, {
         image: flagImage[accountDtoList[i].통화],
         ISO: ISO[accountDtoList[i].통화]
       }
-      if(data.cardType==='SEP'){
+      if(data.cardType==='SEP'||data.cardType==='WALFI'){
         ethereum.push(data);
       }else{
         accounts.push(data);
@@ -75,7 +77,7 @@ export const getAccounts = createAsyncThunk('GET_ACCOUNT', async (mainAccount, {
     const allAccounts = {'accounts':accounts, 'ethereum':ethereum};
     return allAccounts
   } catch (err) {
-    console.log(err)
+    console.log(err,'여기')
     return rejectWithValue(err.response);
   }
 });
