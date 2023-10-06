@@ -1,13 +1,13 @@
 import React, { useContext, useState, useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 import * as Location from "expo-location";
-import * as TaskManager from "expo-task-manager";
+// import * as TaskManager from "expo-task-manager";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Map from "../googlemapcomponents/Map";
 import { LocationContext } from "../googlemaphooks/UseMap";
 import { ScreenHeight, ScreenWidth } from "./../googlemapcomponents/ScreenSize";
 
-const LOCATION_TASK_NAME = "background-location-task";
+// const LOCATION_TASK_NAME = "background-location-task";
 
 export const useLocation = () => useContext(LocationContext);
 
