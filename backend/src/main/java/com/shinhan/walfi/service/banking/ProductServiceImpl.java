@@ -2,6 +2,7 @@ package com.shinhan.walfi.service.banking;
 
 import com.shinhan.walfi.domain.User;
 import com.shinhan.walfi.domain.banking.Account;
+import com.shinhan.walfi.domain.banking.ExchangeHistory;
 import com.shinhan.walfi.dto.banking.ExchangeDto;
 import com.shinhan.walfi.exception.*;
 import com.shinhan.walfi.mapper.BankMapper;
@@ -93,7 +94,7 @@ public class ProductServiceImpl implements ProductService{
             bankMapper.withdrawTransferMoneyFromAccount(targetAccountNum, 입금금액);
         } else {
             long 원화환산금액 = 0;
-            List<ExchangeDto> todayExchanges;
+            List<ExchangeHistory> todayExchanges;
 
             try {
                 todayExchanges = exchangeUtil.getTodayExchange();
@@ -101,7 +102,7 @@ public class ProductServiceImpl implements ProductService{
                 throw new RuntimeException(e);
             }
 
-            for (ExchangeDto todayExchange : todayExchanges) {
+            for (ExchangeHistory todayExchange : todayExchanges) {
                 if (todayExchange.get통화코드().equals(통화코드)) {
                     원화환산금액 = (long) (Math.floor(todayExchange.get매매기준환율() * 입금금액));
                 }

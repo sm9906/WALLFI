@@ -8,8 +8,8 @@ import java.util.List;
 
 public interface UserRepository extends JpaRepository<User, String> {
 
-    @Query(value = "select * from user where user_id = ?1 and password= ?2", nativeQuery = true)
-    User login(String userId, String password);
+//    @Query(value = "select * from user where user_id = ?1 and password= ?2", nativeQuery = true)
+//    User login(String userId, String password);
 
     @Query(value = "select * from user where user_id = ?1", nativeQuery = true)
     User find(String userId);

@@ -1,15 +1,18 @@
 package com.shinhan.walfi.service;
 
 import com.shinhan.walfi.domain.User;
-import com.shinhan.walfi.domain.game.UserGameInfo;
+import com.shinhan.walfi.dto.TokenDto;
 import com.shinhan.walfi.dto.UserDto;
-import com.shinhan.walfi.dto.game.UserGameInfoDto;
-import com.shinhan.walfi.exception.UserErrorCode;
 import com.shinhan.walfi.exception.UserException;
 import com.shinhan.walfi.repository.UserRepository;
-import com.shinhan.walfi.repository.game.UserGameInfoRepository;
+import com.shinhan.walfi.util.JWTUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,11 +24,16 @@ import static com.shinhan.walfi.exception.UserErrorCode.NO_MATCHING_USER;
 
 @Slf4j
 @Service
-@Transactional(readOnly = true)
+//@Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
+
+    private final JWTUtil jwtUtil;
 
     private final UserRepository userRepository;
+
+    private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
 
     @Override
     public List<UserDto> getUserList() {
@@ -39,22 +47,64 @@ public class UserServiceImpl implements UserService{
     /**
      * 로그인 기능
      *
-     * @exception 'NO_MATCHING_USER' - 비밀번호가 틀리거나 존재하지 않는 사용자의 경우 예외 발생
      * @param userId
      * @param password
      * @return
+     * @throws 'NO_MATCHING_USER' - 비밀번호가 틀리거나 존재하지 않는 사용자의 경우 예외 발생
      */
     @Override
-    public UserDto login(String userId, String password) {
-        User findUser = userRepository.login(userId, password);
+    public TokenDto login(String userId, String password) {
 
-        if (findUser == null) {
-            log.error("=== 틀린 비밀번호이거나 존재하지 않는 회원 ===");
+        boolean isLoginSuccessful = true;
+        Authentication authenticatedUser = null;
+        TokenDto tokenDto = new TokenDto();
+        log.info("{}, {}", userId, password);
+        try {
+            authenticatedUser = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(userId, password)
+            );
+        } catch (Exception e) {
+            log.error(e.toString());
+            isLoginSuccessful = false;
+            tokenDto.setLoginSuccessful(isLoginSuccessful);
+            log.error("아이디 혹은 비밀번호가 틀립니다.");
             throw new UserException(NO_MATCHING_USER);
         }
 
-        log.info("=== 유저: " + userId + " 님이 로그인하였습니다 ===");
-        return getUserDto(findUser);
+        if (isLoginSuccessful) {
+
+            User loginUser = (User) authenticatedUser.getPrincipal();
+            String name = loginUser.getName();
+
+            String accessToken = jwtUtil.createAccessToken(userId, name);
+            String refreshToken = jwtUtil.createRefreshToken(userId, name);
+
+            log.debug("로그인 성공");
+            log.debug("user: {}", loginUser);
+            log.debug("Access-Token: {}", accessToken);
+            log.debug("Refresh-Token: {}", refreshToken);
+
+            tokenDto.setLoginSuccessful(true);
+            tokenDto.setACCESS_TOKEN(accessToken);
+            tokenDto.setREFRESH_TOKEN(refreshToken);
+            tokenDto.setName(loginUser.getName());
+
+            // redis에 RefreshToken 저장
+            jwtUtil.saveUserRefreshToken(userId, refreshToken);
+        }
+
+        return tokenDto;
+    }
+
+
+    @Override
+    public void signup(User user) {
+        String encodedPW = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encodedPW);
+        User userResult = userRepository.save(user);
+        log.debug("회원 가입 계정 : "+userResult.toString());
+        // Todo : user_gameinfo 생성, 계좌 6개 생성
+
     }
 
     /**
@@ -73,16 +123,10 @@ public class UserServiceImpl implements UserService{
                 .build();
     }
 
+    public UserDto findUserById(String userId){
+        User user = userRepository.findById(userId).get();
+        UserDto userDto = getUserDto(user);
+        return userDto;
+    }
 }
 
-
-
-
-
-//    @Override
-//    public void signup(User user) {
-//        // user 생성
-//        userRepository.save(user);
-//        // usergameinfo 생성
-//        userGameInfoRepository.save(user.userGameInfoByUser());
-//    }

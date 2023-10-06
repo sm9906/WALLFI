@@ -1,16 +1,22 @@
 package com.shinhan.walfi.service.banking;
 
+import com.shinhan.walfi.domain.banking.CryptoWallet;
+import com.shinhan.walfi.domain.enums.CoinType;
 import com.shinhan.walfi.dto.transfer.GlobalTransactionAccountDTO;
 import com.shinhan.walfi.dto.transfer.KRWTransactionAccountDTO;
 import com.shinhan.walfi.dto.transfer.TransferDTO;
 import com.shinhan.walfi.exception.TransferException;
 import com.shinhan.walfi.mapper.BankMapper;
+import com.shinhan.walfi.repository.banking.CryptoWalletRepository;
+import com.shinhan.walfi.util.CryptoUtil;
 import com.shinhan.walfi.util.ExchangeUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+
+import java.math.BigDecimal;
 
 import static com.shinhan.walfi.exception.TransferErrorCode.*;
 import static java.util.Objects.isNull;
@@ -23,6 +29,9 @@ public class BankServiceImpl implements BankService {
 
     private final ExchangeUtil exchangeUtil;
     private final BankMapper bankMapper;
+    private final CryptoUtil cryptoUtil;
+    private final CryptoWalletRepository cryptoWalletRepository;
+
 
     @Transactional
     public void globalCurrencyTransfer(TransferDTO transferDTO) {
@@ -31,9 +40,17 @@ public class BankServiceImpl implements BankService {
         final String CURRENCY_CODE = transferDTO.get통화코드();
         log.info("통화 코드: {}", CURRENCY_CODE);
 
-        final long TRANSFER_MONEY = transferDTO.get이체금액();
+        final long TRANSFER_MONEY = transferDTO.get이체금액().longValue();
         final String DEPOSIT_MAIN_ACCOUNT_NUMBER = transferDTO.get입금계좌번호();
         final String WITHDRAWAL_MAIN_ACCOUNT_NUMBER = transferDTO.get출금계좌번호();
+
+        if (CURRENCY_CODE.equals(CoinType.SEP.toString())) {
+            CryptoWallet toWallet = cryptoWalletRepository.findWallet(DEPOSIT_MAIN_ACCOUNT_NUMBER, CoinType.SEP);
+            CryptoWallet fromWallet = cryptoWalletRepository.findWallet(WITHDRAWAL_MAIN_ACCOUNT_NUMBER, CoinType.SEP);
+            cryptoUtil.sendEthTransaction(fromWallet, toWallet.getAddress(), transferDTO.get이체금액());
+
+            return;
+        }
 
         log.debug("=== 출금 대표 계좌 번호 조회 중 ===");
         result = bankMapper.findMainAccountNumber(WITHDRAWAL_MAIN_ACCOUNT_NUMBER);
@@ -123,7 +140,7 @@ public class BankServiceImpl implements BankService {
         boolean result;
         final String CURRENCY_CODE = "KRW";
 
-        final long TRANSFER_MONEY = transferDTO.get이체금액();
+        final long TRANSFER_MONEY = transferDTO.get이체금액().longValue();
         final String DEPOSIT_MAIN_ACCOUNT_NUMBER = transferDTO.get입금계좌번호();
         final String WITHDRAWAL_MAIN_ACCOUNT_NUMBER = transferDTO.get출금계좌번호();
 

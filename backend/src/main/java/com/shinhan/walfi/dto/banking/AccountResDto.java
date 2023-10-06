@@ -15,4 +15,18 @@ public class AccountResDto {
 
     private List<AccountDto> AccountDtoList;
 
+    /**
+     * AccountDto를 AccountResDto로 변환하는 기능
+     *
+     * @param userId
+     * @param accountDtoList
+     * @return AccountResDto
+     */
+    public static AccountResDto getAccountResDto(String userId, List<AccountDto> accountDtoList) {
+        return AccountResDto.builder()
+                .userId(userId)
+                .accountsLength(accountDtoList.size())
+                .AccountDtoList(accountDtoList)
+                .build();
+    }
 }

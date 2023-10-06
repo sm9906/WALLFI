@@ -1,5 +1,6 @@
 package com.shinhan.walfi.dto.banking;
 
+import com.shinhan.walfi.domain.banking.ExchangeHistory;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -11,6 +12,6 @@ import java.util.List;
 @ToString
 public class ExchangeResDto {
 
-    List<ExchangeDto> exchangeDtoList;
+    List<ExchangeHistory> exchangeDtoList;
 
 }
