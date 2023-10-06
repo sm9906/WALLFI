@@ -18,7 +18,7 @@
       "supportsTablet": true
     },
     "android": {
-      "versionCode": 4,
+      "versionCode": 5,
       "adaptiveIcon": {
         "foregroundImage": "./src/assets/WALFI_LOGO.png",
         "backgroundImage": "./src/assets/WALFI_LOGO.png"
