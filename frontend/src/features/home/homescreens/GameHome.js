@@ -14,7 +14,7 @@ import { RFPercentage } from 'react-native-responsive-fontsize';
 import { useFocusEffect } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 
-import { getMainCharacter, updateCharacter, getAnimalDeco, ChangeMusic } from '../homeSlice.js';
+import { getMainCharacter, updateCharacter, getAnimalDeco, ChangeMusic, getCharacterList } from '../homeSlice.js';
 
 import Music from '../homecomponents/Music.js';
 import { globalStyles } from '../homestyles/global.js';
@@ -150,10 +150,19 @@ function Content(props) {
     return;
   }
 
+  const characterList = async() => {
+    try {
+      dispatch(getCharacterList());
+    } catch (err) {
+      console.log('characterList', err);
+    }
+  }
+
   return (
     <View style={styles.content}>
       <View style={styles.sideBar}>
         <TouchableOpacity style={styles.button} onPress={() => {
+          characterList();
           props.navigation.navigate('Collection');
         }}>
           <Image source={images.btnSource.collection} style={styles.buttonContent} />

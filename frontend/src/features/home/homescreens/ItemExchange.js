@@ -9,6 +9,7 @@ import {
 
 import { globalStyles } from '../homestyles/global.js';
 import { images } from '../../../common/imgDict.js';
+import { purchaseCharacter, purchaseItem, getCharacterList, getItemList } from '../homeSlice.js';
 
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../../common/ScreenSize.js';
 
@@ -18,6 +19,7 @@ import PageHeader from '../homecomponents/PageHeader.js';
 import Purchase from './ItemExchange/Purchase.js';
 import Sale from './ItemExchange/Sale.js';
 import History from './ItemExchange/History.js';
+import { useDispatch } from 'react-redux';
 
 export default function ItemExchange({ navigation }) {
   const [selectedBtn, setSelectedBtn] = useState(0);
@@ -46,12 +48,40 @@ function ButtonGroup(props) {
     return props.selectedBtn === num ? '#091044' : null;
   }
 
+  const dispatch = useDispatch();
+
+  const purchaseGoods = async() => {
+    try {
+      dispatch(purchaseCharacter());
+      dispatch(purchaseItem());
+    } catch (err) {
+      console.log('purchaseGoods', err);
+    }
+  }
+
+  const saleGoods = async() => {
+    try {
+      dispatch(getCharacterList());
+      dispatch(getItemList());
+    } catch (err) {
+      console.log('saleGoods', err);
+    }
+  }
+
   return (
     <View style={btnGroup.btnContainer}>
-      <TouchableOpacity style={[btnGroup.btnStyle, {backgroundColor: backgroundColor(0)}]} onPress={() => props.setSelectedBtn(0)}>
+      <TouchableOpacity style={[btnGroup.btnStyle, {backgroundColor: backgroundColor(0)}]} 
+        onPress={() => { 
+          purchaseGoods();
+          props.setSelectedBtn(0);
+      }}>
         <Text style={btnGroup.btnText}>구매</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={[btnGroup.btnStyle, {backgroundColor: backgroundColor(1)}]} onPress={() => props.setSelectedBtn(1)}>
+      <TouchableOpacity style={[btnGroup.btnStyle, {backgroundColor: backgroundColor(1)}]} 
+        onPress={() => {
+          saleGoods();
+          props.setSelectedBtn(1);
+      }}>
         <Text style={btnGroup.btnText}>판매</Text>
       </TouchableOpacity>
       <TouchableOpacity style={[btnGroup.btnStyle, {backgroundColor: backgroundColor(2)}]} onPress={() => props.setSelectedBtn(2)}>
