@@ -15,26 +15,16 @@
 # 👉 월피 서비스 화면
 
 ## 회원 가입 및 로그인
-<img src="./images/회원가입.png" width="20%">
-<img src="./images/로그인.png" width="20%">
+<img src="./images/회원가입.png" width="20%"> <img src="./images/로그인.png" width="20%">
 
 ## 뱅킹 서비스
-<img src="./images/송금.gif" width="20%">
-<img src="./images/예적금%20만들기.gif" width="20%">
-<img src="./images/이더리움%20송금.gif" width="20%"><br>
-<img src="./images/환율조회.gif" width="20%">
-<img src="./images/환전.gif" width="20%">
+<img src="./images/송금.gif" width="20%"> <img src="./images/예적금%20만들기.gif" width="20%"> <img src="./images/이더리움%20송금.gif" width="20%"><br>
+<img src="./images/환율조회.gif" width="20%"> <img src="./images/환전.gif" width="20%">
 
 ## 게임 서비스
-<img src="./images/게임%20홈.gif" width="20%">
-<img src="./images/먹이.gif" width="20%">
-<img src="./images/훈련.gif" width="20%"><br>
-<img src="./images/알뽑기.gif" width="20%">
-<img src="./images/아이템%20뽑기.gif" width="20%">
-<img src="./images/색뽑기.gif" width="20%"><br>
-<img src="./images/치장.gif" width="20%">
-<img src="./images/판매.gif" width="20%">
-<img src="./images/전투.gif" width="20%">
+<img src="./images/게임%20홈.gif" width="20%"> <img src="./images/먹이.gif" width="20%"> <img src="./images/훈련.gif" width="20%"><br>
+<img src="./images/알뽑기.gif" width="20%"> <img src="./images/아이템%20뽑기.gif" width="20%"> <img src="./images/색뽑기.gif" width="20%"><br>
+<img src="./images/치장.gif" width="20%"> <img src="./images/판매.gif" width="20%"> <img src="./images/전투.gif" width="20%">
 
 ## 🖥️ 개발 환경
 
