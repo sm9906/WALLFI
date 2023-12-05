@@ -71,4 +71,4 @@
 |Back end|Back end|Back end|Front end|Front end|Front end|
 | :-: | :-: | :-: | :-: | :-: | :-: |
 | <img src="https://avatars.githubusercontent.com/u/104629996?v=4" width="100" height="100"> | <img src="https://avatars.githubusercontent.com/u/83294376?v=4" width="100" height="100"> | <img src="https://avatars.githubusercontent.com/u/76690870?v=4" width="100" height="100"> | <img src="https://github.com/ppeper/WithMe/assets/63226023/1fd33d90-8323-49c3-8f28-147e083d74b1" width="100" height="100"> | <img src="https://avatars.githubusercontent.com/u/80940032?v=4" width="100" height="100"> | <img src="https://avatars.githubusercontent.com/u/96049463?v=4" width="100" height="100">
-|김민수(팀장)|진희솜|이유정|김수민|박민아|서지호|
+|김민수(팀장)|진희솜|김유정|김수민|박민아|서지호|
